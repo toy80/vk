@@ -1,0 +1,16 @@
+language: go
+
+go:
+ - 1.12
+
+env:
+ - GO111MODULE=on
+
+before_install:
+ - sudo apt-get install -y libvulkan-dev
+ - git clone --depth=1 https://github.com/KhronosGroup/Vulkan-Headers.git ~/Vulkan-Headers
+ - sudo rm -rf /usr/include/vulkan
+ - sudo cp -r ~/Vulkan-Headers/include/vulkan /usr/include/
+
+script:
+ - go test  ./...
