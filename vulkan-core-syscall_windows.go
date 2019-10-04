@@ -58,6 +58,9 @@ var (
 // MemAlloc allocate zeroed C memory block
 func MemAlloc(sz uintptr) (p unsafe.Pointer) {
 	// Address of a block of C memory is of course "unsafe pointer"
+	if sz == 0 {
+		sz = 1 // MemAlloc(0) should return a non nil pointer
+	}
 	*(*uintptr)(unsafe.Pointer(&p)), _, _ = procLocalAlloc.Call(0x0040, sz) // 0x0040 = LMEM_FIXED | LMEM_ZEROINIT.
 	dbgMemAlloc(uintptr(p))
 	return

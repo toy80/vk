@@ -1084,7 +1084,7 @@ import (
 func MemAlloc(sz uintptr) (p unsafe.Pointer) {
 	// Address of a block of C memory is of course "unsafe pointer"
 	if sz == 0 {
-		return nil
+		sz = 1 // MemAlloc(0) should return a non nil pointer
 	}
 	q := C.malloc(C.size_t(sz))
 	C.memset(q, 0, C.size_t(sz))
