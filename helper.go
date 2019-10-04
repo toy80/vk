@@ -190,9 +190,12 @@ func CByteArray(s []byte) (c *byte, n uint32, free func()) {
 
 func CArrayReflect(dstPtrType reflect.Type, srcSlice reflect.Value, tr func(x interface{}) interface{}) (c unsafe.Pointer, n uint32, free func()) {
 	if srcSlice.Kind() != reflect.Slice {
-		panic("srcSlice must be slice")
+		panic("srcSlice must be a slice")
 	}
 	n = uint32(srcSlice.Len())
+	if dstPtrType.Kind() != reflect.Ptr && dstPtrType.Kind() != reflect.Slice {
+		panic("dstPtrType must be a type of pointer or slice")
+	}
 	sz := dstPtrType.Elem().Size() // sz = sizeof(*dst)
 	c = MemAlloc(sz * uintptr(n))
 	if tr == nil {
@@ -218,6 +221,9 @@ func CArrayReflect(dstPtrType reflect.Type, srcSlice reflect.Value, tr func(x in
 }
 
 func CArray(dstPtrType, srcSlice interface{}, tr func(x interface{}) interface{}) (c unsafe.Pointer, n uint32, free func()) {
+	if dstPtrType == nil {
+		return CArrayReflect(reflect.TypeOf(srcSlice), reflect.ValueOf(srcSlice), tr)
+	}
 	return CArrayReflect(reflect.TypeOf(dstPtrType), reflect.ValueOf(srcSlice), tr)
 }
 
