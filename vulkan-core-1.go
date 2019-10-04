@@ -22,6 +22,7 @@ import (
 )
 
 const API_VERSION_1_0 uint32 = 1 << 22
+const API_VERSION_1_1 uint32 = 1<<22 | 1<<12
 
 func MakeVersion(major, minor, patch uint32) uint32 {
 	return (((major) << 22) | ((minor) << 12) | (patch))
