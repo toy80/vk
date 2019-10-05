@@ -2,7 +2,9 @@ package vk
 
 import (
 	"fmt"
+	"path/filepath"
 	"reflect"
+	"strings"
 	"unsafe"
 )
 
@@ -245,4 +247,36 @@ func LoadInstanceProc(instance Instance, ppfn interface{}) error {
 
 func MemCopy(dst, src unsafe.Pointer, size uint64) int {
 	return copy(((*[0x7FFFFFFF]byte)(dst))[:size], ((*[0x7FFFFFFF]byte)(src))[:size])
+}
+
+var ShaderFileTypes = map[string]ShaderStageFlags{
+	`.vert`:  SHADER_STAGE_VERTEX_BIT,
+	`.tesc`:  SHADER_STAGE_TESSELLATION_CONTROL_BIT,
+	`.tese`:  SHADER_STAGE_TESSELLATION_EVALUATION_BIT,
+	`.geom`:  SHADER_STAGE_GEOMETRY_BIT,
+	`.frag`:  SHADER_STAGE_FRAGMENT_BIT,
+	`.comp`:  SHADER_STAGE_COMPUTE_BIT,
+	`.mesh`:  SHADER_STAGE_MESH_BIT_NV,
+	`.task`:  SHADER_STAGE_TASK_BIT_NV,
+	`.rgen`:  SHADER_STAGE_RAYGEN_BIT_NV,
+	`.rint`:  SHADER_STAGE_INTERSECTION_BIT_NV,
+	`.rahit`: SHADER_STAGE_ANY_HIT_BIT_NV,
+	`.rchit`: SHADER_STAGE_CLOSEST_HIT_BIT_NV,
+	`.rmiss`: SHADER_STAGE_MISS_BIT_NV,
+	`.rcall`: SHADER_STAGE_CALLABLE_BIT_NV,
+	`.glsl`:  SHADER_STAGE_ALL,
+	`.hlsl`:  SHADER_STAGE_ALL,
+}
+
+func ShaderStageByFileName(name string) (stage ShaderStageFlags, ok bool) {
+	ext := filepath.Ext(name)
+	stage, ok = ShaderFileTypes[ext]
+	if !ok {
+		return SHADER_STAGE_ALL, false
+	}
+	if stage == SHADER_STAGE_ALL {
+		// foo.vert.glsl  bar.frag.hlsl
+		return ShaderStageByFileName(strings.TrimSuffix(name, ext))
+	}
+	return
 }
