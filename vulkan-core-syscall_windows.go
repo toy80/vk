@@ -55,20 +55,20 @@ var (
 	procGetInstanceProcAddr = vkdll.NewProc("vkGetInstanceProcAddr")
 )
 
-// MemAlloc allocate zeroed C memory block
+// MemAlloc allocate zeroed C memory bslock
 func MemAlloc(sz uintptr) (p unsafe.Pointer) {
 	// Address of a block of C memory is of course "unsafe pointer"
 	if sz == 0 {
 		sz = 1 // MemAlloc(0) should return a non nil pointer
 	}
 	*(*uintptr)(unsafe.Pointer(&p)), _, _ = procLocalAlloc.Call(0x0040, sz) // 0x0040 = LMEM_FIXED | LMEM_ZEROINIT.
-	dbgMemAlloc(uintptr(p))
+	debugMarkMemBlock(uintptr(p))
 	return
 }
 
 // MemFree release C memory block that allocated with MemAlloc()
 func MemFree(p unsafe.Pointer) {
-	dbgMemFree(uintptr(p))
+	debugUnmarkMemBlock(uintptr(p))
 	_, _, _ = procLocalFree.Call(uintptr(p))
 }
 

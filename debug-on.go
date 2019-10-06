@@ -1,4 +1,4 @@
-// +build memdbg
+// +build debug
 
 package vk
 
@@ -14,7 +14,7 @@ var (
 	dbgMemMutex  sync.Mutex
 )
 
-func dbgMemAlloc(p uintptr) {
+func debugMarkMemBlock(p uintptr) {
 	dbgMemMutex.Lock()
 	defer dbgMemMutex.Unlock()
 
@@ -38,7 +38,7 @@ func dbgMemAlloc(p uintptr) {
 	dbgMemBlocks[p] = loc
 }
 
-func dbgMemFree(p uintptr) {
+func debugUnmarkMemBlock(p uintptr) {
 	dbgMemMutex.Lock()
 	defer dbgMemMutex.Unlock()
 

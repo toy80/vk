@@ -1088,13 +1088,13 @@ func MemAlloc(sz uintptr) (p unsafe.Pointer) {
 	}
 	q := C.malloc(C.size_t(sz))
 	C.memset(q, 0, C.size_t(sz))
-	dbgMemAlloc(uintptr(q))
+	debugMarkMemBlock(uintptr(q))
 	return q
 }
 
 // MemFree release C memory block that allocated with MemAlloc()
 func MemFree(p unsafe.Pointer) {
-	dbgMemFree(uintptr(p))
+	debugUnmarkMemBlock(uintptr(p))
 	C.free(p)
 }
 
