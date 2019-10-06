@@ -7,8 +7,6 @@ import (
 	"github.com/toy80/vk"
 )
 
-var ()
-
 type Example struct {
 	instance vk.Instance
 
