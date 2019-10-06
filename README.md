@@ -6,4 +6,4 @@ Package vk is an experimental Vulkan binding for golang.
 
 ## Usage
 
-Install the official vulkan runtime and run the example-vk package
+Install the official vulkan runtime and run the toy80-example-vk package
