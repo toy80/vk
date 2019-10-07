@@ -39,6 +39,9 @@ type (
 )
 
 const (
+	SizeofDispatchableHandle    = unsafe.Sizeof(*(*DispatchableHandle)(nil))
+	SizeofNonDispatchableHandle = unsafe.Sizeof(*(*NonDispatchableHandle)(nil))
+
 	REMAINING_MIP_LEVELS     uint32 = 0xFFFFFFFF         // ^0
 	REMAINING_ARRAY_LAYERS   uint32 = 0xFFFFFFFF         // ^0
 	WHOLE_SIZE               uint64 = 0xFFFFFFFFFFFFFFFF // ^0
