@@ -63,6 +63,16 @@ func (r Result) Err() error {
 	return nil
 }
 
+func AsResult(err error) ErrorResult {
+	if err == nil {
+		return ErrorResult(SUCCESS)
+	}
+	if r, ok := err.(ErrorResult); ok {
+		return r
+	}
+	return ErrorResult(RESULT_MAX_ENUM)
+}
+
 // union VkClearColorValue {
 // 	float       float32[4];
 // 	int32_t     int32[4];
