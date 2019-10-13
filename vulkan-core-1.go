@@ -63,14 +63,14 @@ func (r Result) Err() error {
 	return nil
 }
 
-func AsResult(err error) ErrorResult {
+func AsResult(err error) Result {
 	if err == nil {
-		return ErrorResult(SUCCESS)
+		return SUCCESS
 	}
 	if r, ok := err.(ErrorResult); ok {
-		return r
+		return Result(r)
 	}
-	return ErrorResult(RESULT_MAX_ENUM)
+	return RESULT_MAX_ENUM
 }
 
 // union VkClearColorValue {
