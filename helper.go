@@ -171,6 +171,25 @@ func CUint32Array(s []uint32) (c *uint32, n uint32, free func()) {
 	}
 }
 
+func CUint16ArrayOrNil(s []uint16) (c *uint16, n uint32, free func()) {
+	if len(s) == 0 {
+		return nil, 0, func() {}
+	}
+	return CUint16Array(s)
+}
+
+func CUint16Array(s []uint16) (c *uint16, n uint32, free func()) {
+	n = uint32(len(s))
+	p := MemAlloc(uintptr(n) * 2)
+	if p == nil {
+		panic("failed to allocate unmanaged memory")
+	}
+	copy((*((*[0x7FFFFFFF]uint16)(p)))[:n], s)
+	return (*uint16)(p), n, func() {
+		MemFree(p)
+	}
+}
+
 func CFloat32ArrayOrNil(s []float32) (c *float32, n uint32, free func()) {
 	if len(s) == 0 {
 		return nil, 0, func() {}
