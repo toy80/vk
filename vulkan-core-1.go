@@ -144,14 +144,14 @@ func (v *ClearValue) Uint32Color() [4]uint32 {
 }
 
 func (v *ClearValue) SetDepthStencil(x ClearDepthStencilValue) {
-	*((*[8]byte)(unsafe.Pointer(&v))) = *((*[8]byte)(unsafe.Pointer(&x)))
+	*((*[8]byte)(unsafe.Pointer(v))) = *((*[8]byte)(unsafe.Pointer(&x)))
 }
 func (v *ClearValue) DepthStencil() ClearDepthStencilValue {
 	return *((*ClearDepthStencilValue)(unsafe.Pointer(v)))
 }
 
 func (v *ClearValue) SetDepth(x float32) {
-	*((*[4]byte)(unsafe.Pointer(&v))) = *((*[4]byte)(unsafe.Pointer(&x)))
+	*((*[4]byte)(unsafe.Pointer(v))) = *((*[4]byte)(unsafe.Pointer(&x)))
 }
 func (v *ClearValue) Depth() float32 {
 	return *((*float32)(unsafe.Pointer(v)))

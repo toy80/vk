@@ -15,6 +15,7 @@
 *.bak
 .DS_Store
 .vscode
+_*
 
 # Large binary files
 *.7z
