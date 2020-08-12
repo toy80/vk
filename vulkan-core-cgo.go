@@ -4,7 +4,7 @@ package vk
 
 // #cgo windows LDFLAGS: -lvulkan-1
 // #cgo linux LDFLAGS: -lvulkan
-// #cgo darwin LDFLAGS: -lMoltenVK
+// #cgo darwin LDFLAGS: -lvulkan
 //
 // #ifdef _WIN32
 // # include <windows.h>
