@@ -10,12 +10,6 @@ Install the official vulkan runtime and run the toy80-example-vk package
 
 ## More examples
 
-See the [github.com/toy80/graphics](https://github.com/toy80/graphics) package, screenshots:
+See the [github.com/toy80/toy](https://github.com/toy80/toy) repository, screenshot:
 
-Windows
-
-![Windows](https://github.com/toy80/graphics/raw/master/screenshot-windows.png)
-
-Linux
-
-![Linux](https://github.com/toy80/graphics/raw/master/screenshot-linux.png)
+![Screenshot-0](https://github.com/toy80/toy/blob/master/doc/screenshot-0.png?raw=true)
