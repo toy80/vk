@@ -5,8 +5,8 @@ package vk
 // #cgo darwin LDFLAGS: -lMoltenVK
 // #include <Availability.h>
 // #include <stdint.h>
-// #include <vulkan/vulkan.h>
-// #include <vulkan/vulkan_ios.h>
+// #include "./vulkan/vulkan.h"
+// #include "./vulkan/vulkan_ios.h"
 //
 // VkResult bridge_vkCreateMacOSSurfaceMVK(uintptr_t fp,VkInstance instance,const VkMacOSSurfaceCreateInfoMVK* pCreateInfo,const VkAllocationCallbacks* pAllocator,VkSurfaceKHR* pSurface){
 //   return ((PFN_vkCreateMacOSSurfaceMVK)fp)(instance,pCreateInfo,pAllocator,pSurface);
@@ -38,7 +38,7 @@ import (
  */
 
 const MVK_macos_surface = 1
-const MVK_MACOS_SURFACE_SPEC_VERSION = 2
+const MVK_MACOS_SURFACE_SPEC_VERSION = 3
 
 var MVK_MACOS_SURFACE_EXTENSION_NAME = "VK_MVK_macos_surface"
 
@@ -52,7 +52,9 @@ type MacOSSurfaceCreateInfoMVK struct {
 }
 
 func NewMacOSSurfaceCreateInfoMVK() *MacOSSurfaceCreateInfoMVK {
-	return (*MacOSSurfaceCreateInfoMVK)(MemAlloc(unsafe.Sizeof(*(*MacOSSurfaceCreateInfoMVK)(nil))))
+	p := (*MacOSSurfaceCreateInfoMVK)(MemAlloc(unsafe.Sizeof(*(*MacOSSurfaceCreateInfoMVK)(nil))))
+	p.SType = STRUCTURE_TYPE_MACOS_SURFACE_CREATE_INFO_MVK
+	return p
 }
 func (p *MacOSSurfaceCreateInfoMVK) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -61,6 +63,7 @@ type PfnCreateMacOSSurfaceMVK uintptr
 
 func (fn PfnCreateMacOSSurfaceMVK) Call(instance Instance, pCreateInfo *MacOSSurfaceCreateInfoMVK, pAllocator *AllocationCallbacks, pSurface *SurfaceKHR) Result {
 	ret := C.bridge_vkCreateMacOSSurfaceMVK(C.uintptr_t(fn), (C.VkInstance)(unsafe.Pointer(uintptr(instance))), (*C.VkMacOSSurfaceCreateInfoMVK)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkSurfaceKHR)(unsafe.Pointer(pSurface)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateMacOSSurfaceMVK) String() string { return "vkCreateMacOSSurfaceMVK" }

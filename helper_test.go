@@ -62,7 +62,7 @@ func TestMemCopy(t *testing.T) {
 	for i := 0; i < 100; i++ {
 		src[i] = byte(i)
 	}
-	n := MemCopy(unsafe.Pointer(&dst), unsafe.Pointer(&src), 100)
+	n := MemCopy(unsafe.Pointer(&dst), 0, unsafe.Pointer(&src), 0, 100)
 	if n != 100 {
 		t.Fatal("n != 100")
 	}

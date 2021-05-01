@@ -17,37 +17,50 @@ package vk
  */
 
 import (
+	"fmt"
 	"math"
 	"unsafe"
 )
 
-const API_VERSION_1_0 uint32 = 1 << 22
-const API_VERSION_1_1 uint32 = 1<<22 | 1<<12
+type Version uint32
 
-func MakeVersion(major, minor, patch uint32) uint32 {
-	return (((major) << 22) | ((minor) << 12) | (patch))
+const (
+	API_VERSION_1_0         = 1 << 22
+	API_VERSION_1_1         = 1<<22 | 1<<12
+	API_VERSION_1_2         = 1<<22 | 2<<12
+	HEADER_VERSION_COMPLETE = API_VERSION_1_2 | HEADER_VERSION
+)
+
+func MakeVersion(major, minor, patch uint32) Version {
+	return Version(((major) << 22) | ((minor) << 12) | (patch))
 }
-func VersionMajor(ver uint32) uint32 { return ((uint32)(ver) >> 22) }
-func VersionMinor(ver uint32) uint32 { return (((uint32)(ver) >> 12) & 0x3ff) }
-func VersionPatch(ver uint32) uint32 { return ((uint32)(ver) & 0xfff) }
+
+func (ver Version) Major() uint32 { return ((uint32)(ver) >> 22) }
+func (ver Version) Minor() uint32 { return (((uint32)(ver) >> 12) & 0x3ff) }
+func (ver Version) Patch() uint32 { return ((uint32)(ver) & 0xfff) }
+
+func (ver Version) String() string {
+	return fmt.Sprintf("%d.%d.%d", ver.Major(), ver.Minor(), ver.Patch())
+}
 
 type (
+	VkDeviceAddress       = uint64
 	DispatchableHandle    = uintptr // pointer
 	NonDispatchableHandle = uint64  // 64-bits, pointer or not
+	Flags64               = uint64
 
 	PfnVoidFunction = uintptr
 )
 
 const (
-	REMAINING_MIP_LEVELS     uint32 = 0xFFFFFFFF         // ^0
-	REMAINING_ARRAY_LAYERS   uint32 = 0xFFFFFFFF         // ^0
-	WHOLE_SIZE               uint64 = 0xFFFFFFFFFFFFFFFF // ^0
-	ATTACHMENT_UNUSED        uint32 = 0xFFFFFFFF         // ^0
-	QUEUE_FAMILY_IGNORED     uint32 = 0xFFFFFFFF         // ^0
-	QUEUE_FAMILY_EXTERNAL    uint32 = 0xFFFFFFFE         // (^0 - 1)
-	QUEUE_FAMILY_FOREIGN_EXT uint32 = 0xFFFFFFFD         //(^0 - 2)
-	SUBPASS_EXTERNAL         uint32 = 0xFFFFFFFF         // ^0
-	SHADER_UNUSED_NV         uint32 = 0xFFFFFFFF         // ^0
+	NULL_HANDLE                   = 0
+	REMAINING_MIP_LEVELS   uint32 = 0xFFFFFFFF         // ^0
+	REMAINING_ARRAY_LAYERS uint32 = 0xFFFFFFFF         // ^0
+	WHOLE_SIZE             uint64 = 0xFFFFFFFFFFFFFFFF // ^0
+	ATTACHMENT_UNUSED      uint32 = 0xFFFFFFFF         // ^0
+	QUEUE_FAMILY_IGNORED   uint32 = 0xFFFFFFFF         // ^0
+	SUBPASS_EXTERNAL       uint32 = 0xFFFFFFFF         // ^0
+	SHADER_UNUSED_NV       uint32 = 0xFFFFFFFF         // ^0
 )
 
 type ErrorResult Result
@@ -71,6 +84,22 @@ func AsResult(err error) Result {
 		return Result(r)
 	}
 	return RESULT_MAX_ENUM
+}
+
+func CreateInstance(pCreateInfo *InstanceCreateInfo, pAllocator *AllocationCallbacks, pInstance *Instance) Result {
+	fp := PfnCreateInstance(GetInstanceProcAddr(0, "vkCreateInstance"))
+	if fp == 0 {
+		return ERROR_UNKNOWN
+	}
+	return fp.Call(pCreateInfo, pAllocator, pInstance)
+}
+
+func EnumerateInstanceVersion(pApiVersion *Version) Result {
+	fp := PfnEnumerateInstanceVersion(GetInstanceProcAddr(0, "vkEnumerateInstanceVersion"))
+	if fp == 0 {
+		return ERROR_UNKNOWN
+	}
+	return fp.Call((*uint32)(pApiVersion))
 }
 
 // union VkClearColorValue {
@@ -200,3 +229,91 @@ func (v *PerformanceValueDataINTEL) SetValueCString(x *int8) {
 type PipelineExecutableStatisticValueKHR uint64
 
 // TODO:
+
+// ypedef struct VkAccelerationStructureInstanceKHR {
+//     VkTransformMatrixKHR          transform;
+//     uint32_t                      instanceCustomIndex:24;
+//     uint32_t                      mask:8;
+//     uint32_t                      instanceShaderBindingTableRecordOffset:24;
+//     VkGeometryInstanceFlagsKHR    flags:8;
+//     uint64_t                      accelerationStructureReference;
+// } VkAccelerationStructureInstanceKHR;
+
+type AccelerationStructureInstanceKHR struct {
+	Transform                      TransformMatrixKHR
+	bitfield0                      uint32 // instanceCustomIndex:24 mask:8
+	bitfield1                      uint32 // instanceShaderBindingTableRecordOffset:24 flags:8
+	AccelerationStructureReference uint64
+}
+
+func (a *AccelerationStructureInstanceKHR) SetInstanceCustomIndex(x uint32) {
+	a.bitfield0 = (a.bitfield0 & 0xFF000000) | (x & 0x00FFFFFF)
+}
+
+func (a AccelerationStructureInstanceKHR) InstanceCustomIndex() uint32 {
+	return a.bitfield0 & 0x00FFFFFF
+}
+
+func (a *AccelerationStructureInstanceKHR) SetMask(x uint8) {
+	a.bitfield0 = (a.bitfield0 & 0x00FFFFFF) | (uint32(x) << 24)
+}
+
+func (a AccelerationStructureInstanceKHR) Mask() uint8 {
+	return uint8((a.bitfield0 & 0xFF000000) >> 24)
+}
+
+func (a *AccelerationStructureInstanceKHR) SetInstanceShaderBindingTableRecordOffset(x uint32) {
+	a.bitfield1 = (a.bitfield1 & 0xFF000000) | (x & 0x00FFFFFF)
+}
+
+func (a AccelerationStructureInstanceKHR) InstanceShaderBindingTableRecordOffset() uint32 {
+	return a.bitfield1 & 0x00FFFFFF
+}
+
+func (a *AccelerationStructureInstanceKHR) SetFlags(x uint8) {
+	a.bitfield1 = (a.bitfield1 & 0x00FFFFFF) | (uint32(x) << 24)
+}
+
+func (a AccelerationStructureInstanceKHR) Flags() uint8 {
+	return uint8((a.bitfield1 & 0xFF000000) >> 24)
+}
+
+type DeviceOrHostAddressKHR uint64
+
+type DeviceOrHostAddressConstKHR uint64
+
+// typedef union VkAccelerationStructureGeometryDataKHR {
+//     VkAccelerationStructureGeometryTrianglesDataKHR    triangles;
+//     VkAccelerationStructureGeometryAabbsDataKHR        aabbs;
+//     VkAccelerationStructureGeometryInstancesDataKHR    instances;
+// } VkAccelerationStructureGeometryDataKHR;
+/*
+type AccelerationStructureGeometryTrianglesDataKHR struct {
+	SType         StructureType   32
+	PNext         unsafe.Pointer  64
+	VertexFormat  Format          32
+	VertexData    DeviceOrHostAddressConstKHR 64
+	VertexStride  DeviceSize 64
+	MaxVertex     uint32   32
+	IndexType     IndexType 32
+	IndexData     DeviceOrHostAddressConstKHR  64
+	TransformData DeviceOrHostAddressConstKHR  64
+}
+
+// AccelerationStructureGeometryAabbsDataKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureGeometryAabbsDataKHR.html
+type AccelerationStructureGeometryAabbsDataKHR struct {
+	SType  StructureType
+	PNext  unsafe.Pointer
+	Data   DeviceOrHostAddressConstKHR
+	Stride DeviceSize
+}
+
+// AccelerationStructureGeometryInstancesDataKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureGeometryInstancesDataKHR.html
+type AccelerationStructureGeometryInstancesDataKHR struct {
+	SType           StructureType
+	PNext           unsafe.Pointer
+	ArrayOfPointers Bool32
+	Data            DeviceOrHostAddressConstKHR
+}
+*/
+type AccelerationStructureGeometryDataKHR [448]byte // TODO: 验证其尺寸

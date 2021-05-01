@@ -310,7 +310,7 @@ func LoadInstanceProc(instance Instance, ppfn interface{}) error {
 	panic("ppfn must be pointed to a PfnXXXXXXX")
 }
 
-func MemCopy(dst, src unsafe.Pointer, size uint64) int {
+func MemCopy(dst unsafe.Pointer, dstOffset uint64, src unsafe.Pointer, srcOffset uint64, size uint64) int {
 	// *[0x7FFFFFFF]byte 这种模式通不过checkptr:
 	// var a [10]byte
 	// ((*[0x7FFFFFFF]byte)(unsafe.Pointer(&a)))[1] = 1
@@ -319,13 +319,21 @@ func MemCopy(dst, src unsafe.Pointer, size uint64) int {
 
 	var ds []byte
 	hd := (*sliceHeader)(unsafe.Pointer(&ds))
-	hd.Data, hd.Len, hd.Cap = uintptr(dst), int(size), int(size)
+	hd.Data, hd.Len, hd.Cap = uintptr(dst), int(dstOffset+size), int(dstOffset+size)
 
 	var ss []byte
 	hs := (*sliceHeader)(unsafe.Pointer(&ss))
-	hs.Data, hs.Len, hs.Cap = uintptr(src), int(size), int(size)
+	hs.Data, hs.Len, hs.Cap = uintptr(src), int(srcOffset+size), int(srcOffset+size)
+	return copy(ds[dstOffset:], ss[srcOffset:])
+}
 
-	return copy(ds, ss)
+func MemZero(dst unsafe.Pointer, size uint64) {
+	var ds []byte
+	hd := (*sliceHeader)(unsafe.Pointer(&ds))
+	hd.Data, hd.Len, hd.Cap = uintptr(dst), int(size), int(size)
+	for i := range ds {
+		ds[i] = 0
+	}
 }
 
 var ShaderFileTypes = map[string]ShaderStageFlags{
@@ -358,4 +366,13 @@ func ShaderStageByFileName(name string) (stage ShaderStageFlags, ok bool) {
 		return ShaderStageByFileName(strings.TrimSuffix(name, ext))
 	}
 	return
+}
+
+func FindInNextChain(p unsafe.Pointer, sType StructureType) unsafe.Pointer {
+	for p1 := (*BaseOutStructure)(p); p1 != nil; p1 = p1.PNext {
+		if p1.SType == sType {
+			return unsafe.Pointer(p1)
+		}
+	}
+	return nil
 }

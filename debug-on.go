@@ -10,9 +10,21 @@ import (
 )
 
 var (
-	dbgMemBlocks = make(map[uintptr]string)
-	dbgMemMutex  sync.Mutex
+	dbgMemBlocks   = make(map[uintptr]string)
+	dbgMemMutex    sync.Mutex
+	dbgBreakVkCall bool
 )
+
+func DebugBreakAfterVkCall() {
+	dbgBreakVkCall = true
+}
+
+func debugCheckAndBreak() {
+	if dbgBreakVkCall {
+		dbgBreakVkCall = false
+		runtime.Breakpoint()
+	}
+}
 
 func debugMarkMemBlock(p uintptr) {
 	dbgMemMutex.Lock()

@@ -5,8 +5,8 @@ package vk
 // #cgo linux LDFLAGS: -lvulkan
 // #include <stdint.h>
 // #include <X11/Xlib.h>
-// #include <vulkan/vulkan.h>
-// #include <vulkan/vulkan_xlib.h>
+// #include "./vulkan/vulkan.h"
+// #include "./vulkan/vulkan_xlib.h"
 //
 // VkResult bridge_vkCreateXlibSurfaceKHR(uintptr_t fp,VkInstance instance,const VkXlibSurfaceCreateInfoKHR* pCreateInfo,const VkAllocationCallbacks* pAllocator,VkSurfaceKHR* pSurface){
 //   return ((PFN_vkCreateXlibSurfaceKHR)fp)(instance,pCreateInfo,pAllocator,pSurface);
@@ -62,7 +62,9 @@ type XlibSurfaceCreateInfoKHR struct {
 }
 
 func NewXlibSurfaceCreateInfoKHR() *XlibSurfaceCreateInfoKHR {
-	return (*XlibSurfaceCreateInfoKHR)(MemAlloc(unsafe.Sizeof(*(*XlibSurfaceCreateInfoKHR)(nil))))
+	p := (*XlibSurfaceCreateInfoKHR)(MemAlloc(unsafe.Sizeof(*(*XlibSurfaceCreateInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR
+	return p
 }
 func (p *XlibSurfaceCreateInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -71,6 +73,7 @@ type PfnCreateXlibSurfaceKHR uintptr
 
 func (fn PfnCreateXlibSurfaceKHR) Call(instance Instance, pCreateInfo *XlibSurfaceCreateInfoKHR, pAllocator *AllocationCallbacks, pSurface *SurfaceKHR) Result {
 	ret := C.bridge_vkCreateXlibSurfaceKHR(C.uintptr_t(fn), (C.VkInstance)(unsafe.Pointer(uintptr(instance))), (*C.VkXlibSurfaceCreateInfoKHR)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkSurfaceKHR)(unsafe.Pointer(pSurface)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateXlibSurfaceKHR) String() string { return "vkCreateXlibSurfaceKHR" }
@@ -80,6 +83,7 @@ type PfnGetPhysicalDeviceXlibPresentationSupportKHR uintptr
 
 func (fn PfnGetPhysicalDeviceXlibPresentationSupportKHR) Call(physicalDevice PhysicalDevice, queueFamilyIndex uint32, dpy *Display, visualID VisualID) Bool32 {
 	ret := C.bridge_vkGetPhysicalDeviceXlibPresentationSupportKHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.uint32_t)(queueFamilyIndex), (*C.Display)(unsafe.Pointer(dpy)), (C.VisualID)(visualID))
+	debugCheckAndBreak()
 	return Bool32(ret)
 }
 func (fn PfnGetPhysicalDeviceXlibPresentationSupportKHR) String() string {

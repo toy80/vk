@@ -5,8 +5,8 @@ package vk
 // #cgo linux LDFLAGS: -lvulkan
 // #include <stdint.h>
 // #include <xcb/xcb.h>
-// #include <vulkan/vulkan.h>
-// #include <vulkan/vulkan_xcb.h>
+// #include "./vulkan/vulkan.h"
+// #include "./vulkan/vulkan_xcb.h"
 //
 // VkResult bridge_vkCreateXcbSurfaceKHR(uintptr_t fp,VkInstance instance,const VkXcbSurfaceCreateInfoKHR* pCreateInfo,const VkAllocationCallbacks* pAllocator,VkSurfaceKHR* pSurface){
 //   return ((PFN_vkCreateXcbSurfaceKHR)fp)(instance,pCreateInfo,pAllocator,pSurface);
@@ -62,7 +62,9 @@ type XcbSurfaceCreateInfoKHR struct {
 }
 
 func NewXcbSurfaceCreateInfoKHR() *XcbSurfaceCreateInfoKHR {
-	return (*XcbSurfaceCreateInfoKHR)(MemAlloc(unsafe.Sizeof(*(*XcbSurfaceCreateInfoKHR)(nil))))
+	p := (*XcbSurfaceCreateInfoKHR)(MemAlloc(unsafe.Sizeof(*(*XcbSurfaceCreateInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_XCB_SURFACE_CREATE_INFO_KHR
+	return p
 }
 func (p *XcbSurfaceCreateInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -71,6 +73,7 @@ type PfnCreateXcbSurfaceKHR uintptr
 
 func (fn PfnCreateXcbSurfaceKHR) Call(instance Instance, pCreateInfo *XcbSurfaceCreateInfoKHR, pAllocator *AllocationCallbacks, pSurface *SurfaceKHR) Result {
 	ret := C.bridge_vkCreateXcbSurfaceKHR(C.uintptr_t(fn), (C.VkInstance)(unsafe.Pointer(uintptr(instance))), (*C.VkXcbSurfaceCreateInfoKHR)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkSurfaceKHR)(unsafe.Pointer(pSurface)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateXcbSurfaceKHR) String() string { return "vkCreateXcbSurfaceKHR" }
@@ -80,6 +83,7 @@ type PfnGetPhysicalDeviceXcbPresentationSupportKHR uintptr
 
 func (fn PfnGetPhysicalDeviceXcbPresentationSupportKHR) Call(physicalDevice PhysicalDevice, queueFamilyIndex uint32, connection *XcbConnection, visual_id XcbVisualID) Bool32 {
 	ret := C.bridge_vkGetPhysicalDeviceXcbPresentationSupportKHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.uint32_t)(queueFamilyIndex), (*C.xcb_connection_t)(unsafe.Pointer(connection)), (C.xcb_visualid_t)(visual_id))
+	debugCheckAndBreak()
 	return Bool32(ret)
 }
 func (fn PfnGetPhysicalDeviceXcbPresentationSupportKHR) String() string {

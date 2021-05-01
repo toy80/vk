@@ -43,7 +43,9 @@ type Win32SurfaceCreateInfoKHR struct {
 }
 
 func NewWin32SurfaceCreateInfoKHR() *Win32SurfaceCreateInfoKHR {
-	return (*Win32SurfaceCreateInfoKHR)(MemAlloc(unsafe.Sizeof(*(*Win32SurfaceCreateInfoKHR)(nil))))
+	p := (*Win32SurfaceCreateInfoKHR)(MemAlloc(unsafe.Sizeof(*(*Win32SurfaceCreateInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR
+	return p
 }
 func (p *Win32SurfaceCreateInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -52,6 +54,7 @@ type PfnCreateWin32SurfaceKHR uintptr
 
 func (fn PfnCreateWin32SurfaceKHR) Call(instance Instance, pCreateInfo *Win32SurfaceCreateInfoKHR, pAllocator *AllocationCallbacks, pSurface *SurfaceKHR) Result {
 	ret, _, _ := call(uintptr(fn), uintptr(instance), uintptr(unsafe.Pointer(pCreateInfo)), uintptr(unsafe.Pointer(pAllocator)), uintptr(unsafe.Pointer(pSurface)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateWin32SurfaceKHR) String() string { return "vkCreateWin32SurfaceKHR" }
@@ -61,6 +64,7 @@ type PfnGetPhysicalDeviceWin32PresentationSupportKHR uintptr
 
 func (fn PfnGetPhysicalDeviceWin32PresentationSupportKHR) Call(physicalDevice PhysicalDevice, queueFamilyIndex uint32) Bool32 {
 	ret, _, _ := call(uintptr(fn), uintptr(physicalDevice), uintptr(queueFamilyIndex))
+	debugCheckAndBreak()
 	return Bool32(ret)
 }
 func (fn PfnGetPhysicalDeviceWin32PresentationSupportKHR) String() string {
@@ -82,7 +86,9 @@ type ImportMemoryWin32HandleInfoKHR struct {
 }
 
 func NewImportMemoryWin32HandleInfoKHR() *ImportMemoryWin32HandleInfoKHR {
-	return (*ImportMemoryWin32HandleInfoKHR)(MemAlloc(unsafe.Sizeof(*(*ImportMemoryWin32HandleInfoKHR)(nil))))
+	p := (*ImportMemoryWin32HandleInfoKHR)(MemAlloc(unsafe.Sizeof(*(*ImportMemoryWin32HandleInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_IMPORT_MEMORY_WIN32_HANDLE_INFO_NV
+	return p
 }
 func (p *ImportMemoryWin32HandleInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -96,7 +102,9 @@ type ExportMemoryWin32HandleInfoKHR struct {
 }
 
 func NewExportMemoryWin32HandleInfoKHR() *ExportMemoryWin32HandleInfoKHR {
-	return (*ExportMemoryWin32HandleInfoKHR)(MemAlloc(unsafe.Sizeof(*(*ExportMemoryWin32HandleInfoKHR)(nil))))
+	p := (*ExportMemoryWin32HandleInfoKHR)(MemAlloc(unsafe.Sizeof(*(*ExportMemoryWin32HandleInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_EXPORT_MEMORY_WIN32_HANDLE_INFO_NV
+	return p
 }
 func (p *ExportMemoryWin32HandleInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -108,7 +116,9 @@ type MemoryWin32HandlePropertiesKHR struct {
 }
 
 func NewMemoryWin32HandlePropertiesKHR() *MemoryWin32HandlePropertiesKHR {
-	return (*MemoryWin32HandlePropertiesKHR)(MemAlloc(unsafe.Sizeof(*(*MemoryWin32HandlePropertiesKHR)(nil))))
+	p := (*MemoryWin32HandlePropertiesKHR)(MemAlloc(unsafe.Sizeof(*(*MemoryWin32HandlePropertiesKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_MEMORY_WIN32_HANDLE_PROPERTIES_KHR
+	return p
 }
 func (p *MemoryWin32HandlePropertiesKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -121,7 +131,9 @@ type MemoryGetWin32HandleInfoKHR struct {
 }
 
 func NewMemoryGetWin32HandleInfoKHR() *MemoryGetWin32HandleInfoKHR {
-	return (*MemoryGetWin32HandleInfoKHR)(MemAlloc(unsafe.Sizeof(*(*MemoryGetWin32HandleInfoKHR)(nil))))
+	p := (*MemoryGetWin32HandleInfoKHR)(MemAlloc(unsafe.Sizeof(*(*MemoryGetWin32HandleInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_MEMORY_GET_WIN32_HANDLE_INFO_KHR
+	return p
 }
 func (p *MemoryGetWin32HandleInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -130,6 +142,7 @@ type PfnGetMemoryWin32HandleKHR uintptr
 
 func (fn PfnGetMemoryWin32HandleKHR) Call(device Device, pGetWin32HandleInfo *MemoryGetWin32HandleInfoKHR, pHandle *HANDLE) Result {
 	ret, _, _ := call(uintptr(fn), uintptr(device), uintptr(unsafe.Pointer(pGetWin32HandleInfo)), uintptr(unsafe.Pointer(pHandle)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetMemoryWin32HandleKHR) String() string { return "vkGetMemoryWin32HandleKHR" }
@@ -139,6 +152,7 @@ type PfnGetMemoryWin32HandlePropertiesKHR uintptr
 
 func (fn PfnGetMemoryWin32HandlePropertiesKHR) Call(device Device, handleType ExternalMemoryHandleTypeFlags, handle HANDLE, pMemoryWin32HandleProperties *MemoryWin32HandlePropertiesKHR) Result {
 	ret, _, _ := call(uintptr(fn), uintptr(device), uintptr(handleType), uintptr(handle), uintptr(unsafe.Pointer(pMemoryWin32HandleProperties)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetMemoryWin32HandlePropertiesKHR) String() string {
@@ -164,7 +178,9 @@ type Win32KeyedMutexAcquireReleaseInfoKHR struct {
 }
 
 func NewWin32KeyedMutexAcquireReleaseInfoKHR() *Win32KeyedMutexAcquireReleaseInfoKHR {
-	return (*Win32KeyedMutexAcquireReleaseInfoKHR)(MemAlloc(unsafe.Sizeof(*(*Win32KeyedMutexAcquireReleaseInfoKHR)(nil))))
+	p := (*Win32KeyedMutexAcquireReleaseInfoKHR)(MemAlloc(unsafe.Sizeof(*(*Win32KeyedMutexAcquireReleaseInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_WIN32_KEYED_MUTEX_ACQUIRE_RELEASE_INFO_KHR
+	return p
 }
 func (p *Win32KeyedMutexAcquireReleaseInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -185,7 +201,9 @@ type ImportSemaphoreWin32HandleInfoKHR struct {
 }
 
 func NewImportSemaphoreWin32HandleInfoKHR() *ImportSemaphoreWin32HandleInfoKHR {
-	return (*ImportSemaphoreWin32HandleInfoKHR)(MemAlloc(unsafe.Sizeof(*(*ImportSemaphoreWin32HandleInfoKHR)(nil))))
+	p := (*ImportSemaphoreWin32HandleInfoKHR)(MemAlloc(unsafe.Sizeof(*(*ImportSemaphoreWin32HandleInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_IMPORT_SEMAPHORE_WIN32_HANDLE_INFO_KHR
+	return p
 }
 func (p *ImportSemaphoreWin32HandleInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -199,7 +217,9 @@ type ExportSemaphoreWin32HandleInfoKHR struct {
 }
 
 func NewExportSemaphoreWin32HandleInfoKHR() *ExportSemaphoreWin32HandleInfoKHR {
-	return (*ExportSemaphoreWin32HandleInfoKHR)(MemAlloc(unsafe.Sizeof(*(*ExportSemaphoreWin32HandleInfoKHR)(nil))))
+	p := (*ExportSemaphoreWin32HandleInfoKHR)(MemAlloc(unsafe.Sizeof(*(*ExportSemaphoreWin32HandleInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_EXPORT_SEMAPHORE_WIN32_HANDLE_INFO_KHR
+	return p
 }
 func (p *ExportSemaphoreWin32HandleInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -214,7 +234,9 @@ type D3D12FenceSubmitInfoKHR struct {
 }
 
 func NewD3D12FenceSubmitInfoKHR() *D3D12FenceSubmitInfoKHR {
-	return (*D3D12FenceSubmitInfoKHR)(MemAlloc(unsafe.Sizeof(*(*D3D12FenceSubmitInfoKHR)(nil))))
+	p := (*D3D12FenceSubmitInfoKHR)(MemAlloc(unsafe.Sizeof(*(*D3D12FenceSubmitInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_D3D12_FENCE_SUBMIT_INFO_KHR
+	return p
 }
 func (p *D3D12FenceSubmitInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -227,7 +249,9 @@ type SemaphoreGetWin32HandleInfoKHR struct {
 }
 
 func NewSemaphoreGetWin32HandleInfoKHR() *SemaphoreGetWin32HandleInfoKHR {
-	return (*SemaphoreGetWin32HandleInfoKHR)(MemAlloc(unsafe.Sizeof(*(*SemaphoreGetWin32HandleInfoKHR)(nil))))
+	p := (*SemaphoreGetWin32HandleInfoKHR)(MemAlloc(unsafe.Sizeof(*(*SemaphoreGetWin32HandleInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_SEMAPHORE_GET_WIN32_HANDLE_INFO_KHR
+	return p
 }
 func (p *SemaphoreGetWin32HandleInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -236,6 +260,7 @@ type PfnImportSemaphoreWin32HandleKHR uintptr
 
 func (fn PfnImportSemaphoreWin32HandleKHR) Call(device Device, pImportSemaphoreWin32HandleInfo *ImportSemaphoreWin32HandleInfoKHR) Result {
 	ret, _, _ := call(uintptr(fn), uintptr(device), uintptr(unsafe.Pointer(pImportSemaphoreWin32HandleInfo)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnImportSemaphoreWin32HandleKHR) String() string { return "vkImportSemaphoreWin32HandleKHR" }
@@ -245,6 +270,7 @@ type PfnGetSemaphoreWin32HandleKHR uintptr
 
 func (fn PfnGetSemaphoreWin32HandleKHR) Call(device Device, pGetWin32HandleInfo *SemaphoreGetWin32HandleInfoKHR, pHandle *HANDLE) Result {
 	ret, _, _ := call(uintptr(fn), uintptr(device), uintptr(unsafe.Pointer(pGetWin32HandleInfo)), uintptr(unsafe.Pointer(pHandle)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetSemaphoreWin32HandleKHR) String() string { return "vkGetSemaphoreWin32HandleKHR" }
@@ -266,7 +292,9 @@ type ImportFenceWin32HandleInfoKHR struct {
 }
 
 func NewImportFenceWin32HandleInfoKHR() *ImportFenceWin32HandleInfoKHR {
-	return (*ImportFenceWin32HandleInfoKHR)(MemAlloc(unsafe.Sizeof(*(*ImportFenceWin32HandleInfoKHR)(nil))))
+	p := (*ImportFenceWin32HandleInfoKHR)(MemAlloc(unsafe.Sizeof(*(*ImportFenceWin32HandleInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_IMPORT_FENCE_WIN32_HANDLE_INFO_KHR
+	return p
 }
 func (p *ImportFenceWin32HandleInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -280,7 +308,9 @@ type ExportFenceWin32HandleInfoKHR struct {
 }
 
 func NewExportFenceWin32HandleInfoKHR() *ExportFenceWin32HandleInfoKHR {
-	return (*ExportFenceWin32HandleInfoKHR)(MemAlloc(unsafe.Sizeof(*(*ExportFenceWin32HandleInfoKHR)(nil))))
+	p := (*ExportFenceWin32HandleInfoKHR)(MemAlloc(unsafe.Sizeof(*(*ExportFenceWin32HandleInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_EXPORT_FENCE_WIN32_HANDLE_INFO_KHR
+	return p
 }
 func (p *ExportFenceWin32HandleInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -293,7 +323,9 @@ type FenceGetWin32HandleInfoKHR struct {
 }
 
 func NewFenceGetWin32HandleInfoKHR() *FenceGetWin32HandleInfoKHR {
-	return (*FenceGetWin32HandleInfoKHR)(MemAlloc(unsafe.Sizeof(*(*FenceGetWin32HandleInfoKHR)(nil))))
+	p := (*FenceGetWin32HandleInfoKHR)(MemAlloc(unsafe.Sizeof(*(*FenceGetWin32HandleInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_FENCE_GET_WIN32_HANDLE_INFO_KHR
+	return p
 }
 func (p *FenceGetWin32HandleInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -302,6 +334,7 @@ type PfnImportFenceWin32HandleKHR uintptr
 
 func (fn PfnImportFenceWin32HandleKHR) Call(device Device, pImportFenceWin32HandleInfo *ImportFenceWin32HandleInfoKHR) Result {
 	ret, _, _ := call(uintptr(fn), uintptr(device), uintptr(unsafe.Pointer(pImportFenceWin32HandleInfo)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnImportFenceWin32HandleKHR) String() string { return "vkImportFenceWin32HandleKHR" }
@@ -311,6 +344,7 @@ type PfnGetFenceWin32HandleKHR uintptr
 
 func (fn PfnGetFenceWin32HandleKHR) Call(device Device, pGetWin32HandleInfo *FenceGetWin32HandleInfoKHR, pHandle *HANDLE) Result {
 	ret, _, _ := call(uintptr(fn), uintptr(device), uintptr(unsafe.Pointer(pGetWin32HandleInfo)), uintptr(unsafe.Pointer(pHandle)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetFenceWin32HandleKHR) String() string { return "vkGetFenceWin32HandleKHR" }
@@ -329,7 +363,9 @@ type ImportMemoryWin32HandleInfoNV struct {
 }
 
 func NewImportMemoryWin32HandleInfoNV() *ImportMemoryWin32HandleInfoNV {
-	return (*ImportMemoryWin32HandleInfoNV)(MemAlloc(unsafe.Sizeof(*(*ImportMemoryWin32HandleInfoNV)(nil))))
+	p := (*ImportMemoryWin32HandleInfoNV)(MemAlloc(unsafe.Sizeof(*(*ImportMemoryWin32HandleInfoNV)(nil))))
+	p.SType = STRUCTURE_TYPE_IMPORT_MEMORY_WIN32_HANDLE_INFO_NV
+	return p
 }
 func (p *ImportMemoryWin32HandleInfoNV) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -342,7 +378,9 @@ type ExportMemoryWin32HandleInfoNV struct {
 }
 
 func NewExportMemoryWin32HandleInfoNV() *ExportMemoryWin32HandleInfoNV {
-	return (*ExportMemoryWin32HandleInfoNV)(MemAlloc(unsafe.Sizeof(*(*ExportMemoryWin32HandleInfoNV)(nil))))
+	p := (*ExportMemoryWin32HandleInfoNV)(MemAlloc(unsafe.Sizeof(*(*ExportMemoryWin32HandleInfoNV)(nil))))
+	p.SType = STRUCTURE_TYPE_EXPORT_MEMORY_WIN32_HANDLE_INFO_NV
+	return p
 }
 func (p *ExportMemoryWin32HandleInfoNV) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -351,6 +389,7 @@ type PfnGetMemoryWin32HandleNV uintptr
 
 func (fn PfnGetMemoryWin32HandleNV) Call(device Device, memory DeviceMemory, handleType ExternalMemoryHandleTypeFlagsNV, pHandle *HANDLE) Result {
 	ret, _, _ := call(uintptr(fn), uintptr(device), uintptr(memory), uintptr(handleType), uintptr(unsafe.Pointer(pHandle)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetMemoryWin32HandleNV) String() string { return "vkGetMemoryWin32HandleNV" }
@@ -374,7 +413,9 @@ type Win32KeyedMutexAcquireReleaseInfoNV struct {
 }
 
 func NewWin32KeyedMutexAcquireReleaseInfoNV() *Win32KeyedMutexAcquireReleaseInfoNV {
-	return (*Win32KeyedMutexAcquireReleaseInfoNV)(MemAlloc(unsafe.Sizeof(*(*Win32KeyedMutexAcquireReleaseInfoNV)(nil))))
+	p := (*Win32KeyedMutexAcquireReleaseInfoNV)(MemAlloc(unsafe.Sizeof(*(*Win32KeyedMutexAcquireReleaseInfoNV)(nil))))
+	p.SType = STRUCTURE_TYPE_WIN32_KEYED_MUTEX_ACQUIRE_RELEASE_INFO_NV
+	return p
 }
 func (p *Win32KeyedMutexAcquireReleaseInfoNV) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -391,9 +432,6 @@ const (
 	FULL_SCREEN_EXCLUSIVE_ALLOWED_EXT                FullScreenExclusiveEXT = 1
 	FULL_SCREEN_EXCLUSIVE_DISALLOWED_EXT             FullScreenExclusiveEXT = 2
 	FULL_SCREEN_EXCLUSIVE_APPLICATION_CONTROLLED_EXT FullScreenExclusiveEXT = 3
-	FULL_SCREEN_EXCLUSIVE_BEGIN_RANGE_EXT            FullScreenExclusiveEXT = FULL_SCREEN_EXCLUSIVE_DEFAULT_EXT
-	FULL_SCREEN_EXCLUSIVE_END_RANGE_EXT              FullScreenExclusiveEXT = FULL_SCREEN_EXCLUSIVE_APPLICATION_CONTROLLED_EXT
-	FULL_SCREEN_EXCLUSIVE_RANGE_SIZE_EXT             FullScreenExclusiveEXT = (FULL_SCREEN_EXCLUSIVE_APPLICATION_CONTROLLED_EXT - FULL_SCREEN_EXCLUSIVE_DEFAULT_EXT + 1)
 	FULL_SCREEN_EXCLUSIVE_MAX_ENUM_EXT               FullScreenExclusiveEXT = 0x7FFFFFFF
 )
 
@@ -422,7 +460,9 @@ type SurfaceFullScreenExclusiveInfoEXT struct {
 }
 
 func NewSurfaceFullScreenExclusiveInfoEXT() *SurfaceFullScreenExclusiveInfoEXT {
-	return (*SurfaceFullScreenExclusiveInfoEXT)(MemAlloc(unsafe.Sizeof(*(*SurfaceFullScreenExclusiveInfoEXT)(nil))))
+	p := (*SurfaceFullScreenExclusiveInfoEXT)(MemAlloc(unsafe.Sizeof(*(*SurfaceFullScreenExclusiveInfoEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_INFO_EXT
+	return p
 }
 func (p *SurfaceFullScreenExclusiveInfoEXT) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -434,7 +474,9 @@ type SurfaceCapabilitiesFullScreenExclusiveEXT struct {
 }
 
 func NewSurfaceCapabilitiesFullScreenExclusiveEXT() *SurfaceCapabilitiesFullScreenExclusiveEXT {
-	return (*SurfaceCapabilitiesFullScreenExclusiveEXT)(MemAlloc(unsafe.Sizeof(*(*SurfaceCapabilitiesFullScreenExclusiveEXT)(nil))))
+	p := (*SurfaceCapabilitiesFullScreenExclusiveEXT)(MemAlloc(unsafe.Sizeof(*(*SurfaceCapabilitiesFullScreenExclusiveEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_SURFACE_CAPABILITIES_FULL_SCREEN_EXCLUSIVE_EXT
+	return p
 }
 func (p *SurfaceCapabilitiesFullScreenExclusiveEXT) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -446,7 +488,9 @@ type SurfaceFullScreenExclusiveWin32InfoEXT struct {
 }
 
 func NewSurfaceFullScreenExclusiveWin32InfoEXT() *SurfaceFullScreenExclusiveWin32InfoEXT {
-	return (*SurfaceFullScreenExclusiveWin32InfoEXT)(MemAlloc(unsafe.Sizeof(*(*SurfaceFullScreenExclusiveWin32InfoEXT)(nil))))
+	p := (*SurfaceFullScreenExclusiveWin32InfoEXT)(MemAlloc(unsafe.Sizeof(*(*SurfaceFullScreenExclusiveWin32InfoEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_WIN32_INFO_EXT
+	return p
 }
 func (p *SurfaceFullScreenExclusiveWin32InfoEXT) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -455,6 +499,7 @@ type PfnGetPhysicalDeviceSurfacePresentModes2EXT uintptr
 
 func (fn PfnGetPhysicalDeviceSurfacePresentModes2EXT) Call(physicalDevice PhysicalDevice, pSurfaceInfo *PhysicalDeviceSurfaceInfo2KHR, pPresentModeCount *uint32, pPresentModes *PresentModeKHR) Result {
 	ret, _, _ := call(uintptr(fn), uintptr(physicalDevice), uintptr(unsafe.Pointer(pSurfaceInfo)), uintptr(unsafe.Pointer(pPresentModeCount)), uintptr(unsafe.Pointer(pPresentModes)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPhysicalDeviceSurfacePresentModes2EXT) String() string {
@@ -466,6 +511,7 @@ type PfnAcquireFullScreenExclusiveModeEXT uintptr
 
 func (fn PfnAcquireFullScreenExclusiveModeEXT) Call(device Device, swapchain SwapchainKHR) Result {
 	ret, _, _ := call(uintptr(fn), uintptr(device), uintptr(swapchain))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnAcquireFullScreenExclusiveModeEXT) String() string {
@@ -477,6 +523,7 @@ type PfnReleaseFullScreenExclusiveModeEXT uintptr
 
 func (fn PfnReleaseFullScreenExclusiveModeEXT) Call(device Device, swapchain SwapchainKHR) Result {
 	ret, _, _ := call(uintptr(fn), uintptr(device), uintptr(swapchain))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnReleaseFullScreenExclusiveModeEXT) String() string {
@@ -488,6 +535,7 @@ type PfnGetDeviceGroupSurfacePresentModes2EXT uintptr
 
 func (fn PfnGetDeviceGroupSurfacePresentModes2EXT) Call(device Device, pSurfaceInfo *PhysicalDeviceSurfaceInfo2KHR, pModes *DeviceGroupPresentModeFlagsKHR) Result {
 	ret, _, _ := call(uintptr(fn), uintptr(device), uintptr(unsafe.Pointer(pSurfaceInfo)), uintptr(unsafe.Pointer(pModes)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetDeviceGroupSurfacePresentModes2EXT) String() string {

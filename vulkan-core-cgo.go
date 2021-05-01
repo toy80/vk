@@ -4,7 +4,7 @@ package vk
 
 // #cgo windows LDFLAGS: -lvulkan-1
 // #cgo linux LDFLAGS: -lvulkan
-// #cgo darwin LDFLAGS: -lvulkan
+// #cgo darwin LDFLAGS: -lMoltenVK
 //
 // #ifdef _WIN32
 // # include <windows.h>
@@ -17,14 +17,11 @@ package vk
 // #include <stdint.h>
 // #include <stdlib.h>
 // #include <string.h>
-// #include <vulkan/vulkan.h>
+// #include "./vulkan/vulkan.h"
 //
 //
 // void* bridge_vkAllocationFunction(uintptr_t fp,void* pUserData,size_t size,size_t alignment,VkSystemAllocationScope allocationScope){
 //   return ((PFN_vkAllocationFunction)fp)(pUserData,size,alignment,allocationScope);
-// }
-// void* bridge_vkReallocationFunction(uintptr_t fp,void* pUserData,void* pOriginal,size_t size,size_t alignment,VkSystemAllocationScope allocationScope){
-//   return ((PFN_vkReallocationFunction)fp)(pUserData,pOriginal,size,alignment,allocationScope);
 // }
 // void bridge_vkFreeFunction(uintptr_t fp,void* pUserData,void* pMemory){
 //   return ((PFN_vkFreeFunction)fp)(pUserData,pMemory);
@@ -34,6 +31,9 @@ package vk
 // }
 // void bridge_vkInternalFreeNotification(uintptr_t fp,void* pUserData,size_t size,VkInternalAllocationType allocationType,VkSystemAllocationScope allocationScope){
 //   return ((PFN_vkInternalFreeNotification)fp)(pUserData,size,allocationType,allocationScope);
+// }
+// void* bridge_vkReallocationFunction(uintptr_t fp,void* pUserData,void* pOriginal,size_t size,size_t alignment,VkSystemAllocationScope allocationScope){
+//   return ((PFN_vkReallocationFunction)fp)(pUserData,pOriginal,size,alignment,allocationScope);
 // }
 // VkResult bridge_vkCreateInstance(uintptr_t fp,const VkInstanceCreateInfo* pCreateInfo,const VkAllocationCallbacks* pAllocator,VkInstance* pInstance){
 //   return ((PFN_vkCreateInstance)fp)(pCreateInfo,pAllocator,pInstance);
@@ -447,6 +447,7 @@ package vk
 //   return ((PFN_vkCmdExecuteCommands)fp)(commandBuffer,commandBufferCount,pCommandBuffers);
 // }
 // VkResult bridge_vkEnumerateInstanceVersion(uintptr_t fp,uint32_t* pApiVersion){
+//   if ( fp == 0)  return VK_ERROR_UNKNOWN;
 //   return ((PFN_vkEnumerateInstanceVersion)fp)(pApiVersion);
 // }
 // VkResult bridge_vkBindBufferMemory2(uintptr_t fp,VkDevice device,uint32_t bindInfoCount,const VkBindBufferMemoryInfo* pBindInfos){
@@ -529,6 +530,45 @@ package vk
 // }
 // void bridge_vkGetDescriptorSetLayoutSupport(uintptr_t fp,VkDevice device,const VkDescriptorSetLayoutCreateInfo* pCreateInfo,VkDescriptorSetLayoutSupport* pSupport){
 //   return ((PFN_vkGetDescriptorSetLayoutSupport)fp)(device,pCreateInfo,pSupport);
+// }
+// void bridge_vkCmdDrawIndirectCount(uintptr_t fp,VkCommandBuffer commandBuffer,VkBuffer buffer,VkDeviceSize offset,VkBuffer countBuffer,VkDeviceSize countBufferOffset,uint32_t maxDrawCount,uint32_t stride){
+//   return ((PFN_vkCmdDrawIndirectCount)fp)(commandBuffer,buffer,offset,countBuffer,countBufferOffset,maxDrawCount,stride);
+// }
+// void bridge_vkCmdDrawIndexedIndirectCount(uintptr_t fp,VkCommandBuffer commandBuffer,VkBuffer buffer,VkDeviceSize offset,VkBuffer countBuffer,VkDeviceSize countBufferOffset,uint32_t maxDrawCount,uint32_t stride){
+//   return ((PFN_vkCmdDrawIndexedIndirectCount)fp)(commandBuffer,buffer,offset,countBuffer,countBufferOffset,maxDrawCount,stride);
+// }
+// VkResult bridge_vkCreateRenderPass2(uintptr_t fp,VkDevice device,const VkRenderPassCreateInfo2* pCreateInfo,const VkAllocationCallbacks* pAllocator,VkRenderPass* pRenderPass){
+//   return ((PFN_vkCreateRenderPass2)fp)(device,pCreateInfo,pAllocator,pRenderPass);
+// }
+// void bridge_vkCmdBeginRenderPass2(uintptr_t fp,VkCommandBuffer commandBuffer,const VkRenderPassBeginInfo* pRenderPassBegin,const VkSubpassBeginInfo* pSubpassBeginInfo){
+//   return ((PFN_vkCmdBeginRenderPass2)fp)(commandBuffer,pRenderPassBegin,pSubpassBeginInfo);
+// }
+// void bridge_vkCmdNextSubpass2(uintptr_t fp,VkCommandBuffer commandBuffer,const VkSubpassBeginInfo* pSubpassBeginInfo,const VkSubpassEndInfo* pSubpassEndInfo){
+//   return ((PFN_vkCmdNextSubpass2)fp)(commandBuffer,pSubpassBeginInfo,pSubpassEndInfo);
+// }
+// void bridge_vkCmdEndRenderPass2(uintptr_t fp,VkCommandBuffer commandBuffer,const VkSubpassEndInfo* pSubpassEndInfo){
+//   return ((PFN_vkCmdEndRenderPass2)fp)(commandBuffer,pSubpassEndInfo);
+// }
+// void bridge_vkResetQueryPool(uintptr_t fp,VkDevice device,VkQueryPool queryPool,uint32_t firstQuery,uint32_t queryCount){
+//   return ((PFN_vkResetQueryPool)fp)(device,queryPool,firstQuery,queryCount);
+// }
+// VkResult bridge_vkGetSemaphoreCounterValue(uintptr_t fp,VkDevice device,VkSemaphore semaphore,uint64_t* pValue){
+//   return ((PFN_vkGetSemaphoreCounterValue)fp)(device,semaphore,pValue);
+// }
+// VkResult bridge_vkWaitSemaphores(uintptr_t fp,VkDevice device,const VkSemaphoreWaitInfo* pWaitInfo,uint64_t timeout){
+//   return ((PFN_vkWaitSemaphores)fp)(device,pWaitInfo,timeout);
+// }
+// VkResult bridge_vkSignalSemaphore(uintptr_t fp,VkDevice device,const VkSemaphoreSignalInfo* pSignalInfo){
+//   return ((PFN_vkSignalSemaphore)fp)(device,pSignalInfo);
+// }
+// VkDeviceAddress bridge_vkGetBufferDeviceAddress(uintptr_t fp,VkDevice device,const VkBufferDeviceAddressInfo* pInfo){
+//   return ((PFN_vkGetBufferDeviceAddress)fp)(device,pInfo);
+// }
+// uint64_t bridge_vkGetBufferOpaqueCaptureAddress(uintptr_t fp,VkDevice device,const VkBufferDeviceAddressInfo* pInfo){
+//   return ((PFN_vkGetBufferOpaqueCaptureAddress)fp)(device,pInfo);
+// }
+// uint64_t bridge_vkGetDeviceMemoryOpaqueCaptureAddress(uintptr_t fp,VkDevice device,const VkDeviceMemoryOpaqueCaptureAddressInfo* pInfo){
+//   return ((PFN_vkGetDeviceMemoryOpaqueCaptureAddress)fp)(device,pInfo);
 // }
 // void bridge_vkDestroySurfaceKHR(uintptr_t fp,VkInstance instance,VkSurfaceKHR surface,const VkAllocationCallbacks* pAllocator){
 //   return ((PFN_vkDestroySurfaceKHR)fp)(instance,surface,pAllocator);
@@ -665,16 +705,16 @@ package vk
 // void bridge_vkUpdateDescriptorSetWithTemplateKHR(uintptr_t fp,VkDevice device,VkDescriptorSet descriptorSet,VkDescriptorUpdateTemplate descriptorUpdateTemplate,const void* pData){
 //   return ((PFN_vkUpdateDescriptorSetWithTemplateKHR)fp)(device,descriptorSet,descriptorUpdateTemplate,pData);
 // }
-// VkResult bridge_vkCreateRenderPass2KHR(uintptr_t fp,VkDevice device,const VkRenderPassCreateInfo2KHR* pCreateInfo,const VkAllocationCallbacks* pAllocator,VkRenderPass* pRenderPass){
+// VkResult bridge_vkCreateRenderPass2KHR(uintptr_t fp,VkDevice device,const VkRenderPassCreateInfo2* pCreateInfo,const VkAllocationCallbacks* pAllocator,VkRenderPass* pRenderPass){
 //   return ((PFN_vkCreateRenderPass2KHR)fp)(device,pCreateInfo,pAllocator,pRenderPass);
 // }
-// void bridge_vkCmdBeginRenderPass2KHR(uintptr_t fp,VkCommandBuffer commandBuffer,const VkRenderPassBeginInfo* pRenderPassBegin,const VkSubpassBeginInfoKHR* pSubpassBeginInfo){
+// void bridge_vkCmdBeginRenderPass2KHR(uintptr_t fp,VkCommandBuffer commandBuffer,const VkRenderPassBeginInfo* pRenderPassBegin,const VkSubpassBeginInfo* pSubpassBeginInfo){
 //   return ((PFN_vkCmdBeginRenderPass2KHR)fp)(commandBuffer,pRenderPassBegin,pSubpassBeginInfo);
 // }
-// void bridge_vkCmdNextSubpass2KHR(uintptr_t fp,VkCommandBuffer commandBuffer,const VkSubpassBeginInfoKHR* pSubpassBeginInfo,const VkSubpassEndInfoKHR* pSubpassEndInfo){
+// void bridge_vkCmdNextSubpass2KHR(uintptr_t fp,VkCommandBuffer commandBuffer,const VkSubpassBeginInfo* pSubpassBeginInfo,const VkSubpassEndInfo* pSubpassEndInfo){
 //   return ((PFN_vkCmdNextSubpass2KHR)fp)(commandBuffer,pSubpassBeginInfo,pSubpassEndInfo);
 // }
-// void bridge_vkCmdEndRenderPass2KHR(uintptr_t fp,VkCommandBuffer commandBuffer,const VkSubpassEndInfoKHR* pSubpassEndInfo){
+// void bridge_vkCmdEndRenderPass2KHR(uintptr_t fp,VkCommandBuffer commandBuffer,const VkSubpassEndInfo* pSubpassEndInfo){
 //   return ((PFN_vkCmdEndRenderPass2KHR)fp)(commandBuffer,pSubpassEndInfo);
 // }
 // VkResult bridge_vkGetSwapchainStatusKHR(uintptr_t fp,VkDevice device,VkSwapchainKHR swapchain){
@@ -688,6 +728,18 @@ package vk
 // }
 // VkResult bridge_vkGetFenceFdKHR(uintptr_t fp,VkDevice device,const VkFenceGetFdInfoKHR* pGetFdInfo,int* pFd){
 //   return ((PFN_vkGetFenceFdKHR)fp)(device,pGetFdInfo,pFd);
+// }
+// VkResult bridge_vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR(uintptr_t fp,VkPhysicalDevice physicalDevice,uint32_t queueFamilyIndex,uint32_t* pCounterCount,VkPerformanceCounterKHR* pCounters,VkPerformanceCounterDescriptionKHR* pCounterDescriptions){
+//   return ((PFN_vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR)fp)(physicalDevice,queueFamilyIndex,pCounterCount,pCounters,pCounterDescriptions);
+// }
+// void bridge_vkGetPhysicalDeviceQueueFamilyPerformanceQueryPassesKHR(uintptr_t fp,VkPhysicalDevice physicalDevice,const VkQueryPoolPerformanceCreateInfoKHR* pPerformanceQueryCreateInfo,uint32_t* pNumPasses){
+//   return ((PFN_vkGetPhysicalDeviceQueueFamilyPerformanceQueryPassesKHR)fp)(physicalDevice,pPerformanceQueryCreateInfo,pNumPasses);
+// }
+// VkResult bridge_vkAcquireProfilingLockKHR(uintptr_t fp,VkDevice device,const VkAcquireProfilingLockInfoKHR* pInfo){
+//   return ((PFN_vkAcquireProfilingLockKHR)fp)(device,pInfo);
+// }
+// void bridge_vkReleaseProfilingLockKHR(uintptr_t fp,VkDevice device){
+//   return ((PFN_vkReleaseProfilingLockKHR)fp)(device);
 // }
 // VkResult bridge_vkGetPhysicalDeviceSurfaceCapabilities2KHR(uintptr_t fp,VkPhysicalDevice physicalDevice,const VkPhysicalDeviceSurfaceInfo2KHR* pSurfaceInfo,VkSurfaceCapabilities2KHR* pSurfaceCapabilities){
 //   return ((PFN_vkGetPhysicalDeviceSurfaceCapabilities2KHR)fp)(physicalDevice,pSurfaceInfo,pSurfaceCapabilities);
@@ -737,6 +789,45 @@ package vk
 // void bridge_vkCmdDrawIndexedIndirectCountKHR(uintptr_t fp,VkCommandBuffer commandBuffer,VkBuffer buffer,VkDeviceSize offset,VkBuffer countBuffer,VkDeviceSize countBufferOffset,uint32_t maxDrawCount,uint32_t stride){
 //   return ((PFN_vkCmdDrawIndexedIndirectCountKHR)fp)(commandBuffer,buffer,offset,countBuffer,countBufferOffset,maxDrawCount,stride);
 // }
+// VkResult bridge_vkGetSemaphoreCounterValueKHR(uintptr_t fp,VkDevice device,VkSemaphore semaphore,uint64_t* pValue){
+//   return ((PFN_vkGetSemaphoreCounterValueKHR)fp)(device,semaphore,pValue);
+// }
+// VkResult bridge_vkWaitSemaphoresKHR(uintptr_t fp,VkDevice device,const VkSemaphoreWaitInfo* pWaitInfo,uint64_t timeout){
+//   return ((PFN_vkWaitSemaphoresKHR)fp)(device,pWaitInfo,timeout);
+// }
+// VkResult bridge_vkSignalSemaphoreKHR(uintptr_t fp,VkDevice device,const VkSemaphoreSignalInfo* pSignalInfo){
+//   return ((PFN_vkSignalSemaphoreKHR)fp)(device,pSignalInfo);
+// }
+// VkResult bridge_vkGetPhysicalDeviceFragmentShadingRatesKHR(uintptr_t fp,VkPhysicalDevice physicalDevice,uint32_t* pFragmentShadingRateCount,VkPhysicalDeviceFragmentShadingRateKHR* pFragmentShadingRates){
+//   return ((PFN_vkGetPhysicalDeviceFragmentShadingRatesKHR)fp)(physicalDevice,pFragmentShadingRateCount,pFragmentShadingRates);
+// }
+// void bridge_vkCmdSetFragmentShadingRateKHR(uintptr_t fp,VkCommandBuffer commandBuffer,const VkExtent2D* pFragmentSize,const VkFragmentShadingRateCombinerOpKHR combinerOp[2]){
+//   return ((PFN_vkCmdSetFragmentShadingRateKHR)fp)(commandBuffer,pFragmentSize,combinerOp);
+// }
+// VkDeviceAddress bridge_vkGetBufferDeviceAddressKHR(uintptr_t fp,VkDevice device,const VkBufferDeviceAddressInfo* pInfo){
+//   return ((PFN_vkGetBufferDeviceAddressKHR)fp)(device,pInfo);
+// }
+// uint64_t bridge_vkGetBufferOpaqueCaptureAddressKHR(uintptr_t fp,VkDevice device,const VkBufferDeviceAddressInfo* pInfo){
+//   return ((PFN_vkGetBufferOpaqueCaptureAddressKHR)fp)(device,pInfo);
+// }
+// uint64_t bridge_vkGetDeviceMemoryOpaqueCaptureAddressKHR(uintptr_t fp,VkDevice device,const VkDeviceMemoryOpaqueCaptureAddressInfo* pInfo){
+//   return ((PFN_vkGetDeviceMemoryOpaqueCaptureAddressKHR)fp)(device,pInfo);
+// }
+// VkResult bridge_vkCreateDeferredOperationKHR(uintptr_t fp,VkDevice device,const VkAllocationCallbacks* pAllocator,VkDeferredOperationKHR* pDeferredOperation){
+//   return ((PFN_vkCreateDeferredOperationKHR)fp)(device,pAllocator,pDeferredOperation);
+// }
+// void bridge_vkDestroyDeferredOperationKHR(uintptr_t fp,VkDevice device,VkDeferredOperationKHR operation,const VkAllocationCallbacks* pAllocator){
+//   return ((PFN_vkDestroyDeferredOperationKHR)fp)(device,operation,pAllocator);
+// }
+// uint32_t bridge_vkGetDeferredOperationMaxConcurrencyKHR(uintptr_t fp,VkDevice device,VkDeferredOperationKHR operation){
+//   return ((PFN_vkGetDeferredOperationMaxConcurrencyKHR)fp)(device,operation);
+// }
+// VkResult bridge_vkGetDeferredOperationResultKHR(uintptr_t fp,VkDevice device,VkDeferredOperationKHR operation){
+//   return ((PFN_vkGetDeferredOperationResultKHR)fp)(device,operation);
+// }
+// VkResult bridge_vkDeferredOperationJoinKHR(uintptr_t fp,VkDevice device,VkDeferredOperationKHR operation){
+//   return ((PFN_vkDeferredOperationJoinKHR)fp)(device,operation);
+// }
 // VkResult bridge_vkGetPipelineExecutablePropertiesKHR(uintptr_t fp,VkDevice device,const VkPipelineInfoKHR* pPipelineInfo,uint32_t* pExecutableCount,VkPipelineExecutablePropertiesKHR* pProperties){
 //   return ((PFN_vkGetPipelineExecutablePropertiesKHR)fp)(device,pPipelineInfo,pExecutableCount,pProperties);
 // }
@@ -745,6 +836,48 @@ package vk
 // }
 // VkResult bridge_vkGetPipelineExecutableInternalRepresentationsKHR(uintptr_t fp,VkDevice device,const VkPipelineExecutableInfoKHR* pExecutableInfo,uint32_t* pInternalRepresentationCount,VkPipelineExecutableInternalRepresentationKHR* pInternalRepresentations){
 //   return ((PFN_vkGetPipelineExecutableInternalRepresentationsKHR)fp)(device,pExecutableInfo,pInternalRepresentationCount,pInternalRepresentations);
+// }
+// void bridge_vkCmdSetEvent2KHR(uintptr_t fp,VkCommandBuffer commandBuffer,VkEvent event,const VkDependencyInfoKHR* pDependencyInfo){
+//   return ((PFN_vkCmdSetEvent2KHR)fp)(commandBuffer,event,pDependencyInfo);
+// }
+// void bridge_vkCmdResetEvent2KHR(uintptr_t fp,VkCommandBuffer commandBuffer,VkEvent event,VkPipelineStageFlags2KHR stageMask){
+//   return ((PFN_vkCmdResetEvent2KHR)fp)(commandBuffer,event,stageMask);
+// }
+// void bridge_vkCmdWaitEvents2KHR(uintptr_t fp,VkCommandBuffer commandBuffer,uint32_t eventCount,const VkEvent* pEvents,const VkDependencyInfoKHR* pDependencyInfos){
+//   return ((PFN_vkCmdWaitEvents2KHR)fp)(commandBuffer,eventCount,pEvents,pDependencyInfos);
+// }
+// void bridge_vkCmdPipelineBarrier2KHR(uintptr_t fp,VkCommandBuffer commandBuffer,const VkDependencyInfoKHR* pDependencyInfo){
+//   return ((PFN_vkCmdPipelineBarrier2KHR)fp)(commandBuffer,pDependencyInfo);
+// }
+// void bridge_vkCmdWriteTimestamp2KHR(uintptr_t fp,VkCommandBuffer commandBuffer,VkPipelineStageFlags2KHR stage,VkQueryPool queryPool,uint32_t query){
+//   return ((PFN_vkCmdWriteTimestamp2KHR)fp)(commandBuffer,stage,queryPool,query);
+// }
+// VkResult bridge_vkQueueSubmit2KHR(uintptr_t fp,VkQueue queue,uint32_t submitCount,const VkSubmitInfo2KHR* pSubmits,VkFence fence){
+//   return ((PFN_vkQueueSubmit2KHR)fp)(queue,submitCount,pSubmits,fence);
+// }
+// void bridge_vkCmdWriteBufferMarker2AMD(uintptr_t fp,VkCommandBuffer commandBuffer,VkPipelineStageFlags2KHR stage,VkBuffer dstBuffer,VkDeviceSize dstOffset,uint32_t marker){
+//   return ((PFN_vkCmdWriteBufferMarker2AMD)fp)(commandBuffer,stage,dstBuffer,dstOffset,marker);
+// }
+// void bridge_vkGetQueueCheckpointData2NV(uintptr_t fp,VkQueue queue,uint32_t* pCheckpointDataCount,VkCheckpointData2NV* pCheckpointData){
+//   return ((PFN_vkGetQueueCheckpointData2NV)fp)(queue,pCheckpointDataCount,pCheckpointData);
+// }
+// void bridge_vkCmdCopyBuffer2KHR(uintptr_t fp,VkCommandBuffer commandBuffer,const VkCopyBufferInfo2KHR* pCopyBufferInfo){
+//   return ((PFN_vkCmdCopyBuffer2KHR)fp)(commandBuffer,pCopyBufferInfo);
+// }
+// void bridge_vkCmdCopyImage2KHR(uintptr_t fp,VkCommandBuffer commandBuffer,const VkCopyImageInfo2KHR* pCopyImageInfo){
+//   return ((PFN_vkCmdCopyImage2KHR)fp)(commandBuffer,pCopyImageInfo);
+// }
+// void bridge_vkCmdCopyBufferToImage2KHR(uintptr_t fp,VkCommandBuffer commandBuffer,const VkCopyBufferToImageInfo2KHR* pCopyBufferToImageInfo){
+//   return ((PFN_vkCmdCopyBufferToImage2KHR)fp)(commandBuffer,pCopyBufferToImageInfo);
+// }
+// void bridge_vkCmdCopyImageToBuffer2KHR(uintptr_t fp,VkCommandBuffer commandBuffer,const VkCopyImageToBufferInfo2KHR* pCopyImageToBufferInfo){
+//   return ((PFN_vkCmdCopyImageToBuffer2KHR)fp)(commandBuffer,pCopyImageToBufferInfo);
+// }
+// void bridge_vkCmdBlitImage2KHR(uintptr_t fp,VkCommandBuffer commandBuffer,const VkBlitImageInfo2KHR* pBlitImageInfo){
+//   return ((PFN_vkCmdBlitImage2KHR)fp)(commandBuffer,pBlitImageInfo);
+// }
+// void bridge_vkCmdResolveImage2KHR(uintptr_t fp,VkCommandBuffer commandBuffer,const VkResolveImageInfo2KHR* pResolveImageInfo){
+//   return ((PFN_vkCmdResolveImage2KHR)fp)(commandBuffer,pResolveImageInfo);
 // }
 // VkBool32 bridge_vkDebugReportCallbackEXT(uintptr_t fp,VkDebugReportFlagsEXT flags,VkDebugReportObjectTypeEXT objectType,uint64_t object,size_t location,int32_t messageCode,const char* pLayerPrefix,const char* pMessage,void* pUserData){
 //   return ((PFN_vkDebugReportCallbackEXT)fp)(flags,objectType,object,location,messageCode,pLayerPrefix,pMessage,pUserData);
@@ -794,6 +927,9 @@ package vk
 // uint32_t bridge_vkGetImageViewHandleNVX(uintptr_t fp,VkDevice device,const VkImageViewHandleInfoNVX* pInfo){
 //   return ((PFN_vkGetImageViewHandleNVX)fp)(device,pInfo);
 // }
+// VkResult bridge_vkGetImageViewAddressNVX(uintptr_t fp,VkDevice device,VkImageView imageView,VkImageViewAddressPropertiesNVX* pProperties){
+//   return ((PFN_vkGetImageViewAddressNVX)fp)(device,imageView,pProperties);
+// }
 // void bridge_vkCmdDrawIndirectCountAMD(uintptr_t fp,VkCommandBuffer commandBuffer,VkBuffer buffer,VkDeviceSize offset,VkBuffer countBuffer,VkDeviceSize countBufferOffset,uint32_t maxDrawCount,uint32_t stride){
 //   return ((PFN_vkCmdDrawIndirectCountAMD)fp)(commandBuffer,buffer,offset,countBuffer,countBufferOffset,maxDrawCount,stride);
 // }
@@ -811,33 +947,6 @@ package vk
 // }
 // void bridge_vkCmdEndConditionalRenderingEXT(uintptr_t fp,VkCommandBuffer commandBuffer){
 //   return ((PFN_vkCmdEndConditionalRenderingEXT)fp)(commandBuffer);
-// }
-// void bridge_vkCmdProcessCommandsNVX(uintptr_t fp,VkCommandBuffer commandBuffer,const VkCmdProcessCommandsInfoNVX* pProcessCommandsInfo){
-//   return ((PFN_vkCmdProcessCommandsNVX)fp)(commandBuffer,pProcessCommandsInfo);
-// }
-// void bridge_vkCmdReserveSpaceForCommandsNVX(uintptr_t fp,VkCommandBuffer commandBuffer,const VkCmdReserveSpaceForCommandsInfoNVX* pReserveSpaceInfo){
-//   return ((PFN_vkCmdReserveSpaceForCommandsNVX)fp)(commandBuffer,pReserveSpaceInfo);
-// }
-// VkResult bridge_vkCreateIndirectCommandsLayoutNVX(uintptr_t fp,VkDevice device,const VkIndirectCommandsLayoutCreateInfoNVX* pCreateInfo,const VkAllocationCallbacks* pAllocator,VkIndirectCommandsLayoutNVX* pIndirectCommandsLayout){
-//   return ((PFN_vkCreateIndirectCommandsLayoutNVX)fp)(device,pCreateInfo,pAllocator,pIndirectCommandsLayout);
-// }
-// void bridge_vkDestroyIndirectCommandsLayoutNVX(uintptr_t fp,VkDevice device,VkIndirectCommandsLayoutNVX indirectCommandsLayout,const VkAllocationCallbacks* pAllocator){
-//   return ((PFN_vkDestroyIndirectCommandsLayoutNVX)fp)(device,indirectCommandsLayout,pAllocator);
-// }
-// VkResult bridge_vkCreateObjectTableNVX(uintptr_t fp,VkDevice device,const VkObjectTableCreateInfoNVX* pCreateInfo,const VkAllocationCallbacks* pAllocator,VkObjectTableNVX* pObjectTable){
-//   return ((PFN_vkCreateObjectTableNVX)fp)(device,pCreateInfo,pAllocator,pObjectTable);
-// }
-// void bridge_vkDestroyObjectTableNVX(uintptr_t fp,VkDevice device,VkObjectTableNVX objectTable,const VkAllocationCallbacks* pAllocator){
-//   return ((PFN_vkDestroyObjectTableNVX)fp)(device,objectTable,pAllocator);
-// }
-// VkResult bridge_vkRegisterObjectsNVX(uintptr_t fp,VkDevice device,VkObjectTableNVX objectTable,uint32_t objectCount,const VkObjectTableEntryNVX* const* ppObjectTableEntries,const uint32_t* pObjectIndices){
-//   return ((PFN_vkRegisterObjectsNVX)fp)(device,objectTable,objectCount,ppObjectTableEntries,pObjectIndices);
-// }
-// VkResult bridge_vkUnregisterObjectsNVX(uintptr_t fp,VkDevice device,VkObjectTableNVX objectTable,uint32_t objectCount,const VkObjectEntryTypeNVX* pObjectEntryTypes,const uint32_t* pObjectIndices){
-//   return ((PFN_vkUnregisterObjectsNVX)fp)(device,objectTable,objectCount,pObjectEntryTypes,pObjectIndices);
-// }
-// void bridge_vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX(uintptr_t fp,VkPhysicalDevice physicalDevice,VkDeviceGeneratedCommandsFeaturesNVX* pFeatures,VkDeviceGeneratedCommandsLimitsNVX* pLimits){
-//   return ((PFN_vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX)fp)(physicalDevice,pFeatures,pLimits);
 // }
 // void bridge_vkCmdSetViewportWScalingNV(uintptr_t fp,VkCommandBuffer commandBuffer,uint32_t firstViewport,uint32_t viewportCount,const VkViewportWScalingNV* pViewportWScalings){
 //   return ((PFN_vkCmdSetViewportWScalingNV)fp)(commandBuffer,firstViewport,viewportCount,pViewportWScalings);
@@ -953,7 +1062,7 @@ package vk
 // void bridge_vkCmdBuildAccelerationStructureNV(uintptr_t fp,VkCommandBuffer commandBuffer,const VkAccelerationStructureInfoNV* pInfo,VkBuffer instanceData,VkDeviceSize instanceOffset,VkBool32 update,VkAccelerationStructureNV dst,VkAccelerationStructureNV src,VkBuffer scratch,VkDeviceSize scratchOffset){
 //   return ((PFN_vkCmdBuildAccelerationStructureNV)fp)(commandBuffer,pInfo,instanceData,instanceOffset,update,dst,src,scratch,scratchOffset);
 // }
-// void bridge_vkCmdCopyAccelerationStructureNV(uintptr_t fp,VkCommandBuffer commandBuffer,VkAccelerationStructureNV dst,VkAccelerationStructureNV src,VkCopyAccelerationStructureModeNV mode){
+// void bridge_vkCmdCopyAccelerationStructureNV(uintptr_t fp,VkCommandBuffer commandBuffer,VkAccelerationStructureNV dst,VkAccelerationStructureNV src,VkCopyAccelerationStructureModeKHR mode){
 //   return ((PFN_vkCmdCopyAccelerationStructureNV)fp)(commandBuffer,dst,src,mode);
 // }
 // void bridge_vkCmdTraceRaysNV(uintptr_t fp,VkCommandBuffer commandBuffer,VkBuffer raygenShaderBindingTableBuffer,VkDeviceSize raygenShaderBindingOffset,VkBuffer missShaderBindingTableBuffer,VkDeviceSize missShaderBindingOffset,VkDeviceSize missShaderBindingStride,VkBuffer hitShaderBindingTableBuffer,VkDeviceSize hitShaderBindingOffset,VkDeviceSize hitShaderBindingStride,VkBuffer callableShaderBindingTableBuffer,VkDeviceSize callableShaderBindingOffset,VkDeviceSize callableShaderBindingStride,uint32_t width,uint32_t height,uint32_t depth){
@@ -961,6 +1070,9 @@ package vk
 // }
 // VkResult bridge_vkCreateRayTracingPipelinesNV(uintptr_t fp,VkDevice device,VkPipelineCache pipelineCache,uint32_t createInfoCount,const VkRayTracingPipelineCreateInfoNV* pCreateInfos,const VkAllocationCallbacks* pAllocator,VkPipeline* pPipelines){
 //   return ((PFN_vkCreateRayTracingPipelinesNV)fp)(device,pipelineCache,createInfoCount,pCreateInfos,pAllocator,pPipelines);
+// }
+// VkResult bridge_vkGetRayTracingShaderGroupHandlesKHR(uintptr_t fp,VkDevice device,VkPipeline pipeline,uint32_t firstGroup,uint32_t groupCount,size_t dataSize,void* pData){
+//   return ((PFN_vkGetRayTracingShaderGroupHandlesKHR)fp)(device,pipeline,firstGroup,groupCount,dataSize,pData);
 // }
 // VkResult bridge_vkGetRayTracingShaderGroupHandlesNV(uintptr_t fp,VkDevice device,VkPipeline pipeline,uint32_t firstGroup,uint32_t groupCount,size_t dataSize,void* pData){
 //   return ((PFN_vkGetRayTracingShaderGroupHandlesNV)fp)(device,pipeline,firstGroup,groupCount,dataSize,pData);
@@ -1034,8 +1146,11 @@ package vk
 // void bridge_vkSetLocalDimmingAMD(uintptr_t fp,VkDevice device,VkSwapchainKHR swapChain,VkBool32 localDimmingEnable){
 //   return ((PFN_vkSetLocalDimmingAMD)fp)(device,swapChain,localDimmingEnable);
 // }
-// VkDeviceAddress bridge_vkGetBufferDeviceAddressEXT(uintptr_t fp,VkDevice device,const VkBufferDeviceAddressInfoEXT* pInfo){
+// VkDeviceAddress bridge_vkGetBufferDeviceAddressEXT(uintptr_t fp,VkDevice device,const VkBufferDeviceAddressInfo* pInfo){
 //   return ((PFN_vkGetBufferDeviceAddressEXT)fp)(device,pInfo);
+// }
+// VkResult bridge_vkGetPhysicalDeviceToolPropertiesEXT(uintptr_t fp,VkPhysicalDevice physicalDevice,uint32_t* pToolCount,VkPhysicalDeviceToolPropertiesEXT* pToolProperties){
+//   return ((PFN_vkGetPhysicalDeviceToolPropertiesEXT)fp)(physicalDevice,pToolCount,pToolProperties);
 // }
 // VkResult bridge_vkGetPhysicalDeviceCooperativeMatrixPropertiesNV(uintptr_t fp,VkPhysicalDevice physicalDevice,uint32_t* pPropertyCount,VkCooperativeMatrixPropertiesNV* pProperties){
 //   return ((PFN_vkGetPhysicalDeviceCooperativeMatrixPropertiesNV)fp)(physicalDevice,pPropertyCount,pProperties);
@@ -1051,6 +1166,171 @@ package vk
 // }
 // void bridge_vkResetQueryPoolEXT(uintptr_t fp,VkDevice device,VkQueryPool queryPool,uint32_t firstQuery,uint32_t queryCount){
 //   return ((PFN_vkResetQueryPoolEXT)fp)(device,queryPool,firstQuery,queryCount);
+// }
+// void bridge_vkCmdSetCullModeEXT(uintptr_t fp,VkCommandBuffer commandBuffer,VkCullModeFlags cullMode){
+//   return ((PFN_vkCmdSetCullModeEXT)fp)(commandBuffer,cullMode);
+// }
+// void bridge_vkCmdSetFrontFaceEXT(uintptr_t fp,VkCommandBuffer commandBuffer,VkFrontFace frontFace){
+//   return ((PFN_vkCmdSetFrontFaceEXT)fp)(commandBuffer,frontFace);
+// }
+// void bridge_vkCmdSetPrimitiveTopologyEXT(uintptr_t fp,VkCommandBuffer commandBuffer,VkPrimitiveTopology primitiveTopology){
+//   return ((PFN_vkCmdSetPrimitiveTopologyEXT)fp)(commandBuffer,primitiveTopology);
+// }
+// void bridge_vkCmdSetViewportWithCountEXT(uintptr_t fp,VkCommandBuffer commandBuffer,uint32_t viewportCount,const VkViewport* pViewports){
+//   return ((PFN_vkCmdSetViewportWithCountEXT)fp)(commandBuffer,viewportCount,pViewports);
+// }
+// void bridge_vkCmdSetScissorWithCountEXT(uintptr_t fp,VkCommandBuffer commandBuffer,uint32_t scissorCount,const VkRect2D* pScissors){
+//   return ((PFN_vkCmdSetScissorWithCountEXT)fp)(commandBuffer,scissorCount,pScissors);
+// }
+// void bridge_vkCmdBindVertexBuffers2EXT(uintptr_t fp,VkCommandBuffer commandBuffer,uint32_t firstBinding,uint32_t bindingCount,const VkBuffer* pBuffers,const VkDeviceSize* pOffsets,const VkDeviceSize* pSizes,const VkDeviceSize* pStrides){
+//   return ((PFN_vkCmdBindVertexBuffers2EXT)fp)(commandBuffer,firstBinding,bindingCount,pBuffers,pOffsets,pSizes,pStrides);
+// }
+// void bridge_vkCmdSetDepthTestEnableEXT(uintptr_t fp,VkCommandBuffer commandBuffer,VkBool32 depthTestEnable){
+//   return ((PFN_vkCmdSetDepthTestEnableEXT)fp)(commandBuffer,depthTestEnable);
+// }
+// void bridge_vkCmdSetDepthWriteEnableEXT(uintptr_t fp,VkCommandBuffer commandBuffer,VkBool32 depthWriteEnable){
+//   return ((PFN_vkCmdSetDepthWriteEnableEXT)fp)(commandBuffer,depthWriteEnable);
+// }
+// void bridge_vkCmdSetDepthCompareOpEXT(uintptr_t fp,VkCommandBuffer commandBuffer,VkCompareOp depthCompareOp){
+//   return ((PFN_vkCmdSetDepthCompareOpEXT)fp)(commandBuffer,depthCompareOp);
+// }
+// void bridge_vkCmdSetDepthBoundsTestEnableEXT(uintptr_t fp,VkCommandBuffer commandBuffer,VkBool32 depthBoundsTestEnable){
+//   return ((PFN_vkCmdSetDepthBoundsTestEnableEXT)fp)(commandBuffer,depthBoundsTestEnable);
+// }
+// void bridge_vkCmdSetStencilTestEnableEXT(uintptr_t fp,VkCommandBuffer commandBuffer,VkBool32 stencilTestEnable){
+//   return ((PFN_vkCmdSetStencilTestEnableEXT)fp)(commandBuffer,stencilTestEnable);
+// }
+// void bridge_vkCmdSetStencilOpEXT(uintptr_t fp,VkCommandBuffer commandBuffer,VkStencilFaceFlags faceMask,VkStencilOp failOp,VkStencilOp passOp,VkStencilOp depthFailOp,VkCompareOp compareOp){
+//   return ((PFN_vkCmdSetStencilOpEXT)fp)(commandBuffer,faceMask,failOp,passOp,depthFailOp,compareOp);
+// }
+// void bridge_vkGetGeneratedCommandsMemoryRequirementsNV(uintptr_t fp,VkDevice device,const VkGeneratedCommandsMemoryRequirementsInfoNV* pInfo,VkMemoryRequirements2* pMemoryRequirements){
+//   return ((PFN_vkGetGeneratedCommandsMemoryRequirementsNV)fp)(device,pInfo,pMemoryRequirements);
+// }
+// void bridge_vkCmdPreprocessGeneratedCommandsNV(uintptr_t fp,VkCommandBuffer commandBuffer,const VkGeneratedCommandsInfoNV* pGeneratedCommandsInfo){
+//   return ((PFN_vkCmdPreprocessGeneratedCommandsNV)fp)(commandBuffer,pGeneratedCommandsInfo);
+// }
+// void bridge_vkCmdExecuteGeneratedCommandsNV(uintptr_t fp,VkCommandBuffer commandBuffer,VkBool32 isPreprocessed,const VkGeneratedCommandsInfoNV* pGeneratedCommandsInfo){
+//   return ((PFN_vkCmdExecuteGeneratedCommandsNV)fp)(commandBuffer,isPreprocessed,pGeneratedCommandsInfo);
+// }
+// void bridge_vkCmdBindPipelineShaderGroupNV(uintptr_t fp,VkCommandBuffer commandBuffer,VkPipelineBindPoint pipelineBindPoint,VkPipeline pipeline,uint32_t groupIndex){
+//   return ((PFN_vkCmdBindPipelineShaderGroupNV)fp)(commandBuffer,pipelineBindPoint,pipeline,groupIndex);
+// }
+// VkResult bridge_vkCreateIndirectCommandsLayoutNV(uintptr_t fp,VkDevice device,const VkIndirectCommandsLayoutCreateInfoNV* pCreateInfo,const VkAllocationCallbacks* pAllocator,VkIndirectCommandsLayoutNV* pIndirectCommandsLayout){
+//   return ((PFN_vkCreateIndirectCommandsLayoutNV)fp)(device,pCreateInfo,pAllocator,pIndirectCommandsLayout);
+// }
+// void bridge_vkDestroyIndirectCommandsLayoutNV(uintptr_t fp,VkDevice device,VkIndirectCommandsLayoutNV indirectCommandsLayout,const VkAllocationCallbacks* pAllocator){
+//   return ((PFN_vkDestroyIndirectCommandsLayoutNV)fp)(device,indirectCommandsLayout,pAllocator);
+// }
+// void bridge_vkDeviceMemoryReportCallbackEXT(uintptr_t fp,const VkDeviceMemoryReportCallbackDataEXT* pCallbackData,void* pUserData){
+//   return ((PFN_vkDeviceMemoryReportCallbackEXT)fp)(pCallbackData,pUserData);
+// }
+// VkResult bridge_vkCreatePrivateDataSlotEXT(uintptr_t fp,VkDevice device,const VkPrivateDataSlotCreateInfoEXT* pCreateInfo,const VkAllocationCallbacks* pAllocator,VkPrivateDataSlotEXT* pPrivateDataSlot){
+//   return ((PFN_vkCreatePrivateDataSlotEXT)fp)(device,pCreateInfo,pAllocator,pPrivateDataSlot);
+// }
+// void bridge_vkDestroyPrivateDataSlotEXT(uintptr_t fp,VkDevice device,VkPrivateDataSlotEXT privateDataSlot,const VkAllocationCallbacks* pAllocator){
+//   return ((PFN_vkDestroyPrivateDataSlotEXT)fp)(device,privateDataSlot,pAllocator);
+// }
+// VkResult bridge_vkSetPrivateDataEXT(uintptr_t fp,VkDevice device,VkObjectType objectType,uint64_t objectHandle,VkPrivateDataSlotEXT privateDataSlot,uint64_t data){
+//   return ((PFN_vkSetPrivateDataEXT)fp)(device,objectType,objectHandle,privateDataSlot,data);
+// }
+// void bridge_vkGetPrivateDataEXT(uintptr_t fp,VkDevice device,VkObjectType objectType,uint64_t objectHandle,VkPrivateDataSlotEXT privateDataSlot,uint64_t* pData){
+//   return ((PFN_vkGetPrivateDataEXT)fp)(device,objectType,objectHandle,privateDataSlot,pData);
+// }
+// void bridge_vkCmdSetFragmentShadingRateEnumNV(uintptr_t fp,VkCommandBuffer commandBuffer,VkFragmentShadingRateNV shadingRate,const VkFragmentShadingRateCombinerOpKHR combinerOp[2]){
+//   return ((PFN_vkCmdSetFragmentShadingRateEnumNV)fp)(commandBuffer,shadingRate,combinerOp);
+// }
+// VkResult bridge_vkAcquireWinrtDisplayNV(uintptr_t fp,VkPhysicalDevice physicalDevice,VkDisplayKHR display){
+//   return ((PFN_vkAcquireWinrtDisplayNV)fp)(physicalDevice,display);
+// }
+// VkResult bridge_vkGetWinrtDisplayNV(uintptr_t fp,VkPhysicalDevice physicalDevice,uint32_t deviceRelativeId,VkDisplayKHR* pDisplay){
+//   return ((PFN_vkGetWinrtDisplayNV)fp)(physicalDevice,deviceRelativeId,pDisplay);
+// }
+// void bridge_vkCmdSetVertexInputEXT(uintptr_t fp,VkCommandBuffer commandBuffer,uint32_t vertexBindingDescriptionCount,const VkVertexInputBindingDescription2EXT* pVertexBindingDescriptions,uint32_t vertexAttributeDescriptionCount,const VkVertexInputAttributeDescription2EXT* pVertexAttributeDescriptions){
+//   return ((PFN_vkCmdSetVertexInputEXT)fp)(commandBuffer,vertexBindingDescriptionCount,pVertexBindingDescriptions,vertexAttributeDescriptionCount,pVertexAttributeDescriptions);
+// }
+// void bridge_vkCmdSetPatchControlPointsEXT(uintptr_t fp,VkCommandBuffer commandBuffer,uint32_t patchControlPoints){
+//   return ((PFN_vkCmdSetPatchControlPointsEXT)fp)(commandBuffer,patchControlPoints);
+// }
+// void bridge_vkCmdSetRasterizerDiscardEnableEXT(uintptr_t fp,VkCommandBuffer commandBuffer,VkBool32 rasterizerDiscardEnable){
+//   return ((PFN_vkCmdSetRasterizerDiscardEnableEXT)fp)(commandBuffer,rasterizerDiscardEnable);
+// }
+// void bridge_vkCmdSetDepthBiasEnableEXT(uintptr_t fp,VkCommandBuffer commandBuffer,VkBool32 depthBiasEnable){
+//   return ((PFN_vkCmdSetDepthBiasEnableEXT)fp)(commandBuffer,depthBiasEnable);
+// }
+// void bridge_vkCmdSetLogicOpEXT(uintptr_t fp,VkCommandBuffer commandBuffer,VkLogicOp logicOp){
+//   return ((PFN_vkCmdSetLogicOpEXT)fp)(commandBuffer,logicOp);
+// }
+// void bridge_vkCmdSetPrimitiveRestartEnableEXT(uintptr_t fp,VkCommandBuffer commandBuffer,VkBool32 primitiveRestartEnable){
+//   return ((PFN_vkCmdSetPrimitiveRestartEnableEXT)fp)(commandBuffer,primitiveRestartEnable);
+// }
+// void bridge_vkCmdSetColorWriteEnableEXT(uintptr_t fp,VkCommandBuffer commandBuffer,uint32_t attachmentCount,const VkBool32* pColorWriteEnables){
+//   return ((PFN_vkCmdSetColorWriteEnableEXT)fp)(commandBuffer,attachmentCount,pColorWriteEnables);
+// }
+// VkResult bridge_vkCreateAccelerationStructureKHR(uintptr_t fp,VkDevice device,const VkAccelerationStructureCreateInfoKHR* pCreateInfo,const VkAllocationCallbacks* pAllocator,VkAccelerationStructureKHR* pAccelerationStructure){
+//   return ((PFN_vkCreateAccelerationStructureKHR)fp)(device,pCreateInfo,pAllocator,pAccelerationStructure);
+// }
+// void bridge_vkDestroyAccelerationStructureKHR(uintptr_t fp,VkDevice device,VkAccelerationStructureKHR accelerationStructure,const VkAllocationCallbacks* pAllocator){
+//   return ((PFN_vkDestroyAccelerationStructureKHR)fp)(device,accelerationStructure,pAllocator);
+// }
+// void bridge_vkCmdBuildAccelerationStructuresKHR(uintptr_t fp,VkCommandBuffer commandBuffer,uint32_t infoCount,const VkAccelerationStructureBuildGeometryInfoKHR* pInfos,const VkAccelerationStructureBuildRangeInfoKHR* const* ppBuildRangeInfos){
+//   return ((PFN_vkCmdBuildAccelerationStructuresKHR)fp)(commandBuffer,infoCount,pInfos,ppBuildRangeInfos);
+// }
+// void bridge_vkCmdBuildAccelerationStructuresIndirectKHR(uintptr_t fp,VkCommandBuffer commandBuffer,uint32_t infoCount,const VkAccelerationStructureBuildGeometryInfoKHR* pInfos,const VkDeviceAddress* pIndirectDeviceAddresses,const uint32_t* pIndirectStrides,const uint32_t* const* ppMaxPrimitiveCounts){
+//   return ((PFN_vkCmdBuildAccelerationStructuresIndirectKHR)fp)(commandBuffer,infoCount,pInfos,pIndirectDeviceAddresses,pIndirectStrides,ppMaxPrimitiveCounts);
+// }
+// VkResult bridge_vkBuildAccelerationStructuresKHR(uintptr_t fp,VkDevice device,VkDeferredOperationKHR deferredOperation,uint32_t infoCount,const VkAccelerationStructureBuildGeometryInfoKHR* pInfos,const VkAccelerationStructureBuildRangeInfoKHR* const* ppBuildRangeInfos){
+//   return ((PFN_vkBuildAccelerationStructuresKHR)fp)(device,deferredOperation,infoCount,pInfos,ppBuildRangeInfos);
+// }
+// VkResult bridge_vkCopyAccelerationStructureKHR(uintptr_t fp,VkDevice device,VkDeferredOperationKHR deferredOperation,const VkCopyAccelerationStructureInfoKHR* pInfo){
+//   return ((PFN_vkCopyAccelerationStructureKHR)fp)(device,deferredOperation,pInfo);
+// }
+// VkResult bridge_vkCopyAccelerationStructureToMemoryKHR(uintptr_t fp,VkDevice device,VkDeferredOperationKHR deferredOperation,const VkCopyAccelerationStructureToMemoryInfoKHR* pInfo){
+//   return ((PFN_vkCopyAccelerationStructureToMemoryKHR)fp)(device,deferredOperation,pInfo);
+// }
+// VkResult bridge_vkCopyMemoryToAccelerationStructureKHR(uintptr_t fp,VkDevice device,VkDeferredOperationKHR deferredOperation,const VkCopyMemoryToAccelerationStructureInfoKHR* pInfo){
+//   return ((PFN_vkCopyMemoryToAccelerationStructureKHR)fp)(device,deferredOperation,pInfo);
+// }
+// VkResult bridge_vkWriteAccelerationStructuresPropertiesKHR(uintptr_t fp,VkDevice device,uint32_t accelerationStructureCount,const VkAccelerationStructureKHR* pAccelerationStructures,VkQueryType queryType,size_t dataSize,void* pData,size_t stride){
+//   return ((PFN_vkWriteAccelerationStructuresPropertiesKHR)fp)(device,accelerationStructureCount,pAccelerationStructures,queryType,dataSize,pData,stride);
+// }
+// void bridge_vkCmdCopyAccelerationStructureKHR(uintptr_t fp,VkCommandBuffer commandBuffer,const VkCopyAccelerationStructureInfoKHR* pInfo){
+//   return ((PFN_vkCmdCopyAccelerationStructureKHR)fp)(commandBuffer,pInfo);
+// }
+// void bridge_vkCmdCopyAccelerationStructureToMemoryKHR(uintptr_t fp,VkCommandBuffer commandBuffer,const VkCopyAccelerationStructureToMemoryInfoKHR* pInfo){
+//   return ((PFN_vkCmdCopyAccelerationStructureToMemoryKHR)fp)(commandBuffer,pInfo);
+// }
+// void bridge_vkCmdCopyMemoryToAccelerationStructureKHR(uintptr_t fp,VkCommandBuffer commandBuffer,const VkCopyMemoryToAccelerationStructureInfoKHR* pInfo){
+//   return ((PFN_vkCmdCopyMemoryToAccelerationStructureKHR)fp)(commandBuffer,pInfo);
+// }
+// VkDeviceAddress bridge_vkGetAccelerationStructureDeviceAddressKHR(uintptr_t fp,VkDevice device,const VkAccelerationStructureDeviceAddressInfoKHR* pInfo){
+//   return ((PFN_vkGetAccelerationStructureDeviceAddressKHR)fp)(device,pInfo);
+// }
+// void bridge_vkCmdWriteAccelerationStructuresPropertiesKHR(uintptr_t fp,VkCommandBuffer commandBuffer,uint32_t accelerationStructureCount,const VkAccelerationStructureKHR* pAccelerationStructures,VkQueryType queryType,VkQueryPool queryPool,uint32_t firstQuery){
+//   return ((PFN_vkCmdWriteAccelerationStructuresPropertiesKHR)fp)(commandBuffer,accelerationStructureCount,pAccelerationStructures,queryType,queryPool,firstQuery);
+// }
+// void bridge_vkGetDeviceAccelerationStructureCompatibilityKHR(uintptr_t fp,VkDevice device,const VkAccelerationStructureVersionInfoKHR* pVersionInfo,VkAccelerationStructureCompatibilityKHR* pCompatibility){
+//   return ((PFN_vkGetDeviceAccelerationStructureCompatibilityKHR)fp)(device,pVersionInfo,pCompatibility);
+// }
+// void bridge_vkGetAccelerationStructureBuildSizesKHR(uintptr_t fp,VkDevice device,VkAccelerationStructureBuildTypeKHR buildType,const VkAccelerationStructureBuildGeometryInfoKHR* pBuildInfo,const uint32_t* pMaxPrimitiveCounts,VkAccelerationStructureBuildSizesInfoKHR* pSizeInfo){
+//   return ((PFN_vkGetAccelerationStructureBuildSizesKHR)fp)(device,buildType,pBuildInfo,pMaxPrimitiveCounts,pSizeInfo);
+// }
+// void bridge_vkCmdTraceRaysKHR(uintptr_t fp,VkCommandBuffer commandBuffer,const VkStridedDeviceAddressRegionKHR* pRaygenShaderBindingTable,const VkStridedDeviceAddressRegionKHR* pMissShaderBindingTable,const VkStridedDeviceAddressRegionKHR* pHitShaderBindingTable,const VkStridedDeviceAddressRegionKHR* pCallableShaderBindingTable,uint32_t width,uint32_t height,uint32_t depth){
+//   return ((PFN_vkCmdTraceRaysKHR)fp)(commandBuffer,pRaygenShaderBindingTable,pMissShaderBindingTable,pHitShaderBindingTable,pCallableShaderBindingTable,width,height,depth);
+// }
+// VkResult bridge_vkCreateRayTracingPipelinesKHR(uintptr_t fp,VkDevice device,VkDeferredOperationKHR deferredOperation,VkPipelineCache pipelineCache,uint32_t createInfoCount,const VkRayTracingPipelineCreateInfoKHR* pCreateInfos,const VkAllocationCallbacks* pAllocator,VkPipeline* pPipelines){
+//   return ((PFN_vkCreateRayTracingPipelinesKHR)fp)(device,deferredOperation,pipelineCache,createInfoCount,pCreateInfos,pAllocator,pPipelines);
+// }
+// VkResult bridge_vkGetRayTracingCaptureReplayShaderGroupHandlesKHR(uintptr_t fp,VkDevice device,VkPipeline pipeline,uint32_t firstGroup,uint32_t groupCount,size_t dataSize,void* pData){
+//   return ((PFN_vkGetRayTracingCaptureReplayShaderGroupHandlesKHR)fp)(device,pipeline,firstGroup,groupCount,dataSize,pData);
+// }
+// void bridge_vkCmdTraceRaysIndirectKHR(uintptr_t fp,VkCommandBuffer commandBuffer,const VkStridedDeviceAddressRegionKHR* pRaygenShaderBindingTable,const VkStridedDeviceAddressRegionKHR* pMissShaderBindingTable,const VkStridedDeviceAddressRegionKHR* pHitShaderBindingTable,const VkStridedDeviceAddressRegionKHR* pCallableShaderBindingTable,VkDeviceAddress indirectDeviceAddress){
+//   return ((PFN_vkCmdTraceRaysIndirectKHR)fp)(commandBuffer,pRaygenShaderBindingTable,pMissShaderBindingTable,pHitShaderBindingTable,pCallableShaderBindingTable,indirectDeviceAddress);
+// }
+// VkDeviceSize bridge_vkGetRayTracingShaderGroupStackSizeKHR(uintptr_t fp,VkDevice device,VkPipeline pipeline,uint32_t group,VkShaderGroupShaderKHR groupShader){
+//   return ((PFN_vkGetRayTracingShaderGroupStackSizeKHR)fp)(device,pipeline,group,groupShader);
+// }
+// void bridge_vkCmdSetRayTracingPipelineStackSizeKHR(uintptr_t fp,VkCommandBuffer commandBuffer,uint32_t pipelineStackSize){
+//   return ((PFN_vkCmdSetRayTracingPipelineStackSizeKHR)fp)(commandBuffer,pipelineStackSize);
 // }
 import "C"
 
@@ -1098,10 +1378,6 @@ func MemFree(p unsafe.Pointer) {
 	C.free(p)
 }
 
-func CreateInstance(pCreateInfo *InstanceCreateInfo, pAllocator *AllocationCallbacks, pInstance *Instance) Result {
-	return Result(C.vkCreateInstance((*C.VkInstanceCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkInstance)(unsafe.Pointer(pInstance))))
-}
-
 func GetInstanceProcAddr(instance Instance, name string) PfnVoidFunction {
 	c := []byte(name)
 	c = append(c, 0)
@@ -1109,12 +1385,18 @@ func GetInstanceProcAddr(instance Instance, name string) PfnVoidFunction {
 }
 
 const VERSION_1_0 = 1
-const HEADER_VERSION = 122
-const NULL_HANDLE = 0
+const HEADER_VERSION = 177
 
 type Bool32 = uint32
+type DeviceAddress = uint64
 type DeviceSize = uint64
 type SampleMask = uint32
+
+// Buffer -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBuffer.html
+type Buffer NonDispatchableHandle
+
+// Image -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImage.html
+type Image NonDispatchableHandle
 
 // Instance -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkInstance.html
 type Instance DispatchableHandle
@@ -1140,12 +1422,6 @@ type Fence NonDispatchableHandle
 // DeviceMemory -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceMemory.html
 type DeviceMemory NonDispatchableHandle
 
-// Buffer -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBuffer.html
-type Buffer NonDispatchableHandle
-
-// Image -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImage.html
-type Image NonDispatchableHandle
-
 // Event -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkEvent.html
 type Event NonDispatchableHandle
 
@@ -1167,11 +1443,11 @@ type PipelineCache NonDispatchableHandle
 // PipelineLayout -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineLayout.html
 type PipelineLayout NonDispatchableHandle
 
-// RenderPass -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPass.html
-type RenderPass NonDispatchableHandle
-
 // Pipeline -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipeline.html
 type Pipeline NonDispatchableHandle
+
+// RenderPass -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPass.html
+type RenderPass NonDispatchableHandle
 
 // DescriptorSetLayout -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetLayout.html
 type DescriptorSetLayout NonDispatchableHandle
@@ -1179,11 +1455,11 @@ type DescriptorSetLayout NonDispatchableHandle
 // Sampler -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSampler.html
 type Sampler NonDispatchableHandle
 
-// DescriptorPool -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorPool.html
-type DescriptorPool NonDispatchableHandle
-
 // DescriptorSet -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSet.html
 type DescriptorSet NonDispatchableHandle
+
+// DescriptorPool -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorPool.html
+type DescriptorPool NonDispatchableHandle
 
 // Framebuffer -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFramebuffer.html
 type Framebuffer NonDispatchableHandle
@@ -1191,37 +1467,15 @@ type Framebuffer NonDispatchableHandle
 // CommandPool -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandPool.html
 type CommandPool NonDispatchableHandle
 
+const FALSE = 0
 const LOD_CLAMP_NONE = 1000.0
 const TRUE = 1
-const FALSE = 0
-const MAX_PHYSICAL_DEVICE_NAME_SIZE = 256
-const UUID_SIZE = 16
 const MAX_MEMORY_TYPES = 32
 const MAX_MEMORY_HEAPS = 16
+const MAX_PHYSICAL_DEVICE_NAME_SIZE = 256
+const UUID_SIZE = 16
 const MAX_EXTENSION_NAME_SIZE = 256
 const MAX_DESCRIPTION_SIZE = 256
-
-// PipelineCacheHeaderVersion -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineCacheHeaderVersion.html
-type PipelineCacheHeaderVersion int32
-
-const (
-	PIPELINE_CACHE_HEADER_VERSION_ONE         PipelineCacheHeaderVersion = 1
-	PIPELINE_CACHE_HEADER_VERSION_BEGIN_RANGE PipelineCacheHeaderVersion = PIPELINE_CACHE_HEADER_VERSION_ONE
-	PIPELINE_CACHE_HEADER_VERSION_END_RANGE   PipelineCacheHeaderVersion = PIPELINE_CACHE_HEADER_VERSION_ONE
-	PIPELINE_CACHE_HEADER_VERSION_RANGE_SIZE  PipelineCacheHeaderVersion = (PIPELINE_CACHE_HEADER_VERSION_ONE - PIPELINE_CACHE_HEADER_VERSION_ONE + 1)
-	PIPELINE_CACHE_HEADER_VERSION_MAX_ENUM    PipelineCacheHeaderVersion = 0x7FFFFFFF
-)
-
-func (x PipelineCacheHeaderVersion) String() string {
-	switch x {
-	case PIPELINE_CACHE_HEADER_VERSION_ONE:
-		return "PIPELINE_CACHE_HEADER_VERSION_ONE"
-	case PIPELINE_CACHE_HEADER_VERSION_MAX_ENUM:
-		return "PIPELINE_CACHE_HEADER_VERSION_MAX_ENUM"
-	default:
-		return fmt.Sprint(int32(x))
-	}
-}
 
 // Result -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkResult.html
 type Result int32
@@ -1245,8 +1499,11 @@ const (
 	ERROR_TOO_MANY_OBJECTS                             Result = -10
 	ERROR_FORMAT_NOT_SUPPORTED                         Result = -11
 	ERROR_FRAGMENTED_POOL                              Result = -12
+	ERROR_UNKNOWN                                      Result = -13
 	ERROR_OUT_OF_POOL_MEMORY                           Result = -1000069000
 	ERROR_INVALID_EXTERNAL_HANDLE                      Result = -1000072003
+	ERROR_FRAGMENTATION                                Result = -1000161000
+	ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS               Result = -1000257000
 	ERROR_SURFACE_LOST_KHR                             Result = -1000000000
 	ERROR_NATIVE_WINDOW_IN_USE_KHR                     Result = -1000000001
 	SUBOPTIMAL_KHR                                     Result = 1000001003
@@ -1255,15 +1512,19 @@ const (
 	ERROR_VALIDATION_FAILED_EXT                        Result = -1000011001
 	ERROR_INVALID_SHADER_NV                            Result = -1000012000
 	ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT Result = -1000158000
-	ERROR_FRAGMENTATION_EXT                            Result = -1000161000
 	ERROR_NOT_PERMITTED_EXT                            Result = -1000174001
-	ERROR_INVALID_DEVICE_ADDRESS_EXT                   Result = -1000244000
 	ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT          Result = -1000255000
+	THREAD_IDLE_KHR                                    Result = 1000268000
+	THREAD_DONE_KHR                                    Result = 1000268001
+	OPERATION_DEFERRED_KHR                             Result = 1000268002
+	OPERATION_NOT_DEFERRED_KHR                         Result = 1000268003
+	PIPELINE_COMPILE_REQUIRED_EXT                      Result = 1000297000
 	ERROR_OUT_OF_POOL_MEMORY_KHR                       Result = ERROR_OUT_OF_POOL_MEMORY
 	ERROR_INVALID_EXTERNAL_HANDLE_KHR                  Result = ERROR_INVALID_EXTERNAL_HANDLE
-	RESULT_BEGIN_RANGE                                 Result = ERROR_FRAGMENTED_POOL
-	RESULT_END_RANGE                                   Result = INCOMPLETE
-	RESULT_RANGE_SIZE                                  Result = (INCOMPLETE - ERROR_FRAGMENTED_POOL + 1)
+	ERROR_FRAGMENTATION_EXT                            Result = ERROR_FRAGMENTATION
+	ERROR_INVALID_DEVICE_ADDRESS_EXT                   Result = ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS
+	ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS_KHR           Result = ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS
+	ERROR_PIPELINE_COMPILE_REQUIRED_EXT                Result = PIPELINE_COMPILE_REQUIRED_EXT
 	RESULT_MAX_ENUM                                    Result = 0x7FFFFFFF
 )
 
@@ -1305,10 +1566,16 @@ func (x Result) String() string {
 		return "ERROR_FORMAT_NOT_SUPPORTED"
 	case ERROR_FRAGMENTED_POOL:
 		return "ERROR_FRAGMENTED_POOL"
+	case ERROR_UNKNOWN:
+		return "ERROR_UNKNOWN"
 	case ERROR_OUT_OF_POOL_MEMORY:
 		return "ERROR_OUT_OF_POOL_MEMORY"
 	case ERROR_INVALID_EXTERNAL_HANDLE:
 		return "ERROR_INVALID_EXTERNAL_HANDLE"
+	case ERROR_FRAGMENTATION:
+		return "ERROR_FRAGMENTATION"
+	case ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS:
+		return "ERROR_INVALID_OPAQUE_CAPTURE_ADDRESS"
 	case ERROR_SURFACE_LOST_KHR:
 		return "ERROR_SURFACE_LOST_KHR"
 	case ERROR_NATIVE_WINDOW_IN_USE_KHR:
@@ -1325,14 +1592,20 @@ func (x Result) String() string {
 		return "ERROR_INVALID_SHADER_NV"
 	case ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT:
 		return "ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT"
-	case ERROR_FRAGMENTATION_EXT:
-		return "ERROR_FRAGMENTATION_EXT"
 	case ERROR_NOT_PERMITTED_EXT:
 		return "ERROR_NOT_PERMITTED_EXT"
-	case ERROR_INVALID_DEVICE_ADDRESS_EXT:
-		return "ERROR_INVALID_DEVICE_ADDRESS_EXT"
 	case ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT:
 		return "ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT"
+	case THREAD_IDLE_KHR:
+		return "THREAD_IDLE_KHR"
+	case THREAD_DONE_KHR:
+		return "THREAD_DONE_KHR"
+	case OPERATION_DEFERRED_KHR:
+		return "OPERATION_DEFERRED_KHR"
+	case OPERATION_NOT_DEFERRED_KHR:
+		return "OPERATION_NOT_DEFERRED_KHR"
+	case PIPELINE_COMPILE_REQUIRED_EXT:
+		return "PIPELINE_COMPILE_REQUIRED_EXT"
 	case RESULT_MAX_ENUM:
 		return "RESULT_MAX_ENUM"
 	default:
@@ -1458,6 +1731,56 @@ const (
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_MAINTENANCE_3_PROPERTIES                        StructureType = 1000168000
 	STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_SUPPORT                                   StructureType = 1000168001
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES                 StructureType = 1000063000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES                             StructureType = 49
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_PROPERTIES                           StructureType = 50
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES                             StructureType = 51
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_PROPERTIES                           StructureType = 52
+	STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO                                   StructureType = 1000147000
+	STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_2                                        StructureType = 1000109000
+	STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2                                          StructureType = 1000109001
+	STRUCTURE_TYPE_SUBPASS_DESCRIPTION_2                                           StructureType = 1000109002
+	STRUCTURE_TYPE_SUBPASS_DEPENDENCY_2                                            StructureType = 1000109003
+	STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO_2                                       StructureType = 1000109004
+	STRUCTURE_TYPE_SUBPASS_BEGIN_INFO                                              StructureType = 1000109005
+	STRUCTURE_TYPE_SUBPASS_END_INFO                                                StructureType = 1000109006
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_8BIT_STORAGE_FEATURES                           StructureType = 1000177000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES                               StructureType = 1000196000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_INT64_FEATURES                    StructureType = 1000180000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES                    StructureType = 1000082000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_FLOAT_CONTROLS_PROPERTIES                       StructureType = 1000197000
+	STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO                 StructureType = 1000161000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES                    StructureType = 1000161001
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_PROPERTIES                  StructureType = 1000161002
+	STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO          StructureType = 1000161003
+	STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_LAYOUT_SUPPORT         StructureType = 1000161004
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_DEPTH_STENCIL_RESOLVE_PROPERTIES                StructureType = 1000199000
+	STRUCTURE_TYPE_SUBPASS_DESCRIPTION_DEPTH_STENCIL_RESOLVE                       StructureType = 1000199001
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_SCALAR_BLOCK_LAYOUT_FEATURES                    StructureType = 1000221000
+	STRUCTURE_TYPE_IMAGE_STENCIL_USAGE_CREATE_INFO                                 StructureType = 1000246000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_FILTER_MINMAX_PROPERTIES                StructureType = 1000130000
+	STRUCTURE_TYPE_SAMPLER_REDUCTION_MODE_CREATE_INFO                              StructureType = 1000130001
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_MEMORY_MODEL_FEATURES                    StructureType = 1000211000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGELESS_FRAMEBUFFER_FEATURES                  StructureType = 1000108000
+	STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO                             StructureType = 1000108001
+	STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO                               StructureType = 1000108002
+	STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO                               StructureType = 1000108003
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_UNIFORM_BUFFER_STANDARD_LAYOUT_FEATURES         StructureType = 1000253000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_SUBGROUP_EXTENDED_TYPES_FEATURES         StructureType = 1000175000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_SEPARATE_DEPTH_STENCIL_LAYOUTS_FEATURES         StructureType = 1000241000
+	STRUCTURE_TYPE_ATTACHMENT_REFERENCE_STENCIL_LAYOUT                             StructureType = 1000241001
+	STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_STENCIL_LAYOUT                           StructureType = 1000241002
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_HOST_QUERY_RESET_FEATURES                       StructureType = 1000261000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_TIMELINE_SEMAPHORE_FEATURES                     StructureType = 1000207000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_TIMELINE_SEMAPHORE_PROPERTIES                   StructureType = 1000207001
+	STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO                                      StructureType = 1000207002
+	STRUCTURE_TYPE_TIMELINE_SEMAPHORE_SUBMIT_INFO                                  StructureType = 1000207003
+	STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO                                             StructureType = 1000207004
+	STRUCTURE_TYPE_SEMAPHORE_SIGNAL_INFO                                           StructureType = 1000207005
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES                  StructureType = 1000257000
+	STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO                                      StructureType = 1000244001
+	STRUCTURE_TYPE_BUFFER_OPAQUE_CAPTURE_ADDRESS_CREATE_INFO                       StructureType = 1000257002
+	STRUCTURE_TYPE_MEMORY_OPAQUE_CAPTURE_ADDRESS_ALLOCATE_INFO                     StructureType = 1000257003
+	STRUCTURE_TYPE_DEVICE_MEMORY_OPAQUE_CAPTURE_ADDRESS_INFO                       StructureType = 1000257004
 	STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR                                       StructureType = 1000001000
 	STRUCTURE_TYPE_PRESENT_INFO_KHR                                                StructureType = 1000001001
 	STRUCTURE_TYPE_DEVICE_GROUP_PRESENT_CAPABILITIES_KHR                           StructureType = 1000060007
@@ -1479,6 +1802,25 @@ const (
 	STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT                               StructureType = 1000022000
 	STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_TAG_INFO_EXT                                StructureType = 1000022001
 	STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT                                    StructureType = 1000022002
+	K_STRUCTURE_TYPE_VIDEO_PROFILE_KHR                                             StructureType = 1000023000
+	K_STRUCTURE_TYPE_VIDEO_CAPABILITIES_KHR                                        StructureType = 1000023001
+	K_STRUCTURE_TYPE_VIDEO_PICTURE_RESOURCE_KHR                                    StructureType = 1000023002
+	K_STRUCTURE_TYPE_VIDEO_GET_MEMORY_PROPERTIES_KHR                               StructureType = 1000023003
+	K_STRUCTURE_TYPE_VIDEO_BIND_MEMORY_KHR                                         StructureType = 1000023004
+	K_STRUCTURE_TYPE_VIDEO_SESSION_CREATE_INFO_KHR                                 StructureType = 1000023005
+	K_STRUCTURE_TYPE_VIDEO_SESSION_PARAMETERS_CREATE_INFO_KHR                      StructureType = 1000023006
+	K_STRUCTURE_TYPE_VIDEO_SESSION_PARAMETERS_UPDATE_INFO_KHR                      StructureType = 1000023007
+	K_STRUCTURE_TYPE_VIDEO_BEGIN_CODING_INFO_KHR                                   StructureType = 1000023008
+	K_STRUCTURE_TYPE_VIDEO_END_CODING_INFO_KHR                                     StructureType = 1000023009
+	K_STRUCTURE_TYPE_VIDEO_CODING_CONTROL_INFO_KHR                                 StructureType = 1000023010
+	K_STRUCTURE_TYPE_VIDEO_REFERENCE_SLOT_KHR                                      StructureType = 1000023011
+	K_STRUCTURE_TYPE_VIDEO_QUEUE_FAMILY_PROPERTIES_2_KHR                           StructureType = 1000023012
+	K_STRUCTURE_TYPE_VIDEO_PROFILES_KHR                                            StructureType = 1000023013
+	K_STRUCTURE_TYPE_PHYSICAL_DEVICE_VIDEO_FORMAT_INFO_KHR                         StructureType = 1000023014
+	K_STRUCTURE_TYPE_VIDEO_FORMAT_PROPERTIES_KHR                                   StructureType = 1000023015
+	K_STRUCTURE_TYPE_VIDEO_DECODE_INFO_KHR                                         StructureType = 1000024000
+	K_STRUCTURE_TYPE_VIDEO_ENCODE_INFO_KHR                                         StructureType = 1000299000
+	K_STRUCTURE_TYPE_VIDEO_ENCODE_RATE_CONTROL_INFO_KHR                            StructureType = 1000299001
 	STRUCTURE_TYPE_DEDICATED_ALLOCATION_IMAGE_CREATE_INFO_NV                       StructureType = 1000026000
 	STRUCTURE_TYPE_DEDICATED_ALLOCATION_BUFFER_CREATE_INFO_NV                      StructureType = 1000026001
 	STRUCTURE_TYPE_DEDICATED_ALLOCATION_MEMORY_ALLOCATE_INFO_NV                    StructureType = 1000026002
@@ -1486,6 +1828,24 @@ const (
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_TRANSFORM_FEEDBACK_PROPERTIES_EXT               StructureType = 1000028001
 	STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_STREAM_CREATE_INFO_EXT             StructureType = 1000028002
 	STRUCTURE_TYPE_IMAGE_VIEW_HANDLE_INFO_NVX                                      StructureType = 1000030000
+	STRUCTURE_TYPE_IMAGE_VIEW_ADDRESS_PROPERTIES_NVX                               StructureType = 1000030001
+	K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_CAPABILITIES_EXT                            StructureType = 1000038000
+	K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_SESSION_CREATE_INFO_EXT                     StructureType = 1000038001
+	K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_SESSION_PARAMETERS_CREATE_INFO_EXT          StructureType = 1000038002
+	K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_SESSION_PARAMETERS_ADD_INFO_EXT             StructureType = 1000038003
+	K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_VCL_FRAME_INFO_EXT                          StructureType = 1000038004
+	K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_DPB_SLOT_INFO_EXT                           StructureType = 1000038005
+	K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_NALU_SLICE_EXT                              StructureType = 1000038006
+	K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_EMIT_PICTURE_PARAMETERS_EXT                 StructureType = 1000038007
+	K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_PROFILE_EXT                                 StructureType = 1000038008
+	K_STRUCTURE_TYPE_VIDEO_DECODE_H264_CAPABILITIES_EXT                            StructureType = 1000040000
+	K_STRUCTURE_TYPE_VIDEO_DECODE_H264_SESSION_CREATE_INFO_EXT                     StructureType = 1000040001
+	K_STRUCTURE_TYPE_VIDEO_DECODE_H264_PICTURE_INFO_EXT                            StructureType = 1000040002
+	K_STRUCTURE_TYPE_VIDEO_DECODE_H264_MVC_EXT                                     StructureType = 1000040003
+	K_STRUCTURE_TYPE_VIDEO_DECODE_H264_PROFILE_EXT                                 StructureType = 1000040004
+	K_STRUCTURE_TYPE_VIDEO_DECODE_H264_SESSION_PARAMETERS_CREATE_INFO_EXT          StructureType = 1000040005
+	K_STRUCTURE_TYPE_VIDEO_DECODE_H264_SESSION_PARAMETERS_ADD_INFO_EXT             StructureType = 1000040006
+	K_STRUCTURE_TYPE_VIDEO_DECODE_H264_DPB_SLOT_INFO_EXT                           StructureType = 1000040007
 	STRUCTURE_TYPE_TEXTURE_LOD_GATHER_FORMAT_PROPERTIES_AMD                        StructureType = 1000041000
 	STRUCTURE_TYPE_STREAM_DESCRIPTOR_SURFACE_CREATE_INFO_GGP                       StructureType = 1000049000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_CORNER_SAMPLED_IMAGE_FEATURES_NV                StructureType = 1000050000
@@ -1517,14 +1877,7 @@ const (
 	STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_CONDITIONAL_RENDERING_INFO_EXT       StructureType = 1000081000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_CONDITIONAL_RENDERING_FEATURES_EXT              StructureType = 1000081001
 	STRUCTURE_TYPE_CONDITIONAL_RENDERING_BEGIN_INFO_EXT                            StructureType = 1000081002
-	STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES_KHR                StructureType = 1000082000
 	STRUCTURE_TYPE_PRESENT_REGIONS_KHR                                             StructureType = 1000084000
-	STRUCTURE_TYPE_OBJECT_TABLE_CREATE_INFO_NVX                                    StructureType = 1000086000
-	STRUCTURE_TYPE_INDIRECT_COMMANDS_LAYOUT_CREATE_INFO_NVX                        StructureType = 1000086001
-	STRUCTURE_TYPE_CMD_PROCESS_COMMANDS_INFO_NVX                                   StructureType = 1000086002
-	STRUCTURE_TYPE_CMD_RESERVE_SPACE_FOR_COMMANDS_INFO_NVX                         StructureType = 1000086003
-	STRUCTURE_TYPE_DEVICE_GENERATED_COMMANDS_LIMITS_NVX                            StructureType = 1000086004
-	STRUCTURE_TYPE_DEVICE_GENERATED_COMMANDS_FEATURES_NVX                          StructureType = 1000086005
 	STRUCTURE_TYPE_PIPELINE_VIEWPORT_W_SCALING_STATE_CREATE_INFO_NV                StructureType = 1000087000
 	STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_EXT                                      StructureType = 1000090000
 	STRUCTURE_TYPE_DISPLAY_POWER_INFO_EXT                                          StructureType = 1000091000
@@ -1541,23 +1894,19 @@ const (
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_DEPTH_CLIP_ENABLE_FEATURES_EXT                  StructureType = 1000102000
 	STRUCTURE_TYPE_PIPELINE_RASTERIZATION_DEPTH_CLIP_STATE_CREATE_INFO_EXT         StructureType = 1000102001
 	STRUCTURE_TYPE_HDR_METADATA_EXT                                                StructureType = 1000105000
-	STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGELESS_FRAMEBUFFER_FEATURES_KHR              StructureType = 1000108000
-	STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO_KHR                         StructureType = 1000108001
-	STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR                           StructureType = 1000108002
-	STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO_KHR                           StructureType = 1000108003
-	STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_2_KHR                                    StructureType = 1000109000
-	STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2_KHR                                      StructureType = 1000109001
-	STRUCTURE_TYPE_SUBPASS_DESCRIPTION_2_KHR                                       StructureType = 1000109002
-	STRUCTURE_TYPE_SUBPASS_DEPENDENCY_2_KHR                                        StructureType = 1000109003
-	STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO_2_KHR                                   StructureType = 1000109004
-	STRUCTURE_TYPE_SUBPASS_BEGIN_INFO_KHR                                          StructureType = 1000109005
-	STRUCTURE_TYPE_SUBPASS_END_INFO_KHR                                            StructureType = 1000109006
 	STRUCTURE_TYPE_SHARED_PRESENT_SURFACE_CAPABILITIES_KHR                         StructureType = 1000111000
 	STRUCTURE_TYPE_IMPORT_FENCE_WIN32_HANDLE_INFO_KHR                              StructureType = 1000114000
 	STRUCTURE_TYPE_EXPORT_FENCE_WIN32_HANDLE_INFO_KHR                              StructureType = 1000114001
 	STRUCTURE_TYPE_FENCE_GET_WIN32_HANDLE_INFO_KHR                                 StructureType = 1000114002
 	STRUCTURE_TYPE_IMPORT_FENCE_FD_INFO_KHR                                        StructureType = 1000115000
 	STRUCTURE_TYPE_FENCE_GET_FD_INFO_KHR                                           StructureType = 1000115001
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_PERFORMANCE_QUERY_FEATURES_KHR                  StructureType = 1000116000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_PERFORMANCE_QUERY_PROPERTIES_KHR                StructureType = 1000116001
+	STRUCTURE_TYPE_QUERY_POOL_PERFORMANCE_CREATE_INFO_KHR                          StructureType = 1000116002
+	STRUCTURE_TYPE_PERFORMANCE_QUERY_SUBMIT_INFO_KHR                               StructureType = 1000116003
+	STRUCTURE_TYPE_ACQUIRE_PROFILING_LOCK_INFO_KHR                                 StructureType = 1000116004
+	STRUCTURE_TYPE_PERFORMANCE_COUNTER_KHR                                         StructureType = 1000116005
+	STRUCTURE_TYPE_PERFORMANCE_COUNTER_DESCRIPTION_KHR                             StructureType = 1000116006
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR                              StructureType = 1000119000
 	STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_KHR                                      StructureType = 1000119001
 	STRUCTURE_TYPE_SURFACE_FORMAT_2_KHR                                            StructureType = 1000119002
@@ -1579,8 +1928,6 @@ const (
 	STRUCTURE_TYPE_IMPORT_ANDROID_HARDWARE_BUFFER_INFO_ANDROID                     StructureType = 1000129003
 	STRUCTURE_TYPE_MEMORY_GET_ANDROID_HARDWARE_BUFFER_INFO_ANDROID                 StructureType = 1000129004
 	STRUCTURE_TYPE_EXTERNAL_FORMAT_ANDROID                                         StructureType = 1000129005
-	STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_FILTER_MINMAX_PROPERTIES_EXT            StructureType = 1000130000
-	STRUCTURE_TYPE_SAMPLER_REDUCTION_MODE_CREATE_INFO_EXT                          StructureType = 1000130001
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_INLINE_UNIFORM_BLOCK_FEATURES_EXT               StructureType = 1000138000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_INLINE_UNIFORM_BLOCK_PROPERTIES_EXT             StructureType = 1000138001
 	STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_INLINE_UNIFORM_BLOCK_EXT                   StructureType = 1000138002
@@ -1590,27 +1937,43 @@ const (
 	STRUCTURE_TYPE_PIPELINE_SAMPLE_LOCATIONS_STATE_CREATE_INFO_EXT                 StructureType = 1000143002
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLE_LOCATIONS_PROPERTIES_EXT                 StructureType = 1000143003
 	STRUCTURE_TYPE_MULTISAMPLE_PROPERTIES_EXT                                      StructureType = 1000143004
-	STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR                               StructureType = 1000147000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_FEATURES_EXT           StructureType = 1000148000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_PROPERTIES_EXT         StructureType = 1000148001
 	STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_ADVANCED_STATE_CREATE_INFO_EXT             StructureType = 1000148002
 	STRUCTURE_TYPE_PIPELINE_COVERAGE_TO_COLOR_STATE_CREATE_INFO_NV                 StructureType = 1000149000
+	STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR                 StructureType = 1000150007
+	STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR                  StructureType = 1000150000
+	STRUCTURE_TYPE_ACCELERATION_STRUCTURE_DEVICE_ADDRESS_INFO_KHR                  StructureType = 1000150002
+	STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_AABBS_DATA_KHR                  StructureType = 1000150003
+	STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_INSTANCES_DATA_KHR              StructureType = 1000150004
+	STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR              StructureType = 1000150005
+	STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR                             StructureType = 1000150006
+	STRUCTURE_TYPE_ACCELERATION_STRUCTURE_VERSION_INFO_KHR                         StructureType = 1000150009
+	STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_INFO_KHR                            StructureType = 1000150010
+	STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_TO_MEMORY_INFO_KHR                  StructureType = 1000150011
+	STRUCTURE_TYPE_COPY_MEMORY_TO_ACCELERATION_STRUCTURE_INFO_KHR                  StructureType = 1000150012
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR             StructureType = 1000150013
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_PROPERTIES_KHR           StructureType = 1000150014
+	STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_KHR                          StructureType = 1000150017
+	STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR                     StructureType = 1000150020
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR               StructureType = 1000347000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR             StructureType = 1000347001
+	STRUCTURE_TYPE_RAY_TRACING_PIPELINE_CREATE_INFO_KHR                            StructureType = 1000150015
+	STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR                        StructureType = 1000150016
+	STRUCTURE_TYPE_RAY_TRACING_PIPELINE_INTERFACE_CREATE_INFO_KHR                  StructureType = 1000150018
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_QUERY_FEATURES_KHR                          StructureType = 1000348013
 	STRUCTURE_TYPE_PIPELINE_COVERAGE_MODULATION_STATE_CREATE_INFO_NV               StructureType = 1000152000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_SM_BUILTINS_FEATURES_NV                  StructureType = 1000154000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_SM_BUILTINS_PROPERTIES_NV                StructureType = 1000154001
 	STRUCTURE_TYPE_DRM_FORMAT_MODIFIER_PROPERTIES_LIST_EXT                         StructureType = 1000158000
-	STRUCTURE_TYPE_DRM_FORMAT_MODIFIER_PROPERTIES_EXT                              StructureType = 1000158001
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_DRM_FORMAT_MODIFIER_INFO_EXT              StructureType = 1000158002
 	STRUCTURE_TYPE_IMAGE_DRM_FORMAT_MODIFIER_LIST_CREATE_INFO_EXT                  StructureType = 1000158003
 	STRUCTURE_TYPE_IMAGE_DRM_FORMAT_MODIFIER_EXPLICIT_CREATE_INFO_EXT              StructureType = 1000158004
 	STRUCTURE_TYPE_IMAGE_DRM_FORMAT_MODIFIER_PROPERTIES_EXT                        StructureType = 1000158005
 	STRUCTURE_TYPE_VALIDATION_CACHE_CREATE_INFO_EXT                                StructureType = 1000160000
 	STRUCTURE_TYPE_SHADER_MODULE_VALIDATION_CACHE_CREATE_INFO_EXT                  StructureType = 1000160001
-	STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO_EXT             StructureType = 1000161000
-	STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES_EXT                StructureType = 1000161001
-	STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_PROPERTIES_EXT              StructureType = 1000161002
-	STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO_EXT      StructureType = 1000161003
-	STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_LAYOUT_SUPPORT_EXT     StructureType = 1000161004
+	K_STRUCTURE_TYPE_PHYSICAL_DEVICE_PORTABILITY_SUBSET_FEATURES_KHR               StructureType = 1000163000
+	K_STRUCTURE_TYPE_PHYSICAL_DEVICE_PORTABILITY_SUBSET_PROPERTIES_KHR             StructureType = 1000163001
 	STRUCTURE_TYPE_PIPELINE_VIEWPORT_SHADING_RATE_IMAGE_STATE_CREATE_INFO_NV       StructureType = 1000164000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADING_RATE_IMAGE_FEATURES_NV                  StructureType = 1000164001
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADING_RATE_IMAGE_PROPERTIES_NV                StructureType = 1000164002
@@ -1631,24 +1994,26 @@ const (
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_VIEW_IMAGE_FORMAT_INFO_EXT                StructureType = 1000170000
 	STRUCTURE_TYPE_FILTER_CUBIC_IMAGE_VIEW_IMAGE_FORMAT_PROPERTIES_EXT             StructureType = 1000170001
 	STRUCTURE_TYPE_DEVICE_QUEUE_GLOBAL_PRIORITY_CREATE_INFO_EXT                    StructureType = 1000174000
-	STRUCTURE_TYPE_PHYSICAL_DEVICE_8BIT_STORAGE_FEATURES_KHR                       StructureType = 1000177000
 	STRUCTURE_TYPE_IMPORT_MEMORY_HOST_POINTER_INFO_EXT                             StructureType = 1000178000
 	STRUCTURE_TYPE_MEMORY_HOST_POINTER_PROPERTIES_EXT                              StructureType = 1000178001
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_MEMORY_HOST_PROPERTIES_EXT             StructureType = 1000178002
-	STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_INT64_FEATURES_KHR                StructureType = 1000180000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CLOCK_FEATURES_KHR                       StructureType = 1000181000
 	STRUCTURE_TYPE_PIPELINE_COMPILER_CONTROL_CREATE_INFO_AMD                       StructureType = 1000183000
 	STRUCTURE_TYPE_CALIBRATED_TIMESTAMP_INFO_EXT                                   StructureType = 1000184000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_AMD                      StructureType = 1000185000
+	K_STRUCTURE_TYPE_VIDEO_DECODE_H265_CAPABILITIES_EXT                            StructureType = 1000187000
+	K_STRUCTURE_TYPE_VIDEO_DECODE_H265_SESSION_CREATE_INFO_EXT                     StructureType = 1000187001
+	K_STRUCTURE_TYPE_VIDEO_DECODE_H265_SESSION_PARAMETERS_CREATE_INFO_EXT          StructureType = 1000187002
+	K_STRUCTURE_TYPE_VIDEO_DECODE_H265_SESSION_PARAMETERS_ADD_INFO_EXT             StructureType = 1000187003
+	K_STRUCTURE_TYPE_VIDEO_DECODE_H265_PROFILE_EXT                                 StructureType = 1000187004
+	K_STRUCTURE_TYPE_VIDEO_DECODE_H265_PICTURE_INFO_EXT                            StructureType = 1000187005
+	K_STRUCTURE_TYPE_VIDEO_DECODE_H265_DPB_SLOT_INFO_EXT                           StructureType = 1000187006
 	STRUCTURE_TYPE_DEVICE_MEMORY_OVERALLOCATION_CREATE_INFO_AMD                    StructureType = 1000189000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_ATTRIBUTE_DIVISOR_PROPERTIES_EXT         StructureType = 1000190000
 	STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO_EXT             StructureType = 1000190001
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_ATTRIBUTE_DIVISOR_FEATURES_EXT           StructureType = 1000190002
 	STRUCTURE_TYPE_PRESENT_FRAME_TOKEN_GGP                                         StructureType = 1000191000
 	STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT                      StructureType = 1000192000
-	STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES_KHR                           StructureType = 1000196000
-	STRUCTURE_TYPE_PHYSICAL_DEVICE_FLOAT_CONTROLS_PROPERTIES_KHR                   StructureType = 1000197000
-	STRUCTURE_TYPE_PHYSICAL_DEVICE_DEPTH_STENCIL_RESOLVE_PROPERTIES_KHR            StructureType = 1000199000
-	STRUCTURE_TYPE_SUBPASS_DESCRIPTION_DEPTH_STENCIL_RESOLVE_KHR                   StructureType = 1000199001
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_COMPUTE_SHADER_DERIVATIVES_FEATURES_NV          StructureType = 1000201000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_FEATURES_NV                         StructureType = 1000202000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_PROPERTIES_NV                       StructureType = 1000202001
@@ -1659,36 +2024,40 @@ const (
 	STRUCTURE_TYPE_CHECKPOINT_DATA_NV                                              StructureType = 1000206000
 	STRUCTURE_TYPE_QUEUE_FAMILY_CHECKPOINT_PROPERTIES_NV                           StructureType = 1000206001
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_INTEGER_FUNCTIONS_2_FEATURES_INTEL       StructureType = 1000209000
-	STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO_INTEL                                    StructureType = 1000210000
+	STRUCTURE_TYPE_QUERY_POOL_PERFORMANCE_QUERY_CREATE_INFO_INTEL                  StructureType = 1000210000
 	STRUCTURE_TYPE_INITIALIZE_PERFORMANCE_API_INFO_INTEL                           StructureType = 1000210001
 	STRUCTURE_TYPE_PERFORMANCE_MARKER_INFO_INTEL                                   StructureType = 1000210002
 	STRUCTURE_TYPE_PERFORMANCE_STREAM_MARKER_INFO_INTEL                            StructureType = 1000210003
 	STRUCTURE_TYPE_PERFORMANCE_OVERRIDE_INFO_INTEL                                 StructureType = 1000210004
 	STRUCTURE_TYPE_PERFORMANCE_CONFIGURATION_ACQUIRE_INFO_INTEL                    StructureType = 1000210005
-	STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_MEMORY_MODEL_FEATURES_KHR                StructureType = 1000211000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_PCI_BUS_INFO_PROPERTIES_EXT                     StructureType = 1000212000
 	STRUCTURE_TYPE_DISPLAY_NATIVE_HDR_SURFACE_CAPABILITIES_AMD                     StructureType = 1000213000
 	STRUCTURE_TYPE_SWAPCHAIN_DISPLAY_NATIVE_HDR_CREATE_INFO_AMD                    StructureType = 1000213001
 	STRUCTURE_TYPE_IMAGEPIPE_SURFACE_CREATE_INFO_FUCHSIA                           StructureType = 1000214000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_TERMINATE_INVOCATION_FEATURES_KHR        StructureType = 1000215000
 	STRUCTURE_TYPE_METAL_SURFACE_CREATE_INFO_EXT                                   StructureType = 1000217000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_DENSITY_MAP_FEATURES_EXT               StructureType = 1000218000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_DENSITY_MAP_PROPERTIES_EXT             StructureType = 1000218001
 	STRUCTURE_TYPE_RENDER_PASS_FRAGMENT_DENSITY_MAP_CREATE_INFO_EXT                StructureType = 1000218002
-	STRUCTURE_TYPE_PHYSICAL_DEVICE_SCALAR_BLOCK_LAYOUT_FEATURES_EXT                StructureType = 1000221000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_SIZE_CONTROL_PROPERTIES_EXT            StructureType = 1000225000
 	STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_REQUIRED_SUBGROUP_SIZE_CREATE_INFO_EXT    StructureType = 1000225001
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_SIZE_CONTROL_FEATURES_EXT              StructureType = 1000225002
+	STRUCTURE_TYPE_FRAGMENT_SHADING_RATE_ATTACHMENT_INFO_KHR                       StructureType = 1000226000
+	STRUCTURE_TYPE_PIPELINE_FRAGMENT_SHADING_RATE_STATE_CREATE_INFO_KHR            StructureType = 1000226001
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_PROPERTIES_KHR            StructureType = 1000226002
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_FEATURES_KHR              StructureType = 1000226003
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_KHR                       StructureType = 1000226004
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_2_AMD                    StructureType = 1000227000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_COHERENT_MEMORY_FEATURES_AMD                    StructureType = 1000229000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_IMAGE_ATOMIC_INT64_FEATURES_EXT          StructureType = 1000234000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_MEMORY_BUDGET_PROPERTIES_EXT                    StructureType = 1000237000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_MEMORY_PRIORITY_FEATURES_EXT                    StructureType = 1000238000
 	STRUCTURE_TYPE_MEMORY_PRIORITY_ALLOCATE_INFO_EXT                               StructureType = 1000238001
 	STRUCTURE_TYPE_SURFACE_PROTECTED_CAPABILITIES_KHR                              StructureType = 1000239000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_DEDICATED_ALLOCATION_IMAGE_ALIASING_FEATURES_NV StructureType = 1000240000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES_EXT              StructureType = 1000244000
-	STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO_EXT                                  StructureType = 1000244001
 	STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_CREATE_INFO_EXT                           StructureType = 1000244002
-	STRUCTURE_TYPE_IMAGE_STENCIL_USAGE_CREATE_INFO_EXT                             StructureType = 1000246000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_TOOL_PROPERTIES_EXT                             StructureType = 1000245000
 	STRUCTURE_TYPE_VALIDATION_FEATURES_EXT                                         StructureType = 1000247000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_COOPERATIVE_MATRIX_FEATURES_NV                  StructureType = 1000249000
 	STRUCTURE_TYPE_COOPERATIVE_MATRIX_PROPERTIES_NV                                StructureType = 1000249001
@@ -1698,7 +2067,9 @@ const (
 	STRUCTURE_TYPE_FRAMEBUFFER_MIXED_SAMPLES_COMBINATION_NV                        StructureType = 1000250002
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADER_INTERLOCK_FEATURES_EXT          StructureType = 1000251000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_YCBCR_IMAGE_ARRAYS_FEATURES_EXT                 StructureType = 1000252000
-	STRUCTURE_TYPE_PHYSICAL_DEVICE_UNIFORM_BUFFER_STANDARD_LAYOUT_FEATURES_KHR     StructureType = 1000253000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_PROVOKING_VERTEX_FEATURES_EXT                   StructureType = 1000254000
+	STRUCTURE_TYPE_PIPELINE_RASTERIZATION_PROVOKING_VERTEX_STATE_CREATE_INFO_EXT   StructureType = 1000254001
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_PROVOKING_VERTEX_PROPERTIES_EXT                 StructureType = 1000254002
 	STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_INFO_EXT                          StructureType = 1000255000
 	STRUCTURE_TYPE_SURFACE_CAPABILITIES_FULL_SCREEN_EXCLUSIVE_EXT                  StructureType = 1000255002
 	STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_WIN32_INFO_EXT                    StructureType = 1000255001
@@ -1706,8 +2077,9 @@ const (
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_LINE_RASTERIZATION_FEATURES_EXT                 StructureType = 1000259000
 	STRUCTURE_TYPE_PIPELINE_RASTERIZATION_LINE_STATE_CREATE_INFO_EXT               StructureType = 1000259001
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_LINE_RASTERIZATION_PROPERTIES_EXT               StructureType = 1000259002
-	STRUCTURE_TYPE_PHYSICAL_DEVICE_HOST_QUERY_RESET_FEATURES_EXT                   StructureType = 1000261000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_FLOAT_FEATURES_EXT                StructureType = 1000260000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_INDEX_TYPE_UINT8_FEATURES_EXT                   StructureType = 1000265000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_FEATURES_EXT             StructureType = 1000267000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_PIPELINE_EXECUTABLE_PROPERTIES_FEATURES_KHR     StructureType = 1000269000
 	STRUCTURE_TYPE_PIPELINE_INFO_KHR                                               StructureType = 1000269001
 	STRUCTURE_TYPE_PIPELINE_EXECUTABLE_PROPERTIES_KHR                              StructureType = 1000269002
@@ -1715,8 +2087,82 @@ const (
 	STRUCTURE_TYPE_PIPELINE_EXECUTABLE_STATISTIC_KHR                               StructureType = 1000269004
 	STRUCTURE_TYPE_PIPELINE_EXECUTABLE_INTERNAL_REPRESENTATION_KHR                 StructureType = 1000269005
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DEMOTE_TO_HELPER_INVOCATION_FEATURES_EXT StructureType = 1000276000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_DEVICE_GENERATED_COMMANDS_PROPERTIES_NV         StructureType = 1000277000
+	STRUCTURE_TYPE_GRAPHICS_SHADER_GROUP_CREATE_INFO_NV                            StructureType = 1000277001
+	STRUCTURE_TYPE_GRAPHICS_PIPELINE_SHADER_GROUPS_CREATE_INFO_NV                  StructureType = 1000277002
+	STRUCTURE_TYPE_INDIRECT_COMMANDS_LAYOUT_TOKEN_NV                               StructureType = 1000277003
+	STRUCTURE_TYPE_INDIRECT_COMMANDS_LAYOUT_CREATE_INFO_NV                         StructureType = 1000277004
+	STRUCTURE_TYPE_GENERATED_COMMANDS_INFO_NV                                      StructureType = 1000277005
+	STRUCTURE_TYPE_GENERATED_COMMANDS_MEMORY_REQUIREMENTS_INFO_NV                  StructureType = 1000277006
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_DEVICE_GENERATED_COMMANDS_FEATURES_NV           StructureType = 1000277007
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_INHERITED_VIEWPORT_SCISSOR_FEATURES_NV          StructureType = 1000278000
+	STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_VIEWPORT_SCISSOR_INFO_NV             StructureType = 1000278001
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_TEXEL_BUFFER_ALIGNMENT_FEATURES_EXT             StructureType = 1000281000
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_TEXEL_BUFFER_ALIGNMENT_PROPERTIES_EXT           StructureType = 1000281001
+	STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_RENDER_PASS_TRANSFORM_INFO_QCOM      StructureType = 1000282000
+	STRUCTURE_TYPE_RENDER_PASS_TRANSFORM_BEGIN_INFO_QCOM                           StructureType = 1000282001
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_DEVICE_MEMORY_REPORT_FEATURES_EXT               StructureType = 1000284000
+	STRUCTURE_TYPE_DEVICE_DEVICE_MEMORY_REPORT_CREATE_INFO_EXT                     StructureType = 1000284001
+	STRUCTURE_TYPE_DEVICE_MEMORY_REPORT_CALLBACK_DATA_EXT                          StructureType = 1000284002
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_ROBUSTNESS_2_FEATURES_EXT                       StructureType = 1000286000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_ROBUSTNESS_2_PROPERTIES_EXT                     StructureType = 1000286001
+	STRUCTURE_TYPE_SAMPLER_CUSTOM_BORDER_COLOR_CREATE_INFO_EXT                     StructureType = 1000287000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_CUSTOM_BORDER_COLOR_PROPERTIES_EXT              StructureType = 1000287001
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_CUSTOM_BORDER_COLOR_FEATURES_EXT                StructureType = 1000287002
+	STRUCTURE_TYPE_PIPELINE_LIBRARY_CREATE_INFO_KHR                                StructureType = 1000290000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_PRIVATE_DATA_FEATURES_EXT                       StructureType = 1000295000
+	STRUCTURE_TYPE_DEVICE_PRIVATE_DATA_CREATE_INFO_EXT                             StructureType = 1000295001
+	STRUCTURE_TYPE_PRIVATE_DATA_SLOT_CREATE_INFO_EXT                               StructureType = 1000295002
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_PIPELINE_CREATION_CACHE_CONTROL_FEATURES_EXT    StructureType = 1000297000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_DIAGNOSTICS_CONFIG_FEATURES_NV                  StructureType = 1000300000
+	STRUCTURE_TYPE_DEVICE_DIAGNOSTICS_CONFIG_CREATE_INFO_NV                        StructureType = 1000300001
+	STRUCTURE_TYPE_MEMORY_BARRIER_2_KHR                                            StructureType = 1000314000
+	STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER_2_KHR                                     StructureType = 1000314001
+	STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER_2_KHR                                      StructureType = 1000314002
+	STRUCTURE_TYPE_DEPENDENCY_INFO_KHR                                             StructureType = 1000314003
+	STRUCTURE_TYPE_SUBMIT_INFO_2_KHR                                               StructureType = 1000314004
+	STRUCTURE_TYPE_SEMAPHORE_SUBMIT_INFO_KHR                                       StructureType = 1000314005
+	STRUCTURE_TYPE_COMMAND_BUFFER_SUBMIT_INFO_KHR                                  StructureType = 1000314006
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_SYNCHRONIZATION_2_FEATURES_KHR                  StructureType = 1000314007
+	STRUCTURE_TYPE_QUEUE_FAMILY_CHECKPOINT_PROPERTIES_2_NV                         StructureType = 1000314008
+	STRUCTURE_TYPE_CHECKPOINT_DATA_2_NV                                            StructureType = 1000314009
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_ZERO_INITIALIZE_WORKGROUP_MEMORY_FEATURES_KHR   StructureType = 1000325000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_ENUMS_PROPERTIES_NV       StructureType = 1000326000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_ENUMS_FEATURES_NV         StructureType = 1000326001
+	STRUCTURE_TYPE_PIPELINE_FRAGMENT_SHADING_RATE_ENUM_STATE_CREATE_INFO_NV        StructureType = 1000326002
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_YCBCR_2_PLANE_444_FORMATS_FEATURES_EXT          StructureType = 1000330000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_DENSITY_MAP_2_FEATURES_EXT             StructureType = 1000332000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_DENSITY_MAP_2_PROPERTIES_EXT           StructureType = 1000332001
+	STRUCTURE_TYPE_COPY_COMMAND_TRANSFORM_INFO_QCOM                                StructureType = 1000333000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_ROBUSTNESS_FEATURES_EXT                   StructureType = 1000335000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_WORKGROUP_MEMORY_EXPLICIT_LAYOUT_FEATURES_KHR   StructureType = 1000336000
+	STRUCTURE_TYPE_COPY_BUFFER_INFO_2_KHR                                          StructureType = 1000337000
+	STRUCTURE_TYPE_COPY_IMAGE_INFO_2_KHR                                           StructureType = 1000337001
+	STRUCTURE_TYPE_COPY_BUFFER_TO_IMAGE_INFO_2_KHR                                 StructureType = 1000337002
+	STRUCTURE_TYPE_COPY_IMAGE_TO_BUFFER_INFO_2_KHR                                 StructureType = 1000337003
+	STRUCTURE_TYPE_BLIT_IMAGE_INFO_2_KHR                                           StructureType = 1000337004
+	STRUCTURE_TYPE_RESOLVE_IMAGE_INFO_2_KHR                                        StructureType = 1000337005
+	STRUCTURE_TYPE_BUFFER_COPY_2_KHR                                               StructureType = 1000337006
+	STRUCTURE_TYPE_IMAGE_COPY_2_KHR                                                StructureType = 1000337007
+	STRUCTURE_TYPE_IMAGE_BLIT_2_KHR                                                StructureType = 1000337008
+	STRUCTURE_TYPE_BUFFER_IMAGE_COPY_2_KHR                                         StructureType = 1000337009
+	STRUCTURE_TYPE_IMAGE_RESOLVE_2_KHR                                             StructureType = 1000337010
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_4444_FORMATS_FEATURES_EXT                       StructureType = 1000340000
+	STRUCTURE_TYPE_DIRECTFB_SURFACE_CREATE_INFO_EXT                                StructureType = 1000346000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_MUTABLE_DESCRIPTOR_TYPE_FEATURES_VALVE          StructureType = 1000351000
+	STRUCTURE_TYPE_MUTABLE_DESCRIPTOR_TYPE_CREATE_INFO_VALVE                       StructureType = 1000351002
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_INPUT_DYNAMIC_STATE_FEATURES_EXT         StructureType = 1000352000
+	STRUCTURE_TYPE_VERTEX_INPUT_BINDING_DESCRIPTION_2_EXT                          StructureType = 1000352001
+	STRUCTURE_TYPE_VERTEX_INPUT_ATTRIBUTE_DESCRIPTION_2_EXT                        StructureType = 1000352002
+	STRUCTURE_TYPE_IMPORT_MEMORY_ZIRCON_HANDLE_INFO_FUCHSIA                        StructureType = 1000364000
+	STRUCTURE_TYPE_MEMORY_ZIRCON_HANDLE_PROPERTIES_FUCHSIA                         StructureType = 1000364001
+	STRUCTURE_TYPE_MEMORY_GET_ZIRCON_HANDLE_INFO_FUCHSIA                           StructureType = 1000364002
+	STRUCTURE_TYPE_IMPORT_SEMAPHORE_ZIRCON_HANDLE_INFO_FUCHSIA                     StructureType = 1000365000
+	STRUCTURE_TYPE_SEMAPHORE_GET_ZIRCON_HANDLE_INFO_FUCHSIA                        StructureType = 1000365001
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_2_FEATURES_EXT           StructureType = 1000377000
+	STRUCTURE_TYPE_SCREEN_SURFACE_CREATE_INFO_QNX                                  StructureType = 1000378000
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_COLOR_WRITE_ENABLE_FEATURES_EXT                 StructureType = 1000381000
+	STRUCTURE_TYPE_PIPELINE_COLOR_WRITE_CREATE_INFO_EXT                            StructureType = 1000381001
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTER_FEATURES                       StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTERS_FEATURES
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETER_FEATURES                  StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES
 	STRUCTURE_TYPE_DEBUG_REPORT_CREATE_INFO_EXT                                    StructureType = STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT
@@ -1752,10 +2198,22 @@ const (
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_SEMAPHORE_INFO_KHR                     StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_SEMAPHORE_INFO
 	STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_PROPERTIES_KHR                               StructureType = STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_PROPERTIES
 	STRUCTURE_TYPE_EXPORT_SEMAPHORE_CREATE_INFO_KHR                                StructureType = STRUCTURE_TYPE_EXPORT_SEMAPHORE_CREATE_INFO
-	STRUCTURE_TYPE_PHYSICAL_DEVICE_FLOAT16_INT8_FEATURES_KHR                       StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES_KHR
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES_KHR                StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_FLOAT16_INT8_FEATURES_KHR                       StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_16BIT_STORAGE_FEATURES_KHR                      StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_16BIT_STORAGE_FEATURES
 	STRUCTURE_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_CREATE_INFO_KHR                      StructureType = STRUCTURE_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_CREATE_INFO
 	STRUCTURE_TYPE_SURFACE_CAPABILITIES2_EXT                                       StructureType = STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_EXT
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGELESS_FRAMEBUFFER_FEATURES_KHR              StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGELESS_FRAMEBUFFER_FEATURES
+	STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO_KHR                         StructureType = STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO
+	STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR                           StructureType = STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO
+	STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO_KHR                           StructureType = STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO
+	STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_2_KHR                                    StructureType = STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_2
+	STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2_KHR                                      StructureType = STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2
+	STRUCTURE_TYPE_SUBPASS_DESCRIPTION_2_KHR                                       StructureType = STRUCTURE_TYPE_SUBPASS_DESCRIPTION_2
+	STRUCTURE_TYPE_SUBPASS_DEPENDENCY_2_KHR                                        StructureType = STRUCTURE_TYPE_SUBPASS_DEPENDENCY_2
+	STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO_2_KHR                                   StructureType = STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO_2
+	STRUCTURE_TYPE_SUBPASS_BEGIN_INFO_KHR                                          StructureType = STRUCTURE_TYPE_SUBPASS_BEGIN_INFO
+	STRUCTURE_TYPE_SUBPASS_END_INFO_KHR                                            StructureType = STRUCTURE_TYPE_SUBPASS_END_INFO
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_FENCE_INFO_KHR                         StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_FENCE_INFO
 	STRUCTURE_TYPE_EXTERNAL_FENCE_PROPERTIES_KHR                                   StructureType = STRUCTURE_TYPE_EXTERNAL_FENCE_PROPERTIES
 	STRUCTURE_TYPE_EXPORT_FENCE_CREATE_INFO_KHR                                    StructureType = STRUCTURE_TYPE_EXPORT_FENCE_CREATE_INFO
@@ -1763,15 +2221,18 @@ const (
 	STRUCTURE_TYPE_RENDER_PASS_INPUT_ATTACHMENT_ASPECT_CREATE_INFO_KHR             StructureType = STRUCTURE_TYPE_RENDER_PASS_INPUT_ATTACHMENT_ASPECT_CREATE_INFO
 	STRUCTURE_TYPE_IMAGE_VIEW_USAGE_CREATE_INFO_KHR                                StructureType = STRUCTURE_TYPE_IMAGE_VIEW_USAGE_CREATE_INFO
 	STRUCTURE_TYPE_PIPELINE_TESSELLATION_DOMAIN_ORIGIN_STATE_CREATE_INFO_KHR       StructureType = STRUCTURE_TYPE_PIPELINE_TESSELLATION_DOMAIN_ORIGIN_STATE_CREATE_INFO
-	STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTER_FEATURES_KHR                   StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTER_FEATURES
-	STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTERS_FEATURES_KHR                  StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTER_FEATURES
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTERS_FEATURES_KHR                  StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTERS_FEATURES
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTER_FEATURES_KHR                   StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_VARIABLE_POINTERS_FEATURES_KHR
 	STRUCTURE_TYPE_MEMORY_DEDICATED_REQUIREMENTS_KHR                               StructureType = STRUCTURE_TYPE_MEMORY_DEDICATED_REQUIREMENTS
 	STRUCTURE_TYPE_MEMORY_DEDICATED_ALLOCATE_INFO_KHR                              StructureType = STRUCTURE_TYPE_MEMORY_DEDICATED_ALLOCATE_INFO
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_FILTER_MINMAX_PROPERTIES_EXT            StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_FILTER_MINMAX_PROPERTIES
+	STRUCTURE_TYPE_SAMPLER_REDUCTION_MODE_CREATE_INFO_EXT                          StructureType = STRUCTURE_TYPE_SAMPLER_REDUCTION_MODE_CREATE_INFO
 	STRUCTURE_TYPE_BUFFER_MEMORY_REQUIREMENTS_INFO_2_KHR                           StructureType = STRUCTURE_TYPE_BUFFER_MEMORY_REQUIREMENTS_INFO_2
 	STRUCTURE_TYPE_IMAGE_MEMORY_REQUIREMENTS_INFO_2_KHR                            StructureType = STRUCTURE_TYPE_IMAGE_MEMORY_REQUIREMENTS_INFO_2
 	STRUCTURE_TYPE_IMAGE_SPARSE_MEMORY_REQUIREMENTS_INFO_2_KHR                     StructureType = STRUCTURE_TYPE_IMAGE_SPARSE_MEMORY_REQUIREMENTS_INFO_2
 	STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2_KHR                                       StructureType = STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2
 	STRUCTURE_TYPE_SPARSE_IMAGE_MEMORY_REQUIREMENTS_2_KHR                          StructureType = STRUCTURE_TYPE_SPARSE_IMAGE_MEMORY_REQUIREMENTS_2
+	STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR                               StructureType = STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO
 	STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_CREATE_INFO_KHR                        StructureType = STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_CREATE_INFO
 	STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO_KHR                               StructureType = STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO
 	STRUCTURE_TYPE_BIND_IMAGE_PLANE_MEMORY_INFO_KHR                                StructureType = STRUCTURE_TYPE_BIND_IMAGE_PLANE_MEMORY_INFO
@@ -1780,12 +2241,42 @@ const (
 	STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_IMAGE_FORMAT_PROPERTIES_KHR            StructureType = STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_IMAGE_FORMAT_PROPERTIES
 	STRUCTURE_TYPE_BIND_BUFFER_MEMORY_INFO_KHR                                     StructureType = STRUCTURE_TYPE_BIND_BUFFER_MEMORY_INFO
 	STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO_KHR                                      StructureType = STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO
+	STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO_EXT             StructureType = STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES_EXT                StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_PROPERTIES_EXT              StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_PROPERTIES
+	STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO_EXT      StructureType = STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO
+	STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_LAYOUT_SUPPORT_EXT     StructureType = STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_LAYOUT_SUPPORT
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_MAINTENANCE_3_PROPERTIES_KHR                    StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_MAINTENANCE_3_PROPERTIES
 	STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_SUPPORT_KHR                               StructureType = STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_SUPPORT
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_SUBGROUP_EXTENDED_TYPES_FEATURES_KHR     StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_SUBGROUP_EXTENDED_TYPES_FEATURES
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_8BIT_STORAGE_FEATURES_KHR                       StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_8BIT_STORAGE_FEATURES
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_INT64_FEATURES_KHR                StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_INT64_FEATURES
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES_KHR                           StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_FLOAT_CONTROLS_PROPERTIES_KHR                   StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_FLOAT_CONTROLS_PROPERTIES
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_DEPTH_STENCIL_RESOLVE_PROPERTIES_KHR            StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_DEPTH_STENCIL_RESOLVE_PROPERTIES
+	STRUCTURE_TYPE_SUBPASS_DESCRIPTION_DEPTH_STENCIL_RESOLVE_KHR                   StructureType = STRUCTURE_TYPE_SUBPASS_DESCRIPTION_DEPTH_STENCIL_RESOLVE
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_TIMELINE_SEMAPHORE_FEATURES_KHR                 StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_TIMELINE_SEMAPHORE_FEATURES
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_TIMELINE_SEMAPHORE_PROPERTIES_KHR               StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_TIMELINE_SEMAPHORE_PROPERTIES
+	STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO_KHR                                  StructureType = STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO
+	STRUCTURE_TYPE_TIMELINE_SEMAPHORE_SUBMIT_INFO_KHR                              StructureType = STRUCTURE_TYPE_TIMELINE_SEMAPHORE_SUBMIT_INFO
+	STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO_KHR                                         StructureType = STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO
+	STRUCTURE_TYPE_SEMAPHORE_SIGNAL_INFO_KHR                                       StructureType = STRUCTURE_TYPE_SEMAPHORE_SIGNAL_INFO
+	STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO_INTEL                                    StructureType = STRUCTURE_TYPE_QUERY_POOL_PERFORMANCE_QUERY_CREATE_INFO_INTEL
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_MEMORY_MODEL_FEATURES_KHR                StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_MEMORY_MODEL_FEATURES
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_SCALAR_BLOCK_LAYOUT_FEATURES_EXT                StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SCALAR_BLOCK_LAYOUT_FEATURES
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_SEPARATE_DEPTH_STENCIL_LAYOUTS_FEATURES_KHR     StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SEPARATE_DEPTH_STENCIL_LAYOUTS_FEATURES
+	STRUCTURE_TYPE_ATTACHMENT_REFERENCE_STENCIL_LAYOUT_KHR                         StructureType = STRUCTURE_TYPE_ATTACHMENT_REFERENCE_STENCIL_LAYOUT
+	STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_STENCIL_LAYOUT_KHR                       StructureType = STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_STENCIL_LAYOUT
 	STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_ADDRESS_FEATURES_EXT                     StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES_EXT
-	STRUCTURE_TYPE_BEGIN_RANGE                                                     StructureType = STRUCTURE_TYPE_APPLICATION_INFO
-	STRUCTURE_TYPE_END_RANGE                                                       StructureType = STRUCTURE_TYPE_LOADER_DEVICE_CREATE_INFO
-	STRUCTURE_TYPE_RANGE_SIZE                                                      StructureType = (STRUCTURE_TYPE_LOADER_DEVICE_CREATE_INFO - STRUCTURE_TYPE_APPLICATION_INFO + 1)
+	STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO_EXT                                  StructureType = STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO
+	STRUCTURE_TYPE_IMAGE_STENCIL_USAGE_CREATE_INFO_EXT                             StructureType = STRUCTURE_TYPE_IMAGE_STENCIL_USAGE_CREATE_INFO
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_UNIFORM_BUFFER_STANDARD_LAYOUT_FEATURES_KHR     StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_UNIFORM_BUFFER_STANDARD_LAYOUT_FEATURES
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES_KHR              StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES
+	STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO_KHR                                  StructureType = STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO
+	STRUCTURE_TYPE_BUFFER_OPAQUE_CAPTURE_ADDRESS_CREATE_INFO_KHR                   StructureType = STRUCTURE_TYPE_BUFFER_OPAQUE_CAPTURE_ADDRESS_CREATE_INFO
+	STRUCTURE_TYPE_MEMORY_OPAQUE_CAPTURE_ADDRESS_ALLOCATE_INFO_KHR                 StructureType = STRUCTURE_TYPE_MEMORY_OPAQUE_CAPTURE_ADDRESS_ALLOCATE_INFO
+	STRUCTURE_TYPE_DEVICE_MEMORY_OPAQUE_CAPTURE_ADDRESS_INFO_KHR                   StructureType = STRUCTURE_TYPE_DEVICE_MEMORY_OPAQUE_CAPTURE_ADDRESS_INFO
+	STRUCTURE_TYPE_PHYSICAL_DEVICE_HOST_QUERY_RESET_FEATURES_EXT                   StructureType = STRUCTURE_TYPE_PHYSICAL_DEVICE_HOST_QUERY_RESET_FEATURES
 	STRUCTURE_TYPE_MAX_ENUM                                                        StructureType = 0x7FFFFFFF
 )
 
@@ -2019,6 +2510,106 @@ func (x StructureType) String() string {
 		return "STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_SUPPORT"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES:
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_PROPERTIES:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_PROPERTIES"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_PROPERTIES:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_PROPERTIES"
+	case STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO:
+		return "STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO"
+	case STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_2:
+		return "STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_2"
+	case STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2:
+		return "STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2"
+	case STRUCTURE_TYPE_SUBPASS_DESCRIPTION_2:
+		return "STRUCTURE_TYPE_SUBPASS_DESCRIPTION_2"
+	case STRUCTURE_TYPE_SUBPASS_DEPENDENCY_2:
+		return "STRUCTURE_TYPE_SUBPASS_DEPENDENCY_2"
+	case STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO_2:
+		return "STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO_2"
+	case STRUCTURE_TYPE_SUBPASS_BEGIN_INFO:
+		return "STRUCTURE_TYPE_SUBPASS_BEGIN_INFO"
+	case STRUCTURE_TYPE_SUBPASS_END_INFO:
+		return "STRUCTURE_TYPE_SUBPASS_END_INFO"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_8BIT_STORAGE_FEATURES:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_8BIT_STORAGE_FEATURES"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_INT64_FEATURES:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_INT64_FEATURES"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_FLOAT_CONTROLS_PROPERTIES:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_FLOAT_CONTROLS_PROPERTIES"
+	case STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO:
+		return "STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_PROPERTIES:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_PROPERTIES"
+	case STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO:
+		return "STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO"
+	case STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_LAYOUT_SUPPORT:
+		return "STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_LAYOUT_SUPPORT"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_DEPTH_STENCIL_RESOLVE_PROPERTIES:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_DEPTH_STENCIL_RESOLVE_PROPERTIES"
+	case STRUCTURE_TYPE_SUBPASS_DESCRIPTION_DEPTH_STENCIL_RESOLVE:
+		return "STRUCTURE_TYPE_SUBPASS_DESCRIPTION_DEPTH_STENCIL_RESOLVE"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SCALAR_BLOCK_LAYOUT_FEATURES:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SCALAR_BLOCK_LAYOUT_FEATURES"
+	case STRUCTURE_TYPE_IMAGE_STENCIL_USAGE_CREATE_INFO:
+		return "STRUCTURE_TYPE_IMAGE_STENCIL_USAGE_CREATE_INFO"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_FILTER_MINMAX_PROPERTIES:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_FILTER_MINMAX_PROPERTIES"
+	case STRUCTURE_TYPE_SAMPLER_REDUCTION_MODE_CREATE_INFO:
+		return "STRUCTURE_TYPE_SAMPLER_REDUCTION_MODE_CREATE_INFO"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_MEMORY_MODEL_FEATURES:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_MEMORY_MODEL_FEATURES"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGELESS_FRAMEBUFFER_FEATURES:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGELESS_FRAMEBUFFER_FEATURES"
+	case STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO:
+		return "STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO"
+	case STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO:
+		return "STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO"
+	case STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO:
+		return "STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_UNIFORM_BUFFER_STANDARD_LAYOUT_FEATURES:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_UNIFORM_BUFFER_STANDARD_LAYOUT_FEATURES"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_SUBGROUP_EXTENDED_TYPES_FEATURES:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_SUBGROUP_EXTENDED_TYPES_FEATURES"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SEPARATE_DEPTH_STENCIL_LAYOUTS_FEATURES:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SEPARATE_DEPTH_STENCIL_LAYOUTS_FEATURES"
+	case STRUCTURE_TYPE_ATTACHMENT_REFERENCE_STENCIL_LAYOUT:
+		return "STRUCTURE_TYPE_ATTACHMENT_REFERENCE_STENCIL_LAYOUT"
+	case STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_STENCIL_LAYOUT:
+		return "STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_STENCIL_LAYOUT"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_HOST_QUERY_RESET_FEATURES:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_HOST_QUERY_RESET_FEATURES"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_TIMELINE_SEMAPHORE_FEATURES:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_TIMELINE_SEMAPHORE_FEATURES"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_TIMELINE_SEMAPHORE_PROPERTIES:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_TIMELINE_SEMAPHORE_PROPERTIES"
+	case STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO:
+		return "STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO"
+	case STRUCTURE_TYPE_TIMELINE_SEMAPHORE_SUBMIT_INFO:
+		return "STRUCTURE_TYPE_TIMELINE_SEMAPHORE_SUBMIT_INFO"
+	case STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO:
+		return "STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO"
+	case STRUCTURE_TYPE_SEMAPHORE_SIGNAL_INFO:
+		return "STRUCTURE_TYPE_SEMAPHORE_SIGNAL_INFO"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES"
+	case STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO:
+		return "STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO"
+	case STRUCTURE_TYPE_BUFFER_OPAQUE_CAPTURE_ADDRESS_CREATE_INFO:
+		return "STRUCTURE_TYPE_BUFFER_OPAQUE_CAPTURE_ADDRESS_CREATE_INFO"
+	case STRUCTURE_TYPE_MEMORY_OPAQUE_CAPTURE_ADDRESS_ALLOCATE_INFO:
+		return "STRUCTURE_TYPE_MEMORY_OPAQUE_CAPTURE_ADDRESS_ALLOCATE_INFO"
+	case STRUCTURE_TYPE_DEVICE_MEMORY_OPAQUE_CAPTURE_ADDRESS_INFO:
+		return "STRUCTURE_TYPE_DEVICE_MEMORY_OPAQUE_CAPTURE_ADDRESS_INFO"
 	case STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR:
 		return "STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR"
 	case STRUCTURE_TYPE_PRESENT_INFO_KHR:
@@ -2061,6 +2652,44 @@ func (x StructureType) String() string {
 		return "STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_TAG_INFO_EXT"
 	case STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT:
 		return "STRUCTURE_TYPE_DEBUG_MARKER_MARKER_INFO_EXT"
+	case K_STRUCTURE_TYPE_VIDEO_PROFILE_KHR:
+		return "K_STRUCTURE_TYPE_VIDEO_PROFILE_KHR"
+	case K_STRUCTURE_TYPE_VIDEO_CAPABILITIES_KHR:
+		return "K_STRUCTURE_TYPE_VIDEO_CAPABILITIES_KHR"
+	case K_STRUCTURE_TYPE_VIDEO_PICTURE_RESOURCE_KHR:
+		return "K_STRUCTURE_TYPE_VIDEO_PICTURE_RESOURCE_KHR"
+	case K_STRUCTURE_TYPE_VIDEO_GET_MEMORY_PROPERTIES_KHR:
+		return "K_STRUCTURE_TYPE_VIDEO_GET_MEMORY_PROPERTIES_KHR"
+	case K_STRUCTURE_TYPE_VIDEO_BIND_MEMORY_KHR:
+		return "K_STRUCTURE_TYPE_VIDEO_BIND_MEMORY_KHR"
+	case K_STRUCTURE_TYPE_VIDEO_SESSION_CREATE_INFO_KHR:
+		return "K_STRUCTURE_TYPE_VIDEO_SESSION_CREATE_INFO_KHR"
+	case K_STRUCTURE_TYPE_VIDEO_SESSION_PARAMETERS_CREATE_INFO_KHR:
+		return "K_STRUCTURE_TYPE_VIDEO_SESSION_PARAMETERS_CREATE_INFO_KHR"
+	case K_STRUCTURE_TYPE_VIDEO_SESSION_PARAMETERS_UPDATE_INFO_KHR:
+		return "K_STRUCTURE_TYPE_VIDEO_SESSION_PARAMETERS_UPDATE_INFO_KHR"
+	case K_STRUCTURE_TYPE_VIDEO_BEGIN_CODING_INFO_KHR:
+		return "K_STRUCTURE_TYPE_VIDEO_BEGIN_CODING_INFO_KHR"
+	case K_STRUCTURE_TYPE_VIDEO_END_CODING_INFO_KHR:
+		return "K_STRUCTURE_TYPE_VIDEO_END_CODING_INFO_KHR"
+	case K_STRUCTURE_TYPE_VIDEO_CODING_CONTROL_INFO_KHR:
+		return "K_STRUCTURE_TYPE_VIDEO_CODING_CONTROL_INFO_KHR"
+	case K_STRUCTURE_TYPE_VIDEO_REFERENCE_SLOT_KHR:
+		return "K_STRUCTURE_TYPE_VIDEO_REFERENCE_SLOT_KHR"
+	case K_STRUCTURE_TYPE_VIDEO_QUEUE_FAMILY_PROPERTIES_2_KHR:
+		return "K_STRUCTURE_TYPE_VIDEO_QUEUE_FAMILY_PROPERTIES_2_KHR"
+	case K_STRUCTURE_TYPE_VIDEO_PROFILES_KHR:
+		return "K_STRUCTURE_TYPE_VIDEO_PROFILES_KHR"
+	case K_STRUCTURE_TYPE_PHYSICAL_DEVICE_VIDEO_FORMAT_INFO_KHR:
+		return "K_STRUCTURE_TYPE_PHYSICAL_DEVICE_VIDEO_FORMAT_INFO_KHR"
+	case K_STRUCTURE_TYPE_VIDEO_FORMAT_PROPERTIES_KHR:
+		return "K_STRUCTURE_TYPE_VIDEO_FORMAT_PROPERTIES_KHR"
+	case K_STRUCTURE_TYPE_VIDEO_DECODE_INFO_KHR:
+		return "K_STRUCTURE_TYPE_VIDEO_DECODE_INFO_KHR"
+	case K_STRUCTURE_TYPE_VIDEO_ENCODE_INFO_KHR:
+		return "K_STRUCTURE_TYPE_VIDEO_ENCODE_INFO_KHR"
+	case K_STRUCTURE_TYPE_VIDEO_ENCODE_RATE_CONTROL_INFO_KHR:
+		return "K_STRUCTURE_TYPE_VIDEO_ENCODE_RATE_CONTROL_INFO_KHR"
 	case STRUCTURE_TYPE_DEDICATED_ALLOCATION_IMAGE_CREATE_INFO_NV:
 		return "STRUCTURE_TYPE_DEDICATED_ALLOCATION_IMAGE_CREATE_INFO_NV"
 	case STRUCTURE_TYPE_DEDICATED_ALLOCATION_BUFFER_CREATE_INFO_NV:
@@ -2075,6 +2704,42 @@ func (x StructureType) String() string {
 		return "STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_STREAM_CREATE_INFO_EXT"
 	case STRUCTURE_TYPE_IMAGE_VIEW_HANDLE_INFO_NVX:
 		return "STRUCTURE_TYPE_IMAGE_VIEW_HANDLE_INFO_NVX"
+	case STRUCTURE_TYPE_IMAGE_VIEW_ADDRESS_PROPERTIES_NVX:
+		return "STRUCTURE_TYPE_IMAGE_VIEW_ADDRESS_PROPERTIES_NVX"
+	case K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_CAPABILITIES_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_CAPABILITIES_EXT"
+	case K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_SESSION_CREATE_INFO_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_SESSION_CREATE_INFO_EXT"
+	case K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_SESSION_PARAMETERS_CREATE_INFO_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_SESSION_PARAMETERS_CREATE_INFO_EXT"
+	case K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_SESSION_PARAMETERS_ADD_INFO_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_SESSION_PARAMETERS_ADD_INFO_EXT"
+	case K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_VCL_FRAME_INFO_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_VCL_FRAME_INFO_EXT"
+	case K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_DPB_SLOT_INFO_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_DPB_SLOT_INFO_EXT"
+	case K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_NALU_SLICE_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_NALU_SLICE_EXT"
+	case K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_EMIT_PICTURE_PARAMETERS_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_EMIT_PICTURE_PARAMETERS_EXT"
+	case K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_PROFILE_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_ENCODE_H264_PROFILE_EXT"
+	case K_STRUCTURE_TYPE_VIDEO_DECODE_H264_CAPABILITIES_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_DECODE_H264_CAPABILITIES_EXT"
+	case K_STRUCTURE_TYPE_VIDEO_DECODE_H264_SESSION_CREATE_INFO_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_DECODE_H264_SESSION_CREATE_INFO_EXT"
+	case K_STRUCTURE_TYPE_VIDEO_DECODE_H264_PICTURE_INFO_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_DECODE_H264_PICTURE_INFO_EXT"
+	case K_STRUCTURE_TYPE_VIDEO_DECODE_H264_MVC_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_DECODE_H264_MVC_EXT"
+	case K_STRUCTURE_TYPE_VIDEO_DECODE_H264_PROFILE_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_DECODE_H264_PROFILE_EXT"
+	case K_STRUCTURE_TYPE_VIDEO_DECODE_H264_SESSION_PARAMETERS_CREATE_INFO_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_DECODE_H264_SESSION_PARAMETERS_CREATE_INFO_EXT"
+	case K_STRUCTURE_TYPE_VIDEO_DECODE_H264_SESSION_PARAMETERS_ADD_INFO_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_DECODE_H264_SESSION_PARAMETERS_ADD_INFO_EXT"
+	case K_STRUCTURE_TYPE_VIDEO_DECODE_H264_DPB_SLOT_INFO_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_DECODE_H264_DPB_SLOT_INFO_EXT"
 	case STRUCTURE_TYPE_TEXTURE_LOD_GATHER_FORMAT_PROPERTIES_AMD:
 		return "STRUCTURE_TYPE_TEXTURE_LOD_GATHER_FORMAT_PROPERTIES_AMD"
 	case STRUCTURE_TYPE_STREAM_DESCRIPTOR_SURFACE_CREATE_INFO_GGP:
@@ -2137,22 +2802,8 @@ func (x StructureType) String() string {
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_CONDITIONAL_RENDERING_FEATURES_EXT"
 	case STRUCTURE_TYPE_CONDITIONAL_RENDERING_BEGIN_INFO_EXT:
 		return "STRUCTURE_TYPE_CONDITIONAL_RENDERING_BEGIN_INFO_EXT"
-	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES_KHR:
-		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES_KHR"
 	case STRUCTURE_TYPE_PRESENT_REGIONS_KHR:
 		return "STRUCTURE_TYPE_PRESENT_REGIONS_KHR"
-	case STRUCTURE_TYPE_OBJECT_TABLE_CREATE_INFO_NVX:
-		return "STRUCTURE_TYPE_OBJECT_TABLE_CREATE_INFO_NVX"
-	case STRUCTURE_TYPE_INDIRECT_COMMANDS_LAYOUT_CREATE_INFO_NVX:
-		return "STRUCTURE_TYPE_INDIRECT_COMMANDS_LAYOUT_CREATE_INFO_NVX"
-	case STRUCTURE_TYPE_CMD_PROCESS_COMMANDS_INFO_NVX:
-		return "STRUCTURE_TYPE_CMD_PROCESS_COMMANDS_INFO_NVX"
-	case STRUCTURE_TYPE_CMD_RESERVE_SPACE_FOR_COMMANDS_INFO_NVX:
-		return "STRUCTURE_TYPE_CMD_RESERVE_SPACE_FOR_COMMANDS_INFO_NVX"
-	case STRUCTURE_TYPE_DEVICE_GENERATED_COMMANDS_LIMITS_NVX:
-		return "STRUCTURE_TYPE_DEVICE_GENERATED_COMMANDS_LIMITS_NVX"
-	case STRUCTURE_TYPE_DEVICE_GENERATED_COMMANDS_FEATURES_NVX:
-		return "STRUCTURE_TYPE_DEVICE_GENERATED_COMMANDS_FEATURES_NVX"
 	case STRUCTURE_TYPE_PIPELINE_VIEWPORT_W_SCALING_STATE_CREATE_INFO_NV:
 		return "STRUCTURE_TYPE_PIPELINE_VIEWPORT_W_SCALING_STATE_CREATE_INFO_NV"
 	case STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_EXT:
@@ -2185,28 +2836,6 @@ func (x StructureType) String() string {
 		return "STRUCTURE_TYPE_PIPELINE_RASTERIZATION_DEPTH_CLIP_STATE_CREATE_INFO_EXT"
 	case STRUCTURE_TYPE_HDR_METADATA_EXT:
 		return "STRUCTURE_TYPE_HDR_METADATA_EXT"
-	case STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGELESS_FRAMEBUFFER_FEATURES_KHR:
-		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGELESS_FRAMEBUFFER_FEATURES_KHR"
-	case STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO_KHR:
-		return "STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO_KHR"
-	case STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR:
-		return "STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR"
-	case STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO_KHR:
-		return "STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO_KHR"
-	case STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_2_KHR:
-		return "STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_2_KHR"
-	case STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2_KHR:
-		return "STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2_KHR"
-	case STRUCTURE_TYPE_SUBPASS_DESCRIPTION_2_KHR:
-		return "STRUCTURE_TYPE_SUBPASS_DESCRIPTION_2_KHR"
-	case STRUCTURE_TYPE_SUBPASS_DEPENDENCY_2_KHR:
-		return "STRUCTURE_TYPE_SUBPASS_DEPENDENCY_2_KHR"
-	case STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO_2_KHR:
-		return "STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO_2_KHR"
-	case STRUCTURE_TYPE_SUBPASS_BEGIN_INFO_KHR:
-		return "STRUCTURE_TYPE_SUBPASS_BEGIN_INFO_KHR"
-	case STRUCTURE_TYPE_SUBPASS_END_INFO_KHR:
-		return "STRUCTURE_TYPE_SUBPASS_END_INFO_KHR"
 	case STRUCTURE_TYPE_SHARED_PRESENT_SURFACE_CAPABILITIES_KHR:
 		return "STRUCTURE_TYPE_SHARED_PRESENT_SURFACE_CAPABILITIES_KHR"
 	case STRUCTURE_TYPE_IMPORT_FENCE_WIN32_HANDLE_INFO_KHR:
@@ -2219,6 +2848,20 @@ func (x StructureType) String() string {
 		return "STRUCTURE_TYPE_IMPORT_FENCE_FD_INFO_KHR"
 	case STRUCTURE_TYPE_FENCE_GET_FD_INFO_KHR:
 		return "STRUCTURE_TYPE_FENCE_GET_FD_INFO_KHR"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_PERFORMANCE_QUERY_FEATURES_KHR:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_PERFORMANCE_QUERY_FEATURES_KHR"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_PERFORMANCE_QUERY_PROPERTIES_KHR:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_PERFORMANCE_QUERY_PROPERTIES_KHR"
+	case STRUCTURE_TYPE_QUERY_POOL_PERFORMANCE_CREATE_INFO_KHR:
+		return "STRUCTURE_TYPE_QUERY_POOL_PERFORMANCE_CREATE_INFO_KHR"
+	case STRUCTURE_TYPE_PERFORMANCE_QUERY_SUBMIT_INFO_KHR:
+		return "STRUCTURE_TYPE_PERFORMANCE_QUERY_SUBMIT_INFO_KHR"
+	case STRUCTURE_TYPE_ACQUIRE_PROFILING_LOCK_INFO_KHR:
+		return "STRUCTURE_TYPE_ACQUIRE_PROFILING_LOCK_INFO_KHR"
+	case STRUCTURE_TYPE_PERFORMANCE_COUNTER_KHR:
+		return "STRUCTURE_TYPE_PERFORMANCE_COUNTER_KHR"
+	case STRUCTURE_TYPE_PERFORMANCE_COUNTER_DESCRIPTION_KHR:
+		return "STRUCTURE_TYPE_PERFORMANCE_COUNTER_DESCRIPTION_KHR"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR:
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SURFACE_INFO_2_KHR"
 	case STRUCTURE_TYPE_SURFACE_CAPABILITIES_2_KHR:
@@ -2261,10 +2904,6 @@ func (x StructureType) String() string {
 		return "STRUCTURE_TYPE_MEMORY_GET_ANDROID_HARDWARE_BUFFER_INFO_ANDROID"
 	case STRUCTURE_TYPE_EXTERNAL_FORMAT_ANDROID:
 		return "STRUCTURE_TYPE_EXTERNAL_FORMAT_ANDROID"
-	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_FILTER_MINMAX_PROPERTIES_EXT:
-		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_FILTER_MINMAX_PROPERTIES_EXT"
-	case STRUCTURE_TYPE_SAMPLER_REDUCTION_MODE_CREATE_INFO_EXT:
-		return "STRUCTURE_TYPE_SAMPLER_REDUCTION_MODE_CREATE_INFO_EXT"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_INLINE_UNIFORM_BLOCK_FEATURES_EXT:
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_INLINE_UNIFORM_BLOCK_FEATURES_EXT"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_INLINE_UNIFORM_BLOCK_PROPERTIES_EXT:
@@ -2283,8 +2922,6 @@ func (x StructureType) String() string {
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLE_LOCATIONS_PROPERTIES_EXT"
 	case STRUCTURE_TYPE_MULTISAMPLE_PROPERTIES_EXT:
 		return "STRUCTURE_TYPE_MULTISAMPLE_PROPERTIES_EXT"
-	case STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR:
-		return "STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_FEATURES_EXT:
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_FEATURES_EXT"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_BLEND_OPERATION_ADVANCED_PROPERTIES_EXT:
@@ -2293,6 +2930,48 @@ func (x StructureType) String() string {
 		return "STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_ADVANCED_STATE_CREATE_INFO_EXT"
 	case STRUCTURE_TYPE_PIPELINE_COVERAGE_TO_COLOR_STATE_CREATE_INFO_NV:
 		return "STRUCTURE_TYPE_PIPELINE_COVERAGE_TO_COLOR_STATE_CREATE_INFO_NV"
+	case STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR:
+		return "STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR"
+	case STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR:
+		return "STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR"
+	case STRUCTURE_TYPE_ACCELERATION_STRUCTURE_DEVICE_ADDRESS_INFO_KHR:
+		return "STRUCTURE_TYPE_ACCELERATION_STRUCTURE_DEVICE_ADDRESS_INFO_KHR"
+	case STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_AABBS_DATA_KHR:
+		return "STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_AABBS_DATA_KHR"
+	case STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_INSTANCES_DATA_KHR:
+		return "STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_INSTANCES_DATA_KHR"
+	case STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR:
+		return "STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR"
+	case STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR:
+		return "STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR"
+	case STRUCTURE_TYPE_ACCELERATION_STRUCTURE_VERSION_INFO_KHR:
+		return "STRUCTURE_TYPE_ACCELERATION_STRUCTURE_VERSION_INFO_KHR"
+	case STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_INFO_KHR:
+		return "STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_INFO_KHR"
+	case STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_TO_MEMORY_INFO_KHR:
+		return "STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_TO_MEMORY_INFO_KHR"
+	case STRUCTURE_TYPE_COPY_MEMORY_TO_ACCELERATION_STRUCTURE_INFO_KHR:
+		return "STRUCTURE_TYPE_COPY_MEMORY_TO_ACCELERATION_STRUCTURE_INFO_KHR"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_PROPERTIES_KHR:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_PROPERTIES_KHR"
+	case STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_KHR:
+		return "STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_KHR"
+	case STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR:
+		return "STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR"
+	case STRUCTURE_TYPE_RAY_TRACING_PIPELINE_CREATE_INFO_KHR:
+		return "STRUCTURE_TYPE_RAY_TRACING_PIPELINE_CREATE_INFO_KHR"
+	case STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR:
+		return "STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR"
+	case STRUCTURE_TYPE_RAY_TRACING_PIPELINE_INTERFACE_CREATE_INFO_KHR:
+		return "STRUCTURE_TYPE_RAY_TRACING_PIPELINE_INTERFACE_CREATE_INFO_KHR"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_QUERY_FEATURES_KHR:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_QUERY_FEATURES_KHR"
 	case STRUCTURE_TYPE_PIPELINE_COVERAGE_MODULATION_STATE_CREATE_INFO_NV:
 		return "STRUCTURE_TYPE_PIPELINE_COVERAGE_MODULATION_STATE_CREATE_INFO_NV"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_SM_BUILTINS_FEATURES_NV:
@@ -2301,8 +2980,6 @@ func (x StructureType) String() string {
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_SM_BUILTINS_PROPERTIES_NV"
 	case STRUCTURE_TYPE_DRM_FORMAT_MODIFIER_PROPERTIES_LIST_EXT:
 		return "STRUCTURE_TYPE_DRM_FORMAT_MODIFIER_PROPERTIES_LIST_EXT"
-	case STRUCTURE_TYPE_DRM_FORMAT_MODIFIER_PROPERTIES_EXT:
-		return "STRUCTURE_TYPE_DRM_FORMAT_MODIFIER_PROPERTIES_EXT"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_DRM_FORMAT_MODIFIER_INFO_EXT:
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_DRM_FORMAT_MODIFIER_INFO_EXT"
 	case STRUCTURE_TYPE_IMAGE_DRM_FORMAT_MODIFIER_LIST_CREATE_INFO_EXT:
@@ -2315,16 +2992,10 @@ func (x StructureType) String() string {
 		return "STRUCTURE_TYPE_VALIDATION_CACHE_CREATE_INFO_EXT"
 	case STRUCTURE_TYPE_SHADER_MODULE_VALIDATION_CACHE_CREATE_INFO_EXT:
 		return "STRUCTURE_TYPE_SHADER_MODULE_VALIDATION_CACHE_CREATE_INFO_EXT"
-	case STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO_EXT:
-		return "STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO_EXT"
-	case STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES_EXT:
-		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES_EXT"
-	case STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_PROPERTIES_EXT:
-		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_PROPERTIES_EXT"
-	case STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO_EXT:
-		return "STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO_EXT"
-	case STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_LAYOUT_SUPPORT_EXT:
-		return "STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_LAYOUT_SUPPORT_EXT"
+	case K_STRUCTURE_TYPE_PHYSICAL_DEVICE_PORTABILITY_SUBSET_FEATURES_KHR:
+		return "K_STRUCTURE_TYPE_PHYSICAL_DEVICE_PORTABILITY_SUBSET_FEATURES_KHR"
+	case K_STRUCTURE_TYPE_PHYSICAL_DEVICE_PORTABILITY_SUBSET_PROPERTIES_KHR:
+		return "K_STRUCTURE_TYPE_PHYSICAL_DEVICE_PORTABILITY_SUBSET_PROPERTIES_KHR"
 	case STRUCTURE_TYPE_PIPELINE_VIEWPORT_SHADING_RATE_IMAGE_STATE_CREATE_INFO_NV:
 		return "STRUCTURE_TYPE_PIPELINE_VIEWPORT_SHADING_RATE_IMAGE_STATE_CREATE_INFO_NV"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADING_RATE_IMAGE_FEATURES_NV:
@@ -2365,22 +3036,34 @@ func (x StructureType) String() string {
 		return "STRUCTURE_TYPE_FILTER_CUBIC_IMAGE_VIEW_IMAGE_FORMAT_PROPERTIES_EXT"
 	case STRUCTURE_TYPE_DEVICE_QUEUE_GLOBAL_PRIORITY_CREATE_INFO_EXT:
 		return "STRUCTURE_TYPE_DEVICE_QUEUE_GLOBAL_PRIORITY_CREATE_INFO_EXT"
-	case STRUCTURE_TYPE_PHYSICAL_DEVICE_8BIT_STORAGE_FEATURES_KHR:
-		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_8BIT_STORAGE_FEATURES_KHR"
 	case STRUCTURE_TYPE_IMPORT_MEMORY_HOST_POINTER_INFO_EXT:
 		return "STRUCTURE_TYPE_IMPORT_MEMORY_HOST_POINTER_INFO_EXT"
 	case STRUCTURE_TYPE_MEMORY_HOST_POINTER_PROPERTIES_EXT:
 		return "STRUCTURE_TYPE_MEMORY_HOST_POINTER_PROPERTIES_EXT"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_MEMORY_HOST_PROPERTIES_EXT:
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_MEMORY_HOST_PROPERTIES_EXT"
-	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_INT64_FEATURES_KHR:
-		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_INT64_FEATURES_KHR"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CLOCK_FEATURES_KHR:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CLOCK_FEATURES_KHR"
 	case STRUCTURE_TYPE_PIPELINE_COMPILER_CONTROL_CREATE_INFO_AMD:
 		return "STRUCTURE_TYPE_PIPELINE_COMPILER_CONTROL_CREATE_INFO_AMD"
 	case STRUCTURE_TYPE_CALIBRATED_TIMESTAMP_INFO_EXT:
 		return "STRUCTURE_TYPE_CALIBRATED_TIMESTAMP_INFO_EXT"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_AMD:
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_AMD"
+	case K_STRUCTURE_TYPE_VIDEO_DECODE_H265_CAPABILITIES_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_DECODE_H265_CAPABILITIES_EXT"
+	case K_STRUCTURE_TYPE_VIDEO_DECODE_H265_SESSION_CREATE_INFO_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_DECODE_H265_SESSION_CREATE_INFO_EXT"
+	case K_STRUCTURE_TYPE_VIDEO_DECODE_H265_SESSION_PARAMETERS_CREATE_INFO_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_DECODE_H265_SESSION_PARAMETERS_CREATE_INFO_EXT"
+	case K_STRUCTURE_TYPE_VIDEO_DECODE_H265_SESSION_PARAMETERS_ADD_INFO_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_DECODE_H265_SESSION_PARAMETERS_ADD_INFO_EXT"
+	case K_STRUCTURE_TYPE_VIDEO_DECODE_H265_PROFILE_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_DECODE_H265_PROFILE_EXT"
+	case K_STRUCTURE_TYPE_VIDEO_DECODE_H265_PICTURE_INFO_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_DECODE_H265_PICTURE_INFO_EXT"
+	case K_STRUCTURE_TYPE_VIDEO_DECODE_H265_DPB_SLOT_INFO_EXT:
+		return "K_STRUCTURE_TYPE_VIDEO_DECODE_H265_DPB_SLOT_INFO_EXT"
 	case STRUCTURE_TYPE_DEVICE_MEMORY_OVERALLOCATION_CREATE_INFO_AMD:
 		return "STRUCTURE_TYPE_DEVICE_MEMORY_OVERALLOCATION_CREATE_INFO_AMD"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_ATTRIBUTE_DIVISOR_PROPERTIES_EXT:
@@ -2393,14 +3076,6 @@ func (x StructureType) String() string {
 		return "STRUCTURE_TYPE_PRESENT_FRAME_TOKEN_GGP"
 	case STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT:
 		return "STRUCTURE_TYPE_PIPELINE_CREATION_FEEDBACK_CREATE_INFO_EXT"
-	case STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES_KHR:
-		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES_KHR"
-	case STRUCTURE_TYPE_PHYSICAL_DEVICE_FLOAT_CONTROLS_PROPERTIES_KHR:
-		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_FLOAT_CONTROLS_PROPERTIES_KHR"
-	case STRUCTURE_TYPE_PHYSICAL_DEVICE_DEPTH_STENCIL_RESOLVE_PROPERTIES_KHR:
-		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_DEPTH_STENCIL_RESOLVE_PROPERTIES_KHR"
-	case STRUCTURE_TYPE_SUBPASS_DESCRIPTION_DEPTH_STENCIL_RESOLVE_KHR:
-		return "STRUCTURE_TYPE_SUBPASS_DESCRIPTION_DEPTH_STENCIL_RESOLVE_KHR"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_COMPUTE_SHADER_DERIVATIVES_FEATURES_NV:
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_COMPUTE_SHADER_DERIVATIVES_FEATURES_NV"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_FEATURES_NV:
@@ -2421,8 +3096,8 @@ func (x StructureType) String() string {
 		return "STRUCTURE_TYPE_QUEUE_FAMILY_CHECKPOINT_PROPERTIES_NV"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_INTEGER_FUNCTIONS_2_FEATURES_INTEL:
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_INTEGER_FUNCTIONS_2_FEATURES_INTEL"
-	case STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO_INTEL:
-		return "STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO_INTEL"
+	case STRUCTURE_TYPE_QUERY_POOL_PERFORMANCE_QUERY_CREATE_INFO_INTEL:
+		return "STRUCTURE_TYPE_QUERY_POOL_PERFORMANCE_QUERY_CREATE_INFO_INTEL"
 	case STRUCTURE_TYPE_INITIALIZE_PERFORMANCE_API_INFO_INTEL:
 		return "STRUCTURE_TYPE_INITIALIZE_PERFORMANCE_API_INFO_INTEL"
 	case STRUCTURE_TYPE_PERFORMANCE_MARKER_INFO_INTEL:
@@ -2433,8 +3108,6 @@ func (x StructureType) String() string {
 		return "STRUCTURE_TYPE_PERFORMANCE_OVERRIDE_INFO_INTEL"
 	case STRUCTURE_TYPE_PERFORMANCE_CONFIGURATION_ACQUIRE_INFO_INTEL:
 		return "STRUCTURE_TYPE_PERFORMANCE_CONFIGURATION_ACQUIRE_INFO_INTEL"
-	case STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_MEMORY_MODEL_FEATURES_KHR:
-		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_MEMORY_MODEL_FEATURES_KHR"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_PCI_BUS_INFO_PROPERTIES_EXT:
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_PCI_BUS_INFO_PROPERTIES_EXT"
 	case STRUCTURE_TYPE_DISPLAY_NATIVE_HDR_SURFACE_CAPABILITIES_AMD:
@@ -2443,6 +3116,8 @@ func (x StructureType) String() string {
 		return "STRUCTURE_TYPE_SWAPCHAIN_DISPLAY_NATIVE_HDR_CREATE_INFO_AMD"
 	case STRUCTURE_TYPE_IMAGEPIPE_SURFACE_CREATE_INFO_FUCHSIA:
 		return "STRUCTURE_TYPE_IMAGEPIPE_SURFACE_CREATE_INFO_FUCHSIA"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_TERMINATE_INVOCATION_FEATURES_KHR:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_TERMINATE_INVOCATION_FEATURES_KHR"
 	case STRUCTURE_TYPE_METAL_SURFACE_CREATE_INFO_EXT:
 		return "STRUCTURE_TYPE_METAL_SURFACE_CREATE_INFO_EXT"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_DENSITY_MAP_FEATURES_EXT:
@@ -2451,18 +3126,28 @@ func (x StructureType) String() string {
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_DENSITY_MAP_PROPERTIES_EXT"
 	case STRUCTURE_TYPE_RENDER_PASS_FRAGMENT_DENSITY_MAP_CREATE_INFO_EXT:
 		return "STRUCTURE_TYPE_RENDER_PASS_FRAGMENT_DENSITY_MAP_CREATE_INFO_EXT"
-	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SCALAR_BLOCK_LAYOUT_FEATURES_EXT:
-		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SCALAR_BLOCK_LAYOUT_FEATURES_EXT"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_SIZE_CONTROL_PROPERTIES_EXT:
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_SIZE_CONTROL_PROPERTIES_EXT"
 	case STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_REQUIRED_SUBGROUP_SIZE_CREATE_INFO_EXT:
 		return "STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_REQUIRED_SUBGROUP_SIZE_CREATE_INFO_EXT"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_SIZE_CONTROL_FEATURES_EXT:
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_SIZE_CONTROL_FEATURES_EXT"
+	case STRUCTURE_TYPE_FRAGMENT_SHADING_RATE_ATTACHMENT_INFO_KHR:
+		return "STRUCTURE_TYPE_FRAGMENT_SHADING_RATE_ATTACHMENT_INFO_KHR"
+	case STRUCTURE_TYPE_PIPELINE_FRAGMENT_SHADING_RATE_STATE_CREATE_INFO_KHR:
+		return "STRUCTURE_TYPE_PIPELINE_FRAGMENT_SHADING_RATE_STATE_CREATE_INFO_KHR"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_PROPERTIES_KHR:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_PROPERTIES_KHR"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_FEATURES_KHR:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_FEATURES_KHR"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_KHR:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_KHR"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_2_AMD:
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_2_AMD"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_COHERENT_MEMORY_FEATURES_AMD:
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_COHERENT_MEMORY_FEATURES_AMD"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_IMAGE_ATOMIC_INT64_FEATURES_EXT:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_IMAGE_ATOMIC_INT64_FEATURES_EXT"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_MEMORY_BUDGET_PROPERTIES_EXT:
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_MEMORY_BUDGET_PROPERTIES_EXT"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_MEMORY_PRIORITY_FEATURES_EXT:
@@ -2475,12 +3160,10 @@ func (x StructureType) String() string {
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_DEDICATED_ALLOCATION_IMAGE_ALIASING_FEATURES_NV"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES_EXT:
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES_EXT"
-	case STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO_EXT:
-		return "STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO_EXT"
 	case STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_CREATE_INFO_EXT:
 		return "STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_CREATE_INFO_EXT"
-	case STRUCTURE_TYPE_IMAGE_STENCIL_USAGE_CREATE_INFO_EXT:
-		return "STRUCTURE_TYPE_IMAGE_STENCIL_USAGE_CREATE_INFO_EXT"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_TOOL_PROPERTIES_EXT:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_TOOL_PROPERTIES_EXT"
 	case STRUCTURE_TYPE_VALIDATION_FEATURES_EXT:
 		return "STRUCTURE_TYPE_VALIDATION_FEATURES_EXT"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_COOPERATIVE_MATRIX_FEATURES_NV:
@@ -2499,8 +3182,12 @@ func (x StructureType) String() string {
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADER_INTERLOCK_FEATURES_EXT"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_YCBCR_IMAGE_ARRAYS_FEATURES_EXT:
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_YCBCR_IMAGE_ARRAYS_FEATURES_EXT"
-	case STRUCTURE_TYPE_PHYSICAL_DEVICE_UNIFORM_BUFFER_STANDARD_LAYOUT_FEATURES_KHR:
-		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_UNIFORM_BUFFER_STANDARD_LAYOUT_FEATURES_KHR"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_PROVOKING_VERTEX_FEATURES_EXT:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_PROVOKING_VERTEX_FEATURES_EXT"
+	case STRUCTURE_TYPE_PIPELINE_RASTERIZATION_PROVOKING_VERTEX_STATE_CREATE_INFO_EXT:
+		return "STRUCTURE_TYPE_PIPELINE_RASTERIZATION_PROVOKING_VERTEX_STATE_CREATE_INFO_EXT"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_PROVOKING_VERTEX_PROPERTIES_EXT:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_PROVOKING_VERTEX_PROPERTIES_EXT"
 	case STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_INFO_EXT:
 		return "STRUCTURE_TYPE_SURFACE_FULL_SCREEN_EXCLUSIVE_INFO_EXT"
 	case STRUCTURE_TYPE_SURFACE_CAPABILITIES_FULL_SCREEN_EXCLUSIVE_EXT:
@@ -2515,10 +3202,12 @@ func (x StructureType) String() string {
 		return "STRUCTURE_TYPE_PIPELINE_RASTERIZATION_LINE_STATE_CREATE_INFO_EXT"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_LINE_RASTERIZATION_PROPERTIES_EXT:
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_LINE_RASTERIZATION_PROPERTIES_EXT"
-	case STRUCTURE_TYPE_PHYSICAL_DEVICE_HOST_QUERY_RESET_FEATURES_EXT:
-		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_HOST_QUERY_RESET_FEATURES_EXT"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_FLOAT_FEATURES_EXT:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_FLOAT_FEATURES_EXT"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_INDEX_TYPE_UINT8_FEATURES_EXT:
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_INDEX_TYPE_UINT8_FEATURES_EXT"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_FEATURES_EXT:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_FEATURES_EXT"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_PIPELINE_EXECUTABLE_PROPERTIES_FEATURES_KHR:
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_PIPELINE_EXECUTABLE_PROPERTIES_FEATURES_KHR"
 	case STRUCTURE_TYPE_PIPELINE_INFO_KHR:
@@ -2533,12 +3222,464 @@ func (x StructureType) String() string {
 		return "STRUCTURE_TYPE_PIPELINE_EXECUTABLE_INTERNAL_REPRESENTATION_KHR"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DEMOTE_TO_HELPER_INVOCATION_FEATURES_EXT:
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DEMOTE_TO_HELPER_INVOCATION_FEATURES_EXT"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_DEVICE_GENERATED_COMMANDS_PROPERTIES_NV:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_DEVICE_GENERATED_COMMANDS_PROPERTIES_NV"
+	case STRUCTURE_TYPE_GRAPHICS_SHADER_GROUP_CREATE_INFO_NV:
+		return "STRUCTURE_TYPE_GRAPHICS_SHADER_GROUP_CREATE_INFO_NV"
+	case STRUCTURE_TYPE_GRAPHICS_PIPELINE_SHADER_GROUPS_CREATE_INFO_NV:
+		return "STRUCTURE_TYPE_GRAPHICS_PIPELINE_SHADER_GROUPS_CREATE_INFO_NV"
+	case STRUCTURE_TYPE_INDIRECT_COMMANDS_LAYOUT_TOKEN_NV:
+		return "STRUCTURE_TYPE_INDIRECT_COMMANDS_LAYOUT_TOKEN_NV"
+	case STRUCTURE_TYPE_INDIRECT_COMMANDS_LAYOUT_CREATE_INFO_NV:
+		return "STRUCTURE_TYPE_INDIRECT_COMMANDS_LAYOUT_CREATE_INFO_NV"
+	case STRUCTURE_TYPE_GENERATED_COMMANDS_INFO_NV:
+		return "STRUCTURE_TYPE_GENERATED_COMMANDS_INFO_NV"
+	case STRUCTURE_TYPE_GENERATED_COMMANDS_MEMORY_REQUIREMENTS_INFO_NV:
+		return "STRUCTURE_TYPE_GENERATED_COMMANDS_MEMORY_REQUIREMENTS_INFO_NV"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_DEVICE_GENERATED_COMMANDS_FEATURES_NV:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_DEVICE_GENERATED_COMMANDS_FEATURES_NV"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_INHERITED_VIEWPORT_SCISSOR_FEATURES_NV:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_INHERITED_VIEWPORT_SCISSOR_FEATURES_NV"
+	case STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_VIEWPORT_SCISSOR_INFO_NV:
+		return "STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_VIEWPORT_SCISSOR_INFO_NV"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_TEXEL_BUFFER_ALIGNMENT_FEATURES_EXT:
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_TEXEL_BUFFER_ALIGNMENT_FEATURES_EXT"
 	case STRUCTURE_TYPE_PHYSICAL_DEVICE_TEXEL_BUFFER_ALIGNMENT_PROPERTIES_EXT:
 		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_TEXEL_BUFFER_ALIGNMENT_PROPERTIES_EXT"
+	case STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_RENDER_PASS_TRANSFORM_INFO_QCOM:
+		return "STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_RENDER_PASS_TRANSFORM_INFO_QCOM"
+	case STRUCTURE_TYPE_RENDER_PASS_TRANSFORM_BEGIN_INFO_QCOM:
+		return "STRUCTURE_TYPE_RENDER_PASS_TRANSFORM_BEGIN_INFO_QCOM"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_DEVICE_MEMORY_REPORT_FEATURES_EXT:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_DEVICE_MEMORY_REPORT_FEATURES_EXT"
+	case STRUCTURE_TYPE_DEVICE_DEVICE_MEMORY_REPORT_CREATE_INFO_EXT:
+		return "STRUCTURE_TYPE_DEVICE_DEVICE_MEMORY_REPORT_CREATE_INFO_EXT"
+	case STRUCTURE_TYPE_DEVICE_MEMORY_REPORT_CALLBACK_DATA_EXT:
+		return "STRUCTURE_TYPE_DEVICE_MEMORY_REPORT_CALLBACK_DATA_EXT"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_ROBUSTNESS_2_FEATURES_EXT:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_ROBUSTNESS_2_FEATURES_EXT"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_ROBUSTNESS_2_PROPERTIES_EXT:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_ROBUSTNESS_2_PROPERTIES_EXT"
+	case STRUCTURE_TYPE_SAMPLER_CUSTOM_BORDER_COLOR_CREATE_INFO_EXT:
+		return "STRUCTURE_TYPE_SAMPLER_CUSTOM_BORDER_COLOR_CREATE_INFO_EXT"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_CUSTOM_BORDER_COLOR_PROPERTIES_EXT:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_CUSTOM_BORDER_COLOR_PROPERTIES_EXT"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_CUSTOM_BORDER_COLOR_FEATURES_EXT:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_CUSTOM_BORDER_COLOR_FEATURES_EXT"
+	case STRUCTURE_TYPE_PIPELINE_LIBRARY_CREATE_INFO_KHR:
+		return "STRUCTURE_TYPE_PIPELINE_LIBRARY_CREATE_INFO_KHR"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_PRIVATE_DATA_FEATURES_EXT:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_PRIVATE_DATA_FEATURES_EXT"
+	case STRUCTURE_TYPE_DEVICE_PRIVATE_DATA_CREATE_INFO_EXT:
+		return "STRUCTURE_TYPE_DEVICE_PRIVATE_DATA_CREATE_INFO_EXT"
+	case STRUCTURE_TYPE_PRIVATE_DATA_SLOT_CREATE_INFO_EXT:
+		return "STRUCTURE_TYPE_PRIVATE_DATA_SLOT_CREATE_INFO_EXT"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_PIPELINE_CREATION_CACHE_CONTROL_FEATURES_EXT:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_PIPELINE_CREATION_CACHE_CONTROL_FEATURES_EXT"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_DIAGNOSTICS_CONFIG_FEATURES_NV:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_DIAGNOSTICS_CONFIG_FEATURES_NV"
+	case STRUCTURE_TYPE_DEVICE_DIAGNOSTICS_CONFIG_CREATE_INFO_NV:
+		return "STRUCTURE_TYPE_DEVICE_DIAGNOSTICS_CONFIG_CREATE_INFO_NV"
+	case STRUCTURE_TYPE_MEMORY_BARRIER_2_KHR:
+		return "STRUCTURE_TYPE_MEMORY_BARRIER_2_KHR"
+	case STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER_2_KHR:
+		return "STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER_2_KHR"
+	case STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER_2_KHR:
+		return "STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER_2_KHR"
+	case STRUCTURE_TYPE_DEPENDENCY_INFO_KHR:
+		return "STRUCTURE_TYPE_DEPENDENCY_INFO_KHR"
+	case STRUCTURE_TYPE_SUBMIT_INFO_2_KHR:
+		return "STRUCTURE_TYPE_SUBMIT_INFO_2_KHR"
+	case STRUCTURE_TYPE_SEMAPHORE_SUBMIT_INFO_KHR:
+		return "STRUCTURE_TYPE_SEMAPHORE_SUBMIT_INFO_KHR"
+	case STRUCTURE_TYPE_COMMAND_BUFFER_SUBMIT_INFO_KHR:
+		return "STRUCTURE_TYPE_COMMAND_BUFFER_SUBMIT_INFO_KHR"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_SYNCHRONIZATION_2_FEATURES_KHR:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_SYNCHRONIZATION_2_FEATURES_KHR"
+	case STRUCTURE_TYPE_QUEUE_FAMILY_CHECKPOINT_PROPERTIES_2_NV:
+		return "STRUCTURE_TYPE_QUEUE_FAMILY_CHECKPOINT_PROPERTIES_2_NV"
+	case STRUCTURE_TYPE_CHECKPOINT_DATA_2_NV:
+		return "STRUCTURE_TYPE_CHECKPOINT_DATA_2_NV"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_ZERO_INITIALIZE_WORKGROUP_MEMORY_FEATURES_KHR:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_ZERO_INITIALIZE_WORKGROUP_MEMORY_FEATURES_KHR"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_ENUMS_PROPERTIES_NV:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_ENUMS_PROPERTIES_NV"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_ENUMS_FEATURES_NV:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_ENUMS_FEATURES_NV"
+	case STRUCTURE_TYPE_PIPELINE_FRAGMENT_SHADING_RATE_ENUM_STATE_CREATE_INFO_NV:
+		return "STRUCTURE_TYPE_PIPELINE_FRAGMENT_SHADING_RATE_ENUM_STATE_CREATE_INFO_NV"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_YCBCR_2_PLANE_444_FORMATS_FEATURES_EXT:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_YCBCR_2_PLANE_444_FORMATS_FEATURES_EXT"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_DENSITY_MAP_2_FEATURES_EXT:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_DENSITY_MAP_2_FEATURES_EXT"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_DENSITY_MAP_2_PROPERTIES_EXT:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_DENSITY_MAP_2_PROPERTIES_EXT"
+	case STRUCTURE_TYPE_COPY_COMMAND_TRANSFORM_INFO_QCOM:
+		return "STRUCTURE_TYPE_COPY_COMMAND_TRANSFORM_INFO_QCOM"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_ROBUSTNESS_FEATURES_EXT:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_ROBUSTNESS_FEATURES_EXT"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_WORKGROUP_MEMORY_EXPLICIT_LAYOUT_FEATURES_KHR:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_WORKGROUP_MEMORY_EXPLICIT_LAYOUT_FEATURES_KHR"
+	case STRUCTURE_TYPE_COPY_BUFFER_INFO_2_KHR:
+		return "STRUCTURE_TYPE_COPY_BUFFER_INFO_2_KHR"
+	case STRUCTURE_TYPE_COPY_IMAGE_INFO_2_KHR:
+		return "STRUCTURE_TYPE_COPY_IMAGE_INFO_2_KHR"
+	case STRUCTURE_TYPE_COPY_BUFFER_TO_IMAGE_INFO_2_KHR:
+		return "STRUCTURE_TYPE_COPY_BUFFER_TO_IMAGE_INFO_2_KHR"
+	case STRUCTURE_TYPE_COPY_IMAGE_TO_BUFFER_INFO_2_KHR:
+		return "STRUCTURE_TYPE_COPY_IMAGE_TO_BUFFER_INFO_2_KHR"
+	case STRUCTURE_TYPE_BLIT_IMAGE_INFO_2_KHR:
+		return "STRUCTURE_TYPE_BLIT_IMAGE_INFO_2_KHR"
+	case STRUCTURE_TYPE_RESOLVE_IMAGE_INFO_2_KHR:
+		return "STRUCTURE_TYPE_RESOLVE_IMAGE_INFO_2_KHR"
+	case STRUCTURE_TYPE_BUFFER_COPY_2_KHR:
+		return "STRUCTURE_TYPE_BUFFER_COPY_2_KHR"
+	case STRUCTURE_TYPE_IMAGE_COPY_2_KHR:
+		return "STRUCTURE_TYPE_IMAGE_COPY_2_KHR"
+	case STRUCTURE_TYPE_IMAGE_BLIT_2_KHR:
+		return "STRUCTURE_TYPE_IMAGE_BLIT_2_KHR"
+	case STRUCTURE_TYPE_BUFFER_IMAGE_COPY_2_KHR:
+		return "STRUCTURE_TYPE_BUFFER_IMAGE_COPY_2_KHR"
+	case STRUCTURE_TYPE_IMAGE_RESOLVE_2_KHR:
+		return "STRUCTURE_TYPE_IMAGE_RESOLVE_2_KHR"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_4444_FORMATS_FEATURES_EXT:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_4444_FORMATS_FEATURES_EXT"
+	case STRUCTURE_TYPE_DIRECTFB_SURFACE_CREATE_INFO_EXT:
+		return "STRUCTURE_TYPE_DIRECTFB_SURFACE_CREATE_INFO_EXT"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_MUTABLE_DESCRIPTOR_TYPE_FEATURES_VALVE:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_MUTABLE_DESCRIPTOR_TYPE_FEATURES_VALVE"
+	case STRUCTURE_TYPE_MUTABLE_DESCRIPTOR_TYPE_CREATE_INFO_VALVE:
+		return "STRUCTURE_TYPE_MUTABLE_DESCRIPTOR_TYPE_CREATE_INFO_VALVE"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_INPUT_DYNAMIC_STATE_FEATURES_EXT:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_INPUT_DYNAMIC_STATE_FEATURES_EXT"
+	case STRUCTURE_TYPE_VERTEX_INPUT_BINDING_DESCRIPTION_2_EXT:
+		return "STRUCTURE_TYPE_VERTEX_INPUT_BINDING_DESCRIPTION_2_EXT"
+	case STRUCTURE_TYPE_VERTEX_INPUT_ATTRIBUTE_DESCRIPTION_2_EXT:
+		return "STRUCTURE_TYPE_VERTEX_INPUT_ATTRIBUTE_DESCRIPTION_2_EXT"
+	case STRUCTURE_TYPE_IMPORT_MEMORY_ZIRCON_HANDLE_INFO_FUCHSIA:
+		return "STRUCTURE_TYPE_IMPORT_MEMORY_ZIRCON_HANDLE_INFO_FUCHSIA"
+	case STRUCTURE_TYPE_MEMORY_ZIRCON_HANDLE_PROPERTIES_FUCHSIA:
+		return "STRUCTURE_TYPE_MEMORY_ZIRCON_HANDLE_PROPERTIES_FUCHSIA"
+	case STRUCTURE_TYPE_MEMORY_GET_ZIRCON_HANDLE_INFO_FUCHSIA:
+		return "STRUCTURE_TYPE_MEMORY_GET_ZIRCON_HANDLE_INFO_FUCHSIA"
+	case STRUCTURE_TYPE_IMPORT_SEMAPHORE_ZIRCON_HANDLE_INFO_FUCHSIA:
+		return "STRUCTURE_TYPE_IMPORT_SEMAPHORE_ZIRCON_HANDLE_INFO_FUCHSIA"
+	case STRUCTURE_TYPE_SEMAPHORE_GET_ZIRCON_HANDLE_INFO_FUCHSIA:
+		return "STRUCTURE_TYPE_SEMAPHORE_GET_ZIRCON_HANDLE_INFO_FUCHSIA"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_2_FEATURES_EXT:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_2_FEATURES_EXT"
+	case STRUCTURE_TYPE_SCREEN_SURFACE_CREATE_INFO_QNX:
+		return "STRUCTURE_TYPE_SCREEN_SURFACE_CREATE_INFO_QNX"
+	case STRUCTURE_TYPE_PHYSICAL_DEVICE_COLOR_WRITE_ENABLE_FEATURES_EXT:
+		return "STRUCTURE_TYPE_PHYSICAL_DEVICE_COLOR_WRITE_ENABLE_FEATURES_EXT"
+	case STRUCTURE_TYPE_PIPELINE_COLOR_WRITE_CREATE_INFO_EXT:
+		return "STRUCTURE_TYPE_PIPELINE_COLOR_WRITE_CREATE_INFO_EXT"
 	case STRUCTURE_TYPE_MAX_ENUM:
 		return "STRUCTURE_TYPE_MAX_ENUM"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// ImageLayout -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageLayout.html
+type ImageLayout int32
+
+const (
+	IMAGE_LAYOUT_UNDEFINED                                      ImageLayout = 0
+	IMAGE_LAYOUT_GENERAL                                        ImageLayout = 1
+	IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL                       ImageLayout = 2
+	IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL               ImageLayout = 3
+	IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL                ImageLayout = 4
+	IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL                       ImageLayout = 5
+	IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL                           ImageLayout = 6
+	IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL                           ImageLayout = 7
+	IMAGE_LAYOUT_PREINITIALIZED                                 ImageLayout = 8
+	IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL     ImageLayout = 1000117000
+	IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL     ImageLayout = 1000117001
+	IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL                       ImageLayout = 1000241000
+	IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL                        ImageLayout = 1000241001
+	IMAGE_LAYOUT_STENCIL_ATTACHMENT_OPTIMAL                     ImageLayout = 1000241002
+	IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL                      ImageLayout = 1000241003
+	IMAGE_LAYOUT_PRESENT_SRC_KHR                                ImageLayout = 1000001002
+	K_IMAGE_LAYOUT_VIDEO_DECODE_DST_KHR                         ImageLayout = 1000024000
+	K_IMAGE_LAYOUT_VIDEO_DECODE_SRC_KHR                         ImageLayout = 1000024001
+	K_IMAGE_LAYOUT_VIDEO_DECODE_DPB_KHR                         ImageLayout = 1000024002
+	K_IMAGE_LAYOUT_VIDEO_ENCODE_DST_KHR                         ImageLayout = 1000299000
+	K_IMAGE_LAYOUT_VIDEO_ENCODE_SRC_KHR                         ImageLayout = 1000299001
+	K_IMAGE_LAYOUT_VIDEO_ENCODE_DPB_KHR                         ImageLayout = 1000299002
+	IMAGE_LAYOUT_SHARED_PRESENT_KHR                             ImageLayout = 1000111000
+	IMAGE_LAYOUT_SHADING_RATE_OPTIMAL_NV                        ImageLayout = 1000164003
+	IMAGE_LAYOUT_FRAGMENT_DENSITY_MAP_OPTIMAL_EXT               ImageLayout = 1000218000
+	IMAGE_LAYOUT_READ_ONLY_OPTIMAL_KHR                          ImageLayout = 1000314000
+	IMAGE_LAYOUT_ATTACHMENT_OPTIMAL_KHR                         ImageLayout = 1000314001
+	IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL_KHR ImageLayout = IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL
+	IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL_KHR ImageLayout = IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL
+	IMAGE_LAYOUT_FRAGMENT_SHADING_RATE_ATTACHMENT_OPTIMAL_KHR   ImageLayout = IMAGE_LAYOUT_SHADING_RATE_OPTIMAL_NV
+	IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL_KHR                   ImageLayout = IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL
+	IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL_KHR                    ImageLayout = IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL
+	IMAGE_LAYOUT_STENCIL_ATTACHMENT_OPTIMAL_KHR                 ImageLayout = IMAGE_LAYOUT_STENCIL_ATTACHMENT_OPTIMAL
+	IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL_KHR                  ImageLayout = IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL
+	IMAGE_LAYOUT_MAX_ENUM                                       ImageLayout = 0x7FFFFFFF
+)
+
+func (x ImageLayout) String() string {
+	switch x {
+	case IMAGE_LAYOUT_UNDEFINED:
+		return "IMAGE_LAYOUT_UNDEFINED"
+	case IMAGE_LAYOUT_GENERAL:
+		return "IMAGE_LAYOUT_GENERAL"
+	case IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
+		return "IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL"
+	case IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL:
+		return "IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL"
+	case IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL:
+		return "IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL"
+	case IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
+		return "IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL"
+	case IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL:
+		return "IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL"
+	case IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
+		return "IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL"
+	case IMAGE_LAYOUT_PREINITIALIZED:
+		return "IMAGE_LAYOUT_PREINITIALIZED"
+	case IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL:
+		return "IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL"
+	case IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL:
+		return "IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL"
+	case IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL:
+		return "IMAGE_LAYOUT_DEPTH_ATTACHMENT_OPTIMAL"
+	case IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL:
+		return "IMAGE_LAYOUT_DEPTH_READ_ONLY_OPTIMAL"
+	case IMAGE_LAYOUT_STENCIL_ATTACHMENT_OPTIMAL:
+		return "IMAGE_LAYOUT_STENCIL_ATTACHMENT_OPTIMAL"
+	case IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL:
+		return "IMAGE_LAYOUT_STENCIL_READ_ONLY_OPTIMAL"
+	case IMAGE_LAYOUT_PRESENT_SRC_KHR:
+		return "IMAGE_LAYOUT_PRESENT_SRC_KHR"
+	case K_IMAGE_LAYOUT_VIDEO_DECODE_DST_KHR:
+		return "K_IMAGE_LAYOUT_VIDEO_DECODE_DST_KHR"
+	case K_IMAGE_LAYOUT_VIDEO_DECODE_SRC_KHR:
+		return "K_IMAGE_LAYOUT_VIDEO_DECODE_SRC_KHR"
+	case K_IMAGE_LAYOUT_VIDEO_DECODE_DPB_KHR:
+		return "K_IMAGE_LAYOUT_VIDEO_DECODE_DPB_KHR"
+	case K_IMAGE_LAYOUT_VIDEO_ENCODE_DST_KHR:
+		return "K_IMAGE_LAYOUT_VIDEO_ENCODE_DST_KHR"
+	case K_IMAGE_LAYOUT_VIDEO_ENCODE_SRC_KHR:
+		return "K_IMAGE_LAYOUT_VIDEO_ENCODE_SRC_KHR"
+	case K_IMAGE_LAYOUT_VIDEO_ENCODE_DPB_KHR:
+		return "K_IMAGE_LAYOUT_VIDEO_ENCODE_DPB_KHR"
+	case IMAGE_LAYOUT_SHARED_PRESENT_KHR:
+		return "IMAGE_LAYOUT_SHARED_PRESENT_KHR"
+	case IMAGE_LAYOUT_SHADING_RATE_OPTIMAL_NV:
+		return "IMAGE_LAYOUT_SHADING_RATE_OPTIMAL_NV"
+	case IMAGE_LAYOUT_FRAGMENT_DENSITY_MAP_OPTIMAL_EXT:
+		return "IMAGE_LAYOUT_FRAGMENT_DENSITY_MAP_OPTIMAL_EXT"
+	case IMAGE_LAYOUT_READ_ONLY_OPTIMAL_KHR:
+		return "IMAGE_LAYOUT_READ_ONLY_OPTIMAL_KHR"
+	case IMAGE_LAYOUT_ATTACHMENT_OPTIMAL_KHR:
+		return "IMAGE_LAYOUT_ATTACHMENT_OPTIMAL_KHR"
+	case IMAGE_LAYOUT_MAX_ENUM:
+		return "IMAGE_LAYOUT_MAX_ENUM"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// ObjectType -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectType.html
+type ObjectType int32
+
+const (
+	OBJECT_TYPE_UNKNOWN                         ObjectType = 0
+	OBJECT_TYPE_INSTANCE                        ObjectType = 1
+	OBJECT_TYPE_PHYSICAL_DEVICE                 ObjectType = 2
+	OBJECT_TYPE_DEVICE                          ObjectType = 3
+	OBJECT_TYPE_QUEUE                           ObjectType = 4
+	OBJECT_TYPE_SEMAPHORE                       ObjectType = 5
+	OBJECT_TYPE_COMMAND_BUFFER                  ObjectType = 6
+	OBJECT_TYPE_FENCE                           ObjectType = 7
+	OBJECT_TYPE_DEVICE_MEMORY                   ObjectType = 8
+	OBJECT_TYPE_BUFFER                          ObjectType = 9
+	OBJECT_TYPE_IMAGE                           ObjectType = 10
+	OBJECT_TYPE_EVENT                           ObjectType = 11
+	OBJECT_TYPE_QUERY_POOL                      ObjectType = 12
+	OBJECT_TYPE_BUFFER_VIEW                     ObjectType = 13
+	OBJECT_TYPE_IMAGE_VIEW                      ObjectType = 14
+	OBJECT_TYPE_SHADER_MODULE                   ObjectType = 15
+	OBJECT_TYPE_PIPELINE_CACHE                  ObjectType = 16
+	OBJECT_TYPE_PIPELINE_LAYOUT                 ObjectType = 17
+	OBJECT_TYPE_RENDER_PASS                     ObjectType = 18
+	OBJECT_TYPE_PIPELINE                        ObjectType = 19
+	OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT           ObjectType = 20
+	OBJECT_TYPE_SAMPLER                         ObjectType = 21
+	OBJECT_TYPE_DESCRIPTOR_POOL                 ObjectType = 22
+	OBJECT_TYPE_DESCRIPTOR_SET                  ObjectType = 23
+	OBJECT_TYPE_FRAMEBUFFER                     ObjectType = 24
+	OBJECT_TYPE_COMMAND_POOL                    ObjectType = 25
+	OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION        ObjectType = 1000156000
+	OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE      ObjectType = 1000085000
+	OBJECT_TYPE_SURFACE_KHR                     ObjectType = 1000000000
+	OBJECT_TYPE_SWAPCHAIN_KHR                   ObjectType = 1000001000
+	OBJECT_TYPE_DISPLAY_KHR                     ObjectType = 1000002000
+	OBJECT_TYPE_DISPLAY_MODE_KHR                ObjectType = 1000002001
+	OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT       ObjectType = 1000011000
+	K_OBJECT_TYPE_VIDEO_SESSION_KHR             ObjectType = 1000023000
+	K_OBJECT_TYPE_VIDEO_SESSION_PARAMETERS_KHR  ObjectType = 1000023001
+	OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT       ObjectType = 1000128000
+	OBJECT_TYPE_ACCELERATION_STRUCTURE_KHR      ObjectType = 1000150000
+	OBJECT_TYPE_VALIDATION_CACHE_EXT            ObjectType = 1000160000
+	OBJECT_TYPE_ACCELERATION_STRUCTURE_NV       ObjectType = 1000165000
+	OBJECT_TYPE_PERFORMANCE_CONFIGURATION_INTEL ObjectType = 1000210000
+	OBJECT_TYPE_DEFERRED_OPERATION_KHR          ObjectType = 1000268000
+	OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NV     ObjectType = 1000277000
+	OBJECT_TYPE_PRIVATE_DATA_SLOT_EXT           ObjectType = 1000295000
+	OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_KHR  ObjectType = OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE
+	OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION_KHR    ObjectType = OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION
+	OBJECT_TYPE_MAX_ENUM                        ObjectType = 0x7FFFFFFF
+)
+
+func (x ObjectType) String() string {
+	switch x {
+	case OBJECT_TYPE_UNKNOWN:
+		return "OBJECT_TYPE_UNKNOWN"
+	case OBJECT_TYPE_INSTANCE:
+		return "OBJECT_TYPE_INSTANCE"
+	case OBJECT_TYPE_PHYSICAL_DEVICE:
+		return "OBJECT_TYPE_PHYSICAL_DEVICE"
+	case OBJECT_TYPE_DEVICE:
+		return "OBJECT_TYPE_DEVICE"
+	case OBJECT_TYPE_QUEUE:
+		return "OBJECT_TYPE_QUEUE"
+	case OBJECT_TYPE_SEMAPHORE:
+		return "OBJECT_TYPE_SEMAPHORE"
+	case OBJECT_TYPE_COMMAND_BUFFER:
+		return "OBJECT_TYPE_COMMAND_BUFFER"
+	case OBJECT_TYPE_FENCE:
+		return "OBJECT_TYPE_FENCE"
+	case OBJECT_TYPE_DEVICE_MEMORY:
+		return "OBJECT_TYPE_DEVICE_MEMORY"
+	case OBJECT_TYPE_BUFFER:
+		return "OBJECT_TYPE_BUFFER"
+	case OBJECT_TYPE_IMAGE:
+		return "OBJECT_TYPE_IMAGE"
+	case OBJECT_TYPE_EVENT:
+		return "OBJECT_TYPE_EVENT"
+	case OBJECT_TYPE_QUERY_POOL:
+		return "OBJECT_TYPE_QUERY_POOL"
+	case OBJECT_TYPE_BUFFER_VIEW:
+		return "OBJECT_TYPE_BUFFER_VIEW"
+	case OBJECT_TYPE_IMAGE_VIEW:
+		return "OBJECT_TYPE_IMAGE_VIEW"
+	case OBJECT_TYPE_SHADER_MODULE:
+		return "OBJECT_TYPE_SHADER_MODULE"
+	case OBJECT_TYPE_PIPELINE_CACHE:
+		return "OBJECT_TYPE_PIPELINE_CACHE"
+	case OBJECT_TYPE_PIPELINE_LAYOUT:
+		return "OBJECT_TYPE_PIPELINE_LAYOUT"
+	case OBJECT_TYPE_RENDER_PASS:
+		return "OBJECT_TYPE_RENDER_PASS"
+	case OBJECT_TYPE_PIPELINE:
+		return "OBJECT_TYPE_PIPELINE"
+	case OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT:
+		return "OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT"
+	case OBJECT_TYPE_SAMPLER:
+		return "OBJECT_TYPE_SAMPLER"
+	case OBJECT_TYPE_DESCRIPTOR_POOL:
+		return "OBJECT_TYPE_DESCRIPTOR_POOL"
+	case OBJECT_TYPE_DESCRIPTOR_SET:
+		return "OBJECT_TYPE_DESCRIPTOR_SET"
+	case OBJECT_TYPE_FRAMEBUFFER:
+		return "OBJECT_TYPE_FRAMEBUFFER"
+	case OBJECT_TYPE_COMMAND_POOL:
+		return "OBJECT_TYPE_COMMAND_POOL"
+	case OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION:
+		return "OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION"
+	case OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE:
+		return "OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE"
+	case OBJECT_TYPE_SURFACE_KHR:
+		return "OBJECT_TYPE_SURFACE_KHR"
+	case OBJECT_TYPE_SWAPCHAIN_KHR:
+		return "OBJECT_TYPE_SWAPCHAIN_KHR"
+	case OBJECT_TYPE_DISPLAY_KHR:
+		return "OBJECT_TYPE_DISPLAY_KHR"
+	case OBJECT_TYPE_DISPLAY_MODE_KHR:
+		return "OBJECT_TYPE_DISPLAY_MODE_KHR"
+	case OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT:
+		return "OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT"
+	case K_OBJECT_TYPE_VIDEO_SESSION_KHR:
+		return "K_OBJECT_TYPE_VIDEO_SESSION_KHR"
+	case K_OBJECT_TYPE_VIDEO_SESSION_PARAMETERS_KHR:
+		return "K_OBJECT_TYPE_VIDEO_SESSION_PARAMETERS_KHR"
+	case OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT:
+		return "OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT"
+	case OBJECT_TYPE_ACCELERATION_STRUCTURE_KHR:
+		return "OBJECT_TYPE_ACCELERATION_STRUCTURE_KHR"
+	case OBJECT_TYPE_VALIDATION_CACHE_EXT:
+		return "OBJECT_TYPE_VALIDATION_CACHE_EXT"
+	case OBJECT_TYPE_ACCELERATION_STRUCTURE_NV:
+		return "OBJECT_TYPE_ACCELERATION_STRUCTURE_NV"
+	case OBJECT_TYPE_PERFORMANCE_CONFIGURATION_INTEL:
+		return "OBJECT_TYPE_PERFORMANCE_CONFIGURATION_INTEL"
+	case OBJECT_TYPE_DEFERRED_OPERATION_KHR:
+		return "OBJECT_TYPE_DEFERRED_OPERATION_KHR"
+	case OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NV:
+		return "OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NV"
+	case OBJECT_TYPE_PRIVATE_DATA_SLOT_EXT:
+		return "OBJECT_TYPE_PRIVATE_DATA_SLOT_EXT"
+	case OBJECT_TYPE_MAX_ENUM:
+		return "OBJECT_TYPE_MAX_ENUM"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// VendorId -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkVendorId.html
+type VendorId int32
+
+const (
+	VENDOR_ID_VIV      VendorId = 0x10001
+	VENDOR_ID_VSI      VendorId = 0x10002
+	VENDOR_ID_KAZAN    VendorId = 0x10003
+	VENDOR_ID_CODEPLAY VendorId = 0x10004
+	VENDOR_ID_MESA     VendorId = 0x10005
+	VENDOR_ID_POCL     VendorId = 0x10006
+	VENDOR_ID_MAX_ENUM VendorId = 0x7FFFFFFF
+)
+
+func (x VendorId) String() string {
+	switch x {
+	case VENDOR_ID_VIV:
+		return "VENDOR_ID_VIV"
+	case VENDOR_ID_VSI:
+		return "VENDOR_ID_VSI"
+	case VENDOR_ID_KAZAN:
+		return "VENDOR_ID_KAZAN"
+	case VENDOR_ID_CODEPLAY:
+		return "VENDOR_ID_CODEPLAY"
+	case VENDOR_ID_MESA:
+		return "VENDOR_ID_MESA"
+	case VENDOR_ID_POCL:
+		return "VENDOR_ID_POCL"
+	case VENDOR_ID_MAX_ENUM:
+		return "VENDOR_ID_MAX_ENUM"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// PipelineCacheHeaderVersion -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineCacheHeaderVersion.html
+type PipelineCacheHeaderVersion int32
+
+const (
+	PIPELINE_CACHE_HEADER_VERSION_ONE      PipelineCacheHeaderVersion = 1
+	PIPELINE_CACHE_HEADER_VERSION_MAX_ENUM PipelineCacheHeaderVersion = 0x7FFFFFFF
+)
+
+func (x PipelineCacheHeaderVersion) String() string {
+	switch x {
+	case PIPELINE_CACHE_HEADER_VERSION_ONE:
+		return "PIPELINE_CACHE_HEADER_VERSION_ONE"
+	case PIPELINE_CACHE_HEADER_VERSION_MAX_ENUM:
+		return "PIPELINE_CACHE_HEADER_VERSION_MAX_ENUM"
 	default:
 		return fmt.Sprint(int32(x))
 	}
@@ -2548,15 +3689,12 @@ func (x StructureType) String() string {
 type SystemAllocationScope int32
 
 const (
-	SYSTEM_ALLOCATION_SCOPE_COMMAND     SystemAllocationScope = 0
-	SYSTEM_ALLOCATION_SCOPE_OBJECT      SystemAllocationScope = 1
-	SYSTEM_ALLOCATION_SCOPE_CACHE       SystemAllocationScope = 2
-	SYSTEM_ALLOCATION_SCOPE_DEVICE      SystemAllocationScope = 3
-	SYSTEM_ALLOCATION_SCOPE_INSTANCE    SystemAllocationScope = 4
-	SYSTEM_ALLOCATION_SCOPE_BEGIN_RANGE SystemAllocationScope = SYSTEM_ALLOCATION_SCOPE_COMMAND
-	SYSTEM_ALLOCATION_SCOPE_END_RANGE   SystemAllocationScope = SYSTEM_ALLOCATION_SCOPE_INSTANCE
-	SYSTEM_ALLOCATION_SCOPE_RANGE_SIZE  SystemAllocationScope = (SYSTEM_ALLOCATION_SCOPE_INSTANCE - SYSTEM_ALLOCATION_SCOPE_COMMAND + 1)
-	SYSTEM_ALLOCATION_SCOPE_MAX_ENUM    SystemAllocationScope = 0x7FFFFFFF
+	SYSTEM_ALLOCATION_SCOPE_COMMAND  SystemAllocationScope = 0
+	SYSTEM_ALLOCATION_SCOPE_OBJECT   SystemAllocationScope = 1
+	SYSTEM_ALLOCATION_SCOPE_CACHE    SystemAllocationScope = 2
+	SYSTEM_ALLOCATION_SCOPE_DEVICE   SystemAllocationScope = 3
+	SYSTEM_ALLOCATION_SCOPE_INSTANCE SystemAllocationScope = 4
+	SYSTEM_ALLOCATION_SCOPE_MAX_ENUM SystemAllocationScope = 0x7FFFFFFF
 )
 
 func (x SystemAllocationScope) String() string {
@@ -2582,11 +3720,8 @@ func (x SystemAllocationScope) String() string {
 type InternalAllocationType int32
 
 const (
-	INTERNAL_ALLOCATION_TYPE_EXECUTABLE  InternalAllocationType = 0
-	INTERNAL_ALLOCATION_TYPE_BEGIN_RANGE InternalAllocationType = INTERNAL_ALLOCATION_TYPE_EXECUTABLE
-	INTERNAL_ALLOCATION_TYPE_END_RANGE   InternalAllocationType = INTERNAL_ALLOCATION_TYPE_EXECUTABLE
-	INTERNAL_ALLOCATION_TYPE_RANGE_SIZE  InternalAllocationType = (INTERNAL_ALLOCATION_TYPE_EXECUTABLE - INTERNAL_ALLOCATION_TYPE_EXECUTABLE + 1)
-	INTERNAL_ALLOCATION_TYPE_MAX_ENUM    InternalAllocationType = 0x7FFFFFFF
+	INTERNAL_ALLOCATION_TYPE_EXECUTABLE InternalAllocationType = 0
+	INTERNAL_ALLOCATION_TYPE_MAX_ENUM   InternalAllocationType = 0x7FFFFFFF
 )
 
 func (x InternalAllocationType) String() string {
@@ -2845,6 +3980,12 @@ const (
 	FORMAT_ASTC_10x10_SFLOAT_BLOCK_EXT                    Format = 1000066011
 	FORMAT_ASTC_12x10_SFLOAT_BLOCK_EXT                    Format = 1000066012
 	FORMAT_ASTC_12x12_SFLOAT_BLOCK_EXT                    Format = 1000066013
+	FORMAT_G8_B8R8_2PLANE_444_UNORM_EXT                   Format = 1000330000
+	FORMAT_G10X6_B10X6R10X6_2PLANE_444_UNORM_3PACK16_EXT  Format = 1000330001
+	FORMAT_G12X4_B12X4R12X4_2PLANE_444_UNORM_3PACK16_EXT  Format = 1000330002
+	FORMAT_G16_B16R16_2PLANE_444_UNORM_EXT                Format = 1000330003
+	FORMAT_A4R4G4B4_UNORM_PACK16_EXT                      Format = 1000340000
+	FORMAT_A4B4G4R4_UNORM_PACK16_EXT                      Format = 1000340001
 	FORMAT_G8B8G8R8_422_UNORM_KHR                         Format = FORMAT_G8B8G8R8_422_UNORM
 	FORMAT_B8G8R8G8_422_UNORM_KHR                         Format = FORMAT_B8G8R8G8_422_UNORM
 	FORMAT_G8_B8_R8_3PLANE_420_UNORM_KHR                  Format = FORMAT_G8_B8_R8_3PLANE_420_UNORM
@@ -2879,9 +4020,6 @@ const (
 	FORMAT_G16_B16_R16_3PLANE_422_UNORM_KHR               Format = FORMAT_G16_B16_R16_3PLANE_422_UNORM
 	FORMAT_G16_B16R16_2PLANE_422_UNORM_KHR                Format = FORMAT_G16_B16R16_2PLANE_422_UNORM
 	FORMAT_G16_B16_R16_3PLANE_444_UNORM_KHR               Format = FORMAT_G16_B16_R16_3PLANE_444_UNORM
-	FORMAT_BEGIN_RANGE                                    Format = FORMAT_UNDEFINED
-	FORMAT_END_RANGE                                      Format = FORMAT_ASTC_12x12_SRGB_BLOCK
-	FORMAT_RANGE_SIZE                                     Format = (FORMAT_ASTC_12x12_SRGB_BLOCK - FORMAT_UNDEFINED + 1)
 	FORMAT_MAX_ENUM                                       Format = 0x7FFFFFFF
 )
 
@@ -3369,36 +4507,20 @@ func (x Format) String() string {
 		return "FORMAT_ASTC_12x10_SFLOAT_BLOCK_EXT"
 	case FORMAT_ASTC_12x12_SFLOAT_BLOCK_EXT:
 		return "FORMAT_ASTC_12x12_SFLOAT_BLOCK_EXT"
+	case FORMAT_G8_B8R8_2PLANE_444_UNORM_EXT:
+		return "FORMAT_G8_B8R8_2PLANE_444_UNORM_EXT"
+	case FORMAT_G10X6_B10X6R10X6_2PLANE_444_UNORM_3PACK16_EXT:
+		return "FORMAT_G10X6_B10X6R10X6_2PLANE_444_UNORM_3PACK16_EXT"
+	case FORMAT_G12X4_B12X4R12X4_2PLANE_444_UNORM_3PACK16_EXT:
+		return "FORMAT_G12X4_B12X4R12X4_2PLANE_444_UNORM_3PACK16_EXT"
+	case FORMAT_G16_B16R16_2PLANE_444_UNORM_EXT:
+		return "FORMAT_G16_B16R16_2PLANE_444_UNORM_EXT"
+	case FORMAT_A4R4G4B4_UNORM_PACK16_EXT:
+		return "FORMAT_A4R4G4B4_UNORM_PACK16_EXT"
+	case FORMAT_A4B4G4R4_UNORM_PACK16_EXT:
+		return "FORMAT_A4B4G4R4_UNORM_PACK16_EXT"
 	case FORMAT_MAX_ENUM:
 		return "FORMAT_MAX_ENUM"
-	default:
-		return fmt.Sprint(int32(x))
-	}
-}
-
-// ImageType -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageType.html
-type ImageType int32
-
-const (
-	IMAGE_TYPE_1D          ImageType = 0
-	IMAGE_TYPE_2D          ImageType = 1
-	IMAGE_TYPE_3D          ImageType = 2
-	IMAGE_TYPE_BEGIN_RANGE ImageType = IMAGE_TYPE_1D
-	IMAGE_TYPE_END_RANGE   ImageType = IMAGE_TYPE_3D
-	IMAGE_TYPE_RANGE_SIZE  ImageType = (IMAGE_TYPE_3D - IMAGE_TYPE_1D + 1)
-	IMAGE_TYPE_MAX_ENUM    ImageType = 0x7FFFFFFF
-)
-
-func (x ImageType) String() string {
-	switch x {
-	case IMAGE_TYPE_1D:
-		return "IMAGE_TYPE_1D"
-	case IMAGE_TYPE_2D:
-		return "IMAGE_TYPE_2D"
-	case IMAGE_TYPE_3D:
-		return "IMAGE_TYPE_3D"
-	case IMAGE_TYPE_MAX_ENUM:
-		return "IMAGE_TYPE_MAX_ENUM"
 	default:
 		return fmt.Sprint(int32(x))
 	}
@@ -3411,9 +4533,6 @@ const (
 	IMAGE_TILING_OPTIMAL                 ImageTiling = 0
 	IMAGE_TILING_LINEAR                  ImageTiling = 1
 	IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT ImageTiling = 1000158000
-	IMAGE_TILING_BEGIN_RANGE             ImageTiling = IMAGE_TILING_OPTIMAL
-	IMAGE_TILING_END_RANGE               ImageTiling = IMAGE_TILING_LINEAR
-	IMAGE_TILING_RANGE_SIZE              ImageTiling = (IMAGE_TILING_LINEAR - IMAGE_TILING_OPTIMAL + 1)
 	IMAGE_TILING_MAX_ENUM                ImageTiling = 0x7FFFFFFF
 )
 
@@ -3432,6 +4551,31 @@ func (x ImageTiling) String() string {
 	}
 }
 
+// ImageType -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageType.html
+type ImageType int32
+
+const (
+	IMAGE_TYPE_1D       ImageType = 0
+	IMAGE_TYPE_2D       ImageType = 1
+	IMAGE_TYPE_3D       ImageType = 2
+	IMAGE_TYPE_MAX_ENUM ImageType = 0x7FFFFFFF
+)
+
+func (x ImageType) String() string {
+	switch x {
+	case IMAGE_TYPE_1D:
+		return "IMAGE_TYPE_1D"
+	case IMAGE_TYPE_2D:
+		return "IMAGE_TYPE_2D"
+	case IMAGE_TYPE_3D:
+		return "IMAGE_TYPE_3D"
+	case IMAGE_TYPE_MAX_ENUM:
+		return "IMAGE_TYPE_MAX_ENUM"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
 // PhysicalDeviceType -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceType.html
 type PhysicalDeviceType int32
 
@@ -3441,9 +4585,6 @@ const (
 	PHYSICAL_DEVICE_TYPE_DISCRETE_GPU   PhysicalDeviceType = 2
 	PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU    PhysicalDeviceType = 3
 	PHYSICAL_DEVICE_TYPE_CPU            PhysicalDeviceType = 4
-	PHYSICAL_DEVICE_TYPE_BEGIN_RANGE    PhysicalDeviceType = PHYSICAL_DEVICE_TYPE_OTHER
-	PHYSICAL_DEVICE_TYPE_END_RANGE      PhysicalDeviceType = PHYSICAL_DEVICE_TYPE_CPU
-	PHYSICAL_DEVICE_TYPE_RANGE_SIZE     PhysicalDeviceType = (PHYSICAL_DEVICE_TYPE_CPU - PHYSICAL_DEVICE_TYPE_OTHER + 1)
 	PHYSICAL_DEVICE_TYPE_MAX_ENUM       PhysicalDeviceType = 0x7FFFFFFF
 )
 
@@ -3470,16 +4611,18 @@ func (x PhysicalDeviceType) String() string {
 type QueryType int32
 
 const (
-	QUERY_TYPE_OCCLUSION                                QueryType = 0
-	QUERY_TYPE_PIPELINE_STATISTICS                      QueryType = 1
-	QUERY_TYPE_TIMESTAMP                                QueryType = 2
-	QUERY_TYPE_TRANSFORM_FEEDBACK_STREAM_EXT            QueryType = 1000028004
-	QUERY_TYPE_ACCELERATION_STRUCTURE_COMPACTED_SIZE_NV QueryType = 1000165000
-	QUERY_TYPE_PERFORMANCE_QUERY_INTEL                  QueryType = 1000210000
-	QUERY_TYPE_BEGIN_RANGE                              QueryType = QUERY_TYPE_OCCLUSION
-	QUERY_TYPE_END_RANGE                                QueryType = QUERY_TYPE_TIMESTAMP
-	QUERY_TYPE_RANGE_SIZE                               QueryType = (QUERY_TYPE_TIMESTAMP - QUERY_TYPE_OCCLUSION + 1)
-	QUERY_TYPE_MAX_ENUM                                 QueryType = 0x7FFFFFFF
+	QUERY_TYPE_OCCLUSION                                     QueryType = 0
+	QUERY_TYPE_PIPELINE_STATISTICS                           QueryType = 1
+	QUERY_TYPE_TIMESTAMP                                     QueryType = 2
+	K_QUERY_TYPE_RESULT_STATUS_ONLY_KHR                      QueryType = 1000023000
+	K_QUERY_TYPE_VIDEO_ENCODE_BITSTREAM_BUFFER_RANGE_KHR     QueryType = 1000299000
+	QUERY_TYPE_TRANSFORM_FEEDBACK_STREAM_EXT                 QueryType = 1000028004
+	QUERY_TYPE_PERFORMANCE_QUERY_KHR                         QueryType = 1000116000
+	QUERY_TYPE_ACCELERATION_STRUCTURE_COMPACTED_SIZE_KHR     QueryType = 1000150000
+	QUERY_TYPE_ACCELERATION_STRUCTURE_SERIALIZATION_SIZE_KHR QueryType = 1000150001
+	QUERY_TYPE_ACCELERATION_STRUCTURE_COMPACTED_SIZE_NV      QueryType = 1000165000
+	QUERY_TYPE_PERFORMANCE_QUERY_INTEL                       QueryType = 1000210000
+	QUERY_TYPE_MAX_ENUM                                      QueryType = 0x7FFFFFFF
 )
 
 func (x QueryType) String() string {
@@ -3490,8 +4633,18 @@ func (x QueryType) String() string {
 		return "QUERY_TYPE_PIPELINE_STATISTICS"
 	case QUERY_TYPE_TIMESTAMP:
 		return "QUERY_TYPE_TIMESTAMP"
+	case K_QUERY_TYPE_RESULT_STATUS_ONLY_KHR:
+		return "K_QUERY_TYPE_RESULT_STATUS_ONLY_KHR"
+	case K_QUERY_TYPE_VIDEO_ENCODE_BITSTREAM_BUFFER_RANGE_KHR:
+		return "K_QUERY_TYPE_VIDEO_ENCODE_BITSTREAM_BUFFER_RANGE_KHR"
 	case QUERY_TYPE_TRANSFORM_FEEDBACK_STREAM_EXT:
 		return "QUERY_TYPE_TRANSFORM_FEEDBACK_STREAM_EXT"
+	case QUERY_TYPE_PERFORMANCE_QUERY_KHR:
+		return "QUERY_TYPE_PERFORMANCE_QUERY_KHR"
+	case QUERY_TYPE_ACCELERATION_STRUCTURE_COMPACTED_SIZE_KHR:
+		return "QUERY_TYPE_ACCELERATION_STRUCTURE_COMPACTED_SIZE_KHR"
+	case QUERY_TYPE_ACCELERATION_STRUCTURE_SERIALIZATION_SIZE_KHR:
+		return "QUERY_TYPE_ACCELERATION_STRUCTURE_SERIALIZATION_SIZE_KHR"
 	case QUERY_TYPE_ACCELERATION_STRUCTURE_COMPACTED_SIZE_NV:
 		return "QUERY_TYPE_ACCELERATION_STRUCTURE_COMPACTED_SIZE_NV"
 	case QUERY_TYPE_PERFORMANCE_QUERY_INTEL:
@@ -3507,12 +4660,9 @@ func (x QueryType) String() string {
 type SharingMode int32
 
 const (
-	SHARING_MODE_EXCLUSIVE   SharingMode = 0
-	SHARING_MODE_CONCURRENT  SharingMode = 1
-	SHARING_MODE_BEGIN_RANGE SharingMode = SHARING_MODE_EXCLUSIVE
-	SHARING_MODE_END_RANGE   SharingMode = SHARING_MODE_CONCURRENT
-	SHARING_MODE_RANGE_SIZE  SharingMode = (SHARING_MODE_CONCURRENT - SHARING_MODE_EXCLUSIVE + 1)
-	SHARING_MODE_MAX_ENUM    SharingMode = 0x7FFFFFFF
+	SHARING_MODE_EXCLUSIVE  SharingMode = 0
+	SHARING_MODE_CONCURRENT SharingMode = 1
+	SHARING_MODE_MAX_ENUM   SharingMode = 0x7FFFFFFF
 )
 
 func (x SharingMode) String() string {
@@ -3528,127 +4678,18 @@ func (x SharingMode) String() string {
 	}
 }
 
-// ImageLayout -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageLayout.html
-type ImageLayout int32
-
-const (
-	IMAGE_LAYOUT_UNDEFINED                                      ImageLayout = 0
-	IMAGE_LAYOUT_GENERAL                                        ImageLayout = 1
-	IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL                       ImageLayout = 2
-	IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL               ImageLayout = 3
-	IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL                ImageLayout = 4
-	IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL                       ImageLayout = 5
-	IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL                           ImageLayout = 6
-	IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL                           ImageLayout = 7
-	IMAGE_LAYOUT_PREINITIALIZED                                 ImageLayout = 8
-	IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL     ImageLayout = 1000117000
-	IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL     ImageLayout = 1000117001
-	IMAGE_LAYOUT_PRESENT_SRC_KHR                                ImageLayout = 1000001002
-	IMAGE_LAYOUT_SHARED_PRESENT_KHR                             ImageLayout = 1000111000
-	IMAGE_LAYOUT_SHADING_RATE_OPTIMAL_NV                        ImageLayout = 1000164003
-	IMAGE_LAYOUT_FRAGMENT_DENSITY_MAP_OPTIMAL_EXT               ImageLayout = 1000218000
-	IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL_KHR ImageLayout = IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL
-	IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL_KHR ImageLayout = IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL
-	IMAGE_LAYOUT_BEGIN_RANGE                                    ImageLayout = IMAGE_LAYOUT_UNDEFINED
-	IMAGE_LAYOUT_END_RANGE                                      ImageLayout = IMAGE_LAYOUT_PREINITIALIZED
-	IMAGE_LAYOUT_RANGE_SIZE                                     ImageLayout = (IMAGE_LAYOUT_PREINITIALIZED - IMAGE_LAYOUT_UNDEFINED + 1)
-	IMAGE_LAYOUT_MAX_ENUM                                       ImageLayout = 0x7FFFFFFF
-)
-
-func (x ImageLayout) String() string {
-	switch x {
-	case IMAGE_LAYOUT_UNDEFINED:
-		return "IMAGE_LAYOUT_UNDEFINED"
-	case IMAGE_LAYOUT_GENERAL:
-		return "IMAGE_LAYOUT_GENERAL"
-	case IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL:
-		return "IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL"
-	case IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL:
-		return "IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL"
-	case IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL:
-		return "IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL"
-	case IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL:
-		return "IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL"
-	case IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL:
-		return "IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL"
-	case IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL:
-		return "IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL"
-	case IMAGE_LAYOUT_PREINITIALIZED:
-		return "IMAGE_LAYOUT_PREINITIALIZED"
-	case IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL:
-		return "IMAGE_LAYOUT_DEPTH_READ_ONLY_STENCIL_ATTACHMENT_OPTIMAL"
-	case IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL:
-		return "IMAGE_LAYOUT_DEPTH_ATTACHMENT_STENCIL_READ_ONLY_OPTIMAL"
-	case IMAGE_LAYOUT_PRESENT_SRC_KHR:
-		return "IMAGE_LAYOUT_PRESENT_SRC_KHR"
-	case IMAGE_LAYOUT_SHARED_PRESENT_KHR:
-		return "IMAGE_LAYOUT_SHARED_PRESENT_KHR"
-	case IMAGE_LAYOUT_SHADING_RATE_OPTIMAL_NV:
-		return "IMAGE_LAYOUT_SHADING_RATE_OPTIMAL_NV"
-	case IMAGE_LAYOUT_FRAGMENT_DENSITY_MAP_OPTIMAL_EXT:
-		return "IMAGE_LAYOUT_FRAGMENT_DENSITY_MAP_OPTIMAL_EXT"
-	case IMAGE_LAYOUT_MAX_ENUM:
-		return "IMAGE_LAYOUT_MAX_ENUM"
-	default:
-		return fmt.Sprint(int32(x))
-	}
-}
-
-// ImageViewType -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageViewType.html
-type ImageViewType int32
-
-const (
-	IMAGE_VIEW_TYPE_1D          ImageViewType = 0
-	IMAGE_VIEW_TYPE_2D          ImageViewType = 1
-	IMAGE_VIEW_TYPE_3D          ImageViewType = 2
-	IMAGE_VIEW_TYPE_CUBE        ImageViewType = 3
-	IMAGE_VIEW_TYPE_1D_ARRAY    ImageViewType = 4
-	IMAGE_VIEW_TYPE_2D_ARRAY    ImageViewType = 5
-	IMAGE_VIEW_TYPE_CUBE_ARRAY  ImageViewType = 6
-	IMAGE_VIEW_TYPE_BEGIN_RANGE ImageViewType = IMAGE_VIEW_TYPE_1D
-	IMAGE_VIEW_TYPE_END_RANGE   ImageViewType = IMAGE_VIEW_TYPE_CUBE_ARRAY
-	IMAGE_VIEW_TYPE_RANGE_SIZE  ImageViewType = (IMAGE_VIEW_TYPE_CUBE_ARRAY - IMAGE_VIEW_TYPE_1D + 1)
-	IMAGE_VIEW_TYPE_MAX_ENUM    ImageViewType = 0x7FFFFFFF
-)
-
-func (x ImageViewType) String() string {
-	switch x {
-	case IMAGE_VIEW_TYPE_1D:
-		return "IMAGE_VIEW_TYPE_1D"
-	case IMAGE_VIEW_TYPE_2D:
-		return "IMAGE_VIEW_TYPE_2D"
-	case IMAGE_VIEW_TYPE_3D:
-		return "IMAGE_VIEW_TYPE_3D"
-	case IMAGE_VIEW_TYPE_CUBE:
-		return "IMAGE_VIEW_TYPE_CUBE"
-	case IMAGE_VIEW_TYPE_1D_ARRAY:
-		return "IMAGE_VIEW_TYPE_1D_ARRAY"
-	case IMAGE_VIEW_TYPE_2D_ARRAY:
-		return "IMAGE_VIEW_TYPE_2D_ARRAY"
-	case IMAGE_VIEW_TYPE_CUBE_ARRAY:
-		return "IMAGE_VIEW_TYPE_CUBE_ARRAY"
-	case IMAGE_VIEW_TYPE_MAX_ENUM:
-		return "IMAGE_VIEW_TYPE_MAX_ENUM"
-	default:
-		return fmt.Sprint(int32(x))
-	}
-}
-
 // ComponentSwizzle -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkComponentSwizzle.html
 type ComponentSwizzle int32
 
 const (
-	COMPONENT_SWIZZLE_IDENTITY    ComponentSwizzle = 0
-	COMPONENT_SWIZZLE_ZERO        ComponentSwizzle = 1
-	COMPONENT_SWIZZLE_ONE         ComponentSwizzle = 2
-	COMPONENT_SWIZZLE_R           ComponentSwizzle = 3
-	COMPONENT_SWIZZLE_G           ComponentSwizzle = 4
-	COMPONENT_SWIZZLE_B           ComponentSwizzle = 5
-	COMPONENT_SWIZZLE_A           ComponentSwizzle = 6
-	COMPONENT_SWIZZLE_BEGIN_RANGE ComponentSwizzle = COMPONENT_SWIZZLE_IDENTITY
-	COMPONENT_SWIZZLE_END_RANGE   ComponentSwizzle = COMPONENT_SWIZZLE_A
-	COMPONENT_SWIZZLE_RANGE_SIZE  ComponentSwizzle = (COMPONENT_SWIZZLE_A - COMPONENT_SWIZZLE_IDENTITY + 1)
-	COMPONENT_SWIZZLE_MAX_ENUM    ComponentSwizzle = 0x7FFFFFFF
+	COMPONENT_SWIZZLE_IDENTITY ComponentSwizzle = 0
+	COMPONENT_SWIZZLE_ZERO     ComponentSwizzle = 1
+	COMPONENT_SWIZZLE_ONE      ComponentSwizzle = 2
+	COMPONENT_SWIZZLE_R        ComponentSwizzle = 3
+	COMPONENT_SWIZZLE_G        ComponentSwizzle = 4
+	COMPONENT_SWIZZLE_B        ComponentSwizzle = 5
+	COMPONENT_SWIZZLE_A        ComponentSwizzle = 6
+	COMPONENT_SWIZZLE_MAX_ENUM ComponentSwizzle = 0x7FFFFFFF
 )
 
 func (x ComponentSwizzle) String() string {
@@ -3674,287 +4715,38 @@ func (x ComponentSwizzle) String() string {
 	}
 }
 
-// VertexInputRate -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkVertexInputRate.html
-type VertexInputRate int32
+// ImageViewType -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageViewType.html
+type ImageViewType int32
 
 const (
-	VERTEX_INPUT_RATE_VERTEX      VertexInputRate = 0
-	VERTEX_INPUT_RATE_INSTANCE    VertexInputRate = 1
-	VERTEX_INPUT_RATE_BEGIN_RANGE VertexInputRate = VERTEX_INPUT_RATE_VERTEX
-	VERTEX_INPUT_RATE_END_RANGE   VertexInputRate = VERTEX_INPUT_RATE_INSTANCE
-	VERTEX_INPUT_RATE_RANGE_SIZE  VertexInputRate = (VERTEX_INPUT_RATE_INSTANCE - VERTEX_INPUT_RATE_VERTEX + 1)
-	VERTEX_INPUT_RATE_MAX_ENUM    VertexInputRate = 0x7FFFFFFF
+	IMAGE_VIEW_TYPE_1D         ImageViewType = 0
+	IMAGE_VIEW_TYPE_2D         ImageViewType = 1
+	IMAGE_VIEW_TYPE_3D         ImageViewType = 2
+	IMAGE_VIEW_TYPE_CUBE       ImageViewType = 3
+	IMAGE_VIEW_TYPE_1D_ARRAY   ImageViewType = 4
+	IMAGE_VIEW_TYPE_2D_ARRAY   ImageViewType = 5
+	IMAGE_VIEW_TYPE_CUBE_ARRAY ImageViewType = 6
+	IMAGE_VIEW_TYPE_MAX_ENUM   ImageViewType = 0x7FFFFFFF
 )
 
-func (x VertexInputRate) String() string {
+func (x ImageViewType) String() string {
 	switch x {
-	case VERTEX_INPUT_RATE_VERTEX:
-		return "VERTEX_INPUT_RATE_VERTEX"
-	case VERTEX_INPUT_RATE_INSTANCE:
-		return "VERTEX_INPUT_RATE_INSTANCE"
-	case VERTEX_INPUT_RATE_MAX_ENUM:
-		return "VERTEX_INPUT_RATE_MAX_ENUM"
-	default:
-		return fmt.Sprint(int32(x))
-	}
-}
-
-// PrimitiveTopology -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPrimitiveTopology.html
-type PrimitiveTopology int32
-
-const (
-	PRIMITIVE_TOPOLOGY_POINT_LIST                    PrimitiveTopology = 0
-	PRIMITIVE_TOPOLOGY_LINE_LIST                     PrimitiveTopology = 1
-	PRIMITIVE_TOPOLOGY_LINE_STRIP                    PrimitiveTopology = 2
-	PRIMITIVE_TOPOLOGY_TRIANGLE_LIST                 PrimitiveTopology = 3
-	PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP                PrimitiveTopology = 4
-	PRIMITIVE_TOPOLOGY_TRIANGLE_FAN                  PrimitiveTopology = 5
-	PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY      PrimitiveTopology = 6
-	PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY     PrimitiveTopology = 7
-	PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY  PrimitiveTopology = 8
-	PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY PrimitiveTopology = 9
-	PRIMITIVE_TOPOLOGY_PATCH_LIST                    PrimitiveTopology = 10
-	PRIMITIVE_TOPOLOGY_BEGIN_RANGE                   PrimitiveTopology = PRIMITIVE_TOPOLOGY_POINT_LIST
-	PRIMITIVE_TOPOLOGY_END_RANGE                     PrimitiveTopology = PRIMITIVE_TOPOLOGY_PATCH_LIST
-	PRIMITIVE_TOPOLOGY_RANGE_SIZE                    PrimitiveTopology = (PRIMITIVE_TOPOLOGY_PATCH_LIST - PRIMITIVE_TOPOLOGY_POINT_LIST + 1)
-	PRIMITIVE_TOPOLOGY_MAX_ENUM                      PrimitiveTopology = 0x7FFFFFFF
-)
-
-func (x PrimitiveTopology) String() string {
-	switch x {
-	case PRIMITIVE_TOPOLOGY_POINT_LIST:
-		return "PRIMITIVE_TOPOLOGY_POINT_LIST"
-	case PRIMITIVE_TOPOLOGY_LINE_LIST:
-		return "PRIMITIVE_TOPOLOGY_LINE_LIST"
-	case PRIMITIVE_TOPOLOGY_LINE_STRIP:
-		return "PRIMITIVE_TOPOLOGY_LINE_STRIP"
-	case PRIMITIVE_TOPOLOGY_TRIANGLE_LIST:
-		return "PRIMITIVE_TOPOLOGY_TRIANGLE_LIST"
-	case PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP:
-		return "PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP"
-	case PRIMITIVE_TOPOLOGY_TRIANGLE_FAN:
-		return "PRIMITIVE_TOPOLOGY_TRIANGLE_FAN"
-	case PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY:
-		return "PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY"
-	case PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY:
-		return "PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY"
-	case PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY:
-		return "PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY"
-	case PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY:
-		return "PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY"
-	case PRIMITIVE_TOPOLOGY_PATCH_LIST:
-		return "PRIMITIVE_TOPOLOGY_PATCH_LIST"
-	case PRIMITIVE_TOPOLOGY_MAX_ENUM:
-		return "PRIMITIVE_TOPOLOGY_MAX_ENUM"
-	default:
-		return fmt.Sprint(int32(x))
-	}
-}
-
-// PolygonMode -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPolygonMode.html
-type PolygonMode int32
-
-const (
-	POLYGON_MODE_FILL              PolygonMode = 0
-	POLYGON_MODE_LINE              PolygonMode = 1
-	POLYGON_MODE_POINT             PolygonMode = 2
-	POLYGON_MODE_FILL_RECTANGLE_NV PolygonMode = 1000153000
-	POLYGON_MODE_BEGIN_RANGE       PolygonMode = POLYGON_MODE_FILL
-	POLYGON_MODE_END_RANGE         PolygonMode = POLYGON_MODE_POINT
-	POLYGON_MODE_RANGE_SIZE        PolygonMode = (POLYGON_MODE_POINT - POLYGON_MODE_FILL + 1)
-	POLYGON_MODE_MAX_ENUM          PolygonMode = 0x7FFFFFFF
-)
-
-func (x PolygonMode) String() string {
-	switch x {
-	case POLYGON_MODE_FILL:
-		return "POLYGON_MODE_FILL"
-	case POLYGON_MODE_LINE:
-		return "POLYGON_MODE_LINE"
-	case POLYGON_MODE_POINT:
-		return "POLYGON_MODE_POINT"
-	case POLYGON_MODE_FILL_RECTANGLE_NV:
-		return "POLYGON_MODE_FILL_RECTANGLE_NV"
-	case POLYGON_MODE_MAX_ENUM:
-		return "POLYGON_MODE_MAX_ENUM"
-	default:
-		return fmt.Sprint(int32(x))
-	}
-}
-
-// FrontFace -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFrontFace.html
-type FrontFace int32
-
-const (
-	FRONT_FACE_COUNTER_CLOCKWISE FrontFace = 0
-	FRONT_FACE_CLOCKWISE         FrontFace = 1
-	FRONT_FACE_BEGIN_RANGE       FrontFace = FRONT_FACE_COUNTER_CLOCKWISE
-	FRONT_FACE_END_RANGE         FrontFace = FRONT_FACE_CLOCKWISE
-	FRONT_FACE_RANGE_SIZE        FrontFace = (FRONT_FACE_CLOCKWISE - FRONT_FACE_COUNTER_CLOCKWISE + 1)
-	FRONT_FACE_MAX_ENUM          FrontFace = 0x7FFFFFFF
-)
-
-func (x FrontFace) String() string {
-	switch x {
-	case FRONT_FACE_COUNTER_CLOCKWISE:
-		return "FRONT_FACE_COUNTER_CLOCKWISE"
-	case FRONT_FACE_CLOCKWISE:
-		return "FRONT_FACE_CLOCKWISE"
-	case FRONT_FACE_MAX_ENUM:
-		return "FRONT_FACE_MAX_ENUM"
-	default:
-		return fmt.Sprint(int32(x))
-	}
-}
-
-// CompareOp -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCompareOp.html
-type CompareOp int32
-
-const (
-	COMPARE_OP_NEVER            CompareOp = 0
-	COMPARE_OP_LESS             CompareOp = 1
-	COMPARE_OP_EQUAL            CompareOp = 2
-	COMPARE_OP_LESS_OR_EQUAL    CompareOp = 3
-	COMPARE_OP_GREATER          CompareOp = 4
-	COMPARE_OP_NOT_EQUAL        CompareOp = 5
-	COMPARE_OP_GREATER_OR_EQUAL CompareOp = 6
-	COMPARE_OP_ALWAYS           CompareOp = 7
-	COMPARE_OP_BEGIN_RANGE      CompareOp = COMPARE_OP_NEVER
-	COMPARE_OP_END_RANGE        CompareOp = COMPARE_OP_ALWAYS
-	COMPARE_OP_RANGE_SIZE       CompareOp = (COMPARE_OP_ALWAYS - COMPARE_OP_NEVER + 1)
-	COMPARE_OP_MAX_ENUM         CompareOp = 0x7FFFFFFF
-)
-
-func (x CompareOp) String() string {
-	switch x {
-	case COMPARE_OP_NEVER:
-		return "COMPARE_OP_NEVER"
-	case COMPARE_OP_LESS:
-		return "COMPARE_OP_LESS"
-	case COMPARE_OP_EQUAL:
-		return "COMPARE_OP_EQUAL"
-	case COMPARE_OP_LESS_OR_EQUAL:
-		return "COMPARE_OP_LESS_OR_EQUAL"
-	case COMPARE_OP_GREATER:
-		return "COMPARE_OP_GREATER"
-	case COMPARE_OP_NOT_EQUAL:
-		return "COMPARE_OP_NOT_EQUAL"
-	case COMPARE_OP_GREATER_OR_EQUAL:
-		return "COMPARE_OP_GREATER_OR_EQUAL"
-	case COMPARE_OP_ALWAYS:
-		return "COMPARE_OP_ALWAYS"
-	case COMPARE_OP_MAX_ENUM:
-		return "COMPARE_OP_MAX_ENUM"
-	default:
-		return fmt.Sprint(int32(x))
-	}
-}
-
-// StencilOp -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkStencilOp.html
-type StencilOp int32
-
-const (
-	STENCIL_OP_KEEP                StencilOp = 0
-	STENCIL_OP_ZERO                StencilOp = 1
-	STENCIL_OP_REPLACE             StencilOp = 2
-	STENCIL_OP_INCREMENT_AND_CLAMP StencilOp = 3
-	STENCIL_OP_DECREMENT_AND_CLAMP StencilOp = 4
-	STENCIL_OP_INVERT              StencilOp = 5
-	STENCIL_OP_INCREMENT_AND_WRAP  StencilOp = 6
-	STENCIL_OP_DECREMENT_AND_WRAP  StencilOp = 7
-	STENCIL_OP_BEGIN_RANGE         StencilOp = STENCIL_OP_KEEP
-	STENCIL_OP_END_RANGE           StencilOp = STENCIL_OP_DECREMENT_AND_WRAP
-	STENCIL_OP_RANGE_SIZE          StencilOp = (STENCIL_OP_DECREMENT_AND_WRAP - STENCIL_OP_KEEP + 1)
-	STENCIL_OP_MAX_ENUM            StencilOp = 0x7FFFFFFF
-)
-
-func (x StencilOp) String() string {
-	switch x {
-	case STENCIL_OP_KEEP:
-		return "STENCIL_OP_KEEP"
-	case STENCIL_OP_ZERO:
-		return "STENCIL_OP_ZERO"
-	case STENCIL_OP_REPLACE:
-		return "STENCIL_OP_REPLACE"
-	case STENCIL_OP_INCREMENT_AND_CLAMP:
-		return "STENCIL_OP_INCREMENT_AND_CLAMP"
-	case STENCIL_OP_DECREMENT_AND_CLAMP:
-		return "STENCIL_OP_DECREMENT_AND_CLAMP"
-	case STENCIL_OP_INVERT:
-		return "STENCIL_OP_INVERT"
-	case STENCIL_OP_INCREMENT_AND_WRAP:
-		return "STENCIL_OP_INCREMENT_AND_WRAP"
-	case STENCIL_OP_DECREMENT_AND_WRAP:
-		return "STENCIL_OP_DECREMENT_AND_WRAP"
-	case STENCIL_OP_MAX_ENUM:
-		return "STENCIL_OP_MAX_ENUM"
-	default:
-		return fmt.Sprint(int32(x))
-	}
-}
-
-// LogicOp -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkLogicOp.html
-type LogicOp int32
-
-const (
-	LOGIC_OP_CLEAR         LogicOp = 0
-	LOGIC_OP_AND           LogicOp = 1
-	LOGIC_OP_AND_REVERSE   LogicOp = 2
-	LOGIC_OP_COPY          LogicOp = 3
-	LOGIC_OP_AND_INVERTED  LogicOp = 4
-	LOGIC_OP_NO_OP         LogicOp = 5
-	LOGIC_OP_XOR           LogicOp = 6
-	LOGIC_OP_OR            LogicOp = 7
-	LOGIC_OP_NOR           LogicOp = 8
-	LOGIC_OP_EQUIVALENT    LogicOp = 9
-	LOGIC_OP_INVERT        LogicOp = 10
-	LOGIC_OP_OR_REVERSE    LogicOp = 11
-	LOGIC_OP_COPY_INVERTED LogicOp = 12
-	LOGIC_OP_OR_INVERTED   LogicOp = 13
-	LOGIC_OP_NAND          LogicOp = 14
-	LOGIC_OP_SET           LogicOp = 15
-	LOGIC_OP_BEGIN_RANGE   LogicOp = LOGIC_OP_CLEAR
-	LOGIC_OP_END_RANGE     LogicOp = LOGIC_OP_SET
-	LOGIC_OP_RANGE_SIZE    LogicOp = (LOGIC_OP_SET - LOGIC_OP_CLEAR + 1)
-	LOGIC_OP_MAX_ENUM      LogicOp = 0x7FFFFFFF
-)
-
-func (x LogicOp) String() string {
-	switch x {
-	case LOGIC_OP_CLEAR:
-		return "LOGIC_OP_CLEAR"
-	case LOGIC_OP_AND:
-		return "LOGIC_OP_AND"
-	case LOGIC_OP_AND_REVERSE:
-		return "LOGIC_OP_AND_REVERSE"
-	case LOGIC_OP_COPY:
-		return "LOGIC_OP_COPY"
-	case LOGIC_OP_AND_INVERTED:
-		return "LOGIC_OP_AND_INVERTED"
-	case LOGIC_OP_NO_OP:
-		return "LOGIC_OP_NO_OP"
-	case LOGIC_OP_XOR:
-		return "LOGIC_OP_XOR"
-	case LOGIC_OP_OR:
-		return "LOGIC_OP_OR"
-	case LOGIC_OP_NOR:
-		return "LOGIC_OP_NOR"
-	case LOGIC_OP_EQUIVALENT:
-		return "LOGIC_OP_EQUIVALENT"
-	case LOGIC_OP_INVERT:
-		return "LOGIC_OP_INVERT"
-	case LOGIC_OP_OR_REVERSE:
-		return "LOGIC_OP_OR_REVERSE"
-	case LOGIC_OP_COPY_INVERTED:
-		return "LOGIC_OP_COPY_INVERTED"
-	case LOGIC_OP_OR_INVERTED:
-		return "LOGIC_OP_OR_INVERTED"
-	case LOGIC_OP_NAND:
-		return "LOGIC_OP_NAND"
-	case LOGIC_OP_SET:
-		return "LOGIC_OP_SET"
-	case LOGIC_OP_MAX_ENUM:
-		return "LOGIC_OP_MAX_ENUM"
+	case IMAGE_VIEW_TYPE_1D:
+		return "IMAGE_VIEW_TYPE_1D"
+	case IMAGE_VIEW_TYPE_2D:
+		return "IMAGE_VIEW_TYPE_2D"
+	case IMAGE_VIEW_TYPE_3D:
+		return "IMAGE_VIEW_TYPE_3D"
+	case IMAGE_VIEW_TYPE_CUBE:
+		return "IMAGE_VIEW_TYPE_CUBE"
+	case IMAGE_VIEW_TYPE_1D_ARRAY:
+		return "IMAGE_VIEW_TYPE_1D_ARRAY"
+	case IMAGE_VIEW_TYPE_2D_ARRAY:
+		return "IMAGE_VIEW_TYPE_2D_ARRAY"
+	case IMAGE_VIEW_TYPE_CUBE_ARRAY:
+		return "IMAGE_VIEW_TYPE_CUBE_ARRAY"
+	case IMAGE_VIEW_TYPE_MAX_ENUM:
+		return "IMAGE_VIEW_TYPE_MAX_ENUM"
 	default:
 		return fmt.Sprint(int32(x))
 	}
@@ -3983,9 +4775,6 @@ const (
 	BLEND_FACTOR_ONE_MINUS_SRC1_COLOR     BlendFactor = 16
 	BLEND_FACTOR_SRC1_ALPHA               BlendFactor = 17
 	BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA     BlendFactor = 18
-	BLEND_FACTOR_BEGIN_RANGE              BlendFactor = BLEND_FACTOR_ZERO
-	BLEND_FACTOR_END_RANGE                BlendFactor = BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA
-	BLEND_FACTOR_RANGE_SIZE               BlendFactor = (BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA - BLEND_FACTOR_ZERO + 1)
 	BLEND_FACTOR_MAX_ENUM                 BlendFactor = 0x7FFFFFFF
 )
 
@@ -4091,9 +4880,6 @@ const (
 	BLEND_OP_RED_EXT                BlendOp = 1000148043
 	BLEND_OP_GREEN_EXT              BlendOp = 1000148044
 	BLEND_OP_BLUE_EXT               BlendOp = 1000148045
-	BLEND_OP_BEGIN_RANGE            BlendOp = BLEND_OP_ADD
-	BLEND_OP_END_RANGE              BlendOp = BLEND_OP_MAX
-	BLEND_OP_RANGE_SIZE             BlendOp = (BLEND_OP_MAX - BLEND_OP_ADD + 1)
 	BLEND_OP_MAX_ENUM               BlendOp = 0x7FFFFFFF
 )
 
@@ -4208,30 +4994,88 @@ func (x BlendOp) String() string {
 	}
 }
 
+// CompareOp -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCompareOp.html
+type CompareOp int32
+
+const (
+	COMPARE_OP_NEVER            CompareOp = 0
+	COMPARE_OP_LESS             CompareOp = 1
+	COMPARE_OP_EQUAL            CompareOp = 2
+	COMPARE_OP_LESS_OR_EQUAL    CompareOp = 3
+	COMPARE_OP_GREATER          CompareOp = 4
+	COMPARE_OP_NOT_EQUAL        CompareOp = 5
+	COMPARE_OP_GREATER_OR_EQUAL CompareOp = 6
+	COMPARE_OP_ALWAYS           CompareOp = 7
+	COMPARE_OP_MAX_ENUM         CompareOp = 0x7FFFFFFF
+)
+
+func (x CompareOp) String() string {
+	switch x {
+	case COMPARE_OP_NEVER:
+		return "COMPARE_OP_NEVER"
+	case COMPARE_OP_LESS:
+		return "COMPARE_OP_LESS"
+	case COMPARE_OP_EQUAL:
+		return "COMPARE_OP_EQUAL"
+	case COMPARE_OP_LESS_OR_EQUAL:
+		return "COMPARE_OP_LESS_OR_EQUAL"
+	case COMPARE_OP_GREATER:
+		return "COMPARE_OP_GREATER"
+	case COMPARE_OP_NOT_EQUAL:
+		return "COMPARE_OP_NOT_EQUAL"
+	case COMPARE_OP_GREATER_OR_EQUAL:
+		return "COMPARE_OP_GREATER_OR_EQUAL"
+	case COMPARE_OP_ALWAYS:
+		return "COMPARE_OP_ALWAYS"
+	case COMPARE_OP_MAX_ENUM:
+		return "COMPARE_OP_MAX_ENUM"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
 // DynamicState -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDynamicState.html
 type DynamicState int32
 
 const (
-	DYNAMIC_STATE_VIEWPORT                         DynamicState = 0
-	DYNAMIC_STATE_SCISSOR                          DynamicState = 1
-	DYNAMIC_STATE_LINE_WIDTH                       DynamicState = 2
-	DYNAMIC_STATE_DEPTH_BIAS                       DynamicState = 3
-	DYNAMIC_STATE_BLEND_CONSTANTS                  DynamicState = 4
-	DYNAMIC_STATE_DEPTH_BOUNDS                     DynamicState = 5
-	DYNAMIC_STATE_STENCIL_COMPARE_MASK             DynamicState = 6
-	DYNAMIC_STATE_STENCIL_WRITE_MASK               DynamicState = 7
-	DYNAMIC_STATE_STENCIL_REFERENCE                DynamicState = 8
-	DYNAMIC_STATE_VIEWPORT_W_SCALING_NV            DynamicState = 1000087000
-	DYNAMIC_STATE_DISCARD_RECTANGLE_EXT            DynamicState = 1000099000
-	DYNAMIC_STATE_SAMPLE_LOCATIONS_EXT             DynamicState = 1000143000
-	DYNAMIC_STATE_VIEWPORT_SHADING_RATE_PALETTE_NV DynamicState = 1000164004
-	DYNAMIC_STATE_VIEWPORT_COARSE_SAMPLE_ORDER_NV  DynamicState = 1000164006
-	DYNAMIC_STATE_EXCLUSIVE_SCISSOR_NV             DynamicState = 1000205001
-	DYNAMIC_STATE_LINE_STIPPLE_EXT                 DynamicState = 1000259000
-	DYNAMIC_STATE_BEGIN_RANGE                      DynamicState = DYNAMIC_STATE_VIEWPORT
-	DYNAMIC_STATE_END_RANGE                        DynamicState = DYNAMIC_STATE_STENCIL_REFERENCE
-	DYNAMIC_STATE_RANGE_SIZE                       DynamicState = (DYNAMIC_STATE_STENCIL_REFERENCE - DYNAMIC_STATE_VIEWPORT + 1)
-	DYNAMIC_STATE_MAX_ENUM                         DynamicState = 0x7FFFFFFF
+	DYNAMIC_STATE_VIEWPORT                            DynamicState = 0
+	DYNAMIC_STATE_SCISSOR                             DynamicState = 1
+	DYNAMIC_STATE_LINE_WIDTH                          DynamicState = 2
+	DYNAMIC_STATE_DEPTH_BIAS                          DynamicState = 3
+	DYNAMIC_STATE_BLEND_CONSTANTS                     DynamicState = 4
+	DYNAMIC_STATE_DEPTH_BOUNDS                        DynamicState = 5
+	DYNAMIC_STATE_STENCIL_COMPARE_MASK                DynamicState = 6
+	DYNAMIC_STATE_STENCIL_WRITE_MASK                  DynamicState = 7
+	DYNAMIC_STATE_STENCIL_REFERENCE                   DynamicState = 8
+	DYNAMIC_STATE_VIEWPORT_W_SCALING_NV               DynamicState = 1000087000
+	DYNAMIC_STATE_DISCARD_RECTANGLE_EXT               DynamicState = 1000099000
+	DYNAMIC_STATE_SAMPLE_LOCATIONS_EXT                DynamicState = 1000143000
+	DYNAMIC_STATE_RAY_TRACING_PIPELINE_STACK_SIZE_KHR DynamicState = 1000347000
+	DYNAMIC_STATE_VIEWPORT_SHADING_RATE_PALETTE_NV    DynamicState = 1000164004
+	DYNAMIC_STATE_VIEWPORT_COARSE_SAMPLE_ORDER_NV     DynamicState = 1000164006
+	DYNAMIC_STATE_EXCLUSIVE_SCISSOR_NV                DynamicState = 1000205001
+	DYNAMIC_STATE_FRAGMENT_SHADING_RATE_KHR           DynamicState = 1000226000
+	DYNAMIC_STATE_LINE_STIPPLE_EXT                    DynamicState = 1000259000
+	DYNAMIC_STATE_CULL_MODE_EXT                       DynamicState = 1000267000
+	DYNAMIC_STATE_FRONT_FACE_EXT                      DynamicState = 1000267001
+	DYNAMIC_STATE_PRIMITIVE_TOPOLOGY_EXT              DynamicState = 1000267002
+	DYNAMIC_STATE_VIEWPORT_WITH_COUNT_EXT             DynamicState = 1000267003
+	DYNAMIC_STATE_SCISSOR_WITH_COUNT_EXT              DynamicState = 1000267004
+	DYNAMIC_STATE_VERTEX_INPUT_BINDING_STRIDE_EXT     DynamicState = 1000267005
+	DYNAMIC_STATE_DEPTH_TEST_ENABLE_EXT               DynamicState = 1000267006
+	DYNAMIC_STATE_DEPTH_WRITE_ENABLE_EXT              DynamicState = 1000267007
+	DYNAMIC_STATE_DEPTH_COMPARE_OP_EXT                DynamicState = 1000267008
+	DYNAMIC_STATE_DEPTH_BOUNDS_TEST_ENABLE_EXT        DynamicState = 1000267009
+	DYNAMIC_STATE_STENCIL_TEST_ENABLE_EXT             DynamicState = 1000267010
+	DYNAMIC_STATE_STENCIL_OP_EXT                      DynamicState = 1000267011
+	DYNAMIC_STATE_VERTEX_INPUT_EXT                    DynamicState = 1000352000
+	DYNAMIC_STATE_PATCH_CONTROL_POINTS_EXT            DynamicState = 1000377000
+	DYNAMIC_STATE_RASTERIZER_DISCARD_ENABLE_EXT       DynamicState = 1000377001
+	DYNAMIC_STATE_DEPTH_BIAS_ENABLE_EXT               DynamicState = 1000377002
+	DYNAMIC_STATE_LOGIC_OP_EXT                        DynamicState = 1000377003
+	DYNAMIC_STATE_PRIMITIVE_RESTART_ENABLE_EXT        DynamicState = 1000377004
+	DYNAMIC_STATE_COLOR_WRITE_ENABLE_EXT              DynamicState = 1000381000
+	DYNAMIC_STATE_MAX_ENUM                            DynamicState = 0x7FFFFFFF
 )
 
 func (x DynamicState) String() string {
@@ -4260,16 +5104,323 @@ func (x DynamicState) String() string {
 		return "DYNAMIC_STATE_DISCARD_RECTANGLE_EXT"
 	case DYNAMIC_STATE_SAMPLE_LOCATIONS_EXT:
 		return "DYNAMIC_STATE_SAMPLE_LOCATIONS_EXT"
+	case DYNAMIC_STATE_RAY_TRACING_PIPELINE_STACK_SIZE_KHR:
+		return "DYNAMIC_STATE_RAY_TRACING_PIPELINE_STACK_SIZE_KHR"
 	case DYNAMIC_STATE_VIEWPORT_SHADING_RATE_PALETTE_NV:
 		return "DYNAMIC_STATE_VIEWPORT_SHADING_RATE_PALETTE_NV"
 	case DYNAMIC_STATE_VIEWPORT_COARSE_SAMPLE_ORDER_NV:
 		return "DYNAMIC_STATE_VIEWPORT_COARSE_SAMPLE_ORDER_NV"
 	case DYNAMIC_STATE_EXCLUSIVE_SCISSOR_NV:
 		return "DYNAMIC_STATE_EXCLUSIVE_SCISSOR_NV"
+	case DYNAMIC_STATE_FRAGMENT_SHADING_RATE_KHR:
+		return "DYNAMIC_STATE_FRAGMENT_SHADING_RATE_KHR"
 	case DYNAMIC_STATE_LINE_STIPPLE_EXT:
 		return "DYNAMIC_STATE_LINE_STIPPLE_EXT"
+	case DYNAMIC_STATE_CULL_MODE_EXT:
+		return "DYNAMIC_STATE_CULL_MODE_EXT"
+	case DYNAMIC_STATE_FRONT_FACE_EXT:
+		return "DYNAMIC_STATE_FRONT_FACE_EXT"
+	case DYNAMIC_STATE_PRIMITIVE_TOPOLOGY_EXT:
+		return "DYNAMIC_STATE_PRIMITIVE_TOPOLOGY_EXT"
+	case DYNAMIC_STATE_VIEWPORT_WITH_COUNT_EXT:
+		return "DYNAMIC_STATE_VIEWPORT_WITH_COUNT_EXT"
+	case DYNAMIC_STATE_SCISSOR_WITH_COUNT_EXT:
+		return "DYNAMIC_STATE_SCISSOR_WITH_COUNT_EXT"
+	case DYNAMIC_STATE_VERTEX_INPUT_BINDING_STRIDE_EXT:
+		return "DYNAMIC_STATE_VERTEX_INPUT_BINDING_STRIDE_EXT"
+	case DYNAMIC_STATE_DEPTH_TEST_ENABLE_EXT:
+		return "DYNAMIC_STATE_DEPTH_TEST_ENABLE_EXT"
+	case DYNAMIC_STATE_DEPTH_WRITE_ENABLE_EXT:
+		return "DYNAMIC_STATE_DEPTH_WRITE_ENABLE_EXT"
+	case DYNAMIC_STATE_DEPTH_COMPARE_OP_EXT:
+		return "DYNAMIC_STATE_DEPTH_COMPARE_OP_EXT"
+	case DYNAMIC_STATE_DEPTH_BOUNDS_TEST_ENABLE_EXT:
+		return "DYNAMIC_STATE_DEPTH_BOUNDS_TEST_ENABLE_EXT"
+	case DYNAMIC_STATE_STENCIL_TEST_ENABLE_EXT:
+		return "DYNAMIC_STATE_STENCIL_TEST_ENABLE_EXT"
+	case DYNAMIC_STATE_STENCIL_OP_EXT:
+		return "DYNAMIC_STATE_STENCIL_OP_EXT"
+	case DYNAMIC_STATE_VERTEX_INPUT_EXT:
+		return "DYNAMIC_STATE_VERTEX_INPUT_EXT"
+	case DYNAMIC_STATE_PATCH_CONTROL_POINTS_EXT:
+		return "DYNAMIC_STATE_PATCH_CONTROL_POINTS_EXT"
+	case DYNAMIC_STATE_RASTERIZER_DISCARD_ENABLE_EXT:
+		return "DYNAMIC_STATE_RASTERIZER_DISCARD_ENABLE_EXT"
+	case DYNAMIC_STATE_DEPTH_BIAS_ENABLE_EXT:
+		return "DYNAMIC_STATE_DEPTH_BIAS_ENABLE_EXT"
+	case DYNAMIC_STATE_LOGIC_OP_EXT:
+		return "DYNAMIC_STATE_LOGIC_OP_EXT"
+	case DYNAMIC_STATE_PRIMITIVE_RESTART_ENABLE_EXT:
+		return "DYNAMIC_STATE_PRIMITIVE_RESTART_ENABLE_EXT"
+	case DYNAMIC_STATE_COLOR_WRITE_ENABLE_EXT:
+		return "DYNAMIC_STATE_COLOR_WRITE_ENABLE_EXT"
 	case DYNAMIC_STATE_MAX_ENUM:
 		return "DYNAMIC_STATE_MAX_ENUM"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// FrontFace -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFrontFace.html
+type FrontFace int32
+
+const (
+	FRONT_FACE_COUNTER_CLOCKWISE FrontFace = 0
+	FRONT_FACE_CLOCKWISE         FrontFace = 1
+	FRONT_FACE_MAX_ENUM          FrontFace = 0x7FFFFFFF
+)
+
+func (x FrontFace) String() string {
+	switch x {
+	case FRONT_FACE_COUNTER_CLOCKWISE:
+		return "FRONT_FACE_COUNTER_CLOCKWISE"
+	case FRONT_FACE_CLOCKWISE:
+		return "FRONT_FACE_CLOCKWISE"
+	case FRONT_FACE_MAX_ENUM:
+		return "FRONT_FACE_MAX_ENUM"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// VertexInputRate -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkVertexInputRate.html
+type VertexInputRate int32
+
+const (
+	VERTEX_INPUT_RATE_VERTEX   VertexInputRate = 0
+	VERTEX_INPUT_RATE_INSTANCE VertexInputRate = 1
+	VERTEX_INPUT_RATE_MAX_ENUM VertexInputRate = 0x7FFFFFFF
+)
+
+func (x VertexInputRate) String() string {
+	switch x {
+	case VERTEX_INPUT_RATE_VERTEX:
+		return "VERTEX_INPUT_RATE_VERTEX"
+	case VERTEX_INPUT_RATE_INSTANCE:
+		return "VERTEX_INPUT_RATE_INSTANCE"
+	case VERTEX_INPUT_RATE_MAX_ENUM:
+		return "VERTEX_INPUT_RATE_MAX_ENUM"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// PrimitiveTopology -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPrimitiveTopology.html
+type PrimitiveTopology int32
+
+const (
+	PRIMITIVE_TOPOLOGY_POINT_LIST                    PrimitiveTopology = 0
+	PRIMITIVE_TOPOLOGY_LINE_LIST                     PrimitiveTopology = 1
+	PRIMITIVE_TOPOLOGY_LINE_STRIP                    PrimitiveTopology = 2
+	PRIMITIVE_TOPOLOGY_TRIANGLE_LIST                 PrimitiveTopology = 3
+	PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP                PrimitiveTopology = 4
+	PRIMITIVE_TOPOLOGY_TRIANGLE_FAN                  PrimitiveTopology = 5
+	PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY      PrimitiveTopology = 6
+	PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY     PrimitiveTopology = 7
+	PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY  PrimitiveTopology = 8
+	PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY PrimitiveTopology = 9
+	PRIMITIVE_TOPOLOGY_PATCH_LIST                    PrimitiveTopology = 10
+	PRIMITIVE_TOPOLOGY_MAX_ENUM                      PrimitiveTopology = 0x7FFFFFFF
+)
+
+func (x PrimitiveTopology) String() string {
+	switch x {
+	case PRIMITIVE_TOPOLOGY_POINT_LIST:
+		return "PRIMITIVE_TOPOLOGY_POINT_LIST"
+	case PRIMITIVE_TOPOLOGY_LINE_LIST:
+		return "PRIMITIVE_TOPOLOGY_LINE_LIST"
+	case PRIMITIVE_TOPOLOGY_LINE_STRIP:
+		return "PRIMITIVE_TOPOLOGY_LINE_STRIP"
+	case PRIMITIVE_TOPOLOGY_TRIANGLE_LIST:
+		return "PRIMITIVE_TOPOLOGY_TRIANGLE_LIST"
+	case PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP:
+		return "PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP"
+	case PRIMITIVE_TOPOLOGY_TRIANGLE_FAN:
+		return "PRIMITIVE_TOPOLOGY_TRIANGLE_FAN"
+	case PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY:
+		return "PRIMITIVE_TOPOLOGY_LINE_LIST_WITH_ADJACENCY"
+	case PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY:
+		return "PRIMITIVE_TOPOLOGY_LINE_STRIP_WITH_ADJACENCY"
+	case PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY:
+		return "PRIMITIVE_TOPOLOGY_TRIANGLE_LIST_WITH_ADJACENCY"
+	case PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY:
+		return "PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP_WITH_ADJACENCY"
+	case PRIMITIVE_TOPOLOGY_PATCH_LIST:
+		return "PRIMITIVE_TOPOLOGY_PATCH_LIST"
+	case PRIMITIVE_TOPOLOGY_MAX_ENUM:
+		return "PRIMITIVE_TOPOLOGY_MAX_ENUM"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// PolygonMode -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPolygonMode.html
+type PolygonMode int32
+
+const (
+	POLYGON_MODE_FILL              PolygonMode = 0
+	POLYGON_MODE_LINE              PolygonMode = 1
+	POLYGON_MODE_POINT             PolygonMode = 2
+	POLYGON_MODE_FILL_RECTANGLE_NV PolygonMode = 1000153000
+	POLYGON_MODE_MAX_ENUM          PolygonMode = 0x7FFFFFFF
+)
+
+func (x PolygonMode) String() string {
+	switch x {
+	case POLYGON_MODE_FILL:
+		return "POLYGON_MODE_FILL"
+	case POLYGON_MODE_LINE:
+		return "POLYGON_MODE_LINE"
+	case POLYGON_MODE_POINT:
+		return "POLYGON_MODE_POINT"
+	case POLYGON_MODE_FILL_RECTANGLE_NV:
+		return "POLYGON_MODE_FILL_RECTANGLE_NV"
+	case POLYGON_MODE_MAX_ENUM:
+		return "POLYGON_MODE_MAX_ENUM"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// StencilOp -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkStencilOp.html
+type StencilOp int32
+
+const (
+	STENCIL_OP_KEEP                StencilOp = 0
+	STENCIL_OP_ZERO                StencilOp = 1
+	STENCIL_OP_REPLACE             StencilOp = 2
+	STENCIL_OP_INCREMENT_AND_CLAMP StencilOp = 3
+	STENCIL_OP_DECREMENT_AND_CLAMP StencilOp = 4
+	STENCIL_OP_INVERT              StencilOp = 5
+	STENCIL_OP_INCREMENT_AND_WRAP  StencilOp = 6
+	STENCIL_OP_DECREMENT_AND_WRAP  StencilOp = 7
+	STENCIL_OP_MAX_ENUM            StencilOp = 0x7FFFFFFF
+)
+
+func (x StencilOp) String() string {
+	switch x {
+	case STENCIL_OP_KEEP:
+		return "STENCIL_OP_KEEP"
+	case STENCIL_OP_ZERO:
+		return "STENCIL_OP_ZERO"
+	case STENCIL_OP_REPLACE:
+		return "STENCIL_OP_REPLACE"
+	case STENCIL_OP_INCREMENT_AND_CLAMP:
+		return "STENCIL_OP_INCREMENT_AND_CLAMP"
+	case STENCIL_OP_DECREMENT_AND_CLAMP:
+		return "STENCIL_OP_DECREMENT_AND_CLAMP"
+	case STENCIL_OP_INVERT:
+		return "STENCIL_OP_INVERT"
+	case STENCIL_OP_INCREMENT_AND_WRAP:
+		return "STENCIL_OP_INCREMENT_AND_WRAP"
+	case STENCIL_OP_DECREMENT_AND_WRAP:
+		return "STENCIL_OP_DECREMENT_AND_WRAP"
+	case STENCIL_OP_MAX_ENUM:
+		return "STENCIL_OP_MAX_ENUM"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// LogicOp -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkLogicOp.html
+type LogicOp int32
+
+const (
+	LOGIC_OP_CLEAR         LogicOp = 0
+	LOGIC_OP_AND           LogicOp = 1
+	LOGIC_OP_AND_REVERSE   LogicOp = 2
+	LOGIC_OP_COPY          LogicOp = 3
+	LOGIC_OP_AND_INVERTED  LogicOp = 4
+	LOGIC_OP_NO_OP         LogicOp = 5
+	LOGIC_OP_XOR           LogicOp = 6
+	LOGIC_OP_OR            LogicOp = 7
+	LOGIC_OP_NOR           LogicOp = 8
+	LOGIC_OP_EQUIVALENT    LogicOp = 9
+	LOGIC_OP_INVERT        LogicOp = 10
+	LOGIC_OP_OR_REVERSE    LogicOp = 11
+	LOGIC_OP_COPY_INVERTED LogicOp = 12
+	LOGIC_OP_OR_INVERTED   LogicOp = 13
+	LOGIC_OP_NAND          LogicOp = 14
+	LOGIC_OP_SET           LogicOp = 15
+	LOGIC_OP_MAX_ENUM      LogicOp = 0x7FFFFFFF
+)
+
+func (x LogicOp) String() string {
+	switch x {
+	case LOGIC_OP_CLEAR:
+		return "LOGIC_OP_CLEAR"
+	case LOGIC_OP_AND:
+		return "LOGIC_OP_AND"
+	case LOGIC_OP_AND_REVERSE:
+		return "LOGIC_OP_AND_REVERSE"
+	case LOGIC_OP_COPY:
+		return "LOGIC_OP_COPY"
+	case LOGIC_OP_AND_INVERTED:
+		return "LOGIC_OP_AND_INVERTED"
+	case LOGIC_OP_NO_OP:
+		return "LOGIC_OP_NO_OP"
+	case LOGIC_OP_XOR:
+		return "LOGIC_OP_XOR"
+	case LOGIC_OP_OR:
+		return "LOGIC_OP_OR"
+	case LOGIC_OP_NOR:
+		return "LOGIC_OP_NOR"
+	case LOGIC_OP_EQUIVALENT:
+		return "LOGIC_OP_EQUIVALENT"
+	case LOGIC_OP_INVERT:
+		return "LOGIC_OP_INVERT"
+	case LOGIC_OP_OR_REVERSE:
+		return "LOGIC_OP_OR_REVERSE"
+	case LOGIC_OP_COPY_INVERTED:
+		return "LOGIC_OP_COPY_INVERTED"
+	case LOGIC_OP_OR_INVERTED:
+		return "LOGIC_OP_OR_INVERTED"
+	case LOGIC_OP_NAND:
+		return "LOGIC_OP_NAND"
+	case LOGIC_OP_SET:
+		return "LOGIC_OP_SET"
+	case LOGIC_OP_MAX_ENUM:
+		return "LOGIC_OP_MAX_ENUM"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// BorderColor -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBorderColor.html
+type BorderColor int32
+
+const (
+	BORDER_COLOR_FLOAT_TRANSPARENT_BLACK BorderColor = 0
+	BORDER_COLOR_INT_TRANSPARENT_BLACK   BorderColor = 1
+	BORDER_COLOR_FLOAT_OPAQUE_BLACK      BorderColor = 2
+	BORDER_COLOR_INT_OPAQUE_BLACK        BorderColor = 3
+	BORDER_COLOR_FLOAT_OPAQUE_WHITE      BorderColor = 4
+	BORDER_COLOR_INT_OPAQUE_WHITE        BorderColor = 5
+	BORDER_COLOR_FLOAT_CUSTOM_EXT        BorderColor = 1000287003
+	BORDER_COLOR_INT_CUSTOM_EXT          BorderColor = 1000287004
+	BORDER_COLOR_MAX_ENUM                BorderColor = 0x7FFFFFFF
+)
+
+func (x BorderColor) String() string {
+	switch x {
+	case BORDER_COLOR_FLOAT_TRANSPARENT_BLACK:
+		return "BORDER_COLOR_FLOAT_TRANSPARENT_BLACK"
+	case BORDER_COLOR_INT_TRANSPARENT_BLACK:
+		return "BORDER_COLOR_INT_TRANSPARENT_BLACK"
+	case BORDER_COLOR_FLOAT_OPAQUE_BLACK:
+		return "BORDER_COLOR_FLOAT_OPAQUE_BLACK"
+	case BORDER_COLOR_INT_OPAQUE_BLACK:
+		return "BORDER_COLOR_INT_OPAQUE_BLACK"
+	case BORDER_COLOR_FLOAT_OPAQUE_WHITE:
+		return "BORDER_COLOR_FLOAT_OPAQUE_WHITE"
+	case BORDER_COLOR_INT_OPAQUE_WHITE:
+		return "BORDER_COLOR_INT_OPAQUE_WHITE"
+	case BORDER_COLOR_FLOAT_CUSTOM_EXT:
+		return "BORDER_COLOR_FLOAT_CUSTOM_EXT"
+	case BORDER_COLOR_INT_CUSTOM_EXT:
+		return "BORDER_COLOR_INT_CUSTOM_EXT"
+	case BORDER_COLOR_MAX_ENUM:
+		return "BORDER_COLOR_MAX_ENUM"
 	default:
 		return fmt.Sprint(int32(x))
 	}
@@ -4279,14 +5430,11 @@ func (x DynamicState) String() string {
 type Filter int32
 
 const (
-	FILTER_NEAREST     Filter = 0
-	FILTER_LINEAR      Filter = 1
-	FILTER_CUBIC_IMG   Filter = 1000015000
-	FILTER_CUBIC_EXT   Filter = FILTER_CUBIC_IMG
-	FILTER_BEGIN_RANGE Filter = FILTER_NEAREST
-	FILTER_END_RANGE   Filter = FILTER_LINEAR
-	FILTER_RANGE_SIZE  Filter = (FILTER_LINEAR - FILTER_NEAREST + 1)
-	FILTER_MAX_ENUM    Filter = 0x7FFFFFFF
+	FILTER_NEAREST   Filter = 0
+	FILTER_LINEAR    Filter = 1
+	FILTER_CUBIC_IMG Filter = 1000015000
+	FILTER_CUBIC_EXT Filter = FILTER_CUBIC_IMG
+	FILTER_MAX_ENUM  Filter = 0x7FFFFFFF
 )
 
 func (x Filter) String() string {
@@ -4304,31 +5452,6 @@ func (x Filter) String() string {
 	}
 }
 
-// SamplerMipmapMode -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerMipmapMode.html
-type SamplerMipmapMode int32
-
-const (
-	SAMPLER_MIPMAP_MODE_NEAREST     SamplerMipmapMode = 0
-	SAMPLER_MIPMAP_MODE_LINEAR      SamplerMipmapMode = 1
-	SAMPLER_MIPMAP_MODE_BEGIN_RANGE SamplerMipmapMode = SAMPLER_MIPMAP_MODE_NEAREST
-	SAMPLER_MIPMAP_MODE_END_RANGE   SamplerMipmapMode = SAMPLER_MIPMAP_MODE_LINEAR
-	SAMPLER_MIPMAP_MODE_RANGE_SIZE  SamplerMipmapMode = (SAMPLER_MIPMAP_MODE_LINEAR - SAMPLER_MIPMAP_MODE_NEAREST + 1)
-	SAMPLER_MIPMAP_MODE_MAX_ENUM    SamplerMipmapMode = 0x7FFFFFFF
-)
-
-func (x SamplerMipmapMode) String() string {
-	switch x {
-	case SAMPLER_MIPMAP_MODE_NEAREST:
-		return "SAMPLER_MIPMAP_MODE_NEAREST"
-	case SAMPLER_MIPMAP_MODE_LINEAR:
-		return "SAMPLER_MIPMAP_MODE_LINEAR"
-	case SAMPLER_MIPMAP_MODE_MAX_ENUM:
-		return "SAMPLER_MIPMAP_MODE_MAX_ENUM"
-	default:
-		return fmt.Sprint(int32(x))
-	}
-}
-
 // SamplerAddressMode -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerAddressMode.html
 type SamplerAddressMode int32
 
@@ -4339,9 +5462,6 @@ const (
 	SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER          SamplerAddressMode = 3
 	SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE     SamplerAddressMode = 4
 	SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE_KHR SamplerAddressMode = SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE
-	SAMPLER_ADDRESS_MODE_BEGIN_RANGE              SamplerAddressMode = SAMPLER_ADDRESS_MODE_REPEAT
-	SAMPLER_ADDRESS_MODE_END_RANGE                SamplerAddressMode = SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER
-	SAMPLER_ADDRESS_MODE_RANGE_SIZE               SamplerAddressMode = (SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER - SAMPLER_ADDRESS_MODE_REPEAT + 1)
 	SAMPLER_ADDRESS_MODE_MAX_ENUM                 SamplerAddressMode = 0x7FFFFFFF
 )
 
@@ -4364,38 +5484,23 @@ func (x SamplerAddressMode) String() string {
 	}
 }
 
-// BorderColor -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBorderColor.html
-type BorderColor int32
+// SamplerMipmapMode -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerMipmapMode.html
+type SamplerMipmapMode int32
 
 const (
-	BORDER_COLOR_FLOAT_TRANSPARENT_BLACK BorderColor = 0
-	BORDER_COLOR_INT_TRANSPARENT_BLACK   BorderColor = 1
-	BORDER_COLOR_FLOAT_OPAQUE_BLACK      BorderColor = 2
-	BORDER_COLOR_INT_OPAQUE_BLACK        BorderColor = 3
-	BORDER_COLOR_FLOAT_OPAQUE_WHITE      BorderColor = 4
-	BORDER_COLOR_INT_OPAQUE_WHITE        BorderColor = 5
-	BORDER_COLOR_BEGIN_RANGE             BorderColor = BORDER_COLOR_FLOAT_TRANSPARENT_BLACK
-	BORDER_COLOR_END_RANGE               BorderColor = BORDER_COLOR_INT_OPAQUE_WHITE
-	BORDER_COLOR_RANGE_SIZE              BorderColor = (BORDER_COLOR_INT_OPAQUE_WHITE - BORDER_COLOR_FLOAT_TRANSPARENT_BLACK + 1)
-	BORDER_COLOR_MAX_ENUM                BorderColor = 0x7FFFFFFF
+	SAMPLER_MIPMAP_MODE_NEAREST  SamplerMipmapMode = 0
+	SAMPLER_MIPMAP_MODE_LINEAR   SamplerMipmapMode = 1
+	SAMPLER_MIPMAP_MODE_MAX_ENUM SamplerMipmapMode = 0x7FFFFFFF
 )
 
-func (x BorderColor) String() string {
+func (x SamplerMipmapMode) String() string {
 	switch x {
-	case BORDER_COLOR_FLOAT_TRANSPARENT_BLACK:
-		return "BORDER_COLOR_FLOAT_TRANSPARENT_BLACK"
-	case BORDER_COLOR_INT_TRANSPARENT_BLACK:
-		return "BORDER_COLOR_INT_TRANSPARENT_BLACK"
-	case BORDER_COLOR_FLOAT_OPAQUE_BLACK:
-		return "BORDER_COLOR_FLOAT_OPAQUE_BLACK"
-	case BORDER_COLOR_INT_OPAQUE_BLACK:
-		return "BORDER_COLOR_INT_OPAQUE_BLACK"
-	case BORDER_COLOR_FLOAT_OPAQUE_WHITE:
-		return "BORDER_COLOR_FLOAT_OPAQUE_WHITE"
-	case BORDER_COLOR_INT_OPAQUE_WHITE:
-		return "BORDER_COLOR_INT_OPAQUE_WHITE"
-	case BORDER_COLOR_MAX_ENUM:
-		return "BORDER_COLOR_MAX_ENUM"
+	case SAMPLER_MIPMAP_MODE_NEAREST:
+		return "SAMPLER_MIPMAP_MODE_NEAREST"
+	case SAMPLER_MIPMAP_MODE_LINEAR:
+		return "SAMPLER_MIPMAP_MODE_LINEAR"
+	case SAMPLER_MIPMAP_MODE_MAX_ENUM:
+		return "SAMPLER_MIPMAP_MODE_MAX_ENUM"
 	default:
 		return fmt.Sprint(int32(x))
 	}
@@ -4405,23 +5510,22 @@ func (x BorderColor) String() string {
 type DescriptorType int32
 
 const (
-	DESCRIPTOR_TYPE_SAMPLER                   DescriptorType = 0
-	DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER    DescriptorType = 1
-	DESCRIPTOR_TYPE_SAMPLED_IMAGE             DescriptorType = 2
-	DESCRIPTOR_TYPE_STORAGE_IMAGE             DescriptorType = 3
-	DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER      DescriptorType = 4
-	DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER      DescriptorType = 5
-	DESCRIPTOR_TYPE_UNIFORM_BUFFER            DescriptorType = 6
-	DESCRIPTOR_TYPE_STORAGE_BUFFER            DescriptorType = 7
-	DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC    DescriptorType = 8
-	DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC    DescriptorType = 9
-	DESCRIPTOR_TYPE_INPUT_ATTACHMENT          DescriptorType = 10
-	DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT  DescriptorType = 1000138000
-	DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV DescriptorType = 1000165000
-	DESCRIPTOR_TYPE_BEGIN_RANGE               DescriptorType = DESCRIPTOR_TYPE_SAMPLER
-	DESCRIPTOR_TYPE_END_RANGE                 DescriptorType = DESCRIPTOR_TYPE_INPUT_ATTACHMENT
-	DESCRIPTOR_TYPE_RANGE_SIZE                DescriptorType = (DESCRIPTOR_TYPE_INPUT_ATTACHMENT - DESCRIPTOR_TYPE_SAMPLER + 1)
-	DESCRIPTOR_TYPE_MAX_ENUM                  DescriptorType = 0x7FFFFFFF
+	DESCRIPTOR_TYPE_SAMPLER                    DescriptorType = 0
+	DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER     DescriptorType = 1
+	DESCRIPTOR_TYPE_SAMPLED_IMAGE              DescriptorType = 2
+	DESCRIPTOR_TYPE_STORAGE_IMAGE              DescriptorType = 3
+	DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER       DescriptorType = 4
+	DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER       DescriptorType = 5
+	DESCRIPTOR_TYPE_UNIFORM_BUFFER             DescriptorType = 6
+	DESCRIPTOR_TYPE_STORAGE_BUFFER             DescriptorType = 7
+	DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC     DescriptorType = 8
+	DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC     DescriptorType = 9
+	DESCRIPTOR_TYPE_INPUT_ATTACHMENT           DescriptorType = 10
+	DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT   DescriptorType = 1000138000
+	DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR DescriptorType = 1000150000
+	DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV  DescriptorType = 1000165000
+	DESCRIPTOR_TYPE_MUTABLE_VALVE              DescriptorType = 1000351000
+	DESCRIPTOR_TYPE_MAX_ENUM                   DescriptorType = 0x7FFFFFFF
 )
 
 func (x DescriptorType) String() string {
@@ -4450,8 +5554,12 @@ func (x DescriptorType) String() string {
 		return "DESCRIPTOR_TYPE_INPUT_ATTACHMENT"
 	case DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT:
 		return "DESCRIPTOR_TYPE_INLINE_UNIFORM_BLOCK_EXT"
+	case DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR:
+		return "DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR"
 	case DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV:
 		return "DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_NV"
+	case DESCRIPTOR_TYPE_MUTABLE_VALVE:
+		return "DESCRIPTOR_TYPE_MUTABLE_VALVE"
 	case DESCRIPTOR_TYPE_MAX_ENUM:
 		return "DESCRIPTOR_TYPE_MAX_ENUM"
 	default:
@@ -4463,13 +5571,10 @@ func (x DescriptorType) String() string {
 type AttachmentLoadOp int32
 
 const (
-	ATTACHMENT_LOAD_OP_LOAD        AttachmentLoadOp = 0
-	ATTACHMENT_LOAD_OP_CLEAR       AttachmentLoadOp = 1
-	ATTACHMENT_LOAD_OP_DONT_CARE   AttachmentLoadOp = 2
-	ATTACHMENT_LOAD_OP_BEGIN_RANGE AttachmentLoadOp = ATTACHMENT_LOAD_OP_LOAD
-	ATTACHMENT_LOAD_OP_END_RANGE   AttachmentLoadOp = ATTACHMENT_LOAD_OP_DONT_CARE
-	ATTACHMENT_LOAD_OP_RANGE_SIZE  AttachmentLoadOp = (ATTACHMENT_LOAD_OP_DONT_CARE - ATTACHMENT_LOAD_OP_LOAD + 1)
-	ATTACHMENT_LOAD_OP_MAX_ENUM    AttachmentLoadOp = 0x7FFFFFFF
+	ATTACHMENT_LOAD_OP_LOAD      AttachmentLoadOp = 0
+	ATTACHMENT_LOAD_OP_CLEAR     AttachmentLoadOp = 1
+	ATTACHMENT_LOAD_OP_DONT_CARE AttachmentLoadOp = 2
+	ATTACHMENT_LOAD_OP_MAX_ENUM  AttachmentLoadOp = 0x7FFFFFFF
 )
 
 func (x AttachmentLoadOp) String() string {
@@ -4491,12 +5596,10 @@ func (x AttachmentLoadOp) String() string {
 type AttachmentStoreOp int32
 
 const (
-	ATTACHMENT_STORE_OP_STORE       AttachmentStoreOp = 0
-	ATTACHMENT_STORE_OP_DONT_CARE   AttachmentStoreOp = 1
-	ATTACHMENT_STORE_OP_BEGIN_RANGE AttachmentStoreOp = ATTACHMENT_STORE_OP_STORE
-	ATTACHMENT_STORE_OP_END_RANGE   AttachmentStoreOp = ATTACHMENT_STORE_OP_DONT_CARE
-	ATTACHMENT_STORE_OP_RANGE_SIZE  AttachmentStoreOp = (ATTACHMENT_STORE_OP_DONT_CARE - ATTACHMENT_STORE_OP_STORE + 1)
-	ATTACHMENT_STORE_OP_MAX_ENUM    AttachmentStoreOp = 0x7FFFFFFF
+	ATTACHMENT_STORE_OP_STORE     AttachmentStoreOp = 0
+	ATTACHMENT_STORE_OP_DONT_CARE AttachmentStoreOp = 1
+	ATTACHMENT_STORE_OP_NONE_QCOM AttachmentStoreOp = 1000301000
+	ATTACHMENT_STORE_OP_MAX_ENUM  AttachmentStoreOp = 0x7FFFFFFF
 )
 
 func (x AttachmentStoreOp) String() string {
@@ -4505,6 +5608,8 @@ func (x AttachmentStoreOp) String() string {
 		return "ATTACHMENT_STORE_OP_STORE"
 	case ATTACHMENT_STORE_OP_DONT_CARE:
 		return "ATTACHMENT_STORE_OP_DONT_CARE"
+	case ATTACHMENT_STORE_OP_NONE_QCOM:
+		return "ATTACHMENT_STORE_OP_NONE_QCOM"
 	case ATTACHMENT_STORE_OP_MAX_ENUM:
 		return "ATTACHMENT_STORE_OP_MAX_ENUM"
 	default:
@@ -4516,13 +5621,11 @@ func (x AttachmentStoreOp) String() string {
 type PipelineBindPoint int32
 
 const (
-	PIPELINE_BIND_POINT_GRAPHICS       PipelineBindPoint = 0
-	PIPELINE_BIND_POINT_COMPUTE        PipelineBindPoint = 1
-	PIPELINE_BIND_POINT_RAY_TRACING_NV PipelineBindPoint = 1000165000
-	PIPELINE_BIND_POINT_BEGIN_RANGE    PipelineBindPoint = PIPELINE_BIND_POINT_GRAPHICS
-	PIPELINE_BIND_POINT_END_RANGE      PipelineBindPoint = PIPELINE_BIND_POINT_COMPUTE
-	PIPELINE_BIND_POINT_RANGE_SIZE     PipelineBindPoint = (PIPELINE_BIND_POINT_COMPUTE - PIPELINE_BIND_POINT_GRAPHICS + 1)
-	PIPELINE_BIND_POINT_MAX_ENUM       PipelineBindPoint = 0x7FFFFFFF
+	PIPELINE_BIND_POINT_GRAPHICS        PipelineBindPoint = 0
+	PIPELINE_BIND_POINT_COMPUTE         PipelineBindPoint = 1
+	PIPELINE_BIND_POINT_RAY_TRACING_KHR PipelineBindPoint = 1000165000
+	PIPELINE_BIND_POINT_RAY_TRACING_NV  PipelineBindPoint = PIPELINE_BIND_POINT_RAY_TRACING_KHR
+	PIPELINE_BIND_POINT_MAX_ENUM        PipelineBindPoint = 0x7FFFFFFF
 )
 
 func (x PipelineBindPoint) String() string {
@@ -4531,8 +5634,8 @@ func (x PipelineBindPoint) String() string {
 		return "PIPELINE_BIND_POINT_GRAPHICS"
 	case PIPELINE_BIND_POINT_COMPUTE:
 		return "PIPELINE_BIND_POINT_COMPUTE"
-	case PIPELINE_BIND_POINT_RAY_TRACING_NV:
-		return "PIPELINE_BIND_POINT_RAY_TRACING_NV"
+	case PIPELINE_BIND_POINT_RAY_TRACING_KHR:
+		return "PIPELINE_BIND_POINT_RAY_TRACING_KHR"
 	case PIPELINE_BIND_POINT_MAX_ENUM:
 		return "PIPELINE_BIND_POINT_MAX_ENUM"
 	default:
@@ -4544,12 +5647,9 @@ func (x PipelineBindPoint) String() string {
 type CommandBufferLevel int32
 
 const (
-	COMMAND_BUFFER_LEVEL_PRIMARY     CommandBufferLevel = 0
-	COMMAND_BUFFER_LEVEL_SECONDARY   CommandBufferLevel = 1
-	COMMAND_BUFFER_LEVEL_BEGIN_RANGE CommandBufferLevel = COMMAND_BUFFER_LEVEL_PRIMARY
-	COMMAND_BUFFER_LEVEL_END_RANGE   CommandBufferLevel = COMMAND_BUFFER_LEVEL_SECONDARY
-	COMMAND_BUFFER_LEVEL_RANGE_SIZE  CommandBufferLevel = (COMMAND_BUFFER_LEVEL_SECONDARY - COMMAND_BUFFER_LEVEL_PRIMARY + 1)
-	COMMAND_BUFFER_LEVEL_MAX_ENUM    CommandBufferLevel = 0x7FFFFFFF
+	COMMAND_BUFFER_LEVEL_PRIMARY   CommandBufferLevel = 0
+	COMMAND_BUFFER_LEVEL_SECONDARY CommandBufferLevel = 1
+	COMMAND_BUFFER_LEVEL_MAX_ENUM  CommandBufferLevel = 0x7FFFFFFF
 )
 
 func (x CommandBufferLevel) String() string {
@@ -4569,14 +5669,12 @@ func (x CommandBufferLevel) String() string {
 type IndexType int32
 
 const (
-	INDEX_TYPE_UINT16      IndexType = 0
-	INDEX_TYPE_UINT32      IndexType = 1
-	INDEX_TYPE_NONE_NV     IndexType = 1000165000
-	INDEX_TYPE_UINT8_EXT   IndexType = 1000265000
-	INDEX_TYPE_BEGIN_RANGE IndexType = INDEX_TYPE_UINT16
-	INDEX_TYPE_END_RANGE   IndexType = INDEX_TYPE_UINT32
-	INDEX_TYPE_RANGE_SIZE  IndexType = (INDEX_TYPE_UINT32 - INDEX_TYPE_UINT16 + 1)
-	INDEX_TYPE_MAX_ENUM    IndexType = 0x7FFFFFFF
+	INDEX_TYPE_UINT16    IndexType = 0
+	INDEX_TYPE_UINT32    IndexType = 1
+	INDEX_TYPE_NONE_KHR  IndexType = 1000165000
+	INDEX_TYPE_UINT8_EXT IndexType = 1000265000
+	INDEX_TYPE_NONE_NV   IndexType = INDEX_TYPE_NONE_KHR
+	INDEX_TYPE_MAX_ENUM  IndexType = 0x7FFFFFFF
 )
 
 func (x IndexType) String() string {
@@ -4585,8 +5683,8 @@ func (x IndexType) String() string {
 		return "INDEX_TYPE_UINT16"
 	case INDEX_TYPE_UINT32:
 		return "INDEX_TYPE_UINT32"
-	case INDEX_TYPE_NONE_NV:
-		return "INDEX_TYPE_NONE_NV"
+	case INDEX_TYPE_NONE_KHR:
+		return "INDEX_TYPE_NONE_KHR"
 	case INDEX_TYPE_UINT8_EXT:
 		return "INDEX_TYPE_UINT8_EXT"
 	case INDEX_TYPE_MAX_ENUM:
@@ -4602,9 +5700,6 @@ type SubpassContents int32
 const (
 	SUBPASS_CONTENTS_INLINE                    SubpassContents = 0
 	SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS SubpassContents = 1
-	SUBPASS_CONTENTS_BEGIN_RANGE               SubpassContents = SUBPASS_CONTENTS_INLINE
-	SUBPASS_CONTENTS_END_RANGE                 SubpassContents = SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS
-	SUBPASS_CONTENTS_RANGE_SIZE                SubpassContents = (SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS - SUBPASS_CONTENTS_INLINE + 1)
 	SUBPASS_CONTENTS_MAX_ENUM                  SubpassContents = 0x7FFFFFFF
 )
 
@@ -4621,173 +5716,168 @@ func (x SubpassContents) String() string {
 	}
 }
 
-// ObjectType -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectType.html
-type ObjectType int32
+// AccessFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccessFlags.html
+type AccessFlags uint32
 
 const (
-	OBJECT_TYPE_UNKNOWN                         ObjectType = 0
-	OBJECT_TYPE_INSTANCE                        ObjectType = 1
-	OBJECT_TYPE_PHYSICAL_DEVICE                 ObjectType = 2
-	OBJECT_TYPE_DEVICE                          ObjectType = 3
-	OBJECT_TYPE_QUEUE                           ObjectType = 4
-	OBJECT_TYPE_SEMAPHORE                       ObjectType = 5
-	OBJECT_TYPE_COMMAND_BUFFER                  ObjectType = 6
-	OBJECT_TYPE_FENCE                           ObjectType = 7
-	OBJECT_TYPE_DEVICE_MEMORY                   ObjectType = 8
-	OBJECT_TYPE_BUFFER                          ObjectType = 9
-	OBJECT_TYPE_IMAGE                           ObjectType = 10
-	OBJECT_TYPE_EVENT                           ObjectType = 11
-	OBJECT_TYPE_QUERY_POOL                      ObjectType = 12
-	OBJECT_TYPE_BUFFER_VIEW                     ObjectType = 13
-	OBJECT_TYPE_IMAGE_VIEW                      ObjectType = 14
-	OBJECT_TYPE_SHADER_MODULE                   ObjectType = 15
-	OBJECT_TYPE_PIPELINE_CACHE                  ObjectType = 16
-	OBJECT_TYPE_PIPELINE_LAYOUT                 ObjectType = 17
-	OBJECT_TYPE_RENDER_PASS                     ObjectType = 18
-	OBJECT_TYPE_PIPELINE                        ObjectType = 19
-	OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT           ObjectType = 20
-	OBJECT_TYPE_SAMPLER                         ObjectType = 21
-	OBJECT_TYPE_DESCRIPTOR_POOL                 ObjectType = 22
-	OBJECT_TYPE_DESCRIPTOR_SET                  ObjectType = 23
-	OBJECT_TYPE_FRAMEBUFFER                     ObjectType = 24
-	OBJECT_TYPE_COMMAND_POOL                    ObjectType = 25
-	OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION        ObjectType = 1000156000
-	OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE      ObjectType = 1000085000
-	OBJECT_TYPE_SURFACE_KHR                     ObjectType = 1000000000
-	OBJECT_TYPE_SWAPCHAIN_KHR                   ObjectType = 1000001000
-	OBJECT_TYPE_DISPLAY_KHR                     ObjectType = 1000002000
-	OBJECT_TYPE_DISPLAY_MODE_KHR                ObjectType = 1000002001
-	OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT       ObjectType = 1000011000
-	OBJECT_TYPE_OBJECT_TABLE_NVX                ObjectType = 1000086000
-	OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NVX    ObjectType = 1000086001
-	OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT       ObjectType = 1000128000
-	OBJECT_TYPE_VALIDATION_CACHE_EXT            ObjectType = 1000160000
-	OBJECT_TYPE_ACCELERATION_STRUCTURE_NV       ObjectType = 1000165000
-	OBJECT_TYPE_PERFORMANCE_CONFIGURATION_INTEL ObjectType = 1000210000
-	OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_KHR  ObjectType = OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE
-	OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION_KHR    ObjectType = OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION
-	OBJECT_TYPE_BEGIN_RANGE                     ObjectType = OBJECT_TYPE_UNKNOWN
-	OBJECT_TYPE_END_RANGE                       ObjectType = OBJECT_TYPE_COMMAND_POOL
-	OBJECT_TYPE_RANGE_SIZE                      ObjectType = (OBJECT_TYPE_COMMAND_POOL - OBJECT_TYPE_UNKNOWN + 1)
-	OBJECT_TYPE_MAX_ENUM                        ObjectType = 0x7FFFFFFF
+	ACCESS_INDIRECT_COMMAND_READ_BIT                     AccessFlags = 0x00000001
+	ACCESS_INDEX_READ_BIT                                AccessFlags = 0x00000002
+	ACCESS_VERTEX_ATTRIBUTE_READ_BIT                     AccessFlags = 0x00000004
+	ACCESS_UNIFORM_READ_BIT                              AccessFlags = 0x00000008
+	ACCESS_INPUT_ATTACHMENT_READ_BIT                     AccessFlags = 0x00000010
+	ACCESS_SHADER_READ_BIT                               AccessFlags = 0x00000020
+	ACCESS_SHADER_WRITE_BIT                              AccessFlags = 0x00000040
+	ACCESS_COLOR_ATTACHMENT_READ_BIT                     AccessFlags = 0x00000080
+	ACCESS_COLOR_ATTACHMENT_WRITE_BIT                    AccessFlags = 0x00000100
+	ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT             AccessFlags = 0x00000200
+	ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT            AccessFlags = 0x00000400
+	ACCESS_TRANSFER_READ_BIT                             AccessFlags = 0x00000800
+	ACCESS_TRANSFER_WRITE_BIT                            AccessFlags = 0x00001000
+	ACCESS_HOST_READ_BIT                                 AccessFlags = 0x00002000
+	ACCESS_HOST_WRITE_BIT                                AccessFlags = 0x00004000
+	ACCESS_MEMORY_READ_BIT                               AccessFlags = 0x00008000
+	ACCESS_MEMORY_WRITE_BIT                              AccessFlags = 0x00010000
+	ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT              AccessFlags = 0x02000000
+	ACCESS_TRANSFORM_FEEDBACK_COUNTER_READ_BIT_EXT       AccessFlags = 0x04000000
+	ACCESS_TRANSFORM_FEEDBACK_COUNTER_WRITE_BIT_EXT      AccessFlags = 0x08000000
+	ACCESS_CONDITIONAL_RENDERING_READ_BIT_EXT            AccessFlags = 0x00100000
+	ACCESS_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT     AccessFlags = 0x00080000
+	ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR           AccessFlags = 0x00200000
+	ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_KHR          AccessFlags = 0x00400000
+	ACCESS_SHADING_RATE_IMAGE_READ_BIT_NV                AccessFlags = 0x00800000
+	ACCESS_FRAGMENT_DENSITY_MAP_READ_BIT_EXT             AccessFlags = 0x01000000
+	ACCESS_COMMAND_PREPROCESS_READ_BIT_NV                AccessFlags = 0x00020000
+	ACCESS_COMMAND_PREPROCESS_WRITE_BIT_NV               AccessFlags = 0x00040000
+	ACCESS_NONE_KHR                                      AccessFlags = 0
+	ACCESS_ACCELERATION_STRUCTURE_READ_BIT_NV            AccessFlags = ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR
+	ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_NV           AccessFlags = ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_KHR
+	ACCESS_FRAGMENT_SHADING_RATE_ATTACHMENT_READ_BIT_KHR AccessFlags = ACCESS_SHADING_RATE_IMAGE_READ_BIT_NV
+	ACCESS_FLAG_BITS_MAX_ENUM                            AccessFlags = 0x7FFFFFFF
 )
 
-func (x ObjectType) String() string {
-	switch x {
-	case OBJECT_TYPE_UNKNOWN:
-		return "OBJECT_TYPE_UNKNOWN"
-	case OBJECT_TYPE_INSTANCE:
-		return "OBJECT_TYPE_INSTANCE"
-	case OBJECT_TYPE_PHYSICAL_DEVICE:
-		return "OBJECT_TYPE_PHYSICAL_DEVICE"
-	case OBJECT_TYPE_DEVICE:
-		return "OBJECT_TYPE_DEVICE"
-	case OBJECT_TYPE_QUEUE:
-		return "OBJECT_TYPE_QUEUE"
-	case OBJECT_TYPE_SEMAPHORE:
-		return "OBJECT_TYPE_SEMAPHORE"
-	case OBJECT_TYPE_COMMAND_BUFFER:
-		return "OBJECT_TYPE_COMMAND_BUFFER"
-	case OBJECT_TYPE_FENCE:
-		return "OBJECT_TYPE_FENCE"
-	case OBJECT_TYPE_DEVICE_MEMORY:
-		return "OBJECT_TYPE_DEVICE_MEMORY"
-	case OBJECT_TYPE_BUFFER:
-		return "OBJECT_TYPE_BUFFER"
-	case OBJECT_TYPE_IMAGE:
-		return "OBJECT_TYPE_IMAGE"
-	case OBJECT_TYPE_EVENT:
-		return "OBJECT_TYPE_EVENT"
-	case OBJECT_TYPE_QUERY_POOL:
-		return "OBJECT_TYPE_QUERY_POOL"
-	case OBJECT_TYPE_BUFFER_VIEW:
-		return "OBJECT_TYPE_BUFFER_VIEW"
-	case OBJECT_TYPE_IMAGE_VIEW:
-		return "OBJECT_TYPE_IMAGE_VIEW"
-	case OBJECT_TYPE_SHADER_MODULE:
-		return "OBJECT_TYPE_SHADER_MODULE"
-	case OBJECT_TYPE_PIPELINE_CACHE:
-		return "OBJECT_TYPE_PIPELINE_CACHE"
-	case OBJECT_TYPE_PIPELINE_LAYOUT:
-		return "OBJECT_TYPE_PIPELINE_LAYOUT"
-	case OBJECT_TYPE_RENDER_PASS:
-		return "OBJECT_TYPE_RENDER_PASS"
-	case OBJECT_TYPE_PIPELINE:
-		return "OBJECT_TYPE_PIPELINE"
-	case OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT:
-		return "OBJECT_TYPE_DESCRIPTOR_SET_LAYOUT"
-	case OBJECT_TYPE_SAMPLER:
-		return "OBJECT_TYPE_SAMPLER"
-	case OBJECT_TYPE_DESCRIPTOR_POOL:
-		return "OBJECT_TYPE_DESCRIPTOR_POOL"
-	case OBJECT_TYPE_DESCRIPTOR_SET:
-		return "OBJECT_TYPE_DESCRIPTOR_SET"
-	case OBJECT_TYPE_FRAMEBUFFER:
-		return "OBJECT_TYPE_FRAMEBUFFER"
-	case OBJECT_TYPE_COMMAND_POOL:
-		return "OBJECT_TYPE_COMMAND_POOL"
-	case OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION:
-		return "OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION"
-	case OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE:
-		return "OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE"
-	case OBJECT_TYPE_SURFACE_KHR:
-		return "OBJECT_TYPE_SURFACE_KHR"
-	case OBJECT_TYPE_SWAPCHAIN_KHR:
-		return "OBJECT_TYPE_SWAPCHAIN_KHR"
-	case OBJECT_TYPE_DISPLAY_KHR:
-		return "OBJECT_TYPE_DISPLAY_KHR"
-	case OBJECT_TYPE_DISPLAY_MODE_KHR:
-		return "OBJECT_TYPE_DISPLAY_MODE_KHR"
-	case OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT:
-		return "OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT"
-	case OBJECT_TYPE_OBJECT_TABLE_NVX:
-		return "OBJECT_TYPE_OBJECT_TABLE_NVX"
-	case OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NVX:
-		return "OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NVX"
-	case OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT:
-		return "OBJECT_TYPE_DEBUG_UTILS_MESSENGER_EXT"
-	case OBJECT_TYPE_VALIDATION_CACHE_EXT:
-		return "OBJECT_TYPE_VALIDATION_CACHE_EXT"
-	case OBJECT_TYPE_ACCELERATION_STRUCTURE_NV:
-		return "OBJECT_TYPE_ACCELERATION_STRUCTURE_NV"
-	case OBJECT_TYPE_PERFORMANCE_CONFIGURATION_INTEL:
-		return "OBJECT_TYPE_PERFORMANCE_CONFIGURATION_INTEL"
-	case OBJECT_TYPE_MAX_ENUM:
-		return "OBJECT_TYPE_MAX_ENUM"
-	default:
-		return fmt.Sprint(int32(x))
+func (x AccessFlags) String() string {
+	var s string
+	for i := uint32(0); i < 32; i++ {
+		if int32(x)&(1<<i) != 0 {
+			switch AccessFlags(1 << i) {
+			case ACCESS_INDIRECT_COMMAND_READ_BIT:
+				s += "ACCESS_INDIRECT_COMMAND_READ_BIT|"
+			case ACCESS_INDEX_READ_BIT:
+				s += "ACCESS_INDEX_READ_BIT|"
+			case ACCESS_VERTEX_ATTRIBUTE_READ_BIT:
+				s += "ACCESS_VERTEX_ATTRIBUTE_READ_BIT|"
+			case ACCESS_UNIFORM_READ_BIT:
+				s += "ACCESS_UNIFORM_READ_BIT|"
+			case ACCESS_INPUT_ATTACHMENT_READ_BIT:
+				s += "ACCESS_INPUT_ATTACHMENT_READ_BIT|"
+			case ACCESS_SHADER_READ_BIT:
+				s += "ACCESS_SHADER_READ_BIT|"
+			case ACCESS_SHADER_WRITE_BIT:
+				s += "ACCESS_SHADER_WRITE_BIT|"
+			case ACCESS_COLOR_ATTACHMENT_READ_BIT:
+				s += "ACCESS_COLOR_ATTACHMENT_READ_BIT|"
+			case ACCESS_COLOR_ATTACHMENT_WRITE_BIT:
+				s += "ACCESS_COLOR_ATTACHMENT_WRITE_BIT|"
+			case ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT:
+				s += "ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT|"
+			case ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT:
+				s += "ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT|"
+			case ACCESS_TRANSFER_READ_BIT:
+				s += "ACCESS_TRANSFER_READ_BIT|"
+			case ACCESS_TRANSFER_WRITE_BIT:
+				s += "ACCESS_TRANSFER_WRITE_BIT|"
+			case ACCESS_HOST_READ_BIT:
+				s += "ACCESS_HOST_READ_BIT|"
+			case ACCESS_HOST_WRITE_BIT:
+				s += "ACCESS_HOST_WRITE_BIT|"
+			case ACCESS_MEMORY_READ_BIT:
+				s += "ACCESS_MEMORY_READ_BIT|"
+			case ACCESS_MEMORY_WRITE_BIT:
+				s += "ACCESS_MEMORY_WRITE_BIT|"
+			case ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT:
+				s += "ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT|"
+			case ACCESS_TRANSFORM_FEEDBACK_COUNTER_READ_BIT_EXT:
+				s += "ACCESS_TRANSFORM_FEEDBACK_COUNTER_READ_BIT_EXT|"
+			case ACCESS_TRANSFORM_FEEDBACK_COUNTER_WRITE_BIT_EXT:
+				s += "ACCESS_TRANSFORM_FEEDBACK_COUNTER_WRITE_BIT_EXT|"
+			case ACCESS_CONDITIONAL_RENDERING_READ_BIT_EXT:
+				s += "ACCESS_CONDITIONAL_RENDERING_READ_BIT_EXT|"
+			case ACCESS_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT:
+				s += "ACCESS_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT|"
+			case ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR:
+				s += "ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR|"
+			case ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_KHR:
+				s += "ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_KHR|"
+			case ACCESS_SHADING_RATE_IMAGE_READ_BIT_NV:
+				s += "ACCESS_SHADING_RATE_IMAGE_READ_BIT_NV|"
+			case ACCESS_FRAGMENT_DENSITY_MAP_READ_BIT_EXT:
+				s += "ACCESS_FRAGMENT_DENSITY_MAP_READ_BIT_EXT|"
+			case ACCESS_COMMAND_PREPROCESS_READ_BIT_NV:
+				s += "ACCESS_COMMAND_PREPROCESS_READ_BIT_NV|"
+			case ACCESS_COMMAND_PREPROCESS_WRITE_BIT_NV:
+				s += "ACCESS_COMMAND_PREPROCESS_WRITE_BIT_NV|"
+			case ACCESS_NONE_KHR:
+				s += "ACCESS_NONE_KHR|"
+			}
+		}
 	}
+	return strings.TrimSuffix(s, `|`)
 }
 
-// VendorId -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkVendorId.html
-type VendorId int32
+// ImageAspectFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageAspectFlags.html
+type ImageAspectFlags uint32
 
 const (
-	VENDOR_ID_VIV         VendorId = 0x10001
-	VENDOR_ID_VSI         VendorId = 0x10002
-	VENDOR_ID_KAZAN       VendorId = 0x10003
-	VENDOR_ID_BEGIN_RANGE VendorId = VENDOR_ID_VIV
-	VENDOR_ID_END_RANGE   VendorId = VENDOR_ID_KAZAN
-	VENDOR_ID_RANGE_SIZE  VendorId = (VENDOR_ID_KAZAN - VENDOR_ID_VIV + 1)
-	VENDOR_ID_MAX_ENUM    VendorId = 0x7FFFFFFF
+	IMAGE_ASPECT_COLOR_BIT              ImageAspectFlags = 0x00000001
+	IMAGE_ASPECT_DEPTH_BIT              ImageAspectFlags = 0x00000002
+	IMAGE_ASPECT_STENCIL_BIT            ImageAspectFlags = 0x00000004
+	IMAGE_ASPECT_METADATA_BIT           ImageAspectFlags = 0x00000008
+	IMAGE_ASPECT_PLANE_0_BIT            ImageAspectFlags = 0x00000010
+	IMAGE_ASPECT_PLANE_1_BIT            ImageAspectFlags = 0x00000020
+	IMAGE_ASPECT_PLANE_2_BIT            ImageAspectFlags = 0x00000040
+	IMAGE_ASPECT_MEMORY_PLANE_0_BIT_EXT ImageAspectFlags = 0x00000080
+	IMAGE_ASPECT_MEMORY_PLANE_1_BIT_EXT ImageAspectFlags = 0x00000100
+	IMAGE_ASPECT_MEMORY_PLANE_2_BIT_EXT ImageAspectFlags = 0x00000200
+	IMAGE_ASPECT_MEMORY_PLANE_3_BIT_EXT ImageAspectFlags = 0x00000400
+	IMAGE_ASPECT_PLANE_0_BIT_KHR        ImageAspectFlags = IMAGE_ASPECT_PLANE_0_BIT
+	IMAGE_ASPECT_PLANE_1_BIT_KHR        ImageAspectFlags = IMAGE_ASPECT_PLANE_1_BIT
+	IMAGE_ASPECT_PLANE_2_BIT_KHR        ImageAspectFlags = IMAGE_ASPECT_PLANE_2_BIT
+	IMAGE_ASPECT_FLAG_BITS_MAX_ENUM     ImageAspectFlags = 0x7FFFFFFF
 )
 
-func (x VendorId) String() string {
-	switch x {
-	case VENDOR_ID_VIV:
-		return "VENDOR_ID_VIV"
-	case VENDOR_ID_VSI:
-		return "VENDOR_ID_VSI"
-	case VENDOR_ID_KAZAN:
-		return "VENDOR_ID_KAZAN"
-	case VENDOR_ID_MAX_ENUM:
-		return "VENDOR_ID_MAX_ENUM"
-	default:
-		return fmt.Sprint(int32(x))
+func (x ImageAspectFlags) String() string {
+	var s string
+	for i := uint32(0); i < 32; i++ {
+		if int32(x)&(1<<i) != 0 {
+			switch ImageAspectFlags(1 << i) {
+			case IMAGE_ASPECT_COLOR_BIT:
+				s += "IMAGE_ASPECT_COLOR_BIT|"
+			case IMAGE_ASPECT_DEPTH_BIT:
+				s += "IMAGE_ASPECT_DEPTH_BIT|"
+			case IMAGE_ASPECT_STENCIL_BIT:
+				s += "IMAGE_ASPECT_STENCIL_BIT|"
+			case IMAGE_ASPECT_METADATA_BIT:
+				s += "IMAGE_ASPECT_METADATA_BIT|"
+			case IMAGE_ASPECT_PLANE_0_BIT:
+				s += "IMAGE_ASPECT_PLANE_0_BIT|"
+			case IMAGE_ASPECT_PLANE_1_BIT:
+				s += "IMAGE_ASPECT_PLANE_1_BIT|"
+			case IMAGE_ASPECT_PLANE_2_BIT:
+				s += "IMAGE_ASPECT_PLANE_2_BIT|"
+			case IMAGE_ASPECT_MEMORY_PLANE_0_BIT_EXT:
+				s += "IMAGE_ASPECT_MEMORY_PLANE_0_BIT_EXT|"
+			case IMAGE_ASPECT_MEMORY_PLANE_1_BIT_EXT:
+				s += "IMAGE_ASPECT_MEMORY_PLANE_1_BIT_EXT|"
+			case IMAGE_ASPECT_MEMORY_PLANE_2_BIT_EXT:
+				s += "IMAGE_ASPECT_MEMORY_PLANE_2_BIT_EXT|"
+			case IMAGE_ASPECT_MEMORY_PLANE_3_BIT_EXT:
+				s += "IMAGE_ASPECT_MEMORY_PLANE_3_BIT_EXT|"
+			}
+		}
 	}
+	return strings.TrimSuffix(s, `|`)
 }
 
-type InstanceCreateFlags uint32 // reserved
 // FormatFeatureFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFormatFeatureFlags.html
 type FormatFeatureFlags uint32
 
@@ -4814,11 +5904,18 @@ const (
 	FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_CHROMA_RECONSTRUCTION_EXPLICIT_FORCEABLE_BIT     FormatFeatureFlags = 0x00200000
 	FORMAT_FEATURE_DISJOINT_BIT                                                                    FormatFeatureFlags = 0x00400000
 	FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT                                                      FormatFeatureFlags = 0x00800000
+	FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_MINMAX_BIT                                                 FormatFeatureFlags = 0x00010000
 	FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_CUBIC_BIT_IMG                                              FormatFeatureFlags = 0x00002000
-	FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_MINMAX_BIT_EXT                                             FormatFeatureFlags = 0x00010000
+	K_FORMAT_FEATURE_VIDEO_DECODE_OUTPUT_BIT_KHR                                                   FormatFeatureFlags = 0x02000000
+	K_FORMAT_FEATURE_VIDEO_DECODE_DPB_BIT_KHR                                                      FormatFeatureFlags = 0x04000000
+	K_FORMAT_FEATURE_VIDEO_ENCODE_INPUT_BIT_KHR                                                    FormatFeatureFlags = 0x08000000
+	K_FORMAT_FEATURE_VIDEO_ENCODE_DPB_BIT_KHR                                                      FormatFeatureFlags = 0x10000000
+	FORMAT_FEATURE_ACCELERATION_STRUCTURE_VERTEX_BUFFER_BIT_KHR                                    FormatFeatureFlags = 0x20000000
 	FORMAT_FEATURE_FRAGMENT_DENSITY_MAP_BIT_EXT                                                    FormatFeatureFlags = 0x01000000
+	FORMAT_FEATURE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR                                        FormatFeatureFlags = 0x40000000
 	FORMAT_FEATURE_TRANSFER_SRC_BIT_KHR                                                            FormatFeatureFlags = FORMAT_FEATURE_TRANSFER_SRC_BIT
 	FORMAT_FEATURE_TRANSFER_DST_BIT_KHR                                                            FormatFeatureFlags = FORMAT_FEATURE_TRANSFER_DST_BIT
+	FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_MINMAX_BIT_EXT                                             FormatFeatureFlags = FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_MINMAX_BIT
 	FORMAT_FEATURE_MIDPOINT_CHROMA_SAMPLES_BIT_KHR                                                 FormatFeatureFlags = FORMAT_FEATURE_MIDPOINT_CHROMA_SAMPLES_BIT
 	FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_LINEAR_FILTER_BIT_KHR                            FormatFeatureFlags = FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_LINEAR_FILTER_BIT
 	FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_SEPARATE_RECONSTRUCTION_FILTER_BIT_KHR           FormatFeatureFlags = FORMAT_FEATURE_SAMPLED_IMAGE_YCBCR_CONVERSION_SEPARATE_RECONSTRUCTION_FILTER_BIT
@@ -4879,60 +5976,24 @@ func (x FormatFeatureFlags) String() string {
 				s += "FORMAT_FEATURE_DISJOINT_BIT|"
 			case FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT:
 				s += "FORMAT_FEATURE_COSITED_CHROMA_SAMPLES_BIT|"
+			case FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_MINMAX_BIT:
+				s += "FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_MINMAX_BIT|"
 			case FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_CUBIC_BIT_IMG:
 				s += "FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_CUBIC_BIT_IMG|"
-			case FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_MINMAX_BIT_EXT:
-				s += "FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_MINMAX_BIT_EXT|"
+			case K_FORMAT_FEATURE_VIDEO_DECODE_OUTPUT_BIT_KHR:
+				s += "K_FORMAT_FEATURE_VIDEO_DECODE_OUTPUT_BIT_KHR|"
+			case K_FORMAT_FEATURE_VIDEO_DECODE_DPB_BIT_KHR:
+				s += "K_FORMAT_FEATURE_VIDEO_DECODE_DPB_BIT_KHR|"
+			case K_FORMAT_FEATURE_VIDEO_ENCODE_INPUT_BIT_KHR:
+				s += "K_FORMAT_FEATURE_VIDEO_ENCODE_INPUT_BIT_KHR|"
+			case K_FORMAT_FEATURE_VIDEO_ENCODE_DPB_BIT_KHR:
+				s += "K_FORMAT_FEATURE_VIDEO_ENCODE_DPB_BIT_KHR|"
+			case FORMAT_FEATURE_ACCELERATION_STRUCTURE_VERTEX_BUFFER_BIT_KHR:
+				s += "FORMAT_FEATURE_ACCELERATION_STRUCTURE_VERTEX_BUFFER_BIT_KHR|"
 			case FORMAT_FEATURE_FRAGMENT_DENSITY_MAP_BIT_EXT:
 				s += "FORMAT_FEATURE_FRAGMENT_DENSITY_MAP_BIT_EXT|"
-			}
-		}
-	}
-	return strings.TrimSuffix(s, `|`)
-}
-
-// ImageUsageFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageUsageFlags.html
-type ImageUsageFlags uint32
-
-const (
-	IMAGE_USAGE_TRANSFER_SRC_BIT             ImageUsageFlags = 0x00000001
-	IMAGE_USAGE_TRANSFER_DST_BIT             ImageUsageFlags = 0x00000002
-	IMAGE_USAGE_SAMPLED_BIT                  ImageUsageFlags = 0x00000004
-	IMAGE_USAGE_STORAGE_BIT                  ImageUsageFlags = 0x00000008
-	IMAGE_USAGE_COLOR_ATTACHMENT_BIT         ImageUsageFlags = 0x00000010
-	IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT ImageUsageFlags = 0x00000020
-	IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT     ImageUsageFlags = 0x00000040
-	IMAGE_USAGE_INPUT_ATTACHMENT_BIT         ImageUsageFlags = 0x00000080
-	IMAGE_USAGE_SHADING_RATE_IMAGE_BIT_NV    ImageUsageFlags = 0x00000100
-	IMAGE_USAGE_FRAGMENT_DENSITY_MAP_BIT_EXT ImageUsageFlags = 0x00000200
-	IMAGE_USAGE_FLAG_BITS_MAX_ENUM           ImageUsageFlags = 0x7FFFFFFF
-)
-
-func (x ImageUsageFlags) String() string {
-	var s string
-	for i := uint32(0); i < 32; i++ {
-		if int32(x)&(1<<i) != 0 {
-			switch ImageUsageFlags(1 << i) {
-			case IMAGE_USAGE_TRANSFER_SRC_BIT:
-				s += "IMAGE_USAGE_TRANSFER_SRC_BIT|"
-			case IMAGE_USAGE_TRANSFER_DST_BIT:
-				s += "IMAGE_USAGE_TRANSFER_DST_BIT|"
-			case IMAGE_USAGE_SAMPLED_BIT:
-				s += "IMAGE_USAGE_SAMPLED_BIT|"
-			case IMAGE_USAGE_STORAGE_BIT:
-				s += "IMAGE_USAGE_STORAGE_BIT|"
-			case IMAGE_USAGE_COLOR_ATTACHMENT_BIT:
-				s += "IMAGE_USAGE_COLOR_ATTACHMENT_BIT|"
-			case IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT:
-				s += "IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT|"
-			case IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT:
-				s += "IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT|"
-			case IMAGE_USAGE_INPUT_ATTACHMENT_BIT:
-				s += "IMAGE_USAGE_INPUT_ATTACHMENT_BIT|"
-			case IMAGE_USAGE_SHADING_RATE_IMAGE_BIT_NV:
-				s += "IMAGE_USAGE_SHADING_RATE_IMAGE_BIT_NV|"
-			case IMAGE_USAGE_FRAGMENT_DENSITY_MAP_BIT_EXT:
-				s += "IMAGE_USAGE_FRAGMENT_DENSITY_MAP_BIT_EXT|"
+			case FORMAT_FEATURE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR:
+				s += "FORMAT_FEATURE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR|"
 			}
 		}
 	}
@@ -5047,33 +6108,93 @@ func (x SampleCountFlags) String() string {
 	return strings.TrimSuffix(s, `|`)
 }
 
-// QueueFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueueFlags.html
-type QueueFlags uint32
+// ImageUsageFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageUsageFlags.html
+type ImageUsageFlags uint32
 
 const (
-	QUEUE_GRAPHICS_BIT       QueueFlags = 0x00000001
-	QUEUE_COMPUTE_BIT        QueueFlags = 0x00000002
-	QUEUE_TRANSFER_BIT       QueueFlags = 0x00000004
-	QUEUE_SPARSE_BINDING_BIT QueueFlags = 0x00000008
-	QUEUE_PROTECTED_BIT      QueueFlags = 0x00000010
-	QUEUE_FLAG_BITS_MAX_ENUM QueueFlags = 0x7FFFFFFF
+	IMAGE_USAGE_TRANSFER_SRC_BIT                         ImageUsageFlags = 0x00000001
+	IMAGE_USAGE_TRANSFER_DST_BIT                         ImageUsageFlags = 0x00000002
+	IMAGE_USAGE_SAMPLED_BIT                              ImageUsageFlags = 0x00000004
+	IMAGE_USAGE_STORAGE_BIT                              ImageUsageFlags = 0x00000008
+	IMAGE_USAGE_COLOR_ATTACHMENT_BIT                     ImageUsageFlags = 0x00000010
+	IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT             ImageUsageFlags = 0x00000020
+	IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT                 ImageUsageFlags = 0x00000040
+	IMAGE_USAGE_INPUT_ATTACHMENT_BIT                     ImageUsageFlags = 0x00000080
+	K_IMAGE_USAGE_VIDEO_DECODE_DST_BIT_KHR               ImageUsageFlags = 0x00000400
+	K_IMAGE_USAGE_VIDEO_DECODE_SRC_BIT_KHR               ImageUsageFlags = 0x00000800
+	K_IMAGE_USAGE_VIDEO_DECODE_DPB_BIT_KHR               ImageUsageFlags = 0x00001000
+	K_IMAGE_USAGE_VIDEO_ENCODE_DST_BIT_KHR               ImageUsageFlags = 0x00002000
+	K_IMAGE_USAGE_VIDEO_ENCODE_SRC_BIT_KHR               ImageUsageFlags = 0x00004000
+	K_IMAGE_USAGE_VIDEO_ENCODE_DPB_BIT_KHR               ImageUsageFlags = 0x00008000
+	IMAGE_USAGE_SHADING_RATE_IMAGE_BIT_NV                ImageUsageFlags = 0x00000100
+	IMAGE_USAGE_FRAGMENT_DENSITY_MAP_BIT_EXT             ImageUsageFlags = 0x00000200
+	IMAGE_USAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR ImageUsageFlags = IMAGE_USAGE_SHADING_RATE_IMAGE_BIT_NV
+	IMAGE_USAGE_FLAG_BITS_MAX_ENUM                       ImageUsageFlags = 0x7FFFFFFF
 )
 
-func (x QueueFlags) String() string {
+func (x ImageUsageFlags) String() string {
 	var s string
 	for i := uint32(0); i < 32; i++ {
 		if int32(x)&(1<<i) != 0 {
-			switch QueueFlags(1 << i) {
-			case QUEUE_GRAPHICS_BIT:
-				s += "QUEUE_GRAPHICS_BIT|"
-			case QUEUE_COMPUTE_BIT:
-				s += "QUEUE_COMPUTE_BIT|"
-			case QUEUE_TRANSFER_BIT:
-				s += "QUEUE_TRANSFER_BIT|"
-			case QUEUE_SPARSE_BINDING_BIT:
-				s += "QUEUE_SPARSE_BINDING_BIT|"
-			case QUEUE_PROTECTED_BIT:
-				s += "QUEUE_PROTECTED_BIT|"
+			switch ImageUsageFlags(1 << i) {
+			case IMAGE_USAGE_TRANSFER_SRC_BIT:
+				s += "IMAGE_USAGE_TRANSFER_SRC_BIT|"
+			case IMAGE_USAGE_TRANSFER_DST_BIT:
+				s += "IMAGE_USAGE_TRANSFER_DST_BIT|"
+			case IMAGE_USAGE_SAMPLED_BIT:
+				s += "IMAGE_USAGE_SAMPLED_BIT|"
+			case IMAGE_USAGE_STORAGE_BIT:
+				s += "IMAGE_USAGE_STORAGE_BIT|"
+			case IMAGE_USAGE_COLOR_ATTACHMENT_BIT:
+				s += "IMAGE_USAGE_COLOR_ATTACHMENT_BIT|"
+			case IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT:
+				s += "IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT|"
+			case IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT:
+				s += "IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT|"
+			case IMAGE_USAGE_INPUT_ATTACHMENT_BIT:
+				s += "IMAGE_USAGE_INPUT_ATTACHMENT_BIT|"
+			case K_IMAGE_USAGE_VIDEO_DECODE_DST_BIT_KHR:
+				s += "K_IMAGE_USAGE_VIDEO_DECODE_DST_BIT_KHR|"
+			case K_IMAGE_USAGE_VIDEO_DECODE_SRC_BIT_KHR:
+				s += "K_IMAGE_USAGE_VIDEO_DECODE_SRC_BIT_KHR|"
+			case K_IMAGE_USAGE_VIDEO_DECODE_DPB_BIT_KHR:
+				s += "K_IMAGE_USAGE_VIDEO_DECODE_DPB_BIT_KHR|"
+			case K_IMAGE_USAGE_VIDEO_ENCODE_DST_BIT_KHR:
+				s += "K_IMAGE_USAGE_VIDEO_ENCODE_DST_BIT_KHR|"
+			case K_IMAGE_USAGE_VIDEO_ENCODE_SRC_BIT_KHR:
+				s += "K_IMAGE_USAGE_VIDEO_ENCODE_SRC_BIT_KHR|"
+			case K_IMAGE_USAGE_VIDEO_ENCODE_DPB_BIT_KHR:
+				s += "K_IMAGE_USAGE_VIDEO_ENCODE_DPB_BIT_KHR|"
+			case IMAGE_USAGE_SHADING_RATE_IMAGE_BIT_NV:
+				s += "IMAGE_USAGE_SHADING_RATE_IMAGE_BIT_NV|"
+			case IMAGE_USAGE_FRAGMENT_DENSITY_MAP_BIT_EXT:
+				s += "IMAGE_USAGE_FRAGMENT_DENSITY_MAP_BIT_EXT|"
+			}
+		}
+	}
+	return strings.TrimSuffix(s, `|`)
+}
+
+type InstanceCreateFlags uint32 // reserved
+// MemoryHeapFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryHeapFlags.html
+type MemoryHeapFlags uint32
+
+const (
+	MEMORY_HEAP_DEVICE_LOCAL_BIT       MemoryHeapFlags = 0x00000001
+	MEMORY_HEAP_MULTI_INSTANCE_BIT     MemoryHeapFlags = 0x00000002
+	MEMORY_HEAP_MULTI_INSTANCE_BIT_KHR MemoryHeapFlags = MEMORY_HEAP_MULTI_INSTANCE_BIT
+	MEMORY_HEAP_FLAG_BITS_MAX_ENUM     MemoryHeapFlags = 0x7FFFFFFF
+)
+
+func (x MemoryHeapFlags) String() string {
+	var s string
+	for i := uint32(0); i < 32; i++ {
+		if int32(x)&(1<<i) != 0 {
+			switch MemoryHeapFlags(1 << i) {
+			case MEMORY_HEAP_DEVICE_LOCAL_BIT:
+				s += "MEMORY_HEAP_DEVICE_LOCAL_BIT|"
+			case MEMORY_HEAP_MULTI_INSTANCE_BIT:
+				s += "MEMORY_HEAP_MULTI_INSTANCE_BIT|"
 			}
 		}
 	}
@@ -5122,25 +6243,39 @@ func (x MemoryPropertyFlags) String() string {
 	return strings.TrimSuffix(s, `|`)
 }
 
-// MemoryHeapFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryHeapFlags.html
-type MemoryHeapFlags uint32
+// QueueFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueueFlags.html
+type QueueFlags uint32
 
 const (
-	MEMORY_HEAP_DEVICE_LOCAL_BIT       MemoryHeapFlags = 0x00000001
-	MEMORY_HEAP_MULTI_INSTANCE_BIT     MemoryHeapFlags = 0x00000002
-	MEMORY_HEAP_MULTI_INSTANCE_BIT_KHR MemoryHeapFlags = MEMORY_HEAP_MULTI_INSTANCE_BIT
-	MEMORY_HEAP_FLAG_BITS_MAX_ENUM     MemoryHeapFlags = 0x7FFFFFFF
+	QUEUE_GRAPHICS_BIT           QueueFlags = 0x00000001
+	QUEUE_COMPUTE_BIT            QueueFlags = 0x00000002
+	QUEUE_TRANSFER_BIT           QueueFlags = 0x00000004
+	QUEUE_SPARSE_BINDING_BIT     QueueFlags = 0x00000008
+	QUEUE_PROTECTED_BIT          QueueFlags = 0x00000010
+	K_QUEUE_VIDEO_DECODE_BIT_KHR QueueFlags = 0x00000020
+	K_QUEUE_VIDEO_ENCODE_BIT_KHR QueueFlags = 0x00000040
+	QUEUE_FLAG_BITS_MAX_ENUM     QueueFlags = 0x7FFFFFFF
 )
 
-func (x MemoryHeapFlags) String() string {
+func (x QueueFlags) String() string {
 	var s string
 	for i := uint32(0); i < 32; i++ {
 		if int32(x)&(1<<i) != 0 {
-			switch MemoryHeapFlags(1 << i) {
-			case MEMORY_HEAP_DEVICE_LOCAL_BIT:
-				s += "MEMORY_HEAP_DEVICE_LOCAL_BIT|"
-			case MEMORY_HEAP_MULTI_INSTANCE_BIT:
-				s += "MEMORY_HEAP_MULTI_INSTANCE_BIT|"
+			switch QueueFlags(1 << i) {
+			case QUEUE_GRAPHICS_BIT:
+				s += "QUEUE_GRAPHICS_BIT|"
+			case QUEUE_COMPUTE_BIT:
+				s += "QUEUE_COMPUTE_BIT|"
+			case QUEUE_TRANSFER_BIT:
+				s += "QUEUE_TRANSFER_BIT|"
+			case QUEUE_SPARSE_BINDING_BIT:
+				s += "QUEUE_SPARSE_BINDING_BIT|"
+			case QUEUE_PROTECTED_BIT:
+				s += "QUEUE_PROTECTED_BIT|"
+			case K_QUEUE_VIDEO_DECODE_BIT_KHR:
+				s += "K_QUEUE_VIDEO_DECODE_BIT_KHR|"
+			case K_QUEUE_VIDEO_ENCODE_BIT_KHR:
+				s += "K_QUEUE_VIDEO_ENCODE_BIT_KHR|"
 			}
 		}
 	}
@@ -5173,33 +6308,37 @@ func (x DeviceQueueCreateFlags) String() string {
 type PipelineStageFlags uint32
 
 const (
-	PIPELINE_STAGE_TOP_OF_PIPE_BIT                     PipelineStageFlags = 0x00000001
-	PIPELINE_STAGE_DRAW_INDIRECT_BIT                   PipelineStageFlags = 0x00000002
-	PIPELINE_STAGE_VERTEX_INPUT_BIT                    PipelineStageFlags = 0x00000004
-	PIPELINE_STAGE_VERTEX_SHADER_BIT                   PipelineStageFlags = 0x00000008
-	PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT     PipelineStageFlags = 0x00000010
-	PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT  PipelineStageFlags = 0x00000020
-	PIPELINE_STAGE_GEOMETRY_SHADER_BIT                 PipelineStageFlags = 0x00000040
-	PIPELINE_STAGE_FRAGMENT_SHADER_BIT                 PipelineStageFlags = 0x00000080
-	PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT            PipelineStageFlags = 0x00000100
-	PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT             PipelineStageFlags = 0x00000200
-	PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT         PipelineStageFlags = 0x00000400
-	PIPELINE_STAGE_COMPUTE_SHADER_BIT                  PipelineStageFlags = 0x00000800
-	PIPELINE_STAGE_TRANSFER_BIT                        PipelineStageFlags = 0x00001000
-	PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT                  PipelineStageFlags = 0x00002000
-	PIPELINE_STAGE_HOST_BIT                            PipelineStageFlags = 0x00004000
-	PIPELINE_STAGE_ALL_GRAPHICS_BIT                    PipelineStageFlags = 0x00008000
-	PIPELINE_STAGE_ALL_COMMANDS_BIT                    PipelineStageFlags = 0x00010000
-	PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT          PipelineStageFlags = 0x01000000
-	PIPELINE_STAGE_CONDITIONAL_RENDERING_BIT_EXT       PipelineStageFlags = 0x00040000
-	PIPELINE_STAGE_COMMAND_PROCESS_BIT_NVX             PipelineStageFlags = 0x00020000
-	PIPELINE_STAGE_SHADING_RATE_IMAGE_BIT_NV           PipelineStageFlags = 0x00400000
-	PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_NV           PipelineStageFlags = 0x00200000
-	PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_NV PipelineStageFlags = 0x02000000
-	PIPELINE_STAGE_TASK_SHADER_BIT_NV                  PipelineStageFlags = 0x00080000
-	PIPELINE_STAGE_MESH_SHADER_BIT_NV                  PipelineStageFlags = 0x00100000
-	PIPELINE_STAGE_FRAGMENT_DENSITY_PROCESS_BIT_EXT    PipelineStageFlags = 0x00800000
-	PIPELINE_STAGE_FLAG_BITS_MAX_ENUM                  PipelineStageFlags = 0x7FFFFFFF
+	PIPELINE_STAGE_TOP_OF_PIPE_BIT                          PipelineStageFlags = 0x00000001
+	PIPELINE_STAGE_DRAW_INDIRECT_BIT                        PipelineStageFlags = 0x00000002
+	PIPELINE_STAGE_VERTEX_INPUT_BIT                         PipelineStageFlags = 0x00000004
+	PIPELINE_STAGE_VERTEX_SHADER_BIT                        PipelineStageFlags = 0x00000008
+	PIPELINE_STAGE_TESSELLATION_CONTROL_SHADER_BIT          PipelineStageFlags = 0x00000010
+	PIPELINE_STAGE_TESSELLATION_EVALUATION_SHADER_BIT       PipelineStageFlags = 0x00000020
+	PIPELINE_STAGE_GEOMETRY_SHADER_BIT                      PipelineStageFlags = 0x00000040
+	PIPELINE_STAGE_FRAGMENT_SHADER_BIT                      PipelineStageFlags = 0x00000080
+	PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT                 PipelineStageFlags = 0x00000100
+	PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT                  PipelineStageFlags = 0x00000200
+	PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT              PipelineStageFlags = 0x00000400
+	PIPELINE_STAGE_COMPUTE_SHADER_BIT                       PipelineStageFlags = 0x00000800
+	PIPELINE_STAGE_TRANSFER_BIT                             PipelineStageFlags = 0x00001000
+	PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT                       PipelineStageFlags = 0x00002000
+	PIPELINE_STAGE_HOST_BIT                                 PipelineStageFlags = 0x00004000
+	PIPELINE_STAGE_ALL_GRAPHICS_BIT                         PipelineStageFlags = 0x00008000
+	PIPELINE_STAGE_ALL_COMMANDS_BIT                         PipelineStageFlags = 0x00010000
+	PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT               PipelineStageFlags = 0x01000000
+	PIPELINE_STAGE_CONDITIONAL_RENDERING_BIT_EXT            PipelineStageFlags = 0x00040000
+	PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR     PipelineStageFlags = 0x02000000
+	PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_KHR               PipelineStageFlags = 0x00200000
+	PIPELINE_STAGE_SHADING_RATE_IMAGE_BIT_NV                PipelineStageFlags = 0x00400000
+	PIPELINE_STAGE_TASK_SHADER_BIT_NV                       PipelineStageFlags = 0x00080000
+	PIPELINE_STAGE_MESH_SHADER_BIT_NV                       PipelineStageFlags = 0x00100000
+	PIPELINE_STAGE_FRAGMENT_DENSITY_PROCESS_BIT_EXT         PipelineStageFlags = 0x00800000
+	PIPELINE_STAGE_COMMAND_PREPROCESS_BIT_NV                PipelineStageFlags = 0x00020000
+	PIPELINE_STAGE_NONE_KHR                                 PipelineStageFlags = 0
+	PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_NV                PipelineStageFlags = PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_KHR
+	PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_NV      PipelineStageFlags = PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR
+	PIPELINE_STAGE_FRAGMENT_SHADING_RATE_ATTACHMENT_BIT_KHR PipelineStageFlags = PIPELINE_STAGE_SHADING_RATE_IMAGE_BIT_NV
+	PIPELINE_STAGE_FLAG_BITS_MAX_ENUM                       PipelineStageFlags = 0x7FFFFFFF
 )
 
 func (x PipelineStageFlags) String() string {
@@ -5245,20 +6384,22 @@ func (x PipelineStageFlags) String() string {
 				s += "PIPELINE_STAGE_TRANSFORM_FEEDBACK_BIT_EXT|"
 			case PIPELINE_STAGE_CONDITIONAL_RENDERING_BIT_EXT:
 				s += "PIPELINE_STAGE_CONDITIONAL_RENDERING_BIT_EXT|"
-			case PIPELINE_STAGE_COMMAND_PROCESS_BIT_NVX:
-				s += "PIPELINE_STAGE_COMMAND_PROCESS_BIT_NVX|"
+			case PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR:
+				s += "PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR|"
+			case PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_KHR:
+				s += "PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_KHR|"
 			case PIPELINE_STAGE_SHADING_RATE_IMAGE_BIT_NV:
 				s += "PIPELINE_STAGE_SHADING_RATE_IMAGE_BIT_NV|"
-			case PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_NV:
-				s += "PIPELINE_STAGE_RAY_TRACING_SHADER_BIT_NV|"
-			case PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_NV:
-				s += "PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_NV|"
 			case PIPELINE_STAGE_TASK_SHADER_BIT_NV:
 				s += "PIPELINE_STAGE_TASK_SHADER_BIT_NV|"
 			case PIPELINE_STAGE_MESH_SHADER_BIT_NV:
 				s += "PIPELINE_STAGE_MESH_SHADER_BIT_NV|"
 			case PIPELINE_STAGE_FRAGMENT_DENSITY_PROCESS_BIT_EXT:
 				s += "PIPELINE_STAGE_FRAGMENT_DENSITY_PROCESS_BIT_EXT|"
+			case PIPELINE_STAGE_COMMAND_PREPROCESS_BIT_NV:
+				s += "PIPELINE_STAGE_COMMAND_PREPROCESS_BIT_NV|"
+			case PIPELINE_STAGE_NONE_KHR:
+				s += "PIPELINE_STAGE_NONE_KHR|"
 			}
 		}
 	}
@@ -5266,54 +6407,21 @@ func (x PipelineStageFlags) String() string {
 }
 
 type MemoryMapFlags uint32 // reserved
-// ImageAspectFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageAspectFlags.html
-type ImageAspectFlags uint32
+// SparseMemoryBindFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseMemoryBindFlags.html
+type SparseMemoryBindFlags uint32
 
 const (
-	IMAGE_ASPECT_COLOR_BIT              ImageAspectFlags = 0x00000001
-	IMAGE_ASPECT_DEPTH_BIT              ImageAspectFlags = 0x00000002
-	IMAGE_ASPECT_STENCIL_BIT            ImageAspectFlags = 0x00000004
-	IMAGE_ASPECT_METADATA_BIT           ImageAspectFlags = 0x00000008
-	IMAGE_ASPECT_PLANE_0_BIT            ImageAspectFlags = 0x00000010
-	IMAGE_ASPECT_PLANE_1_BIT            ImageAspectFlags = 0x00000020
-	IMAGE_ASPECT_PLANE_2_BIT            ImageAspectFlags = 0x00000040
-	IMAGE_ASPECT_MEMORY_PLANE_0_BIT_EXT ImageAspectFlags = 0x00000080
-	IMAGE_ASPECT_MEMORY_PLANE_1_BIT_EXT ImageAspectFlags = 0x00000100
-	IMAGE_ASPECT_MEMORY_PLANE_2_BIT_EXT ImageAspectFlags = 0x00000200
-	IMAGE_ASPECT_MEMORY_PLANE_3_BIT_EXT ImageAspectFlags = 0x00000400
-	IMAGE_ASPECT_PLANE_0_BIT_KHR        ImageAspectFlags = IMAGE_ASPECT_PLANE_0_BIT
-	IMAGE_ASPECT_PLANE_1_BIT_KHR        ImageAspectFlags = IMAGE_ASPECT_PLANE_1_BIT
-	IMAGE_ASPECT_PLANE_2_BIT_KHR        ImageAspectFlags = IMAGE_ASPECT_PLANE_2_BIT
-	IMAGE_ASPECT_FLAG_BITS_MAX_ENUM     ImageAspectFlags = 0x7FFFFFFF
+	SPARSE_MEMORY_BIND_METADATA_BIT       SparseMemoryBindFlags = 0x00000001
+	SPARSE_MEMORY_BIND_FLAG_BITS_MAX_ENUM SparseMemoryBindFlags = 0x7FFFFFFF
 )
 
-func (x ImageAspectFlags) String() string {
+func (x SparseMemoryBindFlags) String() string {
 	var s string
 	for i := uint32(0); i < 32; i++ {
 		if int32(x)&(1<<i) != 0 {
-			switch ImageAspectFlags(1 << i) {
-			case IMAGE_ASPECT_COLOR_BIT:
-				s += "IMAGE_ASPECT_COLOR_BIT|"
-			case IMAGE_ASPECT_DEPTH_BIT:
-				s += "IMAGE_ASPECT_DEPTH_BIT|"
-			case IMAGE_ASPECT_STENCIL_BIT:
-				s += "IMAGE_ASPECT_STENCIL_BIT|"
-			case IMAGE_ASPECT_METADATA_BIT:
-				s += "IMAGE_ASPECT_METADATA_BIT|"
-			case IMAGE_ASPECT_PLANE_0_BIT:
-				s += "IMAGE_ASPECT_PLANE_0_BIT|"
-			case IMAGE_ASPECT_PLANE_1_BIT:
-				s += "IMAGE_ASPECT_PLANE_1_BIT|"
-			case IMAGE_ASPECT_PLANE_2_BIT:
-				s += "IMAGE_ASPECT_PLANE_2_BIT|"
-			case IMAGE_ASPECT_MEMORY_PLANE_0_BIT_EXT:
-				s += "IMAGE_ASPECT_MEMORY_PLANE_0_BIT_EXT|"
-			case IMAGE_ASPECT_MEMORY_PLANE_1_BIT_EXT:
-				s += "IMAGE_ASPECT_MEMORY_PLANE_1_BIT_EXT|"
-			case IMAGE_ASPECT_MEMORY_PLANE_2_BIT_EXT:
-				s += "IMAGE_ASPECT_MEMORY_PLANE_2_BIT_EXT|"
-			case IMAGE_ASPECT_MEMORY_PLANE_3_BIT_EXT:
-				s += "IMAGE_ASPECT_MEMORY_PLANE_3_BIT_EXT|"
+			switch SparseMemoryBindFlags(1 << i) {
+			case SPARSE_MEMORY_BIND_METADATA_BIT:
+				s += "SPARSE_MEMORY_BIND_METADATA_BIT|"
 			}
 		}
 	}
@@ -5347,27 +6455,6 @@ func (x SparseImageFormatFlags) String() string {
 	return strings.TrimSuffix(s, `|`)
 }
 
-// SparseMemoryBindFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseMemoryBindFlags.html
-type SparseMemoryBindFlags uint32
-
-const (
-	SPARSE_MEMORY_BIND_METADATA_BIT       SparseMemoryBindFlags = 0x00000001
-	SPARSE_MEMORY_BIND_FLAG_BITS_MAX_ENUM SparseMemoryBindFlags = 0x7FFFFFFF
-)
-
-func (x SparseMemoryBindFlags) String() string {
-	var s string
-	for i := uint32(0); i < 32; i++ {
-		if int32(x)&(1<<i) != 0 {
-			switch SparseMemoryBindFlags(1 << i) {
-			case SPARSE_MEMORY_BIND_METADATA_BIT:
-				s += "SPARSE_MEMORY_BIND_METADATA_BIT|"
-			}
-		}
-	}
-	return strings.TrimSuffix(s, `|`)
-}
-
 // FenceCreateFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFenceCreateFlags.html
 type FenceCreateFlags uint32
 
@@ -5390,8 +6477,27 @@ func (x FenceCreateFlags) String() string {
 }
 
 type SemaphoreCreateFlags uint32 // reserved
-type EventCreateFlags uint32     // reserved
-type QueryPoolCreateFlags uint32 // reserved
+// EventCreateFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkEventCreateFlags.html
+type EventCreateFlags uint32
+
+const (
+	EVENT_CREATE_DEVICE_ONLY_BIT_KHR EventCreateFlags = 0x00000001
+	EVENT_CREATE_FLAG_BITS_MAX_ENUM  EventCreateFlags = 0x7FFFFFFF
+)
+
+func (x EventCreateFlags) String() string {
+	var s string
+	for i := uint32(0); i < 32; i++ {
+		if int32(x)&(1<<i) != 0 {
+			switch EventCreateFlags(1 << i) {
+			case EVENT_CREATE_DEVICE_ONLY_BIT_KHR:
+				s += "EVENT_CREATE_DEVICE_ONLY_BIT_KHR|"
+			}
+		}
+	}
+	return strings.TrimSuffix(s, `|`)
+}
+
 // QueryPipelineStatisticFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueryPipelineStatisticFlags.html
 type QueryPipelineStatisticFlags uint32
 
@@ -5443,6 +6549,7 @@ func (x QueryPipelineStatisticFlags) String() string {
 	return strings.TrimSuffix(s, `|`)
 }
 
+type QueryPoolCreateFlags uint32 // reserved
 // QueryResultFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueryResultFlags.html
 type QueryResultFlags uint32
 
@@ -5451,6 +6558,7 @@ const (
 	QUERY_RESULT_WAIT_BIT              QueryResultFlags = 0x00000002
 	QUERY_RESULT_WITH_AVAILABILITY_BIT QueryResultFlags = 0x00000004
 	QUERY_RESULT_PARTIAL_BIT           QueryResultFlags = 0x00000008
+	K_QUERY_RESULT_WITH_STATUS_BIT_KHR QueryResultFlags = 0x00000010
 	QUERY_RESULT_FLAG_BITS_MAX_ENUM    QueryResultFlags = 0x7FFFFFFF
 )
 
@@ -5467,6 +6575,8 @@ func (x QueryResultFlags) String() string {
 				s += "QUERY_RESULT_WITH_AVAILABILITY_BIT|"
 			case QUERY_RESULT_PARTIAL_BIT:
 				s += "QUERY_RESULT_PARTIAL_BIT|"
+			case K_QUERY_RESULT_WITH_STATUS_BIT_KHR:
+				s += "K_QUERY_RESULT_WITH_STATUS_BIT_KHR|"
 			}
 		}
 	}
@@ -5481,7 +6591,9 @@ const (
 	BUFFER_CREATE_SPARSE_RESIDENCY_BIT                  BufferCreateFlags = 0x00000002
 	BUFFER_CREATE_SPARSE_ALIASED_BIT                    BufferCreateFlags = 0x00000004
 	BUFFER_CREATE_PROTECTED_BIT                         BufferCreateFlags = 0x00000008
-	BUFFER_CREATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT_EXT BufferCreateFlags = 0x00000010
+	BUFFER_CREATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT     BufferCreateFlags = 0x00000010
+	BUFFER_CREATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT_EXT BufferCreateFlags = BUFFER_CREATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT
+	BUFFER_CREATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT_KHR BufferCreateFlags = BUFFER_CREATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT
 	BUFFER_CREATE_FLAG_BITS_MAX_ENUM                    BufferCreateFlags = 0x7FFFFFFF
 )
 
@@ -5498,8 +6610,8 @@ func (x BufferCreateFlags) String() string {
 				s += "BUFFER_CREATE_SPARSE_ALIASED_BIT|"
 			case BUFFER_CREATE_PROTECTED_BIT:
 				s += "BUFFER_CREATE_PROTECTED_BIT|"
-			case BUFFER_CREATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT_EXT:
-				s += "BUFFER_CREATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT_EXT|"
+			case BUFFER_CREATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT:
+				s += "BUFFER_CREATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT|"
 			}
 		}
 	}
@@ -5510,21 +6622,30 @@ func (x BufferCreateFlags) String() string {
 type BufferUsageFlags uint32
 
 const (
-	BUFFER_USAGE_TRANSFER_SRC_BIT                          BufferUsageFlags = 0x00000001
-	BUFFER_USAGE_TRANSFER_DST_BIT                          BufferUsageFlags = 0x00000002
-	BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT                  BufferUsageFlags = 0x00000004
-	BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT                  BufferUsageFlags = 0x00000008
-	BUFFER_USAGE_UNIFORM_BUFFER_BIT                        BufferUsageFlags = 0x00000010
-	BUFFER_USAGE_STORAGE_BUFFER_BIT                        BufferUsageFlags = 0x00000020
-	BUFFER_USAGE_INDEX_BUFFER_BIT                          BufferUsageFlags = 0x00000040
-	BUFFER_USAGE_VERTEX_BUFFER_BIT                         BufferUsageFlags = 0x00000080
-	BUFFER_USAGE_INDIRECT_BUFFER_BIT                       BufferUsageFlags = 0x00000100
-	BUFFER_USAGE_TRANSFORM_FEEDBACK_BUFFER_BIT_EXT         BufferUsageFlags = 0x00000800
-	BUFFER_USAGE_TRANSFORM_FEEDBACK_COUNTER_BUFFER_BIT_EXT BufferUsageFlags = 0x00001000
-	BUFFER_USAGE_CONDITIONAL_RENDERING_BIT_EXT             BufferUsageFlags = 0x00000200
-	BUFFER_USAGE_RAY_TRACING_BIT_NV                        BufferUsageFlags = 0x00000400
-	BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_EXT             BufferUsageFlags = 0x00020000
-	BUFFER_USAGE_FLAG_BITS_MAX_ENUM                        BufferUsageFlags = 0x7FFFFFFF
+	BUFFER_USAGE_TRANSFER_SRC_BIT                                     BufferUsageFlags = 0x00000001
+	BUFFER_USAGE_TRANSFER_DST_BIT                                     BufferUsageFlags = 0x00000002
+	BUFFER_USAGE_UNIFORM_TEXEL_BUFFER_BIT                             BufferUsageFlags = 0x00000004
+	BUFFER_USAGE_STORAGE_TEXEL_BUFFER_BIT                             BufferUsageFlags = 0x00000008
+	BUFFER_USAGE_UNIFORM_BUFFER_BIT                                   BufferUsageFlags = 0x00000010
+	BUFFER_USAGE_STORAGE_BUFFER_BIT                                   BufferUsageFlags = 0x00000020
+	BUFFER_USAGE_INDEX_BUFFER_BIT                                     BufferUsageFlags = 0x00000040
+	BUFFER_USAGE_VERTEX_BUFFER_BIT                                    BufferUsageFlags = 0x00000080
+	BUFFER_USAGE_INDIRECT_BUFFER_BIT                                  BufferUsageFlags = 0x00000100
+	BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT                            BufferUsageFlags = 0x00020000
+	K_BUFFER_USAGE_VIDEO_DECODE_SRC_BIT_KHR                           BufferUsageFlags = 0x00002000
+	K_BUFFER_USAGE_VIDEO_DECODE_DST_BIT_KHR                           BufferUsageFlags = 0x00004000
+	K_BUFFER_USAGE_VIDEO_ENCODE_DST_BIT_KHR                           BufferUsageFlags = 0x00008000
+	K_BUFFER_USAGE_VIDEO_ENCODE_SRC_BIT_KHR                           BufferUsageFlags = 0x00010000
+	BUFFER_USAGE_TRANSFORM_FEEDBACK_BUFFER_BIT_EXT                    BufferUsageFlags = 0x00000800
+	BUFFER_USAGE_TRANSFORM_FEEDBACK_COUNTER_BUFFER_BIT_EXT            BufferUsageFlags = 0x00001000
+	BUFFER_USAGE_CONDITIONAL_RENDERING_BIT_EXT                        BufferUsageFlags = 0x00000200
+	BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR BufferUsageFlags = 0x00080000
+	BUFFER_USAGE_ACCELERATION_STRUCTURE_STORAGE_BIT_KHR               BufferUsageFlags = 0x00100000
+	BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR                         BufferUsageFlags = 0x00000400
+	BUFFER_USAGE_RAY_TRACING_BIT_NV                                   BufferUsageFlags = BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR
+	BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_EXT                        BufferUsageFlags = BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT
+	BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_KHR                        BufferUsageFlags = BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT
+	BUFFER_USAGE_FLAG_BITS_MAX_ENUM                                   BufferUsageFlags = 0x7FFFFFFF
 )
 
 func (x BufferUsageFlags) String() string {
@@ -5550,16 +6671,28 @@ func (x BufferUsageFlags) String() string {
 				s += "BUFFER_USAGE_VERTEX_BUFFER_BIT|"
 			case BUFFER_USAGE_INDIRECT_BUFFER_BIT:
 				s += "BUFFER_USAGE_INDIRECT_BUFFER_BIT|"
+			case BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT:
+				s += "BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT|"
+			case K_BUFFER_USAGE_VIDEO_DECODE_SRC_BIT_KHR:
+				s += "K_BUFFER_USAGE_VIDEO_DECODE_SRC_BIT_KHR|"
+			case K_BUFFER_USAGE_VIDEO_DECODE_DST_BIT_KHR:
+				s += "K_BUFFER_USAGE_VIDEO_DECODE_DST_BIT_KHR|"
+			case K_BUFFER_USAGE_VIDEO_ENCODE_DST_BIT_KHR:
+				s += "K_BUFFER_USAGE_VIDEO_ENCODE_DST_BIT_KHR|"
+			case K_BUFFER_USAGE_VIDEO_ENCODE_SRC_BIT_KHR:
+				s += "K_BUFFER_USAGE_VIDEO_ENCODE_SRC_BIT_KHR|"
 			case BUFFER_USAGE_TRANSFORM_FEEDBACK_BUFFER_BIT_EXT:
 				s += "BUFFER_USAGE_TRANSFORM_FEEDBACK_BUFFER_BIT_EXT|"
 			case BUFFER_USAGE_TRANSFORM_FEEDBACK_COUNTER_BUFFER_BIT_EXT:
 				s += "BUFFER_USAGE_TRANSFORM_FEEDBACK_COUNTER_BUFFER_BIT_EXT|"
 			case BUFFER_USAGE_CONDITIONAL_RENDERING_BIT_EXT:
 				s += "BUFFER_USAGE_CONDITIONAL_RENDERING_BIT_EXT|"
-			case BUFFER_USAGE_RAY_TRACING_BIT_NV:
-				s += "BUFFER_USAGE_RAY_TRACING_BIT_NV|"
-			case BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_EXT:
-				s += "BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT_EXT|"
+			case BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR:
+				s += "BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR|"
+			case BUFFER_USAGE_ACCELERATION_STRUCTURE_STORAGE_BIT_KHR:
+				s += "BUFFER_USAGE_ACCELERATION_STRUCTURE_STORAGE_BIT_KHR|"
+			case BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR:
+				s += "BUFFER_USAGE_SHADER_BINDING_TABLE_BIT_KHR|"
 			}
 		}
 	}
@@ -5571,8 +6704,9 @@ type BufferViewCreateFlags uint32 // reserved
 type ImageViewCreateFlags uint32
 
 const (
-	IMAGE_VIEW_CREATE_FRAGMENT_DENSITY_MAP_DYNAMIC_BIT_EXT ImageViewCreateFlags = 0x00000001
-	IMAGE_VIEW_CREATE_FLAG_BITS_MAX_ENUM                   ImageViewCreateFlags = 0x7FFFFFFF
+	IMAGE_VIEW_CREATE_FRAGMENT_DENSITY_MAP_DYNAMIC_BIT_EXT  ImageViewCreateFlags = 0x00000001
+	IMAGE_VIEW_CREATE_FRAGMENT_DENSITY_MAP_DEFERRED_BIT_EXT ImageViewCreateFlags = 0x00000002
+	IMAGE_VIEW_CREATE_FLAG_BITS_MAX_ENUM                    ImageViewCreateFlags = 0x7FFFFFFF
 )
 
 func (x ImageViewCreateFlags) String() string {
@@ -5582,6 +6716,8 @@ func (x ImageViewCreateFlags) String() string {
 			switch ImageViewCreateFlags(1 << i) {
 			case IMAGE_VIEW_CREATE_FRAGMENT_DENSITY_MAP_DYNAMIC_BIT_EXT:
 				s += "IMAGE_VIEW_CREATE_FRAGMENT_DENSITY_MAP_DYNAMIC_BIT_EXT|"
+			case IMAGE_VIEW_CREATE_FRAGMENT_DENSITY_MAP_DEFERRED_BIT_EXT:
+				s += "IMAGE_VIEW_CREATE_FRAGMENT_DENSITY_MAP_DEFERRED_BIT_EXT|"
 			}
 		}
 	}
@@ -5606,22 +6742,84 @@ func (x ShaderModuleCreateFlags) String() string {
 	return strings.TrimSuffix(s, `|`)
 }
 
-type PipelineCacheCreateFlags uint32 // reserved
+// PipelineCacheCreateFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineCacheCreateFlags.html
+type PipelineCacheCreateFlags uint32
+
+const (
+	PIPELINE_CACHE_CREATE_EXTERNALLY_SYNCHRONIZED_BIT_EXT PipelineCacheCreateFlags = 0x00000001
+	PIPELINE_CACHE_CREATE_FLAG_BITS_MAX_ENUM              PipelineCacheCreateFlags = 0x7FFFFFFF
+)
+
+func (x PipelineCacheCreateFlags) String() string {
+	var s string
+	for i := uint32(0); i < 32; i++ {
+		if int32(x)&(1<<i) != 0 {
+			switch PipelineCacheCreateFlags(1 << i) {
+			case PIPELINE_CACHE_CREATE_EXTERNALLY_SYNCHRONIZED_BIT_EXT:
+				s += "PIPELINE_CACHE_CREATE_EXTERNALLY_SYNCHRONIZED_BIT_EXT|"
+			}
+		}
+	}
+	return strings.TrimSuffix(s, `|`)
+}
+
+// ColorComponentFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkColorComponentFlags.html
+type ColorComponentFlags uint32
+
+const (
+	COLOR_COMPONENT_R_BIT              ColorComponentFlags = 0x00000001
+	COLOR_COMPONENT_G_BIT              ColorComponentFlags = 0x00000002
+	COLOR_COMPONENT_B_BIT              ColorComponentFlags = 0x00000004
+	COLOR_COMPONENT_A_BIT              ColorComponentFlags = 0x00000008
+	COLOR_COMPONENT_FLAG_BITS_MAX_ENUM ColorComponentFlags = 0x7FFFFFFF
+)
+
+func (x ColorComponentFlags) String() string {
+	var s string
+	for i := uint32(0); i < 32; i++ {
+		if int32(x)&(1<<i) != 0 {
+			switch ColorComponentFlags(1 << i) {
+			case COLOR_COMPONENT_R_BIT:
+				s += "COLOR_COMPONENT_R_BIT|"
+			case COLOR_COMPONENT_G_BIT:
+				s += "COLOR_COMPONENT_G_BIT|"
+			case COLOR_COMPONENT_B_BIT:
+				s += "COLOR_COMPONENT_B_BIT|"
+			case COLOR_COMPONENT_A_BIT:
+				s += "COLOR_COMPONENT_A_BIT|"
+			}
+		}
+	}
+	return strings.TrimSuffix(s, `|`)
+}
+
 // PipelineCreateFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineCreateFlags.html
 type PipelineCreateFlags uint32
 
 const (
-	PIPELINE_CREATE_DISABLE_OPTIMIZATION_BIT                 PipelineCreateFlags = 0x00000001
-	PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT                    PipelineCreateFlags = 0x00000002
-	PIPELINE_CREATE_DERIVATIVE_BIT                           PipelineCreateFlags = 0x00000004
-	PIPELINE_CREATE_VIEW_INDEX_FROM_DEVICE_INDEX_BIT         PipelineCreateFlags = 0x00000008
-	PIPELINE_CREATE_DISPATCH_BASE                            PipelineCreateFlags = 0x00000010
-	PIPELINE_CREATE_DEFER_COMPILE_BIT_NV                     PipelineCreateFlags = 0x00000020
-	PIPELINE_CREATE_CAPTURE_STATISTICS_BIT_KHR               PipelineCreateFlags = 0x00000040
-	PIPELINE_CREATE_CAPTURE_INTERNAL_REPRESENTATIONS_BIT_KHR PipelineCreateFlags = 0x00000080
-	PIPELINE_CREATE_VIEW_INDEX_FROM_DEVICE_INDEX_BIT_KHR     PipelineCreateFlags = PIPELINE_CREATE_VIEW_INDEX_FROM_DEVICE_INDEX_BIT
-	PIPELINE_CREATE_DISPATCH_BASE_KHR                        PipelineCreateFlags = PIPELINE_CREATE_DISPATCH_BASE
-	PIPELINE_CREATE_FLAG_BITS_MAX_ENUM                       PipelineCreateFlags = 0x7FFFFFFF
+	PIPELINE_CREATE_DISABLE_OPTIMIZATION_BIT                               PipelineCreateFlags = 0x00000001
+	PIPELINE_CREATE_ALLOW_DERIVATIVES_BIT                                  PipelineCreateFlags = 0x00000002
+	PIPELINE_CREATE_DERIVATIVE_BIT                                         PipelineCreateFlags = 0x00000004
+	PIPELINE_CREATE_VIEW_INDEX_FROM_DEVICE_INDEX_BIT                       PipelineCreateFlags = 0x00000008
+	PIPELINE_CREATE_DISPATCH_BASE_BIT                                      PipelineCreateFlags = 0x00000010
+	PIPELINE_CREATE_RAY_TRACING_NO_NULL_ANY_HIT_SHADERS_BIT_KHR            PipelineCreateFlags = 0x00004000
+	PIPELINE_CREATE_RAY_TRACING_NO_NULL_CLOSEST_HIT_SHADERS_BIT_KHR        PipelineCreateFlags = 0x00008000
+	PIPELINE_CREATE_RAY_TRACING_NO_NULL_MISS_SHADERS_BIT_KHR               PipelineCreateFlags = 0x00010000
+	PIPELINE_CREATE_RAY_TRACING_NO_NULL_INTERSECTION_SHADERS_BIT_KHR       PipelineCreateFlags = 0x00020000
+	PIPELINE_CREATE_RAY_TRACING_SKIP_TRIANGLES_BIT_KHR                     PipelineCreateFlags = 0x00001000
+	PIPELINE_CREATE_RAY_TRACING_SKIP_AABBS_BIT_KHR                         PipelineCreateFlags = 0x00002000
+	PIPELINE_CREATE_RAY_TRACING_SHADER_GROUP_HANDLE_CAPTURE_REPLAY_BIT_KHR PipelineCreateFlags = 0x00080000
+	PIPELINE_CREATE_DEFER_COMPILE_BIT_NV                                   PipelineCreateFlags = 0x00000020
+	PIPELINE_CREATE_CAPTURE_STATISTICS_BIT_KHR                             PipelineCreateFlags = 0x00000040
+	PIPELINE_CREATE_CAPTURE_INTERNAL_REPRESENTATIONS_BIT_KHR               PipelineCreateFlags = 0x00000080
+	PIPELINE_CREATE_INDIRECT_BINDABLE_BIT_NV                               PipelineCreateFlags = 0x00040000
+	PIPELINE_CREATE_LIBRARY_BIT_KHR                                        PipelineCreateFlags = 0x00000800
+	PIPELINE_CREATE_FAIL_ON_PIPELINE_COMPILE_REQUIRED_BIT_EXT              PipelineCreateFlags = 0x00000100
+	PIPELINE_CREATE_EARLY_RETURN_ON_FAILURE_BIT_EXT                        PipelineCreateFlags = 0x00000200
+	PIPELINE_CREATE_DISPATCH_BASE                                          PipelineCreateFlags = PIPELINE_CREATE_DISPATCH_BASE_BIT
+	PIPELINE_CREATE_VIEW_INDEX_FROM_DEVICE_INDEX_BIT_KHR                   PipelineCreateFlags = PIPELINE_CREATE_VIEW_INDEX_FROM_DEVICE_INDEX_BIT
+	PIPELINE_CREATE_DISPATCH_BASE_KHR                                      PipelineCreateFlags = PIPELINE_CREATE_DISPATCH_BASE
+	PIPELINE_CREATE_FLAG_BITS_MAX_ENUM                                     PipelineCreateFlags = 0x7FFFFFFF
 )
 
 func (x PipelineCreateFlags) String() string {
@@ -5637,14 +6835,36 @@ func (x PipelineCreateFlags) String() string {
 				s += "PIPELINE_CREATE_DERIVATIVE_BIT|"
 			case PIPELINE_CREATE_VIEW_INDEX_FROM_DEVICE_INDEX_BIT:
 				s += "PIPELINE_CREATE_VIEW_INDEX_FROM_DEVICE_INDEX_BIT|"
-			case PIPELINE_CREATE_DISPATCH_BASE:
-				s += "PIPELINE_CREATE_DISPATCH_BASE|"
+			case PIPELINE_CREATE_DISPATCH_BASE_BIT:
+				s += "PIPELINE_CREATE_DISPATCH_BASE_BIT|"
+			case PIPELINE_CREATE_RAY_TRACING_NO_NULL_ANY_HIT_SHADERS_BIT_KHR:
+				s += "PIPELINE_CREATE_RAY_TRACING_NO_NULL_ANY_HIT_SHADERS_BIT_KHR|"
+			case PIPELINE_CREATE_RAY_TRACING_NO_NULL_CLOSEST_HIT_SHADERS_BIT_KHR:
+				s += "PIPELINE_CREATE_RAY_TRACING_NO_NULL_CLOSEST_HIT_SHADERS_BIT_KHR|"
+			case PIPELINE_CREATE_RAY_TRACING_NO_NULL_MISS_SHADERS_BIT_KHR:
+				s += "PIPELINE_CREATE_RAY_TRACING_NO_NULL_MISS_SHADERS_BIT_KHR|"
+			case PIPELINE_CREATE_RAY_TRACING_NO_NULL_INTERSECTION_SHADERS_BIT_KHR:
+				s += "PIPELINE_CREATE_RAY_TRACING_NO_NULL_INTERSECTION_SHADERS_BIT_KHR|"
+			case PIPELINE_CREATE_RAY_TRACING_SKIP_TRIANGLES_BIT_KHR:
+				s += "PIPELINE_CREATE_RAY_TRACING_SKIP_TRIANGLES_BIT_KHR|"
+			case PIPELINE_CREATE_RAY_TRACING_SKIP_AABBS_BIT_KHR:
+				s += "PIPELINE_CREATE_RAY_TRACING_SKIP_AABBS_BIT_KHR|"
+			case PIPELINE_CREATE_RAY_TRACING_SHADER_GROUP_HANDLE_CAPTURE_REPLAY_BIT_KHR:
+				s += "PIPELINE_CREATE_RAY_TRACING_SHADER_GROUP_HANDLE_CAPTURE_REPLAY_BIT_KHR|"
 			case PIPELINE_CREATE_DEFER_COMPILE_BIT_NV:
 				s += "PIPELINE_CREATE_DEFER_COMPILE_BIT_NV|"
 			case PIPELINE_CREATE_CAPTURE_STATISTICS_BIT_KHR:
 				s += "PIPELINE_CREATE_CAPTURE_STATISTICS_BIT_KHR|"
 			case PIPELINE_CREATE_CAPTURE_INTERNAL_REPRESENTATIONS_BIT_KHR:
 				s += "PIPELINE_CREATE_CAPTURE_INTERNAL_REPRESENTATIONS_BIT_KHR|"
+			case PIPELINE_CREATE_INDIRECT_BINDABLE_BIT_NV:
+				s += "PIPELINE_CREATE_INDIRECT_BINDABLE_BIT_NV|"
+			case PIPELINE_CREATE_LIBRARY_BIT_KHR:
+				s += "PIPELINE_CREATE_LIBRARY_BIT_KHR|"
+			case PIPELINE_CREATE_FAIL_ON_PIPELINE_COMPILE_REQUIRED_BIT_EXT:
+				s += "PIPELINE_CREATE_FAIL_ON_PIPELINE_COMPILE_REQUIRED_BIT_EXT|"
+			case PIPELINE_CREATE_EARLY_RETURN_ON_FAILURE_BIT_EXT:
+				s += "PIPELINE_CREATE_EARLY_RETURN_ON_FAILURE_BIT_EXT|"
 			}
 		}
 	}
@@ -5687,14 +6907,20 @@ const (
 	SHADER_STAGE_COMPUTE_BIT                 ShaderStageFlags = 0x00000020
 	SHADER_STAGE_ALL_GRAPHICS                ShaderStageFlags = 0x0000001F
 	SHADER_STAGE_ALL                         ShaderStageFlags = 0x7FFFFFFF
-	SHADER_STAGE_RAYGEN_BIT_NV               ShaderStageFlags = 0x00000100
-	SHADER_STAGE_ANY_HIT_BIT_NV              ShaderStageFlags = 0x00000200
-	SHADER_STAGE_CLOSEST_HIT_BIT_NV          ShaderStageFlags = 0x00000400
-	SHADER_STAGE_MISS_BIT_NV                 ShaderStageFlags = 0x00000800
-	SHADER_STAGE_INTERSECTION_BIT_NV         ShaderStageFlags = 0x00001000
-	SHADER_STAGE_CALLABLE_BIT_NV             ShaderStageFlags = 0x00002000
+	SHADER_STAGE_RAYGEN_BIT_KHR              ShaderStageFlags = 0x00000100
+	SHADER_STAGE_ANY_HIT_BIT_KHR             ShaderStageFlags = 0x00000200
+	SHADER_STAGE_CLOSEST_HIT_BIT_KHR         ShaderStageFlags = 0x00000400
+	SHADER_STAGE_MISS_BIT_KHR                ShaderStageFlags = 0x00000800
+	SHADER_STAGE_INTERSECTION_BIT_KHR        ShaderStageFlags = 0x00001000
+	SHADER_STAGE_CALLABLE_BIT_KHR            ShaderStageFlags = 0x00002000
 	SHADER_STAGE_TASK_BIT_NV                 ShaderStageFlags = 0x00000040
 	SHADER_STAGE_MESH_BIT_NV                 ShaderStageFlags = 0x00000080
+	SHADER_STAGE_RAYGEN_BIT_NV               ShaderStageFlags = SHADER_STAGE_RAYGEN_BIT_KHR
+	SHADER_STAGE_ANY_HIT_BIT_NV              ShaderStageFlags = SHADER_STAGE_ANY_HIT_BIT_KHR
+	SHADER_STAGE_CLOSEST_HIT_BIT_NV          ShaderStageFlags = SHADER_STAGE_CLOSEST_HIT_BIT_KHR
+	SHADER_STAGE_MISS_BIT_NV                 ShaderStageFlags = SHADER_STAGE_MISS_BIT_KHR
+	SHADER_STAGE_INTERSECTION_BIT_NV         ShaderStageFlags = SHADER_STAGE_INTERSECTION_BIT_KHR
+	SHADER_STAGE_CALLABLE_BIT_NV             ShaderStageFlags = SHADER_STAGE_CALLABLE_BIT_KHR
 	SHADER_STAGE_FLAG_BITS_MAX_ENUM          ShaderStageFlags = 0x7FFFFFFF
 )
 
@@ -5719,18 +6945,18 @@ func (x ShaderStageFlags) String() string {
 				s += "SHADER_STAGE_ALL_GRAPHICS|"
 			case SHADER_STAGE_ALL:
 				s += "SHADER_STAGE_ALL|"
-			case SHADER_STAGE_RAYGEN_BIT_NV:
-				s += "SHADER_STAGE_RAYGEN_BIT_NV|"
-			case SHADER_STAGE_ANY_HIT_BIT_NV:
-				s += "SHADER_STAGE_ANY_HIT_BIT_NV|"
-			case SHADER_STAGE_CLOSEST_HIT_BIT_NV:
-				s += "SHADER_STAGE_CLOSEST_HIT_BIT_NV|"
-			case SHADER_STAGE_MISS_BIT_NV:
-				s += "SHADER_STAGE_MISS_BIT_NV|"
-			case SHADER_STAGE_INTERSECTION_BIT_NV:
-				s += "SHADER_STAGE_INTERSECTION_BIT_NV|"
-			case SHADER_STAGE_CALLABLE_BIT_NV:
-				s += "SHADER_STAGE_CALLABLE_BIT_NV|"
+			case SHADER_STAGE_RAYGEN_BIT_KHR:
+				s += "SHADER_STAGE_RAYGEN_BIT_KHR|"
+			case SHADER_STAGE_ANY_HIT_BIT_KHR:
+				s += "SHADER_STAGE_ANY_HIT_BIT_KHR|"
+			case SHADER_STAGE_CLOSEST_HIT_BIT_KHR:
+				s += "SHADER_STAGE_CLOSEST_HIT_BIT_KHR|"
+			case SHADER_STAGE_MISS_BIT_KHR:
+				s += "SHADER_STAGE_MISS_BIT_KHR|"
+			case SHADER_STAGE_INTERSECTION_BIT_KHR:
+				s += "SHADER_STAGE_INTERSECTION_BIT_KHR|"
+			case SHADER_STAGE_CALLABLE_BIT_KHR:
+				s += "SHADER_STAGE_CALLABLE_BIT_KHR|"
 			case SHADER_STAGE_TASK_BIT_NV:
 				s += "SHADER_STAGE_TASK_BIT_NV|"
 			case SHADER_STAGE_MESH_BIT_NV:
@@ -5741,11 +6967,6 @@ func (x ShaderStageFlags) String() string {
 	return strings.TrimSuffix(s, `|`)
 }
 
-type PipelineVertexInputStateCreateFlags uint32   // reserved
-type PipelineInputAssemblyStateCreateFlags uint32 // reserved
-type PipelineTessellationStateCreateFlags uint32  // reserved
-type PipelineViewportStateCreateFlags uint32      // reserved
-type PipelineRasterizationStateCreateFlags uint32 // reserved
 // CullModeFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCullModeFlags.html
 type CullModeFlags uint32
 
@@ -5776,41 +6997,16 @@ func (x CullModeFlags) String() string {
 	return strings.TrimSuffix(s, `|`)
 }
 
-type PipelineMultisampleStateCreateFlags uint32  // reserved
-type PipelineDepthStencilStateCreateFlags uint32 // reserved
-type PipelineColorBlendStateCreateFlags uint32   // reserved
-// ColorComponentFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkColorComponentFlags.html
-type ColorComponentFlags uint32
-
-const (
-	COLOR_COMPONENT_R_BIT              ColorComponentFlags = 0x00000001
-	COLOR_COMPONENT_G_BIT              ColorComponentFlags = 0x00000002
-	COLOR_COMPONENT_B_BIT              ColorComponentFlags = 0x00000004
-	COLOR_COMPONENT_A_BIT              ColorComponentFlags = 0x00000008
-	COLOR_COMPONENT_FLAG_BITS_MAX_ENUM ColorComponentFlags = 0x7FFFFFFF
-)
-
-func (x ColorComponentFlags) String() string {
-	var s string
-	for i := uint32(0); i < 32; i++ {
-		if int32(x)&(1<<i) != 0 {
-			switch ColorComponentFlags(1 << i) {
-			case COLOR_COMPONENT_R_BIT:
-				s += "COLOR_COMPONENT_R_BIT|"
-			case COLOR_COMPONENT_G_BIT:
-				s += "COLOR_COMPONENT_G_BIT|"
-			case COLOR_COMPONENT_B_BIT:
-				s += "COLOR_COMPONENT_B_BIT|"
-			case COLOR_COMPONENT_A_BIT:
-				s += "COLOR_COMPONENT_A_BIT|"
-			}
-		}
-	}
-	return strings.TrimSuffix(s, `|`)
-}
-
-type PipelineDynamicStateCreateFlags uint32 // reserved
-type PipelineLayoutCreateFlags uint32       // reserved
+type PipelineVertexInputStateCreateFlags uint32   // reserved
+type PipelineInputAssemblyStateCreateFlags uint32 // reserved
+type PipelineTessellationStateCreateFlags uint32  // reserved
+type PipelineViewportStateCreateFlags uint32      // reserved
+type PipelineRasterizationStateCreateFlags uint32 // reserved
+type PipelineMultisampleStateCreateFlags uint32   // reserved
+type PipelineDepthStencilStateCreateFlags uint32  // reserved
+type PipelineColorBlendStateCreateFlags uint32    // reserved
+type PipelineDynamicStateCreateFlags uint32       // reserved
+type PipelineLayoutCreateFlags uint32             // reserved
 // SamplerCreateFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerCreateFlags.html
 type SamplerCreateFlags uint32
 
@@ -5835,36 +7031,14 @@ func (x SamplerCreateFlags) String() string {
 	return strings.TrimSuffix(s, `|`)
 }
 
-// DescriptorSetLayoutCreateFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetLayoutCreateFlags.html
-type DescriptorSetLayoutCreateFlags uint32
-
-const (
-	DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR        DescriptorSetLayoutCreateFlags = 0x00000001
-	DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT_EXT DescriptorSetLayoutCreateFlags = 0x00000002
-	DESCRIPTOR_SET_LAYOUT_CREATE_FLAG_BITS_MAX_ENUM             DescriptorSetLayoutCreateFlags = 0x7FFFFFFF
-)
-
-func (x DescriptorSetLayoutCreateFlags) String() string {
-	var s string
-	for i := uint32(0); i < 32; i++ {
-		if int32(x)&(1<<i) != 0 {
-			switch DescriptorSetLayoutCreateFlags(1 << i) {
-			case DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR:
-				s += "DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR|"
-			case DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT_EXT:
-				s += "DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT_EXT|"
-			}
-		}
-	}
-	return strings.TrimSuffix(s, `|`)
-}
-
 // DescriptorPoolCreateFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorPoolCreateFlags.html
 type DescriptorPoolCreateFlags uint32
 
 const (
 	DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT   DescriptorPoolCreateFlags = 0x00000001
-	DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT_EXT DescriptorPoolCreateFlags = 0x00000002
+	DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT     DescriptorPoolCreateFlags = 0x00000002
+	DESCRIPTOR_POOL_CREATE_HOST_ONLY_BIT_VALVE       DescriptorPoolCreateFlags = 0x00000004
+	DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT_EXT DescriptorPoolCreateFlags = DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT
 	DESCRIPTOR_POOL_CREATE_FLAG_BITS_MAX_ENUM        DescriptorPoolCreateFlags = 0x7FFFFFFF
 )
 
@@ -5875,8 +7049,10 @@ func (x DescriptorPoolCreateFlags) String() string {
 			switch DescriptorPoolCreateFlags(1 << i) {
 			case DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT:
 				s += "DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT|"
-			case DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT_EXT:
-				s += "DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT_EXT|"
+			case DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT:
+				s += "DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT|"
+			case DESCRIPTOR_POOL_CREATE_HOST_ONLY_BIT_VALVE:
+				s += "DESCRIPTOR_POOL_CREATE_HOST_ONLY_BIT_VALVE|"
 			}
 		}
 	}
@@ -5884,39 +7060,28 @@ func (x DescriptorPoolCreateFlags) String() string {
 }
 
 type DescriptorPoolResetFlags uint32 // reserved
-// FramebufferCreateFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFramebufferCreateFlags.html
-type FramebufferCreateFlags uint32
+// DescriptorSetLayoutCreateFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetLayoutCreateFlags.html
+type DescriptorSetLayoutCreateFlags uint32
 
 const (
-	FRAMEBUFFER_CREATE_IMAGELESS_BIT_KHR  FramebufferCreateFlags = 0x00000001
-	FRAMEBUFFER_CREATE_FLAG_BITS_MAX_ENUM FramebufferCreateFlags = 0x7FFFFFFF
+	DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT     DescriptorSetLayoutCreateFlags = 0x00000002
+	DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR        DescriptorSetLayoutCreateFlags = 0x00000001
+	DESCRIPTOR_SET_LAYOUT_CREATE_HOST_ONLY_POOL_BIT_VALVE       DescriptorSetLayoutCreateFlags = 0x00000004
+	DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT_EXT DescriptorSetLayoutCreateFlags = DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT
+	DESCRIPTOR_SET_LAYOUT_CREATE_FLAG_BITS_MAX_ENUM             DescriptorSetLayoutCreateFlags = 0x7FFFFFFF
 )
 
-func (x FramebufferCreateFlags) String() string {
+func (x DescriptorSetLayoutCreateFlags) String() string {
 	var s string
 	for i := uint32(0); i < 32; i++ {
 		if int32(x)&(1<<i) != 0 {
-			switch FramebufferCreateFlags(1 << i) {
-			case FRAMEBUFFER_CREATE_IMAGELESS_BIT_KHR:
-				s += "FRAMEBUFFER_CREATE_IMAGELESS_BIT_KHR|"
-			}
-		}
-	}
-	return strings.TrimSuffix(s, `|`)
-}
-
-// RenderPassCreateFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassCreateFlags.html
-type RenderPassCreateFlags uint32
-
-const (
-	RENDER_PASS_CREATE_FLAG_BITS_MAX_ENUM RenderPassCreateFlags = 0x7FFFFFFF
-)
-
-func (x RenderPassCreateFlags) String() string {
-	var s string
-	for i := uint32(0); i < 32; i++ {
-		if int32(x)&(1<<i) != 0 {
-			switch RenderPassCreateFlags(1 << i) {
+			switch DescriptorSetLayoutCreateFlags(1 << i) {
+			case DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT:
+				s += "DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT|"
+			case DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR:
+				s += "DESCRIPTOR_SET_LAYOUT_CREATE_PUSH_DESCRIPTOR_BIT_KHR|"
+			case DESCRIPTOR_SET_LAYOUT_CREATE_HOST_ONLY_POOL_BIT_VALVE:
+				s += "DESCRIPTOR_SET_LAYOUT_CREATE_HOST_ONLY_POOL_BIT_VALVE|"
 			}
 		}
 	}
@@ -5938,132 +7103,6 @@ func (x AttachmentDescriptionFlags) String() string {
 			switch AttachmentDescriptionFlags(1 << i) {
 			case ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT:
 				s += "ATTACHMENT_DESCRIPTION_MAY_ALIAS_BIT|"
-			}
-		}
-	}
-	return strings.TrimSuffix(s, `|`)
-}
-
-// SubpassDescriptionFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassDescriptionFlags.html
-type SubpassDescriptionFlags uint32
-
-const (
-	SUBPASS_DESCRIPTION_PER_VIEW_ATTRIBUTES_BIT_NVX      SubpassDescriptionFlags = 0x00000001
-	SUBPASS_DESCRIPTION_PER_VIEW_POSITION_X_ONLY_BIT_NVX SubpassDescriptionFlags = 0x00000002
-	SUBPASS_DESCRIPTION_FLAG_BITS_MAX_ENUM               SubpassDescriptionFlags = 0x7FFFFFFF
-)
-
-func (x SubpassDescriptionFlags) String() string {
-	var s string
-	for i := uint32(0); i < 32; i++ {
-		if int32(x)&(1<<i) != 0 {
-			switch SubpassDescriptionFlags(1 << i) {
-			case SUBPASS_DESCRIPTION_PER_VIEW_ATTRIBUTES_BIT_NVX:
-				s += "SUBPASS_DESCRIPTION_PER_VIEW_ATTRIBUTES_BIT_NVX|"
-			case SUBPASS_DESCRIPTION_PER_VIEW_POSITION_X_ONLY_BIT_NVX:
-				s += "SUBPASS_DESCRIPTION_PER_VIEW_POSITION_X_ONLY_BIT_NVX|"
-			}
-		}
-	}
-	return strings.TrimSuffix(s, `|`)
-}
-
-// AccessFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccessFlags.html
-type AccessFlags uint32
-
-const (
-	ACCESS_INDIRECT_COMMAND_READ_BIT                 AccessFlags = 0x00000001
-	ACCESS_INDEX_READ_BIT                            AccessFlags = 0x00000002
-	ACCESS_VERTEX_ATTRIBUTE_READ_BIT                 AccessFlags = 0x00000004
-	ACCESS_UNIFORM_READ_BIT                          AccessFlags = 0x00000008
-	ACCESS_INPUT_ATTACHMENT_READ_BIT                 AccessFlags = 0x00000010
-	ACCESS_SHADER_READ_BIT                           AccessFlags = 0x00000020
-	ACCESS_SHADER_WRITE_BIT                          AccessFlags = 0x00000040
-	ACCESS_COLOR_ATTACHMENT_READ_BIT                 AccessFlags = 0x00000080
-	ACCESS_COLOR_ATTACHMENT_WRITE_BIT                AccessFlags = 0x00000100
-	ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT         AccessFlags = 0x00000200
-	ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT        AccessFlags = 0x00000400
-	ACCESS_TRANSFER_READ_BIT                         AccessFlags = 0x00000800
-	ACCESS_TRANSFER_WRITE_BIT                        AccessFlags = 0x00001000
-	ACCESS_HOST_READ_BIT                             AccessFlags = 0x00002000
-	ACCESS_HOST_WRITE_BIT                            AccessFlags = 0x00004000
-	ACCESS_MEMORY_READ_BIT                           AccessFlags = 0x00008000
-	ACCESS_MEMORY_WRITE_BIT                          AccessFlags = 0x00010000
-	ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT          AccessFlags = 0x02000000
-	ACCESS_TRANSFORM_FEEDBACK_COUNTER_READ_BIT_EXT   AccessFlags = 0x04000000
-	ACCESS_TRANSFORM_FEEDBACK_COUNTER_WRITE_BIT_EXT  AccessFlags = 0x08000000
-	ACCESS_CONDITIONAL_RENDERING_READ_BIT_EXT        AccessFlags = 0x00100000
-	ACCESS_COMMAND_PROCESS_READ_BIT_NVX              AccessFlags = 0x00020000
-	ACCESS_COMMAND_PROCESS_WRITE_BIT_NVX             AccessFlags = 0x00040000
-	ACCESS_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT AccessFlags = 0x00080000
-	ACCESS_SHADING_RATE_IMAGE_READ_BIT_NV            AccessFlags = 0x00800000
-	ACCESS_ACCELERATION_STRUCTURE_READ_BIT_NV        AccessFlags = 0x00200000
-	ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_NV       AccessFlags = 0x00400000
-	ACCESS_FRAGMENT_DENSITY_MAP_READ_BIT_EXT         AccessFlags = 0x01000000
-	ACCESS_FLAG_BITS_MAX_ENUM                        AccessFlags = 0x7FFFFFFF
-)
-
-func (x AccessFlags) String() string {
-	var s string
-	for i := uint32(0); i < 32; i++ {
-		if int32(x)&(1<<i) != 0 {
-			switch AccessFlags(1 << i) {
-			case ACCESS_INDIRECT_COMMAND_READ_BIT:
-				s += "ACCESS_INDIRECT_COMMAND_READ_BIT|"
-			case ACCESS_INDEX_READ_BIT:
-				s += "ACCESS_INDEX_READ_BIT|"
-			case ACCESS_VERTEX_ATTRIBUTE_READ_BIT:
-				s += "ACCESS_VERTEX_ATTRIBUTE_READ_BIT|"
-			case ACCESS_UNIFORM_READ_BIT:
-				s += "ACCESS_UNIFORM_READ_BIT|"
-			case ACCESS_INPUT_ATTACHMENT_READ_BIT:
-				s += "ACCESS_INPUT_ATTACHMENT_READ_BIT|"
-			case ACCESS_SHADER_READ_BIT:
-				s += "ACCESS_SHADER_READ_BIT|"
-			case ACCESS_SHADER_WRITE_BIT:
-				s += "ACCESS_SHADER_WRITE_BIT|"
-			case ACCESS_COLOR_ATTACHMENT_READ_BIT:
-				s += "ACCESS_COLOR_ATTACHMENT_READ_BIT|"
-			case ACCESS_COLOR_ATTACHMENT_WRITE_BIT:
-				s += "ACCESS_COLOR_ATTACHMENT_WRITE_BIT|"
-			case ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT:
-				s += "ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT|"
-			case ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT:
-				s += "ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT|"
-			case ACCESS_TRANSFER_READ_BIT:
-				s += "ACCESS_TRANSFER_READ_BIT|"
-			case ACCESS_TRANSFER_WRITE_BIT:
-				s += "ACCESS_TRANSFER_WRITE_BIT|"
-			case ACCESS_HOST_READ_BIT:
-				s += "ACCESS_HOST_READ_BIT|"
-			case ACCESS_HOST_WRITE_BIT:
-				s += "ACCESS_HOST_WRITE_BIT|"
-			case ACCESS_MEMORY_READ_BIT:
-				s += "ACCESS_MEMORY_READ_BIT|"
-			case ACCESS_MEMORY_WRITE_BIT:
-				s += "ACCESS_MEMORY_WRITE_BIT|"
-			case ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT:
-				s += "ACCESS_TRANSFORM_FEEDBACK_WRITE_BIT_EXT|"
-			case ACCESS_TRANSFORM_FEEDBACK_COUNTER_READ_BIT_EXT:
-				s += "ACCESS_TRANSFORM_FEEDBACK_COUNTER_READ_BIT_EXT|"
-			case ACCESS_TRANSFORM_FEEDBACK_COUNTER_WRITE_BIT_EXT:
-				s += "ACCESS_TRANSFORM_FEEDBACK_COUNTER_WRITE_BIT_EXT|"
-			case ACCESS_CONDITIONAL_RENDERING_READ_BIT_EXT:
-				s += "ACCESS_CONDITIONAL_RENDERING_READ_BIT_EXT|"
-			case ACCESS_COMMAND_PROCESS_READ_BIT_NVX:
-				s += "ACCESS_COMMAND_PROCESS_READ_BIT_NVX|"
-			case ACCESS_COMMAND_PROCESS_WRITE_BIT_NVX:
-				s += "ACCESS_COMMAND_PROCESS_WRITE_BIT_NVX|"
-			case ACCESS_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT:
-				s += "ACCESS_COLOR_ATTACHMENT_READ_NONCOHERENT_BIT_EXT|"
-			case ACCESS_SHADING_RATE_IMAGE_READ_BIT_NV:
-				s += "ACCESS_SHADING_RATE_IMAGE_READ_BIT_NV|"
-			case ACCESS_ACCELERATION_STRUCTURE_READ_BIT_NV:
-				s += "ACCESS_ACCELERATION_STRUCTURE_READ_BIT_NV|"
-			case ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_NV:
-				s += "ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_NV|"
-			case ACCESS_FRAGMENT_DENSITY_MAP_READ_BIT_EXT:
-				s += "ACCESS_FRAGMENT_DENSITY_MAP_READ_BIT_EXT|"
 			}
 		}
 	}
@@ -6093,6 +7132,79 @@ func (x DependencyFlags) String() string {
 				s += "DEPENDENCY_DEVICE_GROUP_BIT|"
 			case DEPENDENCY_VIEW_LOCAL_BIT:
 				s += "DEPENDENCY_VIEW_LOCAL_BIT|"
+			}
+		}
+	}
+	return strings.TrimSuffix(s, `|`)
+}
+
+// FramebufferCreateFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFramebufferCreateFlags.html
+type FramebufferCreateFlags uint32
+
+const (
+	FRAMEBUFFER_CREATE_IMAGELESS_BIT      FramebufferCreateFlags = 0x00000001
+	FRAMEBUFFER_CREATE_IMAGELESS_BIT_KHR  FramebufferCreateFlags = FRAMEBUFFER_CREATE_IMAGELESS_BIT
+	FRAMEBUFFER_CREATE_FLAG_BITS_MAX_ENUM FramebufferCreateFlags = 0x7FFFFFFF
+)
+
+func (x FramebufferCreateFlags) String() string {
+	var s string
+	for i := uint32(0); i < 32; i++ {
+		if int32(x)&(1<<i) != 0 {
+			switch FramebufferCreateFlags(1 << i) {
+			case FRAMEBUFFER_CREATE_IMAGELESS_BIT:
+				s += "FRAMEBUFFER_CREATE_IMAGELESS_BIT|"
+			}
+		}
+	}
+	return strings.TrimSuffix(s, `|`)
+}
+
+// RenderPassCreateFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassCreateFlags.html
+type RenderPassCreateFlags uint32
+
+const (
+	RENDER_PASS_CREATE_TRANSFORM_BIT_QCOM RenderPassCreateFlags = 0x00000002
+	RENDER_PASS_CREATE_FLAG_BITS_MAX_ENUM RenderPassCreateFlags = 0x7FFFFFFF
+)
+
+func (x RenderPassCreateFlags) String() string {
+	var s string
+	for i := uint32(0); i < 32; i++ {
+		if int32(x)&(1<<i) != 0 {
+			switch RenderPassCreateFlags(1 << i) {
+			case RENDER_PASS_CREATE_TRANSFORM_BIT_QCOM:
+				s += "RENDER_PASS_CREATE_TRANSFORM_BIT_QCOM|"
+			}
+		}
+	}
+	return strings.TrimSuffix(s, `|`)
+}
+
+// SubpassDescriptionFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassDescriptionFlags.html
+type SubpassDescriptionFlags uint32
+
+const (
+	SUBPASS_DESCRIPTION_PER_VIEW_ATTRIBUTES_BIT_NVX      SubpassDescriptionFlags = 0x00000001
+	SUBPASS_DESCRIPTION_PER_VIEW_POSITION_X_ONLY_BIT_NVX SubpassDescriptionFlags = 0x00000002
+	SUBPASS_DESCRIPTION_FRAGMENT_REGION_BIT_QCOM         SubpassDescriptionFlags = 0x00000004
+	SUBPASS_DESCRIPTION_SHADER_RESOLVE_BIT_QCOM          SubpassDescriptionFlags = 0x00000008
+	SUBPASS_DESCRIPTION_FLAG_BITS_MAX_ENUM               SubpassDescriptionFlags = 0x7FFFFFFF
+)
+
+func (x SubpassDescriptionFlags) String() string {
+	var s string
+	for i := uint32(0); i < 32; i++ {
+		if int32(x)&(1<<i) != 0 {
+			switch SubpassDescriptionFlags(1 << i) {
+			case SUBPASS_DESCRIPTION_PER_VIEW_ATTRIBUTES_BIT_NVX:
+				s += "SUBPASS_DESCRIPTION_PER_VIEW_ATTRIBUTES_BIT_NVX|"
+			case SUBPASS_DESCRIPTION_PER_VIEW_POSITION_X_ONLY_BIT_NVX:
+				s += "SUBPASS_DESCRIPTION_PER_VIEW_POSITION_X_ONLY_BIT_NVX|"
+			case SUBPASS_DESCRIPTION_FRAGMENT_REGION_BIT_QCOM:
+				s += "SUBPASS_DESCRIPTION_FRAGMENT_REGION_BIT_QCOM|"
+			case SUBPASS_DESCRIPTION_SHADER_RESOLVE_BIT_QCOM:
+				s += "SUBPASS_DESCRIPTION_SHADER_RESOLVE_BIT_QCOM|"
 			}
 		}
 	}
@@ -6244,15 +7356,260 @@ func (x StencilFaceFlags) String() string {
 	return strings.TrimSuffix(s, `|`)
 }
 
+// Extent2D -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExtent2D.html
+type Extent2D struct {
+	Width  uint32
+	Height uint32
+}
+
+func NewExtent2D() *Extent2D { return (*Extent2D)(MemAlloc(unsafe.Sizeof(*(*Extent2D)(nil)))) }
+func (p *Extent2D) Free()    { MemFree(unsafe.Pointer(p)) }
+
+// Extent3D -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExtent3D.html
+type Extent3D struct {
+	Width  uint32
+	Height uint32
+	Depth  uint32
+}
+
+func NewExtent3D() *Extent3D { return (*Extent3D)(MemAlloc(unsafe.Sizeof(*(*Extent3D)(nil)))) }
+func (p *Extent3D) Free()    { MemFree(unsafe.Pointer(p)) }
+
+// Offset2D -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkOffset2D.html
+type Offset2D struct {
+	X int32
+	Y int32
+}
+
+func NewOffset2D() *Offset2D { return (*Offset2D)(MemAlloc(unsafe.Sizeof(*(*Offset2D)(nil)))) }
+func (p *Offset2D) Free()    { MemFree(unsafe.Pointer(p)) }
+
+// Offset3D -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkOffset3D.html
+type Offset3D struct {
+	X int32
+	Y int32
+	Z int32
+}
+
+func NewOffset3D() *Offset3D { return (*Offset3D)(MemAlloc(unsafe.Sizeof(*(*Offset3D)(nil)))) }
+func (p *Offset3D) Free()    { MemFree(unsafe.Pointer(p)) }
+
+// Rect2D -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRect2D.html
+type Rect2D struct {
+	Offset Offset2D
+	Extent Extent2D
+}
+
+func NewRect2D() *Rect2D { return (*Rect2D)(MemAlloc(unsafe.Sizeof(*(*Rect2D)(nil)))) }
+func (p *Rect2D) Free()  { MemFree(unsafe.Pointer(p)) }
+
+// BaseInStructure -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBaseInStructure.html
+type BaseInStructure struct {
+	SType StructureType
+	PNext *BaseInStructure
+}
+
+func NewBaseInStructure() *BaseInStructure {
+	return (*BaseInStructure)(MemAlloc(unsafe.Sizeof(*(*BaseInStructure)(nil))))
+}
+func (p *BaseInStructure) Free() { MemFree(unsafe.Pointer(p)) }
+
+// BaseOutStructure -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBaseOutStructure.html
+type BaseOutStructure struct {
+	SType StructureType
+	PNext *BaseOutStructure
+}
+
+func NewBaseOutStructure() *BaseOutStructure {
+	return (*BaseOutStructure)(MemAlloc(unsafe.Sizeof(*(*BaseOutStructure)(nil))))
+}
+func (p *BaseOutStructure) Free() { MemFree(unsafe.Pointer(p)) }
+
+// BufferMemoryBarrier -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferMemoryBarrier.html
+type BufferMemoryBarrier struct {
+	SType               StructureType
+	PNext               unsafe.Pointer
+	SrcAccessMask       AccessFlags
+	DstAccessMask       AccessFlags
+	SrcQueueFamilyIndex uint32
+	DstQueueFamilyIndex uint32
+	Buffer              Buffer
+	Offset              DeviceSize
+	Size                DeviceSize
+}
+
+func NewBufferMemoryBarrier() *BufferMemoryBarrier {
+	p := (*BufferMemoryBarrier)(MemAlloc(unsafe.Sizeof(*(*BufferMemoryBarrier)(nil))))
+	p.SType = STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER
+	return p
+}
+func (p *BufferMemoryBarrier) Free() { MemFree(unsafe.Pointer(p)) }
+
+// DispatchIndirectCommand -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDispatchIndirectCommand.html
+type DispatchIndirectCommand struct {
+	X uint32
+	Y uint32
+	Z uint32
+}
+
+func NewDispatchIndirectCommand() *DispatchIndirectCommand {
+	return (*DispatchIndirectCommand)(MemAlloc(unsafe.Sizeof(*(*DispatchIndirectCommand)(nil))))
+}
+func (p *DispatchIndirectCommand) Free() { MemFree(unsafe.Pointer(p)) }
+
+// DrawIndexedIndirectCommand -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDrawIndexedIndirectCommand.html
+type DrawIndexedIndirectCommand struct {
+	IndexCount    uint32
+	InstanceCount uint32
+	FirstIndex    uint32
+	VertexOffset  int32
+	FirstInstance uint32
+}
+
+func NewDrawIndexedIndirectCommand() *DrawIndexedIndirectCommand {
+	return (*DrawIndexedIndirectCommand)(MemAlloc(unsafe.Sizeof(*(*DrawIndexedIndirectCommand)(nil))))
+}
+func (p *DrawIndexedIndirectCommand) Free() { MemFree(unsafe.Pointer(p)) }
+
+// DrawIndirectCommand -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDrawIndirectCommand.html
+type DrawIndirectCommand struct {
+	VertexCount   uint32
+	InstanceCount uint32
+	FirstVertex   uint32
+	FirstInstance uint32
+}
+
+func NewDrawIndirectCommand() *DrawIndirectCommand {
+	return (*DrawIndirectCommand)(MemAlloc(unsafe.Sizeof(*(*DrawIndirectCommand)(nil))))
+}
+func (p *DrawIndirectCommand) Free() { MemFree(unsafe.Pointer(p)) }
+
+// ImageSubresourceRange -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageSubresourceRange.html
+type ImageSubresourceRange struct {
+	AspectMask     ImageAspectFlags
+	BaseMipLevel   uint32
+	LevelCount     uint32
+	BaseArrayLayer uint32
+	LayerCount     uint32
+}
+
+func NewImageSubresourceRange() *ImageSubresourceRange {
+	return (*ImageSubresourceRange)(MemAlloc(unsafe.Sizeof(*(*ImageSubresourceRange)(nil))))
+}
+func (p *ImageSubresourceRange) Free() { MemFree(unsafe.Pointer(p)) }
+
+// ImageMemoryBarrier -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageMemoryBarrier.html
+type ImageMemoryBarrier struct {
+	SType               StructureType
+	PNext               unsafe.Pointer
+	SrcAccessMask       AccessFlags
+	DstAccessMask       AccessFlags
+	OldLayout           ImageLayout
+	NewLayout           ImageLayout
+	SrcQueueFamilyIndex uint32
+	DstQueueFamilyIndex uint32
+	Image               Image
+	SubresourceRange    ImageSubresourceRange
+}
+
+func NewImageMemoryBarrier() *ImageMemoryBarrier {
+	p := (*ImageMemoryBarrier)(MemAlloc(unsafe.Sizeof(*(*ImageMemoryBarrier)(nil))))
+	p.SType = STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER
+	return p
+}
+func (p *ImageMemoryBarrier) Free() { MemFree(unsafe.Pointer(p)) }
+
+// MemoryBarrier -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryBarrier.html
+type MemoryBarrier struct {
+	SType         StructureType
+	PNext         unsafe.Pointer
+	SrcAccessMask AccessFlags
+	DstAccessMask AccessFlags
+}
+
+func NewMemoryBarrier() *MemoryBarrier {
+	p := (*MemoryBarrier)(MemAlloc(unsafe.Sizeof(*(*MemoryBarrier)(nil))))
+	p.SType = STRUCTURE_TYPE_MEMORY_BARRIER
+	return p
+}
+func (p *MemoryBarrier) Free() { MemFree(unsafe.Pointer(p)) }
+
+//  PfnAllocationFunction -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkAllocationFunction.html
+type PfnAllocationFunction uintptr
+
+func (fn PfnAllocationFunction) Call(pUserData unsafe.Pointer, size, alignment uintptr, allocationScope SystemAllocationScope) unsafe.Pointer {
+	ret := C.bridge_vkAllocationFunction(C.uintptr_t(fn), (unsafe.Pointer)(pUserData), (C.size_t)(size), (C.size_t)(alignment), (C.VkSystemAllocationScope)(allocationScope))
+	debugCheckAndBreak()
+	return unsafe.Pointer(ret)
+}
+func (fn PfnAllocationFunction) String() string { return "vkAllocationFunction" }
+
+//  PfnFreeFunction -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkFreeFunction.html
+type PfnFreeFunction uintptr
+
+func (fn PfnFreeFunction) Call(pUserData, pMemory unsafe.Pointer) {
+	C.bridge_vkFreeFunction(C.uintptr_t(fn), (unsafe.Pointer)(pUserData), (unsafe.Pointer)(pMemory))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnFreeFunction) String() string { return "vkFreeFunction" }
+
+//  PfnInternalAllocationNotification -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkInternalAllocationNotification.html
+type PfnInternalAllocationNotification uintptr
+
+func (fn PfnInternalAllocationNotification) Call(pUserData unsafe.Pointer, size uintptr, allocationType InternalAllocationType, allocationScope SystemAllocationScope) {
+	C.bridge_vkInternalAllocationNotification(C.uintptr_t(fn), (unsafe.Pointer)(pUserData), (C.size_t)(size), (C.VkInternalAllocationType)(allocationType), (C.VkSystemAllocationScope)(allocationScope))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnInternalAllocationNotification) String() string {
+	return "vkInternalAllocationNotification"
+}
+
+//  PfnInternalFreeNotification -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkInternalFreeNotification.html
+type PfnInternalFreeNotification uintptr
+
+func (fn PfnInternalFreeNotification) Call(pUserData unsafe.Pointer, size uintptr, allocationType InternalAllocationType, allocationScope SystemAllocationScope) {
+	C.bridge_vkInternalFreeNotification(C.uintptr_t(fn), (unsafe.Pointer)(pUserData), (C.size_t)(size), (C.VkInternalAllocationType)(allocationType), (C.VkSystemAllocationScope)(allocationScope))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnInternalFreeNotification) String() string { return "vkInternalFreeNotification" }
+
+//  PfnReallocationFunction -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkReallocationFunction.html
+type PfnReallocationFunction uintptr
+
+func (fn PfnReallocationFunction) Call(pUserData, pOriginal unsafe.Pointer, size, alignment uintptr, allocationScope SystemAllocationScope) unsafe.Pointer {
+	ret := C.bridge_vkReallocationFunction(C.uintptr_t(fn), (unsafe.Pointer)(pUserData), (unsafe.Pointer)(pOriginal), (C.size_t)(size), (C.size_t)(alignment), (C.VkSystemAllocationScope)(allocationScope))
+	debugCheckAndBreak()
+	return unsafe.Pointer(ret)
+}
+func (fn PfnReallocationFunction) String() string { return "vkReallocationFunction" }
+
+// AllocationCallbacks -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAllocationCallbacks.html
+type AllocationCallbacks struct {
+	PUserData             unsafe.Pointer
+	PfnAllocation         PfnAllocationFunction
+	PfnReallocation       PfnReallocationFunction
+	PfnFree               PfnFreeFunction
+	PfnInternalAllocation PfnInternalAllocationNotification
+	PfnInternalFree       PfnInternalFreeNotification
+}
+
+func NewAllocationCallbacks() *AllocationCallbacks {
+	return (*AllocationCallbacks)(MemAlloc(unsafe.Sizeof(*(*AllocationCallbacks)(nil))))
+}
+func (p *AllocationCallbacks) Free() { MemFree(unsafe.Pointer(p)) }
+
 // ApplicationInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkApplicationInfo.html
 type ApplicationInfo struct {
 	SType              StructureType
 	PNext              unsafe.Pointer
 	PApplicationName   *int8
-	ApplicationVersion uint32
+	ApplicationVersion Version
 	PEngineName        *int8
-	EngineVersion      uint32
-	ApiVersion         uint32
+	EngineVersion      Version
+	ApiVersion         Version
 }
 
 func NewApplicationInfo() *ApplicationInfo {
@@ -6261,6 +7618,32 @@ func NewApplicationInfo() *ApplicationInfo {
 	return p
 }
 func (p *ApplicationInfo) Free() { MemFree(unsafe.Pointer(p)) }
+
+// FormatProperties -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFormatProperties.html
+type FormatProperties struct {
+	LinearTilingFeatures  FormatFeatureFlags
+	OptimalTilingFeatures FormatFeatureFlags
+	BufferFeatures        FormatFeatureFlags
+}
+
+func NewFormatProperties() *FormatProperties {
+	return (*FormatProperties)(MemAlloc(unsafe.Sizeof(*(*FormatProperties)(nil))))
+}
+func (p *FormatProperties) Free() { MemFree(unsafe.Pointer(p)) }
+
+// ImageFormatProperties -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageFormatProperties.html
+type ImageFormatProperties struct {
+	MaxExtent       Extent3D
+	MaxMipLevels    uint32
+	MaxArrayLayers  uint32
+	SampleCounts    SampleCountFlags
+	MaxResourceSize DeviceSize
+}
+
+func NewImageFormatProperties() *ImageFormatProperties {
+	return (*ImageFormatProperties)(MemAlloc(unsafe.Sizeof(*(*ImageFormatProperties)(nil))))
+}
+func (p *ImageFormatProperties) Free() { MemFree(unsafe.Pointer(p)) }
 
 // InstanceCreateInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkInstanceCreateInfo.html
 type InstanceCreateInfo struct {
@@ -6281,67 +7664,23 @@ func NewInstanceCreateInfo() *InstanceCreateInfo {
 }
 func (p *InstanceCreateInfo) Free() { MemFree(unsafe.Pointer(p)) }
 
-//  PfnAllocationFunction -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkAllocationFunction.html
-type PfnAllocationFunction uintptr
-
-func (fn PfnAllocationFunction) Call(pUserData unsafe.Pointer, size, alignment uintptr, allocationScope SystemAllocationScope) unsafe.Pointer {
-	ret := C.bridge_vkAllocationFunction(C.uintptr_t(fn), (unsafe.Pointer)(pUserData), (C.size_t)(size), (C.size_t)(alignment), (C.VkSystemAllocationScope)(allocationScope))
-	return unsafe.Pointer(ret)
-}
-func (fn PfnAllocationFunction) String() string { return "vkAllocationFunction" }
-
-//  PfnReallocationFunction -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkReallocationFunction.html
-type PfnReallocationFunction uintptr
-
-func (fn PfnReallocationFunction) Call(pUserData, pOriginal unsafe.Pointer, size, alignment uintptr, allocationScope SystemAllocationScope) unsafe.Pointer {
-	ret := C.bridge_vkReallocationFunction(C.uintptr_t(fn), (unsafe.Pointer)(pUserData), (unsafe.Pointer)(pOriginal), (C.size_t)(size), (C.size_t)(alignment), (C.VkSystemAllocationScope)(allocationScope))
-	return unsafe.Pointer(ret)
-}
-func (fn PfnReallocationFunction) String() string { return "vkReallocationFunction" }
-
-//  PfnFreeFunction -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkFreeFunction.html
-type PfnFreeFunction uintptr
-
-func (fn PfnFreeFunction) Call(pUserData, pMemory unsafe.Pointer) {
-	C.bridge_vkFreeFunction(C.uintptr_t(fn), (unsafe.Pointer)(pUserData), (unsafe.Pointer)(pMemory))
-	return
-}
-func (fn PfnFreeFunction) String() string { return "vkFreeFunction" }
-
-//  PfnInternalAllocationNotification -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkInternalAllocationNotification.html
-type PfnInternalAllocationNotification uintptr
-
-func (fn PfnInternalAllocationNotification) Call(pUserData unsafe.Pointer, size uintptr, allocationType InternalAllocationType, allocationScope SystemAllocationScope) {
-	C.bridge_vkInternalAllocationNotification(C.uintptr_t(fn), (unsafe.Pointer)(pUserData), (C.size_t)(size), (C.VkInternalAllocationType)(allocationType), (C.VkSystemAllocationScope)(allocationScope))
-	return
-}
-func (fn PfnInternalAllocationNotification) String() string {
-	return "vkInternalAllocationNotification"
+// MemoryHeap -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryHeap.html
+type MemoryHeap struct {
+	Size  DeviceSize
+	Flags MemoryHeapFlags
 }
 
-//  PfnInternalFreeNotification -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkInternalFreeNotification.html
-type PfnInternalFreeNotification uintptr
+func NewMemoryHeap() *MemoryHeap { return (*MemoryHeap)(MemAlloc(unsafe.Sizeof(*(*MemoryHeap)(nil)))) }
+func (p *MemoryHeap) Free()      { MemFree(unsafe.Pointer(p)) }
 
-func (fn PfnInternalFreeNotification) Call(pUserData unsafe.Pointer, size uintptr, allocationType InternalAllocationType, allocationScope SystemAllocationScope) {
-	C.bridge_vkInternalFreeNotification(C.uintptr_t(fn), (unsafe.Pointer)(pUserData), (C.size_t)(size), (C.VkInternalAllocationType)(allocationType), (C.VkSystemAllocationScope)(allocationScope))
-	return
-}
-func (fn PfnInternalFreeNotification) String() string { return "vkInternalFreeNotification" }
-
-// AllocationCallbacks -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAllocationCallbacks.html
-type AllocationCallbacks struct {
-	PUserData             unsafe.Pointer
-	PfnAllocation         PfnAllocationFunction
-	PfnReallocation       PfnReallocationFunction
-	PfnFree               PfnFreeFunction
-	PfnInternalAllocation PfnInternalAllocationNotification
-	PfnInternalFree       PfnInternalFreeNotification
+// MemoryType -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryType.html
+type MemoryType struct {
+	PropertyFlags MemoryPropertyFlags
+	HeapIndex     uint32
 }
 
-func NewAllocationCallbacks() *AllocationCallbacks {
-	return (*AllocationCallbacks)(MemAlloc(unsafe.Sizeof(*(*AllocationCallbacks)(nil))))
-}
-func (p *AllocationCallbacks) Free() { MemFree(unsafe.Pointer(p)) }
+func NewMemoryType() *MemoryType { return (*MemoryType)(MemAlloc(unsafe.Sizeof(*(*MemoryType)(nil)))) }
+func (p *MemoryType) Free()      { MemFree(unsafe.Pointer(p)) }
 
 // PhysicalDeviceFeatures -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceFeatures.html
 type PhysicalDeviceFeatures struct {
@@ -6406,42 +7745,6 @@ func NewPhysicalDeviceFeatures() *PhysicalDeviceFeatures {
 	return (*PhysicalDeviceFeatures)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceFeatures)(nil))))
 }
 func (p *PhysicalDeviceFeatures) Free() { MemFree(unsafe.Pointer(p)) }
-
-// FormatProperties -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFormatProperties.html
-type FormatProperties struct {
-	LinearTilingFeatures  FormatFeatureFlags
-	OptimalTilingFeatures FormatFeatureFlags
-	BufferFeatures        FormatFeatureFlags
-}
-
-func NewFormatProperties() *FormatProperties {
-	return (*FormatProperties)(MemAlloc(unsafe.Sizeof(*(*FormatProperties)(nil))))
-}
-func (p *FormatProperties) Free() { MemFree(unsafe.Pointer(p)) }
-
-// Extent3D -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExtent3D.html
-type Extent3D struct {
-	Width  uint32
-	Height uint32
-	Depth  uint32
-}
-
-func NewExtent3D() *Extent3D { return (*Extent3D)(MemAlloc(unsafe.Sizeof(*(*Extent3D)(nil)))) }
-func (p *Extent3D) Free()    { MemFree(unsafe.Pointer(p)) }
-
-// ImageFormatProperties -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageFormatProperties.html
-type ImageFormatProperties struct {
-	MaxExtent       Extent3D
-	MaxMipLevels    uint32
-	MaxArrayLayers  uint32
-	SampleCounts    SampleCountFlags
-	MaxResourceSize DeviceSize
-}
-
-func NewImageFormatProperties() *ImageFormatProperties {
-	return (*ImageFormatProperties)(MemAlloc(unsafe.Sizeof(*(*ImageFormatProperties)(nil))))
-}
-func (p *ImageFormatProperties) Free() { MemFree(unsafe.Pointer(p)) }
 
 // PhysicalDeviceLimits -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceLimits.html
 type PhysicalDeviceLimits struct {
@@ -6558,6 +7861,19 @@ func NewPhysicalDeviceLimits() *PhysicalDeviceLimits {
 }
 func (p *PhysicalDeviceLimits) Free() { MemFree(unsafe.Pointer(p)) }
 
+// PhysicalDeviceMemoryProperties -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceMemoryProperties.html
+type PhysicalDeviceMemoryProperties struct {
+	MemoryTypeCount uint32
+	MemoryTypes     [MAX_MEMORY_TYPES]MemoryType
+	MemoryHeapCount uint32
+	MemoryHeaps     [MAX_MEMORY_HEAPS]MemoryHeap
+}
+
+func NewPhysicalDeviceMemoryProperties() *PhysicalDeviceMemoryProperties {
+	return (*PhysicalDeviceMemoryProperties)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceMemoryProperties)(nil))))
+}
+func (p *PhysicalDeviceMemoryProperties) Free() { MemFree(unsafe.Pointer(p)) }
+
 // PhysicalDeviceSparseProperties -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceSparseProperties.html
 type PhysicalDeviceSparseProperties struct {
 	ResidencyStandard2DBlockShape            Bool32
@@ -6574,8 +7890,8 @@ func (p *PhysicalDeviceSparseProperties) Free() { MemFree(unsafe.Pointer(p)) }
 
 // PhysicalDeviceProperties -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceProperties.html
 type PhysicalDeviceProperties struct {
-	ApiVersion        uint32
-	DriverVersion     uint32
+	ApiVersion        Version
+	DriverVersion     Version
 	VendorID          uint32
 	DeviceID          uint32
 	DeviceType        PhysicalDeviceType
@@ -6602,37 +7918,6 @@ func NewQueueFamilyProperties() *QueueFamilyProperties {
 	return (*QueueFamilyProperties)(MemAlloc(unsafe.Sizeof(*(*QueueFamilyProperties)(nil))))
 }
 func (p *QueueFamilyProperties) Free() { MemFree(unsafe.Pointer(p)) }
-
-// MemoryType -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryType.html
-type MemoryType struct {
-	PropertyFlags MemoryPropertyFlags
-	HeapIndex     uint32
-}
-
-func NewMemoryType() *MemoryType { return (*MemoryType)(MemAlloc(unsafe.Sizeof(*(*MemoryType)(nil)))) }
-func (p *MemoryType) Free()      { MemFree(unsafe.Pointer(p)) }
-
-// MemoryHeap -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryHeap.html
-type MemoryHeap struct {
-	Size  DeviceSize
-	Flags MemoryHeapFlags
-}
-
-func NewMemoryHeap() *MemoryHeap { return (*MemoryHeap)(MemAlloc(unsafe.Sizeof(*(*MemoryHeap)(nil)))) }
-func (p *MemoryHeap) Free()      { MemFree(unsafe.Pointer(p)) }
-
-// PhysicalDeviceMemoryProperties -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceMemoryProperties.html
-type PhysicalDeviceMemoryProperties struct {
-	MemoryTypeCount uint32
-	MemoryTypes     [MAX_MEMORY_TYPES]MemoryType
-	MemoryHeapCount uint32
-	MemoryHeaps     [MAX_MEMORY_HEAPS]MemoryHeap
-}
-
-func NewPhysicalDeviceMemoryProperties() *PhysicalDeviceMemoryProperties {
-	return (*PhysicalDeviceMemoryProperties)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceMemoryProperties)(nil))))
-}
-func (p *PhysicalDeviceMemoryProperties) Free() { MemFree(unsafe.Pointer(p)) }
 
 // DeviceQueueCreateInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceQueueCreateInfo.html
 type DeviceQueueCreateInfo struct {
@@ -6675,7 +7960,7 @@ func (p *DeviceCreateInfo) Free() { MemFree(unsafe.Pointer(p)) }
 // ExtensionProperties -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExtensionProperties.html
 type ExtensionProperties struct {
 	ExtensionName [MAX_EXTENSION_NAME_SIZE]int8
-	SpecVersion   uint32
+	SpecVersion   Version
 }
 
 func NewExtensionProperties() *ExtensionProperties {
@@ -6686,8 +7971,8 @@ func (p *ExtensionProperties) Free() { MemFree(unsafe.Pointer(p)) }
 // LayerProperties -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkLayerProperties.html
 type LayerProperties struct {
 	LayerName             [MAX_EXTENSION_NAME_SIZE]int8
-	SpecVersion           uint32
-	ImplementationVersion uint32
+	SpecVersion           Version
+	ImplementationVersion Version
 	Description           [MAX_DESCRIPTION_SIZE]int8
 }
 
@@ -6716,21 +8001,6 @@ func NewSubmitInfo() *SubmitInfo {
 }
 func (p *SubmitInfo) Free() { MemFree(unsafe.Pointer(p)) }
 
-// MemoryAllocateInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryAllocateInfo.html
-type MemoryAllocateInfo struct {
-	SType           StructureType
-	PNext           unsafe.Pointer
-	AllocationSize  DeviceSize
-	MemoryTypeIndex uint32
-}
-
-func NewMemoryAllocateInfo() *MemoryAllocateInfo {
-	p := (*MemoryAllocateInfo)(MemAlloc(unsafe.Sizeof(*(*MemoryAllocateInfo)(nil))))
-	p.SType = STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO
-	return p
-}
-func (p *MemoryAllocateInfo) Free() { MemFree(unsafe.Pointer(p)) }
-
 // MappedMemoryRange -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMappedMemoryRange.html
 type MappedMemoryRange struct {
 	SType  StructureType
@@ -6747,6 +8017,21 @@ func NewMappedMemoryRange() *MappedMemoryRange {
 }
 func (p *MappedMemoryRange) Free() { MemFree(unsafe.Pointer(p)) }
 
+// MemoryAllocateInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryAllocateInfo.html
+type MemoryAllocateInfo struct {
+	SType           StructureType
+	PNext           unsafe.Pointer
+	AllocationSize  DeviceSize
+	MemoryTypeIndex uint32
+}
+
+func NewMemoryAllocateInfo() *MemoryAllocateInfo {
+	p := (*MemoryAllocateInfo)(MemAlloc(unsafe.Sizeof(*(*MemoryAllocateInfo)(nil))))
+	p.SType = STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO
+	return p
+}
+func (p *MemoryAllocateInfo) Free() { MemFree(unsafe.Pointer(p)) }
+
 // MemoryRequirements -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryRequirements.html
 type MemoryRequirements struct {
 	Size           DeviceSize
@@ -6758,32 +8043,6 @@ func NewMemoryRequirements() *MemoryRequirements {
 	return (*MemoryRequirements)(MemAlloc(unsafe.Sizeof(*(*MemoryRequirements)(nil))))
 }
 func (p *MemoryRequirements) Free() { MemFree(unsafe.Pointer(p)) }
-
-// SparseImageFormatProperties -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseImageFormatProperties.html
-type SparseImageFormatProperties struct {
-	AspectMask       ImageAspectFlags
-	ImageGranularity Extent3D
-	Flags            SparseImageFormatFlags
-}
-
-func NewSparseImageFormatProperties() *SparseImageFormatProperties {
-	return (*SparseImageFormatProperties)(MemAlloc(unsafe.Sizeof(*(*SparseImageFormatProperties)(nil))))
-}
-func (p *SparseImageFormatProperties) Free() { MemFree(unsafe.Pointer(p)) }
-
-// SparseImageMemoryRequirements -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseImageMemoryRequirements.html
-type SparseImageMemoryRequirements struct {
-	FormatProperties     SparseImageFormatProperties
-	ImageMipTailFirstLod uint32
-	ImageMipTailSize     DeviceSize
-	ImageMipTailOffset   DeviceSize
-	ImageMipTailStride   DeviceSize
-}
-
-func NewSparseImageMemoryRequirements() *SparseImageMemoryRequirements {
-	return (*SparseImageMemoryRequirements)(MemAlloc(unsafe.Sizeof(*(*SparseImageMemoryRequirements)(nil))))
-}
-func (p *SparseImageMemoryRequirements) Free() { MemFree(unsafe.Pointer(p)) }
 
 // SparseMemoryBind -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseMemoryBind.html
 type SparseMemoryBind struct {
@@ -6835,16 +8094,6 @@ func NewImageSubresource() *ImageSubresource {
 }
 func (p *ImageSubresource) Free() { MemFree(unsafe.Pointer(p)) }
 
-// Offset3D -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkOffset3D.html
-type Offset3D struct {
-	X int32
-	Y int32
-	Z int32
-}
-
-func NewOffset3D() *Offset3D { return (*Offset3D)(MemAlloc(unsafe.Sizeof(*(*Offset3D)(nil)))) }
-func (p *Offset3D) Free()    { MemFree(unsafe.Pointer(p)) }
-
 // SparseImageMemoryBind -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseImageMemoryBind.html
 type SparseImageMemoryBind struct {
 	Subresource  ImageSubresource
@@ -6894,6 +8143,32 @@ func NewBindSparseInfo() *BindSparseInfo {
 	return p
 }
 func (p *BindSparseInfo) Free() { MemFree(unsafe.Pointer(p)) }
+
+// SparseImageFormatProperties -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseImageFormatProperties.html
+type SparseImageFormatProperties struct {
+	AspectMask       ImageAspectFlags
+	ImageGranularity Extent3D
+	Flags            SparseImageFormatFlags
+}
+
+func NewSparseImageFormatProperties() *SparseImageFormatProperties {
+	return (*SparseImageFormatProperties)(MemAlloc(unsafe.Sizeof(*(*SparseImageFormatProperties)(nil))))
+}
+func (p *SparseImageFormatProperties) Free() { MemFree(unsafe.Pointer(p)) }
+
+// SparseImageMemoryRequirements -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseImageMemoryRequirements.html
+type SparseImageMemoryRequirements struct {
+	FormatProperties     SparseImageFormatProperties
+	ImageMipTailFirstLod uint32
+	ImageMipTailSize     DeviceSize
+	ImageMipTailOffset   DeviceSize
+	ImageMipTailStride   DeviceSize
+}
+
+func NewSparseImageMemoryRequirements() *SparseImageMemoryRequirements {
+	return (*SparseImageMemoryRequirements)(MemAlloc(unsafe.Sizeof(*(*SparseImageMemoryRequirements)(nil))))
+}
+func (p *SparseImageMemoryRequirements) Free() { MemFree(unsafe.Pointer(p)) }
 
 // FenceCreateInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFenceCreateInfo.html
 type FenceCreateInfo struct {
@@ -7044,20 +8319,6 @@ func NewComponentMapping() *ComponentMapping {
 }
 func (p *ComponentMapping) Free() { MemFree(unsafe.Pointer(p)) }
 
-// ImageSubresourceRange -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageSubresourceRange.html
-type ImageSubresourceRange struct {
-	AspectMask     ImageAspectFlags
-	BaseMipLevel   uint32
-	LevelCount     uint32
-	BaseArrayLayer uint32
-	LayerCount     uint32
-}
-
-func NewImageSubresourceRange() *ImageSubresourceRange {
-	return (*ImageSubresourceRange)(MemAlloc(unsafe.Sizeof(*(*ImageSubresourceRange)(nil))))
-}
-func (p *ImageSubresourceRange) Free() { MemFree(unsafe.Pointer(p)) }
-
 // ImageViewCreateInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageViewCreateInfo.html
 type ImageViewCreateInfo struct {
 	SType            StructureType
@@ -7152,6 +8413,24 @@ func NewPipelineShaderStageCreateInfo() *PipelineShaderStageCreateInfo {
 }
 func (p *PipelineShaderStageCreateInfo) Free() { MemFree(unsafe.Pointer(p)) }
 
+// ComputePipelineCreateInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkComputePipelineCreateInfo.html
+type ComputePipelineCreateInfo struct {
+	SType              StructureType
+	PNext              unsafe.Pointer
+	Flags              PipelineCreateFlags
+	Stage              PipelineShaderStageCreateInfo
+	Layout             PipelineLayout
+	BasePipelineHandle Pipeline
+	BasePipelineIndex  int32
+}
+
+func NewComputePipelineCreateInfo() *ComputePipelineCreateInfo {
+	p := (*ComputePipelineCreateInfo)(MemAlloc(unsafe.Sizeof(*(*ComputePipelineCreateInfo)(nil))))
+	p.SType = STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO
+	return p
+}
+func (p *ComputePipelineCreateInfo) Free() { MemFree(unsafe.Pointer(p)) }
+
 // VertexInputBindingDescription -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkVertexInputBindingDescription.html
 type VertexInputBindingDescription struct {
 	Binding   uint32
@@ -7238,33 +8517,6 @@ type Viewport struct {
 
 func NewViewport() *Viewport { return (*Viewport)(MemAlloc(unsafe.Sizeof(*(*Viewport)(nil)))) }
 func (p *Viewport) Free()    { MemFree(unsafe.Pointer(p)) }
-
-// Offset2D -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkOffset2D.html
-type Offset2D struct {
-	X int32
-	Y int32
-}
-
-func NewOffset2D() *Offset2D { return (*Offset2D)(MemAlloc(unsafe.Sizeof(*(*Offset2D)(nil)))) }
-func (p *Offset2D) Free()    { MemFree(unsafe.Pointer(p)) }
-
-// Extent2D -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkExtent2D.html
-type Extent2D struct {
-	Width  uint32
-	Height uint32
-}
-
-func NewExtent2D() *Extent2D { return (*Extent2D)(MemAlloc(unsafe.Sizeof(*(*Extent2D)(nil)))) }
-func (p *Extent2D) Free()    { MemFree(unsafe.Pointer(p)) }
-
-// Rect2D -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRect2D.html
-type Rect2D struct {
-	Offset Offset2D
-	Extent Extent2D
-}
-
-func NewRect2D() *Rect2D { return (*Rect2D)(MemAlloc(unsafe.Sizeof(*(*Rect2D)(nil)))) }
-func (p *Rect2D) Free()  { MemFree(unsafe.Pointer(p)) }
 
 // PipelineViewportStateCreateInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineViewportStateCreateInfo.html
 type PipelineViewportStateCreateInfo struct {
@@ -7449,24 +8701,6 @@ func NewGraphicsPipelineCreateInfo() *GraphicsPipelineCreateInfo {
 }
 func (p *GraphicsPipelineCreateInfo) Free() { MemFree(unsafe.Pointer(p)) }
 
-// ComputePipelineCreateInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkComputePipelineCreateInfo.html
-type ComputePipelineCreateInfo struct {
-	SType              StructureType
-	PNext              unsafe.Pointer
-	Flags              PipelineCreateFlags
-	Stage              PipelineShaderStageCreateInfo
-	Layout             PipelineLayout
-	BasePipelineHandle Pipeline
-	BasePipelineIndex  int32
-}
-
-func NewComputePipelineCreateInfo() *ComputePipelineCreateInfo {
-	p := (*ComputePipelineCreateInfo)(MemAlloc(unsafe.Sizeof(*(*ComputePipelineCreateInfo)(nil))))
-	p.SType = STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO
-	return p
-}
-func (p *ComputePipelineCreateInfo) Free() { MemFree(unsafe.Pointer(p)) }
-
 // PushConstantRange -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPushConstantRange.html
 type PushConstantRange struct {
 	StageFlags ShaderStageFlags
@@ -7526,35 +8760,49 @@ func NewSamplerCreateInfo() *SamplerCreateInfo {
 }
 func (p *SamplerCreateInfo) Free() { MemFree(unsafe.Pointer(p)) }
 
-// DescriptorSetLayoutBinding -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetLayoutBinding.html
-type DescriptorSetLayoutBinding struct {
-	Binding            uint32
-	DescriptorType     DescriptorType
-	DescriptorCount    uint32
-	StageFlags         ShaderStageFlags
-	PImmutableSamplers *Sampler
+// CopyDescriptorSet -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCopyDescriptorSet.html
+type CopyDescriptorSet struct {
+	SType           StructureType
+	PNext           unsafe.Pointer
+	SrcSet          DescriptorSet
+	SrcBinding      uint32
+	SrcArrayElement uint32
+	DstSet          DescriptorSet
+	DstBinding      uint32
+	DstArrayElement uint32
+	DescriptorCount uint32
 }
 
-func NewDescriptorSetLayoutBinding() *DescriptorSetLayoutBinding {
-	return (*DescriptorSetLayoutBinding)(MemAlloc(unsafe.Sizeof(*(*DescriptorSetLayoutBinding)(nil))))
-}
-func (p *DescriptorSetLayoutBinding) Free() { MemFree(unsafe.Pointer(p)) }
-
-// DescriptorSetLayoutCreateInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetLayoutCreateInfo.html
-type DescriptorSetLayoutCreateInfo struct {
-	SType        StructureType
-	PNext        unsafe.Pointer
-	Flags        DescriptorSetLayoutCreateFlags
-	BindingCount uint32
-	PBindings    *DescriptorSetLayoutBinding
-}
-
-func NewDescriptorSetLayoutCreateInfo() *DescriptorSetLayoutCreateInfo {
-	p := (*DescriptorSetLayoutCreateInfo)(MemAlloc(unsafe.Sizeof(*(*DescriptorSetLayoutCreateInfo)(nil))))
-	p.SType = STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO
+func NewCopyDescriptorSet() *CopyDescriptorSet {
+	p := (*CopyDescriptorSet)(MemAlloc(unsafe.Sizeof(*(*CopyDescriptorSet)(nil))))
+	p.SType = STRUCTURE_TYPE_COPY_DESCRIPTOR_SET
 	return p
 }
-func (p *DescriptorSetLayoutCreateInfo) Free() { MemFree(unsafe.Pointer(p)) }
+func (p *CopyDescriptorSet) Free() { MemFree(unsafe.Pointer(p)) }
+
+// DescriptorBufferInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorBufferInfo.html
+type DescriptorBufferInfo struct {
+	Buffer Buffer
+	Offset DeviceSize
+	Range  DeviceSize
+}
+
+func NewDescriptorBufferInfo() *DescriptorBufferInfo {
+	return (*DescriptorBufferInfo)(MemAlloc(unsafe.Sizeof(*(*DescriptorBufferInfo)(nil))))
+}
+func (p *DescriptorBufferInfo) Free() { MemFree(unsafe.Pointer(p)) }
+
+// DescriptorImageInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorImageInfo.html
+type DescriptorImageInfo struct {
+	Sampler     Sampler
+	ImageView   ImageView
+	ImageLayout ImageLayout
+}
+
+func NewDescriptorImageInfo() *DescriptorImageInfo {
+	return (*DescriptorImageInfo)(MemAlloc(unsafe.Sizeof(*(*DescriptorImageInfo)(nil))))
+}
+func (p *DescriptorImageInfo) Free() { MemFree(unsafe.Pointer(p)) }
 
 // DescriptorPoolSize -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorPoolSize.html
 type DescriptorPoolSize struct {
@@ -7600,29 +8848,35 @@ func NewDescriptorSetAllocateInfo() *DescriptorSetAllocateInfo {
 }
 func (p *DescriptorSetAllocateInfo) Free() { MemFree(unsafe.Pointer(p)) }
 
-// DescriptorImageInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorImageInfo.html
-type DescriptorImageInfo struct {
-	Sampler     Sampler
-	ImageView   ImageView
-	ImageLayout ImageLayout
+// DescriptorSetLayoutBinding -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetLayoutBinding.html
+type DescriptorSetLayoutBinding struct {
+	Binding            uint32
+	DescriptorType     DescriptorType
+	DescriptorCount    uint32
+	StageFlags         ShaderStageFlags
+	PImmutableSamplers *Sampler
 }
 
-func NewDescriptorImageInfo() *DescriptorImageInfo {
-	return (*DescriptorImageInfo)(MemAlloc(unsafe.Sizeof(*(*DescriptorImageInfo)(nil))))
+func NewDescriptorSetLayoutBinding() *DescriptorSetLayoutBinding {
+	return (*DescriptorSetLayoutBinding)(MemAlloc(unsafe.Sizeof(*(*DescriptorSetLayoutBinding)(nil))))
 }
-func (p *DescriptorImageInfo) Free() { MemFree(unsafe.Pointer(p)) }
+func (p *DescriptorSetLayoutBinding) Free() { MemFree(unsafe.Pointer(p)) }
 
-// DescriptorBufferInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorBufferInfo.html
-type DescriptorBufferInfo struct {
-	Buffer Buffer
-	Offset DeviceSize
-	Range  DeviceSize
+// DescriptorSetLayoutCreateInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetLayoutCreateInfo.html
+type DescriptorSetLayoutCreateInfo struct {
+	SType        StructureType
+	PNext        unsafe.Pointer
+	Flags        DescriptorSetLayoutCreateFlags
+	BindingCount uint32
+	PBindings    *DescriptorSetLayoutBinding
 }
 
-func NewDescriptorBufferInfo() *DescriptorBufferInfo {
-	return (*DescriptorBufferInfo)(MemAlloc(unsafe.Sizeof(*(*DescriptorBufferInfo)(nil))))
+func NewDescriptorSetLayoutCreateInfo() *DescriptorSetLayoutCreateInfo {
+	p := (*DescriptorSetLayoutCreateInfo)(MemAlloc(unsafe.Sizeof(*(*DescriptorSetLayoutCreateInfo)(nil))))
+	p.SType = STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO
+	return p
 }
-func (p *DescriptorBufferInfo) Free() { MemFree(unsafe.Pointer(p)) }
+func (p *DescriptorSetLayoutCreateInfo) Free() { MemFree(unsafe.Pointer(p)) }
 
 // WriteDescriptorSet -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkWriteDescriptorSet.html
 type WriteDescriptorSet struct {
@@ -7644,46 +8898,6 @@ func NewWriteDescriptorSet() *WriteDescriptorSet {
 	return p
 }
 func (p *WriteDescriptorSet) Free() { MemFree(unsafe.Pointer(p)) }
-
-// CopyDescriptorSet -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCopyDescriptorSet.html
-type CopyDescriptorSet struct {
-	SType           StructureType
-	PNext           unsafe.Pointer
-	SrcSet          DescriptorSet
-	SrcBinding      uint32
-	SrcArrayElement uint32
-	DstSet          DescriptorSet
-	DstBinding      uint32
-	DstArrayElement uint32
-	DescriptorCount uint32
-}
-
-func NewCopyDescriptorSet() *CopyDescriptorSet {
-	p := (*CopyDescriptorSet)(MemAlloc(unsafe.Sizeof(*(*CopyDescriptorSet)(nil))))
-	p.SType = STRUCTURE_TYPE_COPY_DESCRIPTOR_SET
-	return p
-}
-func (p *CopyDescriptorSet) Free() { MemFree(unsafe.Pointer(p)) }
-
-// FramebufferCreateInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFramebufferCreateInfo.html
-type FramebufferCreateInfo struct {
-	SType           StructureType
-	PNext           unsafe.Pointer
-	Flags           FramebufferCreateFlags
-	RenderPass      RenderPass
-	AttachmentCount uint32
-	PAttachments    *ImageView
-	Width           uint32
-	Height          uint32
-	Layers          uint32
-}
-
-func NewFramebufferCreateInfo() *FramebufferCreateInfo {
-	p := (*FramebufferCreateInfo)(MemAlloc(unsafe.Sizeof(*(*FramebufferCreateInfo)(nil))))
-	p.SType = STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO
-	return p
-}
-func (p *FramebufferCreateInfo) Free() { MemFree(unsafe.Pointer(p)) }
 
 // AttachmentDescription -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAttachmentDescription.html
 type AttachmentDescription struct {
@@ -7713,6 +8927,26 @@ func NewAttachmentReference() *AttachmentReference {
 	return (*AttachmentReference)(MemAlloc(unsafe.Sizeof(*(*AttachmentReference)(nil))))
 }
 func (p *AttachmentReference) Free() { MemFree(unsafe.Pointer(p)) }
+
+// FramebufferCreateInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFramebufferCreateInfo.html
+type FramebufferCreateInfo struct {
+	SType           StructureType
+	PNext           unsafe.Pointer
+	Flags           FramebufferCreateFlags
+	RenderPass      RenderPass
+	AttachmentCount uint32
+	PAttachments    *ImageView
+	Width           uint32
+	Height          uint32
+	Layers          uint32
+}
+
+func NewFramebufferCreateInfo() *FramebufferCreateInfo {
+	p := (*FramebufferCreateInfo)(MemAlloc(unsafe.Sizeof(*(*FramebufferCreateInfo)(nil))))
+	p.SType = STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO
+	return p
+}
+func (p *FramebufferCreateInfo) Free() { MemFree(unsafe.Pointer(p)) }
 
 // SubpassDescription -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassDescription.html
 type SubpassDescription struct {
@@ -7857,29 +9091,6 @@ func NewImageSubresourceLayers() *ImageSubresourceLayers {
 }
 func (p *ImageSubresourceLayers) Free() { MemFree(unsafe.Pointer(p)) }
 
-// ImageCopy -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageCopy.html
-type ImageCopy struct {
-	SrcSubresource ImageSubresourceLayers
-	SrcOffset      Offset3D
-	DstSubresource ImageSubresourceLayers
-	DstOffset      Offset3D
-	Extent         Extent3D
-}
-
-func NewImageCopy() *ImageCopy { return (*ImageCopy)(MemAlloc(unsafe.Sizeof(*(*ImageCopy)(nil)))) }
-func (p *ImageCopy) Free()     { MemFree(unsafe.Pointer(p)) }
-
-// ImageBlit -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageBlit.html
-type ImageBlit struct {
-	SrcSubresource ImageSubresourceLayers
-	SrcOffsets     [2]Offset3D
-	DstSubresource ImageSubresourceLayers
-	DstOffsets     [2]Offset3D
-}
-
-func NewImageBlit() *ImageBlit { return (*ImageBlit)(MemAlloc(unsafe.Sizeof(*(*ImageBlit)(nil)))) }
-func (p *ImageBlit) Free()     { MemFree(unsafe.Pointer(p)) }
-
 // BufferImageCopy -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferImageCopy.html
 type BufferImageCopy struct {
 	BufferOffset      DeviceSize
@@ -7928,6 +9139,29 @@ type ClearRect struct {
 func NewClearRect() *ClearRect { return (*ClearRect)(MemAlloc(unsafe.Sizeof(*(*ClearRect)(nil)))) }
 func (p *ClearRect) Free()     { MemFree(unsafe.Pointer(p)) }
 
+// ImageBlit -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageBlit.html
+type ImageBlit struct {
+	SrcSubresource ImageSubresourceLayers
+	SrcOffsets     [2]Offset3D
+	DstSubresource ImageSubresourceLayers
+	DstOffsets     [2]Offset3D
+}
+
+func NewImageBlit() *ImageBlit { return (*ImageBlit)(MemAlloc(unsafe.Sizeof(*(*ImageBlit)(nil)))) }
+func (p *ImageBlit) Free()     { MemFree(unsafe.Pointer(p)) }
+
+// ImageCopy -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageCopy.html
+type ImageCopy struct {
+	SrcSubresource ImageSubresourceLayers
+	SrcOffset      Offset3D
+	DstSubresource ImageSubresourceLayers
+	DstOffset      Offset3D
+	Extent         Extent3D
+}
+
+func NewImageCopy() *ImageCopy { return (*ImageCopy)(MemAlloc(unsafe.Sizeof(*(*ImageCopy)(nil)))) }
+func (p *ImageCopy) Free()     { MemFree(unsafe.Pointer(p)) }
+
 // ImageResolve -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageResolve.html
 type ImageResolve struct {
 	SrcSubresource ImageSubresourceLayers
@@ -7941,62 +9175,6 @@ func NewImageResolve() *ImageResolve {
 	return (*ImageResolve)(MemAlloc(unsafe.Sizeof(*(*ImageResolve)(nil))))
 }
 func (p *ImageResolve) Free() { MemFree(unsafe.Pointer(p)) }
-
-// MemoryBarrier -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryBarrier.html
-type MemoryBarrier struct {
-	SType         StructureType
-	PNext         unsafe.Pointer
-	SrcAccessMask AccessFlags
-	DstAccessMask AccessFlags
-}
-
-func NewMemoryBarrier() *MemoryBarrier {
-	p := (*MemoryBarrier)(MemAlloc(unsafe.Sizeof(*(*MemoryBarrier)(nil))))
-	p.SType = STRUCTURE_TYPE_MEMORY_BARRIER
-	return p
-}
-func (p *MemoryBarrier) Free() { MemFree(unsafe.Pointer(p)) }
-
-// BufferMemoryBarrier -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferMemoryBarrier.html
-type BufferMemoryBarrier struct {
-	SType               StructureType
-	PNext               unsafe.Pointer
-	SrcAccessMask       AccessFlags
-	DstAccessMask       AccessFlags
-	SrcQueueFamilyIndex uint32
-	DstQueueFamilyIndex uint32
-	Buffer              Buffer
-	Offset              DeviceSize
-	Size                DeviceSize
-}
-
-func NewBufferMemoryBarrier() *BufferMemoryBarrier {
-	p := (*BufferMemoryBarrier)(MemAlloc(unsafe.Sizeof(*(*BufferMemoryBarrier)(nil))))
-	p.SType = STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER
-	return p
-}
-func (p *BufferMemoryBarrier) Free() { MemFree(unsafe.Pointer(p)) }
-
-// ImageMemoryBarrier -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageMemoryBarrier.html
-type ImageMemoryBarrier struct {
-	SType               StructureType
-	PNext               unsafe.Pointer
-	SrcAccessMask       AccessFlags
-	DstAccessMask       AccessFlags
-	OldLayout           ImageLayout
-	NewLayout           ImageLayout
-	SrcQueueFamilyIndex uint32
-	DstQueueFamilyIndex uint32
-	Image               Image
-	SubresourceRange    ImageSubresourceRange
-}
-
-func NewImageMemoryBarrier() *ImageMemoryBarrier {
-	p := (*ImageMemoryBarrier)(MemAlloc(unsafe.Sizeof(*(*ImageMemoryBarrier)(nil))))
-	p.SType = STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER
-	return p
-}
-func (p *ImageMemoryBarrier) Free() { MemFree(unsafe.Pointer(p)) }
 
 // RenderPassBeginInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassBeginInfo.html
 type RenderPassBeginInfo struct {
@@ -8016,72 +9194,12 @@ func NewRenderPassBeginInfo() *RenderPassBeginInfo {
 }
 func (p *RenderPassBeginInfo) Free() { MemFree(unsafe.Pointer(p)) }
 
-// DispatchIndirectCommand -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDispatchIndirectCommand.html
-type DispatchIndirectCommand struct {
-	X uint32
-	Y uint32
-	Z uint32
-}
-
-func NewDispatchIndirectCommand() *DispatchIndirectCommand {
-	return (*DispatchIndirectCommand)(MemAlloc(unsafe.Sizeof(*(*DispatchIndirectCommand)(nil))))
-}
-func (p *DispatchIndirectCommand) Free() { MemFree(unsafe.Pointer(p)) }
-
-// DrawIndexedIndirectCommand -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDrawIndexedIndirectCommand.html
-type DrawIndexedIndirectCommand struct {
-	IndexCount    uint32
-	InstanceCount uint32
-	FirstIndex    uint32
-	VertexOffset  int32
-	FirstInstance uint32
-}
-
-func NewDrawIndexedIndirectCommand() *DrawIndexedIndirectCommand {
-	return (*DrawIndexedIndirectCommand)(MemAlloc(unsafe.Sizeof(*(*DrawIndexedIndirectCommand)(nil))))
-}
-func (p *DrawIndexedIndirectCommand) Free() { MemFree(unsafe.Pointer(p)) }
-
-// DrawIndirectCommand -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDrawIndirectCommand.html
-type DrawIndirectCommand struct {
-	VertexCount   uint32
-	InstanceCount uint32
-	FirstVertex   uint32
-	FirstInstance uint32
-}
-
-func NewDrawIndirectCommand() *DrawIndirectCommand {
-	return (*DrawIndirectCommand)(MemAlloc(unsafe.Sizeof(*(*DrawIndirectCommand)(nil))))
-}
-func (p *DrawIndirectCommand) Free() { MemFree(unsafe.Pointer(p)) }
-
-// BaseOutStructure -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBaseOutStructure.html
-type BaseOutStructure struct {
-	SType StructureType
-	PNext *BaseOutStructure
-}
-
-func NewBaseOutStructure() *BaseOutStructure {
-	return (*BaseOutStructure)(MemAlloc(unsafe.Sizeof(*(*BaseOutStructure)(nil))))
-}
-func (p *BaseOutStructure) Free() { MemFree(unsafe.Pointer(p)) }
-
-// BaseInStructure -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBaseInStructure.html
-type BaseInStructure struct {
-	SType StructureType
-	PNext *BaseInStructure
-}
-
-func NewBaseInStructure() *BaseInStructure {
-	return (*BaseInStructure)(MemAlloc(unsafe.Sizeof(*(*BaseInStructure)(nil))))
-}
-func (p *BaseInStructure) Free() { MemFree(unsafe.Pointer(p)) }
-
 //  PfnCreateInstance -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateInstance.html
 type PfnCreateInstance uintptr
 
 func (fn PfnCreateInstance) Call(pCreateInfo *InstanceCreateInfo, pAllocator *AllocationCallbacks, pInstance *Instance) Result {
 	ret := C.bridge_vkCreateInstance(C.uintptr_t(fn), (*C.VkInstanceCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkInstance)(unsafe.Pointer(pInstance)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateInstance) String() string { return "vkCreateInstance" }
@@ -8091,6 +9209,7 @@ type PfnDestroyInstance uintptr
 
 func (fn PfnDestroyInstance) Call(instance Instance, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyInstance(C.uintptr_t(fn), (C.VkInstance)(unsafe.Pointer(uintptr(instance))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyInstance) String() string { return "vkDestroyInstance" }
@@ -8100,6 +9219,7 @@ type PfnEnumeratePhysicalDevices uintptr
 
 func (fn PfnEnumeratePhysicalDevices) Call(instance Instance, pPhysicalDeviceCount *uint32, pPhysicalDevices *PhysicalDevice) Result {
 	ret := C.bridge_vkEnumeratePhysicalDevices(C.uintptr_t(fn), (C.VkInstance)(unsafe.Pointer(uintptr(instance))), (*C.uint32_t)(unsafe.Pointer(pPhysicalDeviceCount)), (*C.VkPhysicalDevice)(unsafe.Pointer(pPhysicalDevices)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnEnumeratePhysicalDevices) String() string { return "vkEnumeratePhysicalDevices" }
@@ -8109,6 +9229,7 @@ type PfnGetPhysicalDeviceFeatures uintptr
 
 func (fn PfnGetPhysicalDeviceFeatures) Call(physicalDevice PhysicalDevice, pFeatures *PhysicalDeviceFeatures) {
 	C.bridge_vkGetPhysicalDeviceFeatures(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkPhysicalDeviceFeatures)(unsafe.Pointer(pFeatures)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceFeatures) String() string { return "vkGetPhysicalDeviceFeatures" }
@@ -8118,6 +9239,7 @@ type PfnGetPhysicalDeviceFormatProperties uintptr
 
 func (fn PfnGetPhysicalDeviceFormatProperties) Call(physicalDevice PhysicalDevice, format Format, pFormatProperties *FormatProperties) {
 	C.bridge_vkGetPhysicalDeviceFormatProperties(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.VkFormat)(format), (*C.VkFormatProperties)(unsafe.Pointer(pFormatProperties)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceFormatProperties) String() string {
@@ -8129,6 +9251,7 @@ type PfnGetPhysicalDeviceImageFormatProperties uintptr
 
 func (fn PfnGetPhysicalDeviceImageFormatProperties) Call(physicalDevice PhysicalDevice, format Format, type_ ImageType, tiling ImageTiling, usage ImageUsageFlags, flags ImageCreateFlags, pImageFormatProperties *ImageFormatProperties) Result {
 	ret := C.bridge_vkGetPhysicalDeviceImageFormatProperties(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.VkFormat)(format), (C.VkImageType)(type_), (C.VkImageTiling)(tiling), (C.VkImageUsageFlags)(uint32(usage)), (C.VkImageCreateFlags)(uint32(flags)), (*C.VkImageFormatProperties)(unsafe.Pointer(pImageFormatProperties)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPhysicalDeviceImageFormatProperties) String() string {
@@ -8140,6 +9263,7 @@ type PfnGetPhysicalDeviceProperties uintptr
 
 func (fn PfnGetPhysicalDeviceProperties) Call(physicalDevice PhysicalDevice, pProperties *PhysicalDeviceProperties) {
 	C.bridge_vkGetPhysicalDeviceProperties(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkPhysicalDeviceProperties)(unsafe.Pointer(pProperties)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceProperties) String() string { return "vkGetPhysicalDeviceProperties" }
@@ -8149,6 +9273,7 @@ type PfnGetPhysicalDeviceQueueFamilyProperties uintptr
 
 func (fn PfnGetPhysicalDeviceQueueFamilyProperties) Call(physicalDevice PhysicalDevice, pQueueFamilyPropertyCount *uint32, pQueueFamilyProperties *QueueFamilyProperties) {
 	C.bridge_vkGetPhysicalDeviceQueueFamilyProperties(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.uint32_t)(unsafe.Pointer(pQueueFamilyPropertyCount)), (*C.VkQueueFamilyProperties)(unsafe.Pointer(pQueueFamilyProperties)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceQueueFamilyProperties) String() string {
@@ -8160,6 +9285,7 @@ type PfnGetPhysicalDeviceMemoryProperties uintptr
 
 func (fn PfnGetPhysicalDeviceMemoryProperties) Call(physicalDevice PhysicalDevice, pMemoryProperties *PhysicalDeviceMemoryProperties) {
 	C.bridge_vkGetPhysicalDeviceMemoryProperties(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkPhysicalDeviceMemoryProperties)(unsafe.Pointer(pMemoryProperties)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceMemoryProperties) String() string {
@@ -8171,6 +9297,7 @@ type PfnGetInstanceProcAddr uintptr
 
 func (fn PfnGetInstanceProcAddr) Call(instance Instance, pName *int8) PfnVoidFunction {
 	ret := C.bridge_vkGetInstanceProcAddr(C.uintptr_t(fn), (C.VkInstance)(unsafe.Pointer(uintptr(instance))), (*C.char)(unsafe.Pointer(pName)))
+	debugCheckAndBreak()
 	return PfnVoidFunction(unsafe.Pointer(ret))
 }
 func (fn PfnGetInstanceProcAddr) String() string { return "vkGetInstanceProcAddr" }
@@ -8180,6 +9307,7 @@ type PfnGetDeviceProcAddr uintptr
 
 func (fn PfnGetDeviceProcAddr) Call(device Device, pName *int8) PfnVoidFunction {
 	ret := C.bridge_vkGetDeviceProcAddr(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.char)(unsafe.Pointer(pName)))
+	debugCheckAndBreak()
 	return PfnVoidFunction(unsafe.Pointer(ret))
 }
 func (fn PfnGetDeviceProcAddr) String() string { return "vkGetDeviceProcAddr" }
@@ -8189,6 +9317,7 @@ type PfnCreateDevice uintptr
 
 func (fn PfnCreateDevice) Call(physicalDevice PhysicalDevice, pCreateInfo *DeviceCreateInfo, pAllocator *AllocationCallbacks, pDevice *Device) Result {
 	ret := C.bridge_vkCreateDevice(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkDeviceCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkDevice)(unsafe.Pointer(pDevice)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateDevice) String() string { return "vkCreateDevice" }
@@ -8198,6 +9327,7 @@ type PfnDestroyDevice uintptr
 
 func (fn PfnDestroyDevice) Call(device Device, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyDevice(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyDevice) String() string { return "vkDestroyDevice" }
@@ -8207,6 +9337,7 @@ type PfnEnumerateInstanceExtensionProperties uintptr
 
 func (fn PfnEnumerateInstanceExtensionProperties) Call(pLayerName *int8, pPropertyCount *uint32, pProperties *ExtensionProperties) Result {
 	ret := C.bridge_vkEnumerateInstanceExtensionProperties(C.uintptr_t(fn), (*C.char)(unsafe.Pointer(pLayerName)), (*C.uint32_t)(unsafe.Pointer(pPropertyCount)), (*C.VkExtensionProperties)(unsafe.Pointer(pProperties)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnEnumerateInstanceExtensionProperties) String() string {
@@ -8218,6 +9349,7 @@ type PfnEnumerateDeviceExtensionProperties uintptr
 
 func (fn PfnEnumerateDeviceExtensionProperties) Call(physicalDevice PhysicalDevice, pLayerName *int8, pPropertyCount *uint32, pProperties *ExtensionProperties) Result {
 	ret := C.bridge_vkEnumerateDeviceExtensionProperties(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.char)(unsafe.Pointer(pLayerName)), (*C.uint32_t)(unsafe.Pointer(pPropertyCount)), (*C.VkExtensionProperties)(unsafe.Pointer(pProperties)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnEnumerateDeviceExtensionProperties) String() string {
@@ -8229,6 +9361,7 @@ type PfnEnumerateInstanceLayerProperties uintptr
 
 func (fn PfnEnumerateInstanceLayerProperties) Call(pPropertyCount *uint32, pProperties *LayerProperties) Result {
 	ret := C.bridge_vkEnumerateInstanceLayerProperties(C.uintptr_t(fn), (*C.uint32_t)(unsafe.Pointer(pPropertyCount)), (*C.VkLayerProperties)(unsafe.Pointer(pProperties)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnEnumerateInstanceLayerProperties) String() string {
@@ -8240,6 +9373,7 @@ type PfnEnumerateDeviceLayerProperties uintptr
 
 func (fn PfnEnumerateDeviceLayerProperties) Call(physicalDevice PhysicalDevice, pPropertyCount *uint32, pProperties *LayerProperties) Result {
 	ret := C.bridge_vkEnumerateDeviceLayerProperties(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.uint32_t)(unsafe.Pointer(pPropertyCount)), (*C.VkLayerProperties)(unsafe.Pointer(pProperties)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnEnumerateDeviceLayerProperties) String() string {
@@ -8251,6 +9385,7 @@ type PfnGetDeviceQueue uintptr
 
 func (fn PfnGetDeviceQueue) Call(device Device, queueFamilyIndex, queueIndex uint32, pQueue *Queue) {
 	C.bridge_vkGetDeviceQueue(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.uint32_t)(queueFamilyIndex), (C.uint32_t)(queueIndex), (*C.VkQueue)(unsafe.Pointer(pQueue)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetDeviceQueue) String() string { return "vkGetDeviceQueue" }
@@ -8260,6 +9395,7 @@ type PfnQueueSubmit uintptr
 
 func (fn PfnQueueSubmit) Call(queue Queue, submitCount uint32, pSubmits *SubmitInfo, fence Fence) Result {
 	ret := C.bridge_vkQueueSubmit(C.uintptr_t(fn), (C.VkQueue)(unsafe.Pointer(uintptr(queue))), (C.uint32_t)(submitCount), (*C.VkSubmitInfo)(unsafe.Pointer(pSubmits)), (C.VkFence)(unsafe.Pointer(uintptr(fence))))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnQueueSubmit) String() string { return "vkQueueSubmit" }
@@ -8269,6 +9405,7 @@ type PfnQueueWaitIdle uintptr
 
 func (fn PfnQueueWaitIdle) Call(queue Queue) Result {
 	ret := C.bridge_vkQueueWaitIdle(C.uintptr_t(fn), (C.VkQueue)(unsafe.Pointer(uintptr(queue))))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnQueueWaitIdle) String() string { return "vkQueueWaitIdle" }
@@ -8278,6 +9415,7 @@ type PfnDeviceWaitIdle uintptr
 
 func (fn PfnDeviceWaitIdle) Call(device Device) Result {
 	ret := C.bridge_vkDeviceWaitIdle(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnDeviceWaitIdle) String() string { return "vkDeviceWaitIdle" }
@@ -8287,6 +9425,7 @@ type PfnAllocateMemory uintptr
 
 func (fn PfnAllocateMemory) Call(device Device, pAllocateInfo *MemoryAllocateInfo, pAllocator *AllocationCallbacks, pMemory *DeviceMemory) Result {
 	ret := C.bridge_vkAllocateMemory(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkMemoryAllocateInfo)(unsafe.Pointer(pAllocateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkDeviceMemory)(unsafe.Pointer(pMemory)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnAllocateMemory) String() string { return "vkAllocateMemory" }
@@ -8296,6 +9435,7 @@ type PfnFreeMemory uintptr
 
 func (fn PfnFreeMemory) Call(device Device, memory DeviceMemory, pAllocator *AllocationCallbacks) {
 	C.bridge_vkFreeMemory(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkDeviceMemory)(unsafe.Pointer(uintptr(memory))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnFreeMemory) String() string { return "vkFreeMemory" }
@@ -8305,6 +9445,7 @@ type PfnMapMemory uintptr
 
 func (fn PfnMapMemory) Call(device Device, memory DeviceMemory, offset, size DeviceSize, flags MemoryMapFlags, ppData *unsafe.Pointer) Result {
 	ret := C.bridge_vkMapMemory(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkDeviceMemory)(unsafe.Pointer(uintptr(memory))), (C.VkDeviceSize)(offset), (C.VkDeviceSize)(size), (C.VkMemoryMapFlags)(uint32(flags)), (*unsafe.Pointer)(unsafe.Pointer(ppData)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnMapMemory) String() string { return "vkMapMemory" }
@@ -8314,6 +9455,7 @@ type PfnUnmapMemory uintptr
 
 func (fn PfnUnmapMemory) Call(device Device, memory DeviceMemory) {
 	C.bridge_vkUnmapMemory(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkDeviceMemory)(unsafe.Pointer(uintptr(memory))))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnUnmapMemory) String() string { return "vkUnmapMemory" }
@@ -8323,6 +9465,7 @@ type PfnFlushMappedMemoryRanges uintptr
 
 func (fn PfnFlushMappedMemoryRanges) Call(device Device, memoryRangeCount uint32, pMemoryRanges *MappedMemoryRange) Result {
 	ret := C.bridge_vkFlushMappedMemoryRanges(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.uint32_t)(memoryRangeCount), (*C.VkMappedMemoryRange)(unsafe.Pointer(pMemoryRanges)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnFlushMappedMemoryRanges) String() string { return "vkFlushMappedMemoryRanges" }
@@ -8332,6 +9475,7 @@ type PfnInvalidateMappedMemoryRanges uintptr
 
 func (fn PfnInvalidateMappedMemoryRanges) Call(device Device, memoryRangeCount uint32, pMemoryRanges *MappedMemoryRange) Result {
 	ret := C.bridge_vkInvalidateMappedMemoryRanges(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.uint32_t)(memoryRangeCount), (*C.VkMappedMemoryRange)(unsafe.Pointer(pMemoryRanges)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnInvalidateMappedMemoryRanges) String() string { return "vkInvalidateMappedMemoryRanges" }
@@ -8341,6 +9485,7 @@ type PfnGetDeviceMemoryCommitment uintptr
 
 func (fn PfnGetDeviceMemoryCommitment) Call(device Device, memory DeviceMemory, pCommittedMemoryInBytes *DeviceSize) {
 	C.bridge_vkGetDeviceMemoryCommitment(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkDeviceMemory)(unsafe.Pointer(uintptr(memory))), (*C.VkDeviceSize)(unsafe.Pointer(pCommittedMemoryInBytes)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetDeviceMemoryCommitment) String() string { return "vkGetDeviceMemoryCommitment" }
@@ -8350,6 +9495,7 @@ type PfnBindBufferMemory uintptr
 
 func (fn PfnBindBufferMemory) Call(device Device, buffer Buffer, memory DeviceMemory, memoryOffset DeviceSize) Result {
 	ret := C.bridge_vkBindBufferMemory(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkBuffer)(unsafe.Pointer(uintptr(buffer))), (C.VkDeviceMemory)(unsafe.Pointer(uintptr(memory))), (C.VkDeviceSize)(memoryOffset))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnBindBufferMemory) String() string { return "vkBindBufferMemory" }
@@ -8359,6 +9505,7 @@ type PfnBindImageMemory uintptr
 
 func (fn PfnBindImageMemory) Call(device Device, image Image, memory DeviceMemory, memoryOffset DeviceSize) Result {
 	ret := C.bridge_vkBindImageMemory(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkImage)(unsafe.Pointer(uintptr(image))), (C.VkDeviceMemory)(unsafe.Pointer(uintptr(memory))), (C.VkDeviceSize)(memoryOffset))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnBindImageMemory) String() string { return "vkBindImageMemory" }
@@ -8368,6 +9515,7 @@ type PfnGetBufferMemoryRequirements uintptr
 
 func (fn PfnGetBufferMemoryRequirements) Call(device Device, buffer Buffer, pMemoryRequirements *MemoryRequirements) {
 	C.bridge_vkGetBufferMemoryRequirements(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkBuffer)(unsafe.Pointer(uintptr(buffer))), (*C.VkMemoryRequirements)(unsafe.Pointer(pMemoryRequirements)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetBufferMemoryRequirements) String() string { return "vkGetBufferMemoryRequirements" }
@@ -8377,6 +9525,7 @@ type PfnGetImageMemoryRequirements uintptr
 
 func (fn PfnGetImageMemoryRequirements) Call(device Device, image Image, pMemoryRequirements *MemoryRequirements) {
 	C.bridge_vkGetImageMemoryRequirements(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkImage)(unsafe.Pointer(uintptr(image))), (*C.VkMemoryRequirements)(unsafe.Pointer(pMemoryRequirements)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetImageMemoryRequirements) String() string { return "vkGetImageMemoryRequirements" }
@@ -8386,6 +9535,7 @@ type PfnGetImageSparseMemoryRequirements uintptr
 
 func (fn PfnGetImageSparseMemoryRequirements) Call(device Device, image Image, pSparseMemoryRequirementCount *uint32, pSparseMemoryRequirements *SparseImageMemoryRequirements) {
 	C.bridge_vkGetImageSparseMemoryRequirements(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkImage)(unsafe.Pointer(uintptr(image))), (*C.uint32_t)(unsafe.Pointer(pSparseMemoryRequirementCount)), (*C.VkSparseImageMemoryRequirements)(unsafe.Pointer(pSparseMemoryRequirements)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetImageSparseMemoryRequirements) String() string {
@@ -8397,6 +9547,7 @@ type PfnGetPhysicalDeviceSparseImageFormatProperties uintptr
 
 func (fn PfnGetPhysicalDeviceSparseImageFormatProperties) Call(physicalDevice PhysicalDevice, format Format, type_ ImageType, samples SampleCountFlags, usage ImageUsageFlags, tiling ImageTiling, pPropertyCount *uint32, pProperties *SparseImageFormatProperties) {
 	C.bridge_vkGetPhysicalDeviceSparseImageFormatProperties(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.VkFormat)(format), (C.VkImageType)(type_), (C.VkSampleCountFlagBits)(samples), (C.VkImageUsageFlags)(uint32(usage)), (C.VkImageTiling)(tiling), (*C.uint32_t)(unsafe.Pointer(pPropertyCount)), (*C.VkSparseImageFormatProperties)(unsafe.Pointer(pProperties)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceSparseImageFormatProperties) String() string {
@@ -8408,6 +9559,7 @@ type PfnQueueBindSparse uintptr
 
 func (fn PfnQueueBindSparse) Call(queue Queue, bindInfoCount uint32, pBindInfo *BindSparseInfo, fence Fence) Result {
 	ret := C.bridge_vkQueueBindSparse(C.uintptr_t(fn), (C.VkQueue)(unsafe.Pointer(uintptr(queue))), (C.uint32_t)(bindInfoCount), (*C.VkBindSparseInfo)(unsafe.Pointer(pBindInfo)), (C.VkFence)(unsafe.Pointer(uintptr(fence))))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnQueueBindSparse) String() string { return "vkQueueBindSparse" }
@@ -8417,6 +9569,7 @@ type PfnCreateFence uintptr
 
 func (fn PfnCreateFence) Call(device Device, pCreateInfo *FenceCreateInfo, pAllocator *AllocationCallbacks, pFence *Fence) Result {
 	ret := C.bridge_vkCreateFence(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkFenceCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkFence)(unsafe.Pointer(pFence)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateFence) String() string { return "vkCreateFence" }
@@ -8426,6 +9579,7 @@ type PfnDestroyFence uintptr
 
 func (fn PfnDestroyFence) Call(device Device, fence Fence, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyFence(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkFence)(unsafe.Pointer(uintptr(fence))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyFence) String() string { return "vkDestroyFence" }
@@ -8435,6 +9589,7 @@ type PfnResetFences uintptr
 
 func (fn PfnResetFences) Call(device Device, fenceCount uint32, pFences *Fence) Result {
 	ret := C.bridge_vkResetFences(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.uint32_t)(fenceCount), (*C.VkFence)(unsafe.Pointer(pFences)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnResetFences) String() string { return "vkResetFences" }
@@ -8444,6 +9599,7 @@ type PfnGetFenceStatus uintptr
 
 func (fn PfnGetFenceStatus) Call(device Device, fence Fence) Result {
 	ret := C.bridge_vkGetFenceStatus(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkFence)(unsafe.Pointer(uintptr(fence))))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetFenceStatus) String() string { return "vkGetFenceStatus" }
@@ -8453,6 +9609,7 @@ type PfnWaitForFences uintptr
 
 func (fn PfnWaitForFences) Call(device Device, fenceCount uint32, pFences *Fence, waitAll Bool32, timeout uint64) Result {
 	ret := C.bridge_vkWaitForFences(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.uint32_t)(fenceCount), (*C.VkFence)(unsafe.Pointer(pFences)), (C.VkBool32)(waitAll), (C.uint64_t)(timeout))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnWaitForFences) String() string { return "vkWaitForFences" }
@@ -8462,6 +9619,7 @@ type PfnCreateSemaphore uintptr
 
 func (fn PfnCreateSemaphore) Call(device Device, pCreateInfo *SemaphoreCreateInfo, pAllocator *AllocationCallbacks, pSemaphore *Semaphore) Result {
 	ret := C.bridge_vkCreateSemaphore(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkSemaphoreCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkSemaphore)(unsafe.Pointer(pSemaphore)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateSemaphore) String() string { return "vkCreateSemaphore" }
@@ -8471,6 +9629,7 @@ type PfnDestroySemaphore uintptr
 
 func (fn PfnDestroySemaphore) Call(device Device, semaphore Semaphore, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroySemaphore(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkSemaphore)(unsafe.Pointer(uintptr(semaphore))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroySemaphore) String() string { return "vkDestroySemaphore" }
@@ -8480,6 +9639,7 @@ type PfnCreateEvent uintptr
 
 func (fn PfnCreateEvent) Call(device Device, pCreateInfo *EventCreateInfo, pAllocator *AllocationCallbacks, pEvent *Event) Result {
 	ret := C.bridge_vkCreateEvent(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkEventCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkEvent)(unsafe.Pointer(pEvent)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateEvent) String() string { return "vkCreateEvent" }
@@ -8489,6 +9649,7 @@ type PfnDestroyEvent uintptr
 
 func (fn PfnDestroyEvent) Call(device Device, event Event, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyEvent(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkEvent)(unsafe.Pointer(uintptr(event))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyEvent) String() string { return "vkDestroyEvent" }
@@ -8498,6 +9659,7 @@ type PfnGetEventStatus uintptr
 
 func (fn PfnGetEventStatus) Call(device Device, event Event) Result {
 	ret := C.bridge_vkGetEventStatus(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkEvent)(unsafe.Pointer(uintptr(event))))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetEventStatus) String() string { return "vkGetEventStatus" }
@@ -8507,6 +9669,7 @@ type PfnSetEvent uintptr
 
 func (fn PfnSetEvent) Call(device Device, event Event) Result {
 	ret := C.bridge_vkSetEvent(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkEvent)(unsafe.Pointer(uintptr(event))))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnSetEvent) String() string { return "vkSetEvent" }
@@ -8516,6 +9679,7 @@ type PfnResetEvent uintptr
 
 func (fn PfnResetEvent) Call(device Device, event Event) Result {
 	ret := C.bridge_vkResetEvent(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkEvent)(unsafe.Pointer(uintptr(event))))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnResetEvent) String() string { return "vkResetEvent" }
@@ -8525,6 +9689,7 @@ type PfnCreateQueryPool uintptr
 
 func (fn PfnCreateQueryPool) Call(device Device, pCreateInfo *QueryPoolCreateInfo, pAllocator *AllocationCallbacks, pQueryPool *QueryPool) Result {
 	ret := C.bridge_vkCreateQueryPool(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkQueryPoolCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkQueryPool)(unsafe.Pointer(pQueryPool)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateQueryPool) String() string { return "vkCreateQueryPool" }
@@ -8534,6 +9699,7 @@ type PfnDestroyQueryPool uintptr
 
 func (fn PfnDestroyQueryPool) Call(device Device, queryPool QueryPool, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyQueryPool(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkQueryPool)(unsafe.Pointer(uintptr(queryPool))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyQueryPool) String() string { return "vkDestroyQueryPool" }
@@ -8543,6 +9709,7 @@ type PfnGetQueryPoolResults uintptr
 
 func (fn PfnGetQueryPoolResults) Call(device Device, queryPool QueryPool, firstQuery, queryCount uint32, dataSize uintptr, pData unsafe.Pointer, stride DeviceSize, flags QueryResultFlags) Result {
 	ret := C.bridge_vkGetQueryPoolResults(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkQueryPool)(unsafe.Pointer(uintptr(queryPool))), (C.uint32_t)(firstQuery), (C.uint32_t)(queryCount), (C.size_t)(dataSize), (unsafe.Pointer)(pData), (C.VkDeviceSize)(stride), (C.VkQueryResultFlags)(uint32(flags)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetQueryPoolResults) String() string { return "vkGetQueryPoolResults" }
@@ -8552,6 +9719,7 @@ type PfnCreateBuffer uintptr
 
 func (fn PfnCreateBuffer) Call(device Device, pCreateInfo *BufferCreateInfo, pAllocator *AllocationCallbacks, pBuffer *Buffer) Result {
 	ret := C.bridge_vkCreateBuffer(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkBufferCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkBuffer)(unsafe.Pointer(pBuffer)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateBuffer) String() string { return "vkCreateBuffer" }
@@ -8561,6 +9729,7 @@ type PfnDestroyBuffer uintptr
 
 func (fn PfnDestroyBuffer) Call(device Device, buffer Buffer, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyBuffer(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkBuffer)(unsafe.Pointer(uintptr(buffer))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyBuffer) String() string { return "vkDestroyBuffer" }
@@ -8570,6 +9739,7 @@ type PfnCreateBufferView uintptr
 
 func (fn PfnCreateBufferView) Call(device Device, pCreateInfo *BufferViewCreateInfo, pAllocator *AllocationCallbacks, pView *BufferView) Result {
 	ret := C.bridge_vkCreateBufferView(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkBufferViewCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkBufferView)(unsafe.Pointer(pView)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateBufferView) String() string { return "vkCreateBufferView" }
@@ -8579,6 +9749,7 @@ type PfnDestroyBufferView uintptr
 
 func (fn PfnDestroyBufferView) Call(device Device, bufferView BufferView, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyBufferView(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkBufferView)(unsafe.Pointer(uintptr(bufferView))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyBufferView) String() string { return "vkDestroyBufferView" }
@@ -8588,6 +9759,7 @@ type PfnCreateImage uintptr
 
 func (fn PfnCreateImage) Call(device Device, pCreateInfo *ImageCreateInfo, pAllocator *AllocationCallbacks, pImage *Image) Result {
 	ret := C.bridge_vkCreateImage(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkImageCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkImage)(unsafe.Pointer(pImage)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateImage) String() string { return "vkCreateImage" }
@@ -8597,6 +9769,7 @@ type PfnDestroyImage uintptr
 
 func (fn PfnDestroyImage) Call(device Device, image Image, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyImage(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkImage)(unsafe.Pointer(uintptr(image))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyImage) String() string { return "vkDestroyImage" }
@@ -8606,6 +9779,7 @@ type PfnGetImageSubresourceLayout uintptr
 
 func (fn PfnGetImageSubresourceLayout) Call(device Device, image Image, pSubresource *ImageSubresource, pLayout *SubresourceLayout) {
 	C.bridge_vkGetImageSubresourceLayout(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkImage)(unsafe.Pointer(uintptr(image))), (*C.VkImageSubresource)(unsafe.Pointer(pSubresource)), (*C.VkSubresourceLayout)(unsafe.Pointer(pLayout)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetImageSubresourceLayout) String() string { return "vkGetImageSubresourceLayout" }
@@ -8615,6 +9789,7 @@ type PfnCreateImageView uintptr
 
 func (fn PfnCreateImageView) Call(device Device, pCreateInfo *ImageViewCreateInfo, pAllocator *AllocationCallbacks, pView *ImageView) Result {
 	ret := C.bridge_vkCreateImageView(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkImageViewCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkImageView)(unsafe.Pointer(pView)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateImageView) String() string { return "vkCreateImageView" }
@@ -8624,6 +9799,7 @@ type PfnDestroyImageView uintptr
 
 func (fn PfnDestroyImageView) Call(device Device, imageView ImageView, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyImageView(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkImageView)(unsafe.Pointer(uintptr(imageView))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyImageView) String() string { return "vkDestroyImageView" }
@@ -8633,6 +9809,7 @@ type PfnCreateShaderModule uintptr
 
 func (fn PfnCreateShaderModule) Call(device Device, pCreateInfo *ShaderModuleCreateInfo, pAllocator *AllocationCallbacks, pShaderModule *ShaderModule) Result {
 	ret := C.bridge_vkCreateShaderModule(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkShaderModuleCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkShaderModule)(unsafe.Pointer(pShaderModule)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateShaderModule) String() string { return "vkCreateShaderModule" }
@@ -8642,6 +9819,7 @@ type PfnDestroyShaderModule uintptr
 
 func (fn PfnDestroyShaderModule) Call(device Device, shaderModule ShaderModule, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyShaderModule(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkShaderModule)(unsafe.Pointer(uintptr(shaderModule))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyShaderModule) String() string { return "vkDestroyShaderModule" }
@@ -8651,6 +9829,7 @@ type PfnCreatePipelineCache uintptr
 
 func (fn PfnCreatePipelineCache) Call(device Device, pCreateInfo *PipelineCacheCreateInfo, pAllocator *AllocationCallbacks, pPipelineCache *PipelineCache) Result {
 	ret := C.bridge_vkCreatePipelineCache(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkPipelineCacheCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkPipelineCache)(unsafe.Pointer(pPipelineCache)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreatePipelineCache) String() string { return "vkCreatePipelineCache" }
@@ -8660,6 +9839,7 @@ type PfnDestroyPipelineCache uintptr
 
 func (fn PfnDestroyPipelineCache) Call(device Device, pipelineCache PipelineCache, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyPipelineCache(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkPipelineCache)(unsafe.Pointer(uintptr(pipelineCache))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyPipelineCache) String() string { return "vkDestroyPipelineCache" }
@@ -8669,6 +9849,7 @@ type PfnGetPipelineCacheData uintptr
 
 func (fn PfnGetPipelineCacheData) Call(device Device, pipelineCache PipelineCache, pDataSize *uintptr, pData unsafe.Pointer) Result {
 	ret := C.bridge_vkGetPipelineCacheData(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkPipelineCache)(unsafe.Pointer(uintptr(pipelineCache))), (*C.size_t)(unsafe.Pointer(pDataSize)), (unsafe.Pointer)(pData))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPipelineCacheData) String() string { return "vkGetPipelineCacheData" }
@@ -8678,6 +9859,7 @@ type PfnMergePipelineCaches uintptr
 
 func (fn PfnMergePipelineCaches) Call(device Device, dstCache PipelineCache, srcCacheCount uint32, pSrcCaches *PipelineCache) Result {
 	ret := C.bridge_vkMergePipelineCaches(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkPipelineCache)(unsafe.Pointer(uintptr(dstCache))), (C.uint32_t)(srcCacheCount), (*C.VkPipelineCache)(unsafe.Pointer(pSrcCaches)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnMergePipelineCaches) String() string { return "vkMergePipelineCaches" }
@@ -8687,6 +9869,7 @@ type PfnCreateGraphicsPipelines uintptr
 
 func (fn PfnCreateGraphicsPipelines) Call(device Device, pipelineCache PipelineCache, createInfoCount uint32, pCreateInfos *GraphicsPipelineCreateInfo, pAllocator *AllocationCallbacks, pPipelines *Pipeline) Result {
 	ret := C.bridge_vkCreateGraphicsPipelines(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkPipelineCache)(unsafe.Pointer(uintptr(pipelineCache))), (C.uint32_t)(createInfoCount), (*C.VkGraphicsPipelineCreateInfo)(unsafe.Pointer(pCreateInfos)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkPipeline)(unsafe.Pointer(pPipelines)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateGraphicsPipelines) String() string { return "vkCreateGraphicsPipelines" }
@@ -8696,6 +9879,7 @@ type PfnCreateComputePipelines uintptr
 
 func (fn PfnCreateComputePipelines) Call(device Device, pipelineCache PipelineCache, createInfoCount uint32, pCreateInfos *ComputePipelineCreateInfo, pAllocator *AllocationCallbacks, pPipelines *Pipeline) Result {
 	ret := C.bridge_vkCreateComputePipelines(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkPipelineCache)(unsafe.Pointer(uintptr(pipelineCache))), (C.uint32_t)(createInfoCount), (*C.VkComputePipelineCreateInfo)(unsafe.Pointer(pCreateInfos)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkPipeline)(unsafe.Pointer(pPipelines)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateComputePipelines) String() string { return "vkCreateComputePipelines" }
@@ -8705,6 +9889,7 @@ type PfnDestroyPipeline uintptr
 
 func (fn PfnDestroyPipeline) Call(device Device, pipeline Pipeline, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyPipeline(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkPipeline)(unsafe.Pointer(uintptr(pipeline))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyPipeline) String() string { return "vkDestroyPipeline" }
@@ -8714,6 +9899,7 @@ type PfnCreatePipelineLayout uintptr
 
 func (fn PfnCreatePipelineLayout) Call(device Device, pCreateInfo *PipelineLayoutCreateInfo, pAllocator *AllocationCallbacks, pPipelineLayout *PipelineLayout) Result {
 	ret := C.bridge_vkCreatePipelineLayout(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkPipelineLayoutCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkPipelineLayout)(unsafe.Pointer(pPipelineLayout)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreatePipelineLayout) String() string { return "vkCreatePipelineLayout" }
@@ -8723,6 +9909,7 @@ type PfnDestroyPipelineLayout uintptr
 
 func (fn PfnDestroyPipelineLayout) Call(device Device, pipelineLayout PipelineLayout, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyPipelineLayout(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkPipelineLayout)(unsafe.Pointer(uintptr(pipelineLayout))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyPipelineLayout) String() string { return "vkDestroyPipelineLayout" }
@@ -8732,6 +9919,7 @@ type PfnCreateSampler uintptr
 
 func (fn PfnCreateSampler) Call(device Device, pCreateInfo *SamplerCreateInfo, pAllocator *AllocationCallbacks, pSampler *Sampler) Result {
 	ret := C.bridge_vkCreateSampler(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkSamplerCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkSampler)(unsafe.Pointer(pSampler)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateSampler) String() string { return "vkCreateSampler" }
@@ -8741,6 +9929,7 @@ type PfnDestroySampler uintptr
 
 func (fn PfnDestroySampler) Call(device Device, sampler Sampler, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroySampler(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkSampler)(unsafe.Pointer(uintptr(sampler))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroySampler) String() string { return "vkDestroySampler" }
@@ -8750,6 +9939,7 @@ type PfnCreateDescriptorSetLayout uintptr
 
 func (fn PfnCreateDescriptorSetLayout) Call(device Device, pCreateInfo *DescriptorSetLayoutCreateInfo, pAllocator *AllocationCallbacks, pSetLayout *DescriptorSetLayout) Result {
 	ret := C.bridge_vkCreateDescriptorSetLayout(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkDescriptorSetLayoutCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkDescriptorSetLayout)(unsafe.Pointer(pSetLayout)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateDescriptorSetLayout) String() string { return "vkCreateDescriptorSetLayout" }
@@ -8759,6 +9949,7 @@ type PfnDestroyDescriptorSetLayout uintptr
 
 func (fn PfnDestroyDescriptorSetLayout) Call(device Device, descriptorSetLayout DescriptorSetLayout, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyDescriptorSetLayout(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkDescriptorSetLayout)(unsafe.Pointer(uintptr(descriptorSetLayout))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyDescriptorSetLayout) String() string { return "vkDestroyDescriptorSetLayout" }
@@ -8768,6 +9959,7 @@ type PfnCreateDescriptorPool uintptr
 
 func (fn PfnCreateDescriptorPool) Call(device Device, pCreateInfo *DescriptorPoolCreateInfo, pAllocator *AllocationCallbacks, pDescriptorPool *DescriptorPool) Result {
 	ret := C.bridge_vkCreateDescriptorPool(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkDescriptorPoolCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkDescriptorPool)(unsafe.Pointer(pDescriptorPool)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateDescriptorPool) String() string { return "vkCreateDescriptorPool" }
@@ -8777,6 +9969,7 @@ type PfnDestroyDescriptorPool uintptr
 
 func (fn PfnDestroyDescriptorPool) Call(device Device, descriptorPool DescriptorPool, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyDescriptorPool(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkDescriptorPool)(unsafe.Pointer(uintptr(descriptorPool))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyDescriptorPool) String() string { return "vkDestroyDescriptorPool" }
@@ -8786,6 +9979,7 @@ type PfnResetDescriptorPool uintptr
 
 func (fn PfnResetDescriptorPool) Call(device Device, descriptorPool DescriptorPool, flags DescriptorPoolResetFlags) Result {
 	ret := C.bridge_vkResetDescriptorPool(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkDescriptorPool)(unsafe.Pointer(uintptr(descriptorPool))), (C.VkDescriptorPoolResetFlags)(uint32(flags)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnResetDescriptorPool) String() string { return "vkResetDescriptorPool" }
@@ -8795,6 +9989,7 @@ type PfnAllocateDescriptorSets uintptr
 
 func (fn PfnAllocateDescriptorSets) Call(device Device, pAllocateInfo *DescriptorSetAllocateInfo, pDescriptorSets *DescriptorSet) Result {
 	ret := C.bridge_vkAllocateDescriptorSets(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkDescriptorSetAllocateInfo)(unsafe.Pointer(pAllocateInfo)), (*C.VkDescriptorSet)(unsafe.Pointer(pDescriptorSets)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnAllocateDescriptorSets) String() string { return "vkAllocateDescriptorSets" }
@@ -8804,6 +9999,7 @@ type PfnFreeDescriptorSets uintptr
 
 func (fn PfnFreeDescriptorSets) Call(device Device, descriptorPool DescriptorPool, descriptorSetCount uint32, pDescriptorSets *DescriptorSet) Result {
 	ret := C.bridge_vkFreeDescriptorSets(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkDescriptorPool)(unsafe.Pointer(uintptr(descriptorPool))), (C.uint32_t)(descriptorSetCount), (*C.VkDescriptorSet)(unsafe.Pointer(pDescriptorSets)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnFreeDescriptorSets) String() string { return "vkFreeDescriptorSets" }
@@ -8813,6 +10009,7 @@ type PfnUpdateDescriptorSets uintptr
 
 func (fn PfnUpdateDescriptorSets) Call(device Device, descriptorWriteCount uint32, pDescriptorWrites *WriteDescriptorSet, descriptorCopyCount uint32, pDescriptorCopies *CopyDescriptorSet) {
 	C.bridge_vkUpdateDescriptorSets(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.uint32_t)(descriptorWriteCount), (*C.VkWriteDescriptorSet)(unsafe.Pointer(pDescriptorWrites)), (C.uint32_t)(descriptorCopyCount), (*C.VkCopyDescriptorSet)(unsafe.Pointer(pDescriptorCopies)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnUpdateDescriptorSets) String() string { return "vkUpdateDescriptorSets" }
@@ -8822,6 +10019,7 @@ type PfnCreateFramebuffer uintptr
 
 func (fn PfnCreateFramebuffer) Call(device Device, pCreateInfo *FramebufferCreateInfo, pAllocator *AllocationCallbacks, pFramebuffer *Framebuffer) Result {
 	ret := C.bridge_vkCreateFramebuffer(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkFramebufferCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkFramebuffer)(unsafe.Pointer(pFramebuffer)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateFramebuffer) String() string { return "vkCreateFramebuffer" }
@@ -8831,6 +10029,7 @@ type PfnDestroyFramebuffer uintptr
 
 func (fn PfnDestroyFramebuffer) Call(device Device, framebuffer Framebuffer, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyFramebuffer(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkFramebuffer)(unsafe.Pointer(uintptr(framebuffer))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyFramebuffer) String() string { return "vkDestroyFramebuffer" }
@@ -8840,6 +10039,7 @@ type PfnCreateRenderPass uintptr
 
 func (fn PfnCreateRenderPass) Call(device Device, pCreateInfo *RenderPassCreateInfo, pAllocator *AllocationCallbacks, pRenderPass *RenderPass) Result {
 	ret := C.bridge_vkCreateRenderPass(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkRenderPassCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkRenderPass)(unsafe.Pointer(pRenderPass)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateRenderPass) String() string { return "vkCreateRenderPass" }
@@ -8849,6 +10049,7 @@ type PfnDestroyRenderPass uintptr
 
 func (fn PfnDestroyRenderPass) Call(device Device, renderPass RenderPass, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyRenderPass(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkRenderPass)(unsafe.Pointer(uintptr(renderPass))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyRenderPass) String() string { return "vkDestroyRenderPass" }
@@ -8858,6 +10059,7 @@ type PfnGetRenderAreaGranularity uintptr
 
 func (fn PfnGetRenderAreaGranularity) Call(device Device, renderPass RenderPass, pGranularity *Extent2D) {
 	C.bridge_vkGetRenderAreaGranularity(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkRenderPass)(unsafe.Pointer(uintptr(renderPass))), (*C.VkExtent2D)(unsafe.Pointer(pGranularity)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetRenderAreaGranularity) String() string { return "vkGetRenderAreaGranularity" }
@@ -8867,6 +10069,7 @@ type PfnCreateCommandPool uintptr
 
 func (fn PfnCreateCommandPool) Call(device Device, pCreateInfo *CommandPoolCreateInfo, pAllocator *AllocationCallbacks, pCommandPool *CommandPool) Result {
 	ret := C.bridge_vkCreateCommandPool(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkCommandPoolCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkCommandPool)(unsafe.Pointer(pCommandPool)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateCommandPool) String() string { return "vkCreateCommandPool" }
@@ -8876,6 +10079,7 @@ type PfnDestroyCommandPool uintptr
 
 func (fn PfnDestroyCommandPool) Call(device Device, commandPool CommandPool, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyCommandPool(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkCommandPool)(unsafe.Pointer(uintptr(commandPool))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyCommandPool) String() string { return "vkDestroyCommandPool" }
@@ -8885,6 +10089,7 @@ type PfnResetCommandPool uintptr
 
 func (fn PfnResetCommandPool) Call(device Device, commandPool CommandPool, flags CommandPoolResetFlags) Result {
 	ret := C.bridge_vkResetCommandPool(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkCommandPool)(unsafe.Pointer(uintptr(commandPool))), (C.VkCommandPoolResetFlags)(uint32(flags)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnResetCommandPool) String() string { return "vkResetCommandPool" }
@@ -8894,6 +10099,7 @@ type PfnAllocateCommandBuffers uintptr
 
 func (fn PfnAllocateCommandBuffers) Call(device Device, pAllocateInfo *CommandBufferAllocateInfo, pCommandBuffers *CommandBuffer) Result {
 	ret := C.bridge_vkAllocateCommandBuffers(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkCommandBufferAllocateInfo)(unsafe.Pointer(pAllocateInfo)), (*C.VkCommandBuffer)(unsafe.Pointer(pCommandBuffers)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnAllocateCommandBuffers) String() string { return "vkAllocateCommandBuffers" }
@@ -8903,6 +10109,7 @@ type PfnFreeCommandBuffers uintptr
 
 func (fn PfnFreeCommandBuffers) Call(device Device, commandPool CommandPool, commandBufferCount uint32, pCommandBuffers *CommandBuffer) {
 	C.bridge_vkFreeCommandBuffers(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkCommandPool)(unsafe.Pointer(uintptr(commandPool))), (C.uint32_t)(commandBufferCount), (*C.VkCommandBuffer)(unsafe.Pointer(pCommandBuffers)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnFreeCommandBuffers) String() string { return "vkFreeCommandBuffers" }
@@ -8912,6 +10119,7 @@ type PfnBeginCommandBuffer uintptr
 
 func (fn PfnBeginCommandBuffer) Call(commandBuffer CommandBuffer, pBeginInfo *CommandBufferBeginInfo) Result {
 	ret := C.bridge_vkBeginCommandBuffer(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkCommandBufferBeginInfo)(unsafe.Pointer(pBeginInfo)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnBeginCommandBuffer) String() string { return "vkBeginCommandBuffer" }
@@ -8921,6 +10129,7 @@ type PfnEndCommandBuffer uintptr
 
 func (fn PfnEndCommandBuffer) Call(commandBuffer CommandBuffer) Result {
 	ret := C.bridge_vkEndCommandBuffer(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnEndCommandBuffer) String() string { return "vkEndCommandBuffer" }
@@ -8930,6 +10139,7 @@ type PfnResetCommandBuffer uintptr
 
 func (fn PfnResetCommandBuffer) Call(commandBuffer CommandBuffer, flags CommandBufferResetFlags) Result {
 	ret := C.bridge_vkResetCommandBuffer(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkCommandBufferResetFlags)(uint32(flags)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnResetCommandBuffer) String() string { return "vkResetCommandBuffer" }
@@ -8939,6 +10149,7 @@ type PfnCmdBindPipeline uintptr
 
 func (fn PfnCmdBindPipeline) Call(commandBuffer CommandBuffer, pipelineBindPoint PipelineBindPoint, pipeline Pipeline) {
 	C.bridge_vkCmdBindPipeline(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkPipelineBindPoint)(pipelineBindPoint), (C.VkPipeline)(unsafe.Pointer(uintptr(pipeline))))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdBindPipeline) String() string { return "vkCmdBindPipeline" }
@@ -8948,6 +10159,7 @@ type PfnCmdSetViewport uintptr
 
 func (fn PfnCmdSetViewport) Call(commandBuffer CommandBuffer, firstViewport, viewportCount uint32, pViewports *Viewport) {
 	C.bridge_vkCmdSetViewport(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(firstViewport), (C.uint32_t)(viewportCount), (*C.VkViewport)(unsafe.Pointer(pViewports)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdSetViewport) String() string { return "vkCmdSetViewport" }
@@ -8957,6 +10169,7 @@ type PfnCmdSetScissor uintptr
 
 func (fn PfnCmdSetScissor) Call(commandBuffer CommandBuffer, firstScissor, scissorCount uint32, pScissors *Rect2D) {
 	C.bridge_vkCmdSetScissor(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(firstScissor), (C.uint32_t)(scissorCount), (*C.VkRect2D)(unsafe.Pointer(pScissors)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdSetScissor) String() string { return "vkCmdSetScissor" }
@@ -8966,6 +10179,7 @@ type PfnCmdSetLineWidth uintptr
 
 func (fn PfnCmdSetLineWidth) Call(commandBuffer CommandBuffer, lineWidth float32) {
 	C.bridge_vkCmdSetLineWidth(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.float)(lineWidth))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdSetLineWidth) String() string { return "vkCmdSetLineWidth" }
@@ -8975,6 +10189,7 @@ type PfnCmdSetDepthBias uintptr
 
 func (fn PfnCmdSetDepthBias) Call(commandBuffer CommandBuffer, depthBiasConstantFactor, depthBiasClamp, depthBiasSlopeFactor float32) {
 	C.bridge_vkCmdSetDepthBias(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.float)(depthBiasConstantFactor), (C.float)(depthBiasClamp), (C.float)(depthBiasSlopeFactor))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdSetDepthBias) String() string { return "vkCmdSetDepthBias" }
@@ -8984,6 +10199,7 @@ type PfnCmdSetBlendConstants uintptr
 
 func (fn PfnCmdSetBlendConstants) Call(commandBuffer CommandBuffer, blendConstant *[4]float32) {
 	C.bridge_vkCmdSetBlendConstants(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.float)(unsafe.Pointer(blendConstant)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdSetBlendConstants) String() string { return "vkCmdSetBlendConstants" }
@@ -8993,6 +10209,7 @@ type PfnCmdSetDepthBounds uintptr
 
 func (fn PfnCmdSetDepthBounds) Call(commandBuffer CommandBuffer, minDepthBounds, maxDepthBounds float32) {
 	C.bridge_vkCmdSetDepthBounds(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.float)(minDepthBounds), (C.float)(maxDepthBounds))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdSetDepthBounds) String() string { return "vkCmdSetDepthBounds" }
@@ -9002,6 +10219,7 @@ type PfnCmdSetStencilCompareMask uintptr
 
 func (fn PfnCmdSetStencilCompareMask) Call(commandBuffer CommandBuffer, faceMask StencilFaceFlags, compareMask uint32) {
 	C.bridge_vkCmdSetStencilCompareMask(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkStencilFaceFlags)(uint32(faceMask)), (C.uint32_t)(compareMask))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdSetStencilCompareMask) String() string { return "vkCmdSetStencilCompareMask" }
@@ -9011,6 +10229,7 @@ type PfnCmdSetStencilWriteMask uintptr
 
 func (fn PfnCmdSetStencilWriteMask) Call(commandBuffer CommandBuffer, faceMask StencilFaceFlags, writeMask uint32) {
 	C.bridge_vkCmdSetStencilWriteMask(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkStencilFaceFlags)(uint32(faceMask)), (C.uint32_t)(writeMask))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdSetStencilWriteMask) String() string { return "vkCmdSetStencilWriteMask" }
@@ -9020,6 +10239,7 @@ type PfnCmdSetStencilReference uintptr
 
 func (fn PfnCmdSetStencilReference) Call(commandBuffer CommandBuffer, faceMask StencilFaceFlags, reference uint32) {
 	C.bridge_vkCmdSetStencilReference(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkStencilFaceFlags)(uint32(faceMask)), (C.uint32_t)(reference))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdSetStencilReference) String() string { return "vkCmdSetStencilReference" }
@@ -9029,6 +10249,7 @@ type PfnCmdBindDescriptorSets uintptr
 
 func (fn PfnCmdBindDescriptorSets) Call(commandBuffer CommandBuffer, pipelineBindPoint PipelineBindPoint, layout PipelineLayout, firstSet, descriptorSetCount uint32, pDescriptorSets *DescriptorSet, dynamicOffsetCount uint32, pDynamicOffsets *uint32) {
 	C.bridge_vkCmdBindDescriptorSets(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkPipelineBindPoint)(pipelineBindPoint), (C.VkPipelineLayout)(unsafe.Pointer(uintptr(layout))), (C.uint32_t)(firstSet), (C.uint32_t)(descriptorSetCount), (*C.VkDescriptorSet)(unsafe.Pointer(pDescriptorSets)), (C.uint32_t)(dynamicOffsetCount), (*C.uint32_t)(unsafe.Pointer(pDynamicOffsets)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdBindDescriptorSets) String() string { return "vkCmdBindDescriptorSets" }
@@ -9038,6 +10259,7 @@ type PfnCmdBindIndexBuffer uintptr
 
 func (fn PfnCmdBindIndexBuffer) Call(commandBuffer CommandBuffer, buffer Buffer, offset DeviceSize, indexType IndexType) {
 	C.bridge_vkCmdBindIndexBuffer(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBuffer)(unsafe.Pointer(uintptr(buffer))), (C.VkDeviceSize)(offset), (C.VkIndexType)(indexType))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdBindIndexBuffer) String() string { return "vkCmdBindIndexBuffer" }
@@ -9047,6 +10269,7 @@ type PfnCmdBindVertexBuffers uintptr
 
 func (fn PfnCmdBindVertexBuffers) Call(commandBuffer CommandBuffer, firstBinding, bindingCount uint32, pBuffers *Buffer, pOffsets *DeviceSize) {
 	C.bridge_vkCmdBindVertexBuffers(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(firstBinding), (C.uint32_t)(bindingCount), (*C.VkBuffer)(unsafe.Pointer(pBuffers)), (*C.VkDeviceSize)(unsafe.Pointer(pOffsets)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdBindVertexBuffers) String() string { return "vkCmdBindVertexBuffers" }
@@ -9056,6 +10279,7 @@ type PfnCmdDraw uintptr
 
 func (fn PfnCmdDraw) Call(commandBuffer CommandBuffer, vertexCount, instanceCount, firstVertex, firstInstance uint32) {
 	C.bridge_vkCmdDraw(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(vertexCount), (C.uint32_t)(instanceCount), (C.uint32_t)(firstVertex), (C.uint32_t)(firstInstance))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdDraw) String() string { return "vkCmdDraw" }
@@ -9065,6 +10289,7 @@ type PfnCmdDrawIndexed uintptr
 
 func (fn PfnCmdDrawIndexed) Call(commandBuffer CommandBuffer, indexCount, instanceCount, firstIndex uint32, vertexOffset int32, firstInstance uint32) {
 	C.bridge_vkCmdDrawIndexed(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(indexCount), (C.uint32_t)(instanceCount), (C.uint32_t)(firstIndex), (C.int32_t)(vertexOffset), (C.uint32_t)(firstInstance))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdDrawIndexed) String() string { return "vkCmdDrawIndexed" }
@@ -9074,6 +10299,7 @@ type PfnCmdDrawIndirect uintptr
 
 func (fn PfnCmdDrawIndirect) Call(commandBuffer CommandBuffer, buffer Buffer, offset DeviceSize, drawCount, stride uint32) {
 	C.bridge_vkCmdDrawIndirect(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBuffer)(unsafe.Pointer(uintptr(buffer))), (C.VkDeviceSize)(offset), (C.uint32_t)(drawCount), (C.uint32_t)(stride))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdDrawIndirect) String() string { return "vkCmdDrawIndirect" }
@@ -9083,6 +10309,7 @@ type PfnCmdDrawIndexedIndirect uintptr
 
 func (fn PfnCmdDrawIndexedIndirect) Call(commandBuffer CommandBuffer, buffer Buffer, offset DeviceSize, drawCount, stride uint32) {
 	C.bridge_vkCmdDrawIndexedIndirect(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBuffer)(unsafe.Pointer(uintptr(buffer))), (C.VkDeviceSize)(offset), (C.uint32_t)(drawCount), (C.uint32_t)(stride))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdDrawIndexedIndirect) String() string { return "vkCmdDrawIndexedIndirect" }
@@ -9092,6 +10319,7 @@ type PfnCmdDispatch uintptr
 
 func (fn PfnCmdDispatch) Call(commandBuffer CommandBuffer, groupCountX, groupCountY, groupCountZ uint32) {
 	C.bridge_vkCmdDispatch(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(groupCountX), (C.uint32_t)(groupCountY), (C.uint32_t)(groupCountZ))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdDispatch) String() string { return "vkCmdDispatch" }
@@ -9101,6 +10329,7 @@ type PfnCmdDispatchIndirect uintptr
 
 func (fn PfnCmdDispatchIndirect) Call(commandBuffer CommandBuffer, buffer Buffer, offset DeviceSize) {
 	C.bridge_vkCmdDispatchIndirect(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBuffer)(unsafe.Pointer(uintptr(buffer))), (C.VkDeviceSize)(offset))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdDispatchIndirect) String() string { return "vkCmdDispatchIndirect" }
@@ -9110,6 +10339,7 @@ type PfnCmdCopyBuffer uintptr
 
 func (fn PfnCmdCopyBuffer) Call(commandBuffer CommandBuffer, srcBuffer, dstBuffer Buffer, regionCount uint32, pRegions *BufferCopy) {
 	C.bridge_vkCmdCopyBuffer(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBuffer)(unsafe.Pointer(uintptr(srcBuffer))), (C.VkBuffer)(unsafe.Pointer(uintptr(dstBuffer))), (C.uint32_t)(regionCount), (*C.VkBufferCopy)(unsafe.Pointer(pRegions)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdCopyBuffer) String() string { return "vkCmdCopyBuffer" }
@@ -9119,6 +10349,7 @@ type PfnCmdCopyImage uintptr
 
 func (fn PfnCmdCopyImage) Call(commandBuffer CommandBuffer, srcImage Image, srcImageLayout ImageLayout, dstImage Image, dstImageLayout ImageLayout, regionCount uint32, pRegions *ImageCopy) {
 	C.bridge_vkCmdCopyImage(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkImage)(unsafe.Pointer(uintptr(srcImage))), (C.VkImageLayout)(srcImageLayout), (C.VkImage)(unsafe.Pointer(uintptr(dstImage))), (C.VkImageLayout)(dstImageLayout), (C.uint32_t)(regionCount), (*C.VkImageCopy)(unsafe.Pointer(pRegions)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdCopyImage) String() string { return "vkCmdCopyImage" }
@@ -9128,6 +10359,7 @@ type PfnCmdBlitImage uintptr
 
 func (fn PfnCmdBlitImage) Call(commandBuffer CommandBuffer, srcImage Image, srcImageLayout ImageLayout, dstImage Image, dstImageLayout ImageLayout, regionCount uint32, pRegions *ImageBlit, filter Filter) {
 	C.bridge_vkCmdBlitImage(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkImage)(unsafe.Pointer(uintptr(srcImage))), (C.VkImageLayout)(srcImageLayout), (C.VkImage)(unsafe.Pointer(uintptr(dstImage))), (C.VkImageLayout)(dstImageLayout), (C.uint32_t)(regionCount), (*C.VkImageBlit)(unsafe.Pointer(pRegions)), (C.VkFilter)(filter))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdBlitImage) String() string { return "vkCmdBlitImage" }
@@ -9137,6 +10369,7 @@ type PfnCmdCopyBufferToImage uintptr
 
 func (fn PfnCmdCopyBufferToImage) Call(commandBuffer CommandBuffer, srcBuffer Buffer, dstImage Image, dstImageLayout ImageLayout, regionCount uint32, pRegions *BufferImageCopy) {
 	C.bridge_vkCmdCopyBufferToImage(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBuffer)(unsafe.Pointer(uintptr(srcBuffer))), (C.VkImage)(unsafe.Pointer(uintptr(dstImage))), (C.VkImageLayout)(dstImageLayout), (C.uint32_t)(regionCount), (*C.VkBufferImageCopy)(unsafe.Pointer(pRegions)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdCopyBufferToImage) String() string { return "vkCmdCopyBufferToImage" }
@@ -9146,6 +10379,7 @@ type PfnCmdCopyImageToBuffer uintptr
 
 func (fn PfnCmdCopyImageToBuffer) Call(commandBuffer CommandBuffer, srcImage Image, srcImageLayout ImageLayout, dstBuffer Buffer, regionCount uint32, pRegions *BufferImageCopy) {
 	C.bridge_vkCmdCopyImageToBuffer(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkImage)(unsafe.Pointer(uintptr(srcImage))), (C.VkImageLayout)(srcImageLayout), (C.VkBuffer)(unsafe.Pointer(uintptr(dstBuffer))), (C.uint32_t)(regionCount), (*C.VkBufferImageCopy)(unsafe.Pointer(pRegions)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdCopyImageToBuffer) String() string { return "vkCmdCopyImageToBuffer" }
@@ -9155,6 +10389,7 @@ type PfnCmdUpdateBuffer uintptr
 
 func (fn PfnCmdUpdateBuffer) Call(commandBuffer CommandBuffer, dstBuffer Buffer, dstOffset, dataSize DeviceSize, pData unsafe.Pointer) {
 	C.bridge_vkCmdUpdateBuffer(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBuffer)(unsafe.Pointer(uintptr(dstBuffer))), (C.VkDeviceSize)(dstOffset), (C.VkDeviceSize)(dataSize), (unsafe.Pointer)(pData))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdUpdateBuffer) String() string { return "vkCmdUpdateBuffer" }
@@ -9164,6 +10399,7 @@ type PfnCmdFillBuffer uintptr
 
 func (fn PfnCmdFillBuffer) Call(commandBuffer CommandBuffer, dstBuffer Buffer, dstOffset, size DeviceSize, data uint32) {
 	C.bridge_vkCmdFillBuffer(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBuffer)(unsafe.Pointer(uintptr(dstBuffer))), (C.VkDeviceSize)(dstOffset), (C.VkDeviceSize)(size), (C.uint32_t)(data))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdFillBuffer) String() string { return "vkCmdFillBuffer" }
@@ -9173,6 +10409,7 @@ type PfnCmdClearColorImage uintptr
 
 func (fn PfnCmdClearColorImage) Call(commandBuffer CommandBuffer, image Image, imageLayout ImageLayout, pColor *ClearColorValue, rangeCount uint32, pRanges *ImageSubresourceRange) {
 	C.bridge_vkCmdClearColorImage(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkImage)(unsafe.Pointer(uintptr(image))), (C.VkImageLayout)(imageLayout), (*C.VkClearColorValue)(unsafe.Pointer(pColor)), (C.uint32_t)(rangeCount), (*C.VkImageSubresourceRange)(unsafe.Pointer(pRanges)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdClearColorImage) String() string { return "vkCmdClearColorImage" }
@@ -9182,6 +10419,7 @@ type PfnCmdClearDepthStencilImage uintptr
 
 func (fn PfnCmdClearDepthStencilImage) Call(commandBuffer CommandBuffer, image Image, imageLayout ImageLayout, pDepthStencil *ClearDepthStencilValue, rangeCount uint32, pRanges *ImageSubresourceRange) {
 	C.bridge_vkCmdClearDepthStencilImage(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkImage)(unsafe.Pointer(uintptr(image))), (C.VkImageLayout)(imageLayout), (*C.VkClearDepthStencilValue)(unsafe.Pointer(pDepthStencil)), (C.uint32_t)(rangeCount), (*C.VkImageSubresourceRange)(unsafe.Pointer(pRanges)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdClearDepthStencilImage) String() string { return "vkCmdClearDepthStencilImage" }
@@ -9191,6 +10429,7 @@ type PfnCmdClearAttachments uintptr
 
 func (fn PfnCmdClearAttachments) Call(commandBuffer CommandBuffer, attachmentCount uint32, pAttachments *ClearAttachment, rectCount uint32, pRects *ClearRect) {
 	C.bridge_vkCmdClearAttachments(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(attachmentCount), (*C.VkClearAttachment)(unsafe.Pointer(pAttachments)), (C.uint32_t)(rectCount), (*C.VkClearRect)(unsafe.Pointer(pRects)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdClearAttachments) String() string { return "vkCmdClearAttachments" }
@@ -9200,6 +10439,7 @@ type PfnCmdResolveImage uintptr
 
 func (fn PfnCmdResolveImage) Call(commandBuffer CommandBuffer, srcImage Image, srcImageLayout ImageLayout, dstImage Image, dstImageLayout ImageLayout, regionCount uint32, pRegions *ImageResolve) {
 	C.bridge_vkCmdResolveImage(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkImage)(unsafe.Pointer(uintptr(srcImage))), (C.VkImageLayout)(srcImageLayout), (C.VkImage)(unsafe.Pointer(uintptr(dstImage))), (C.VkImageLayout)(dstImageLayout), (C.uint32_t)(regionCount), (*C.VkImageResolve)(unsafe.Pointer(pRegions)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdResolveImage) String() string { return "vkCmdResolveImage" }
@@ -9209,6 +10449,7 @@ type PfnCmdSetEvent uintptr
 
 func (fn PfnCmdSetEvent) Call(commandBuffer CommandBuffer, event Event, stageMask PipelineStageFlags) {
 	C.bridge_vkCmdSetEvent(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkEvent)(unsafe.Pointer(uintptr(event))), (C.VkPipelineStageFlags)(uint32(stageMask)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdSetEvent) String() string { return "vkCmdSetEvent" }
@@ -9218,6 +10459,7 @@ type PfnCmdResetEvent uintptr
 
 func (fn PfnCmdResetEvent) Call(commandBuffer CommandBuffer, event Event, stageMask PipelineStageFlags) {
 	C.bridge_vkCmdResetEvent(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkEvent)(unsafe.Pointer(uintptr(event))), (C.VkPipelineStageFlags)(uint32(stageMask)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdResetEvent) String() string { return "vkCmdResetEvent" }
@@ -9227,6 +10469,7 @@ type PfnCmdWaitEvents uintptr
 
 func (fn PfnCmdWaitEvents) Call(commandBuffer CommandBuffer, eventCount uint32, pEvents *Event, srcStageMask, dstStageMask PipelineStageFlags, memoryBarrierCount uint32, pMemoryBarriers *MemoryBarrier, bufferMemoryBarrierCount uint32, pBufferMemoryBarriers *BufferMemoryBarrier, imageMemoryBarrierCount uint32, pImageMemoryBarriers *ImageMemoryBarrier) {
 	C.bridge_vkCmdWaitEvents(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(eventCount), (*C.VkEvent)(unsafe.Pointer(pEvents)), (C.VkPipelineStageFlags)(uint32(srcStageMask)), (C.VkPipelineStageFlags)(uint32(dstStageMask)), (C.uint32_t)(memoryBarrierCount), (*C.VkMemoryBarrier)(unsafe.Pointer(pMemoryBarriers)), (C.uint32_t)(bufferMemoryBarrierCount), (*C.VkBufferMemoryBarrier)(unsafe.Pointer(pBufferMemoryBarriers)), (C.uint32_t)(imageMemoryBarrierCount), (*C.VkImageMemoryBarrier)(unsafe.Pointer(pImageMemoryBarriers)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdWaitEvents) String() string { return "vkCmdWaitEvents" }
@@ -9236,6 +10479,7 @@ type PfnCmdPipelineBarrier uintptr
 
 func (fn PfnCmdPipelineBarrier) Call(commandBuffer CommandBuffer, srcStageMask, dstStageMask PipelineStageFlags, dependencyFlags DependencyFlags, memoryBarrierCount uint32, pMemoryBarriers *MemoryBarrier, bufferMemoryBarrierCount uint32, pBufferMemoryBarriers *BufferMemoryBarrier, imageMemoryBarrierCount uint32, pImageMemoryBarriers *ImageMemoryBarrier) {
 	C.bridge_vkCmdPipelineBarrier(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkPipelineStageFlags)(uint32(srcStageMask)), (C.VkPipelineStageFlags)(uint32(dstStageMask)), (C.VkDependencyFlags)(uint32(dependencyFlags)), (C.uint32_t)(memoryBarrierCount), (*C.VkMemoryBarrier)(unsafe.Pointer(pMemoryBarriers)), (C.uint32_t)(bufferMemoryBarrierCount), (*C.VkBufferMemoryBarrier)(unsafe.Pointer(pBufferMemoryBarriers)), (C.uint32_t)(imageMemoryBarrierCount), (*C.VkImageMemoryBarrier)(unsafe.Pointer(pImageMemoryBarriers)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdPipelineBarrier) String() string { return "vkCmdPipelineBarrier" }
@@ -9245,6 +10489,7 @@ type PfnCmdBeginQuery uintptr
 
 func (fn PfnCmdBeginQuery) Call(commandBuffer CommandBuffer, queryPool QueryPool, query uint32, flags QueryControlFlags) {
 	C.bridge_vkCmdBeginQuery(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkQueryPool)(unsafe.Pointer(uintptr(queryPool))), (C.uint32_t)(query), (C.VkQueryControlFlags)(uint32(flags)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdBeginQuery) String() string { return "vkCmdBeginQuery" }
@@ -9254,6 +10499,7 @@ type PfnCmdEndQuery uintptr
 
 func (fn PfnCmdEndQuery) Call(commandBuffer CommandBuffer, queryPool QueryPool, query uint32) {
 	C.bridge_vkCmdEndQuery(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkQueryPool)(unsafe.Pointer(uintptr(queryPool))), (C.uint32_t)(query))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdEndQuery) String() string { return "vkCmdEndQuery" }
@@ -9263,6 +10509,7 @@ type PfnCmdResetQueryPool uintptr
 
 func (fn PfnCmdResetQueryPool) Call(commandBuffer CommandBuffer, queryPool QueryPool, firstQuery, queryCount uint32) {
 	C.bridge_vkCmdResetQueryPool(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkQueryPool)(unsafe.Pointer(uintptr(queryPool))), (C.uint32_t)(firstQuery), (C.uint32_t)(queryCount))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdResetQueryPool) String() string { return "vkCmdResetQueryPool" }
@@ -9272,6 +10519,7 @@ type PfnCmdWriteTimestamp uintptr
 
 func (fn PfnCmdWriteTimestamp) Call(commandBuffer CommandBuffer, pipelineStage PipelineStageFlags, queryPool QueryPool, query uint32) {
 	C.bridge_vkCmdWriteTimestamp(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkPipelineStageFlagBits)(pipelineStage), (C.VkQueryPool)(unsafe.Pointer(uintptr(queryPool))), (C.uint32_t)(query))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdWriteTimestamp) String() string { return "vkCmdWriteTimestamp" }
@@ -9281,6 +10529,7 @@ type PfnCmdCopyQueryPoolResults uintptr
 
 func (fn PfnCmdCopyQueryPoolResults) Call(commandBuffer CommandBuffer, queryPool QueryPool, firstQuery, queryCount uint32, dstBuffer Buffer, dstOffset, stride DeviceSize, flags QueryResultFlags) {
 	C.bridge_vkCmdCopyQueryPoolResults(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkQueryPool)(unsafe.Pointer(uintptr(queryPool))), (C.uint32_t)(firstQuery), (C.uint32_t)(queryCount), (C.VkBuffer)(unsafe.Pointer(uintptr(dstBuffer))), (C.VkDeviceSize)(dstOffset), (C.VkDeviceSize)(stride), (C.VkQueryResultFlags)(uint32(flags)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdCopyQueryPoolResults) String() string { return "vkCmdCopyQueryPoolResults" }
@@ -9290,6 +10539,7 @@ type PfnCmdPushConstants uintptr
 
 func (fn PfnCmdPushConstants) Call(commandBuffer CommandBuffer, layout PipelineLayout, stageFlags ShaderStageFlags, offset, size uint32, pValues unsafe.Pointer) {
 	C.bridge_vkCmdPushConstants(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkPipelineLayout)(unsafe.Pointer(uintptr(layout))), (C.VkShaderStageFlags)(uint32(stageFlags)), (C.uint32_t)(offset), (C.uint32_t)(size), (unsafe.Pointer)(pValues))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdPushConstants) String() string { return "vkCmdPushConstants" }
@@ -9299,6 +10549,7 @@ type PfnCmdBeginRenderPass uintptr
 
 func (fn PfnCmdBeginRenderPass) Call(commandBuffer CommandBuffer, pRenderPassBegin *RenderPassBeginInfo, contents SubpassContents) {
 	C.bridge_vkCmdBeginRenderPass(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkRenderPassBeginInfo)(unsafe.Pointer(pRenderPassBegin)), (C.VkSubpassContents)(contents))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdBeginRenderPass) String() string { return "vkCmdBeginRenderPass" }
@@ -9308,6 +10559,7 @@ type PfnCmdNextSubpass uintptr
 
 func (fn PfnCmdNextSubpass) Call(commandBuffer CommandBuffer, contents SubpassContents) {
 	C.bridge_vkCmdNextSubpass(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkSubpassContents)(contents))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdNextSubpass) String() string { return "vkCmdNextSubpass" }
@@ -9317,6 +10569,7 @@ type PfnCmdEndRenderPass uintptr
 
 func (fn PfnCmdEndRenderPass) Call(commandBuffer CommandBuffer) {
 	C.bridge_vkCmdEndRenderPass(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdEndRenderPass) String() string { return "vkCmdEndRenderPass" }
@@ -9326,6 +10579,7 @@ type PfnCmdExecuteCommands uintptr
 
 func (fn PfnCmdExecuteCommands) Call(commandBuffer CommandBuffer, commandBufferCount uint32, pCommandBuffers *CommandBuffer) {
 	C.bridge_vkCmdExecuteCommands(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(commandBufferCount), (*C.VkCommandBuffer)(unsafe.Pointer(pCommandBuffers)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdExecuteCommands) String() string { return "vkCmdExecuteCommands" }
@@ -9340,6 +10594,7 @@ type DescriptorUpdateTemplate NonDispatchableHandle
 
 const MAX_DEVICE_GROUP_SIZE = 32
 const LUID_SIZE = 8
+const QUEUE_FAMILY_EXTERNAL = uint32(0xFFFFFFFE)
 
 // PointClippingBehavior -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPointClippingBehavior.html
 type PointClippingBehavior int32
@@ -9349,9 +10604,6 @@ const (
 	POINT_CLIPPING_BEHAVIOR_USER_CLIP_PLANES_ONLY     PointClippingBehavior = 1
 	POINT_CLIPPING_BEHAVIOR_ALL_CLIP_PLANES_KHR       PointClippingBehavior = POINT_CLIPPING_BEHAVIOR_ALL_CLIP_PLANES
 	POINT_CLIPPING_BEHAVIOR_USER_CLIP_PLANES_ONLY_KHR PointClippingBehavior = POINT_CLIPPING_BEHAVIOR_USER_CLIP_PLANES_ONLY
-	POINT_CLIPPING_BEHAVIOR_BEGIN_RANGE               PointClippingBehavior = POINT_CLIPPING_BEHAVIOR_ALL_CLIP_PLANES
-	POINT_CLIPPING_BEHAVIOR_END_RANGE                 PointClippingBehavior = POINT_CLIPPING_BEHAVIOR_USER_CLIP_PLANES_ONLY
-	POINT_CLIPPING_BEHAVIOR_RANGE_SIZE                PointClippingBehavior = (POINT_CLIPPING_BEHAVIOR_USER_CLIP_PLANES_ONLY - POINT_CLIPPING_BEHAVIOR_ALL_CLIP_PLANES + 1)
 	POINT_CLIPPING_BEHAVIOR_MAX_ENUM                  PointClippingBehavior = 0x7FFFFFFF
 )
 
@@ -9376,9 +10628,6 @@ const (
 	TESSELLATION_DOMAIN_ORIGIN_LOWER_LEFT     TessellationDomainOrigin = 1
 	TESSELLATION_DOMAIN_ORIGIN_UPPER_LEFT_KHR TessellationDomainOrigin = TESSELLATION_DOMAIN_ORIGIN_UPPER_LEFT
 	TESSELLATION_DOMAIN_ORIGIN_LOWER_LEFT_KHR TessellationDomainOrigin = TESSELLATION_DOMAIN_ORIGIN_LOWER_LEFT
-	TESSELLATION_DOMAIN_ORIGIN_BEGIN_RANGE    TessellationDomainOrigin = TESSELLATION_DOMAIN_ORIGIN_UPPER_LEFT
-	TESSELLATION_DOMAIN_ORIGIN_END_RANGE      TessellationDomainOrigin = TESSELLATION_DOMAIN_ORIGIN_LOWER_LEFT
-	TESSELLATION_DOMAIN_ORIGIN_RANGE_SIZE     TessellationDomainOrigin = (TESSELLATION_DOMAIN_ORIGIN_LOWER_LEFT - TESSELLATION_DOMAIN_ORIGIN_UPPER_LEFT + 1)
 	TESSELLATION_DOMAIN_ORIGIN_MAX_ENUM       TessellationDomainOrigin = 0x7FFFFFFF
 )
 
@@ -9409,9 +10658,6 @@ const (
 	SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_709_KHR      SamplerYcbcrModelConversion = SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_709
 	SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601_KHR      SamplerYcbcrModelConversion = SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601
 	SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_2020_KHR     SamplerYcbcrModelConversion = SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_2020
-	SAMPLER_YCBCR_MODEL_CONVERSION_BEGIN_RANGE        SamplerYcbcrModelConversion = SAMPLER_YCBCR_MODEL_CONVERSION_RGB_IDENTITY
-	SAMPLER_YCBCR_MODEL_CONVERSION_END_RANGE          SamplerYcbcrModelConversion = SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_2020
-	SAMPLER_YCBCR_MODEL_CONVERSION_RANGE_SIZE         SamplerYcbcrModelConversion = (SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_2020 - SAMPLER_YCBCR_MODEL_CONVERSION_RGB_IDENTITY + 1)
 	SAMPLER_YCBCR_MODEL_CONVERSION_MAX_ENUM           SamplerYcbcrModelConversion = 0x7FFFFFFF
 )
 
@@ -9442,9 +10688,6 @@ const (
 	SAMPLER_YCBCR_RANGE_ITU_NARROW     SamplerYcbcrRange = 1
 	SAMPLER_YCBCR_RANGE_ITU_FULL_KHR   SamplerYcbcrRange = SAMPLER_YCBCR_RANGE_ITU_FULL
 	SAMPLER_YCBCR_RANGE_ITU_NARROW_KHR SamplerYcbcrRange = SAMPLER_YCBCR_RANGE_ITU_NARROW
-	SAMPLER_YCBCR_RANGE_BEGIN_RANGE    SamplerYcbcrRange = SAMPLER_YCBCR_RANGE_ITU_FULL
-	SAMPLER_YCBCR_RANGE_END_RANGE      SamplerYcbcrRange = SAMPLER_YCBCR_RANGE_ITU_NARROW
-	SAMPLER_YCBCR_RANGE_RANGE_SIZE     SamplerYcbcrRange = (SAMPLER_YCBCR_RANGE_ITU_NARROW - SAMPLER_YCBCR_RANGE_ITU_FULL + 1)
 	SAMPLER_YCBCR_RANGE_MAX_ENUM       SamplerYcbcrRange = 0x7FFFFFFF
 )
 
@@ -9469,9 +10712,6 @@ const (
 	CHROMA_LOCATION_MIDPOINT         ChromaLocation = 1
 	CHROMA_LOCATION_COSITED_EVEN_KHR ChromaLocation = CHROMA_LOCATION_COSITED_EVEN
 	CHROMA_LOCATION_MIDPOINT_KHR     ChromaLocation = CHROMA_LOCATION_MIDPOINT
-	CHROMA_LOCATION_BEGIN_RANGE      ChromaLocation = CHROMA_LOCATION_COSITED_EVEN
-	CHROMA_LOCATION_END_RANGE        ChromaLocation = CHROMA_LOCATION_MIDPOINT
-	CHROMA_LOCATION_RANGE_SIZE       ChromaLocation = (CHROMA_LOCATION_MIDPOINT - CHROMA_LOCATION_COSITED_EVEN + 1)
 	CHROMA_LOCATION_MAX_ENUM         ChromaLocation = 0x7FFFFFFF
 )
 
@@ -9495,9 +10735,6 @@ const (
 	DESCRIPTOR_UPDATE_TEMPLATE_TYPE_DESCRIPTOR_SET       DescriptorUpdateTemplateType = 0
 	DESCRIPTOR_UPDATE_TEMPLATE_TYPE_PUSH_DESCRIPTORS_KHR DescriptorUpdateTemplateType = 1
 	DESCRIPTOR_UPDATE_TEMPLATE_TYPE_DESCRIPTOR_SET_KHR   DescriptorUpdateTemplateType = DESCRIPTOR_UPDATE_TEMPLATE_TYPE_DESCRIPTOR_SET
-	DESCRIPTOR_UPDATE_TEMPLATE_TYPE_BEGIN_RANGE          DescriptorUpdateTemplateType = DESCRIPTOR_UPDATE_TEMPLATE_TYPE_DESCRIPTOR_SET
-	DESCRIPTOR_UPDATE_TEMPLATE_TYPE_END_RANGE            DescriptorUpdateTemplateType = DESCRIPTOR_UPDATE_TEMPLATE_TYPE_DESCRIPTOR_SET
-	DESCRIPTOR_UPDATE_TEMPLATE_TYPE_RANGE_SIZE           DescriptorUpdateTemplateType = (DESCRIPTOR_UPDATE_TEMPLATE_TYPE_DESCRIPTOR_SET - DESCRIPTOR_UPDATE_TEMPLATE_TYPE_DESCRIPTOR_SET + 1)
 	DESCRIPTOR_UPDATE_TEMPLATE_TYPE_MAX_ENUM             DescriptorUpdateTemplateType = 0x7FFFFFFF
 )
 
@@ -9597,9 +10834,13 @@ func (x PeerMemoryFeatureFlags) String() string {
 type MemoryAllocateFlags uint32
 
 const (
-	MEMORY_ALLOCATE_DEVICE_MASK_BIT     MemoryAllocateFlags = 0x00000001
-	MEMORY_ALLOCATE_DEVICE_MASK_BIT_KHR MemoryAllocateFlags = MEMORY_ALLOCATE_DEVICE_MASK_BIT
-	MEMORY_ALLOCATE_FLAG_BITS_MAX_ENUM  MemoryAllocateFlags = 0x7FFFFFFF
+	MEMORY_ALLOCATE_DEVICE_MASK_BIT                       MemoryAllocateFlags = 0x00000001
+	MEMORY_ALLOCATE_DEVICE_ADDRESS_BIT                    MemoryAllocateFlags = 0x00000002
+	MEMORY_ALLOCATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT     MemoryAllocateFlags = 0x00000004
+	MEMORY_ALLOCATE_DEVICE_MASK_BIT_KHR                   MemoryAllocateFlags = MEMORY_ALLOCATE_DEVICE_MASK_BIT
+	MEMORY_ALLOCATE_DEVICE_ADDRESS_BIT_KHR                MemoryAllocateFlags = MEMORY_ALLOCATE_DEVICE_ADDRESS_BIT
+	MEMORY_ALLOCATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT_KHR MemoryAllocateFlags = MEMORY_ALLOCATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT
+	MEMORY_ALLOCATE_FLAG_BITS_MAX_ENUM                    MemoryAllocateFlags = 0x7FFFFFFF
 )
 
 func (x MemoryAllocateFlags) String() string {
@@ -9609,6 +10850,10 @@ func (x MemoryAllocateFlags) String() string {
 			switch MemoryAllocateFlags(1 << i) {
 			case MEMORY_ALLOCATE_DEVICE_MASK_BIT:
 				s += "MEMORY_ALLOCATE_DEVICE_MASK_BIT|"
+			case MEMORY_ALLOCATE_DEVICE_ADDRESS_BIT:
+				s += "MEMORY_ALLOCATE_DEVICE_ADDRESS_BIT|"
+			case MEMORY_ALLOCATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT:
+				s += "MEMORY_ALLOCATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT|"
 			}
 		}
 	}
@@ -9632,6 +10877,7 @@ const (
 	EXTERNAL_MEMORY_HANDLE_TYPE_ANDROID_HARDWARE_BUFFER_BIT_ANDROID ExternalMemoryHandleTypeFlags = 0x00000400
 	EXTERNAL_MEMORY_HANDLE_TYPE_HOST_ALLOCATION_BIT_EXT             ExternalMemoryHandleTypeFlags = 0x00000080
 	EXTERNAL_MEMORY_HANDLE_TYPE_HOST_MAPPED_FOREIGN_MEMORY_BIT_EXT  ExternalMemoryHandleTypeFlags = 0x00000100
+	EXTERNAL_MEMORY_HANDLE_TYPE_ZIRCON_VMO_BIT_FUCHSIA              ExternalMemoryHandleTypeFlags = 0x00000800
 	EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_FD_BIT_KHR                   ExternalMemoryHandleTypeFlags = EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_FD_BIT
 	EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32_BIT_KHR                ExternalMemoryHandleTypeFlags = EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32_BIT
 	EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32_KMT_BIT_KHR            ExternalMemoryHandleTypeFlags = EXTERNAL_MEMORY_HANDLE_TYPE_OPAQUE_WIN32_KMT_BIT
@@ -9669,6 +10915,8 @@ func (x ExternalMemoryHandleTypeFlags) String() string {
 				s += "EXTERNAL_MEMORY_HANDLE_TYPE_HOST_ALLOCATION_BIT_EXT|"
 			case EXTERNAL_MEMORY_HANDLE_TYPE_HOST_MAPPED_FOREIGN_MEMORY_BIT_EXT:
 				s += "EXTERNAL_MEMORY_HANDLE_TYPE_HOST_MAPPED_FOREIGN_MEMORY_BIT_EXT|"
+			case EXTERNAL_MEMORY_HANDLE_TYPE_ZIRCON_VMO_BIT_FUCHSIA:
+				s += "EXTERNAL_MEMORY_HANDLE_TYPE_ZIRCON_VMO_BIT_FUCHSIA|"
 			}
 		}
 	}
@@ -9818,6 +11066,8 @@ const (
 	EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_KMT_BIT     ExternalSemaphoreHandleTypeFlags = 0x00000004
 	EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE_BIT          ExternalSemaphoreHandleTypeFlags = 0x00000008
 	EXTERNAL_SEMAPHORE_HANDLE_TYPE_SYNC_FD_BIT              ExternalSemaphoreHandleTypeFlags = 0x00000010
+	EXTERNAL_SEMAPHORE_HANDLE_TYPE_ZIRCON_EVENT_BIT_FUCHSIA ExternalSemaphoreHandleTypeFlags = 0x00000080
+	EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D11_FENCE_BIT          ExternalSemaphoreHandleTypeFlags = EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE_BIT
 	EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD_BIT_KHR        ExternalSemaphoreHandleTypeFlags = EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_FD_BIT
 	EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_BIT_KHR     ExternalSemaphoreHandleTypeFlags = EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_BIT
 	EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_KMT_BIT_KHR ExternalSemaphoreHandleTypeFlags = EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_KMT_BIT
@@ -9841,6 +11091,8 @@ func (x ExternalSemaphoreHandleTypeFlags) String() string {
 				s += "EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE_BIT|"
 			case EXTERNAL_SEMAPHORE_HANDLE_TYPE_SYNC_FD_BIT:
 				s += "EXTERNAL_SEMAPHORE_HANDLE_TYPE_SYNC_FD_BIT|"
+			case EXTERNAL_SEMAPHORE_HANDLE_TYPE_ZIRCON_EVENT_BIT_FUCHSIA:
+				s += "EXTERNAL_SEMAPHORE_HANDLE_TYPE_ZIRCON_EVENT_BIT_FUCHSIA|"
 			}
 		}
 	}
@@ -10166,8 +11418,6 @@ func NewMemoryRequirements2() *MemoryRequirements2 {
 	return p
 }
 func (p *MemoryRequirements2) Free() { MemFree(unsafe.Pointer(p)) }
-
-type MemoryRequirements2KHR = MemoryRequirements2
 
 // SparseImageMemoryRequirements2 -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSparseImageMemoryRequirements2.html
 type SparseImageMemoryRequirements2 struct {
@@ -10906,6 +12156,7 @@ type PfnEnumerateInstanceVersion uintptr
 
 func (fn PfnEnumerateInstanceVersion) Call(pApiVersion *uint32) Result {
 	ret := C.bridge_vkEnumerateInstanceVersion(C.uintptr_t(fn), (*C.uint32_t)(unsafe.Pointer(pApiVersion)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnEnumerateInstanceVersion) String() string { return "vkEnumerateInstanceVersion" }
@@ -10915,6 +12166,7 @@ type PfnBindBufferMemory2 uintptr
 
 func (fn PfnBindBufferMemory2) Call(device Device, bindInfoCount uint32, pBindInfos *BindBufferMemoryInfo) Result {
 	ret := C.bridge_vkBindBufferMemory2(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.uint32_t)(bindInfoCount), (*C.VkBindBufferMemoryInfo)(unsafe.Pointer(pBindInfos)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnBindBufferMemory2) String() string { return "vkBindBufferMemory2" }
@@ -10924,6 +12176,7 @@ type PfnBindImageMemory2 uintptr
 
 func (fn PfnBindImageMemory2) Call(device Device, bindInfoCount uint32, pBindInfos *BindImageMemoryInfo) Result {
 	ret := C.bridge_vkBindImageMemory2(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.uint32_t)(bindInfoCount), (*C.VkBindImageMemoryInfo)(unsafe.Pointer(pBindInfos)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnBindImageMemory2) String() string { return "vkBindImageMemory2" }
@@ -10933,6 +12186,7 @@ type PfnGetDeviceGroupPeerMemoryFeatures uintptr
 
 func (fn PfnGetDeviceGroupPeerMemoryFeatures) Call(device Device, heapIndex, localDeviceIndex, remoteDeviceIndex uint32, pPeerMemoryFeatures *PeerMemoryFeatureFlags) {
 	C.bridge_vkGetDeviceGroupPeerMemoryFeatures(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.uint32_t)(heapIndex), (C.uint32_t)(localDeviceIndex), (C.uint32_t)(remoteDeviceIndex), (*C.VkPeerMemoryFeatureFlags)(unsafe.Pointer(pPeerMemoryFeatures)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetDeviceGroupPeerMemoryFeatures) String() string {
@@ -10944,6 +12198,7 @@ type PfnCmdSetDeviceMask uintptr
 
 func (fn PfnCmdSetDeviceMask) Call(commandBuffer CommandBuffer, deviceMask uint32) {
 	C.bridge_vkCmdSetDeviceMask(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(deviceMask))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdSetDeviceMask) String() string { return "vkCmdSetDeviceMask" }
@@ -10953,6 +12208,7 @@ type PfnCmdDispatchBase uintptr
 
 func (fn PfnCmdDispatchBase) Call(commandBuffer CommandBuffer, baseGroupX, baseGroupY, baseGroupZ, groupCountX, groupCountY, groupCountZ uint32) {
 	C.bridge_vkCmdDispatchBase(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(baseGroupX), (C.uint32_t)(baseGroupY), (C.uint32_t)(baseGroupZ), (C.uint32_t)(groupCountX), (C.uint32_t)(groupCountY), (C.uint32_t)(groupCountZ))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdDispatchBase) String() string { return "vkCmdDispatchBase" }
@@ -10962,6 +12218,7 @@ type PfnEnumeratePhysicalDeviceGroups uintptr
 
 func (fn PfnEnumeratePhysicalDeviceGroups) Call(instance Instance, pPhysicalDeviceGroupCount *uint32, pPhysicalDeviceGroupProperties *PhysicalDeviceGroupProperties) Result {
 	ret := C.bridge_vkEnumeratePhysicalDeviceGroups(C.uintptr_t(fn), (C.VkInstance)(unsafe.Pointer(uintptr(instance))), (*C.uint32_t)(unsafe.Pointer(pPhysicalDeviceGroupCount)), (*C.VkPhysicalDeviceGroupProperties)(unsafe.Pointer(pPhysicalDeviceGroupProperties)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnEnumeratePhysicalDeviceGroups) String() string { return "vkEnumeratePhysicalDeviceGroups" }
@@ -10971,6 +12228,7 @@ type PfnGetImageMemoryRequirements2 uintptr
 
 func (fn PfnGetImageMemoryRequirements2) Call(device Device, pInfo *ImageMemoryRequirementsInfo2, pMemoryRequirements *MemoryRequirements2) {
 	C.bridge_vkGetImageMemoryRequirements2(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkImageMemoryRequirementsInfo2)(unsafe.Pointer(pInfo)), (*C.VkMemoryRequirements2)(unsafe.Pointer(pMemoryRequirements)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetImageMemoryRequirements2) String() string { return "vkGetImageMemoryRequirements2" }
@@ -10980,6 +12238,7 @@ type PfnGetBufferMemoryRequirements2 uintptr
 
 func (fn PfnGetBufferMemoryRequirements2) Call(device Device, pInfo *BufferMemoryRequirementsInfo2, pMemoryRequirements *MemoryRequirements2) {
 	C.bridge_vkGetBufferMemoryRequirements2(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkBufferMemoryRequirementsInfo2)(unsafe.Pointer(pInfo)), (*C.VkMemoryRequirements2)(unsafe.Pointer(pMemoryRequirements)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetBufferMemoryRequirements2) String() string { return "vkGetBufferMemoryRequirements2" }
@@ -10989,6 +12248,7 @@ type PfnGetImageSparseMemoryRequirements2 uintptr
 
 func (fn PfnGetImageSparseMemoryRequirements2) Call(device Device, pInfo *ImageSparseMemoryRequirementsInfo2, pSparseMemoryRequirementCount *uint32, pSparseMemoryRequirements *SparseImageMemoryRequirements2) {
 	C.bridge_vkGetImageSparseMemoryRequirements2(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkImageSparseMemoryRequirementsInfo2)(unsafe.Pointer(pInfo)), (*C.uint32_t)(unsafe.Pointer(pSparseMemoryRequirementCount)), (*C.VkSparseImageMemoryRequirements2)(unsafe.Pointer(pSparseMemoryRequirements)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetImageSparseMemoryRequirements2) String() string {
@@ -11000,6 +12260,7 @@ type PfnGetPhysicalDeviceFeatures2 uintptr
 
 func (fn PfnGetPhysicalDeviceFeatures2) Call(physicalDevice PhysicalDevice, pFeatures *PhysicalDeviceFeatures2) {
 	C.bridge_vkGetPhysicalDeviceFeatures2(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkPhysicalDeviceFeatures2)(unsafe.Pointer(pFeatures)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceFeatures2) String() string { return "vkGetPhysicalDeviceFeatures2" }
@@ -11009,6 +12270,7 @@ type PfnGetPhysicalDeviceProperties2 uintptr
 
 func (fn PfnGetPhysicalDeviceProperties2) Call(physicalDevice PhysicalDevice, pProperties *PhysicalDeviceProperties2) {
 	C.bridge_vkGetPhysicalDeviceProperties2(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkPhysicalDeviceProperties2)(unsafe.Pointer(pProperties)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceProperties2) String() string { return "vkGetPhysicalDeviceProperties2" }
@@ -11018,6 +12280,7 @@ type PfnGetPhysicalDeviceFormatProperties2 uintptr
 
 func (fn PfnGetPhysicalDeviceFormatProperties2) Call(physicalDevice PhysicalDevice, format Format, pFormatProperties *FormatProperties2) {
 	C.bridge_vkGetPhysicalDeviceFormatProperties2(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.VkFormat)(format), (*C.VkFormatProperties2)(unsafe.Pointer(pFormatProperties)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceFormatProperties2) String() string {
@@ -11029,6 +12292,7 @@ type PfnGetPhysicalDeviceImageFormatProperties2 uintptr
 
 func (fn PfnGetPhysicalDeviceImageFormatProperties2) Call(physicalDevice PhysicalDevice, pImageFormatInfo *PhysicalDeviceImageFormatInfo2, pImageFormatProperties *ImageFormatProperties2) Result {
 	ret := C.bridge_vkGetPhysicalDeviceImageFormatProperties2(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkPhysicalDeviceImageFormatInfo2)(unsafe.Pointer(pImageFormatInfo)), (*C.VkImageFormatProperties2)(unsafe.Pointer(pImageFormatProperties)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPhysicalDeviceImageFormatProperties2) String() string {
@@ -11040,6 +12304,7 @@ type PfnGetPhysicalDeviceQueueFamilyProperties2 uintptr
 
 func (fn PfnGetPhysicalDeviceQueueFamilyProperties2) Call(physicalDevice PhysicalDevice, pQueueFamilyPropertyCount *uint32, pQueueFamilyProperties *QueueFamilyProperties2) {
 	C.bridge_vkGetPhysicalDeviceQueueFamilyProperties2(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.uint32_t)(unsafe.Pointer(pQueueFamilyPropertyCount)), (*C.VkQueueFamilyProperties2)(unsafe.Pointer(pQueueFamilyProperties)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceQueueFamilyProperties2) String() string {
@@ -11051,6 +12316,7 @@ type PfnGetPhysicalDeviceMemoryProperties2 uintptr
 
 func (fn PfnGetPhysicalDeviceMemoryProperties2) Call(physicalDevice PhysicalDevice, pMemoryProperties *PhysicalDeviceMemoryProperties2) {
 	C.bridge_vkGetPhysicalDeviceMemoryProperties2(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkPhysicalDeviceMemoryProperties2)(unsafe.Pointer(pMemoryProperties)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceMemoryProperties2) String() string {
@@ -11062,6 +12328,7 @@ type PfnGetPhysicalDeviceSparseImageFormatProperties2 uintptr
 
 func (fn PfnGetPhysicalDeviceSparseImageFormatProperties2) Call(physicalDevice PhysicalDevice, pFormatInfo *PhysicalDeviceSparseImageFormatInfo2, pPropertyCount *uint32, pProperties *SparseImageFormatProperties2) {
 	C.bridge_vkGetPhysicalDeviceSparseImageFormatProperties2(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkPhysicalDeviceSparseImageFormatInfo2)(unsafe.Pointer(pFormatInfo)), (*C.uint32_t)(unsafe.Pointer(pPropertyCount)), (*C.VkSparseImageFormatProperties2)(unsafe.Pointer(pProperties)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceSparseImageFormatProperties2) String() string {
@@ -11073,6 +12340,7 @@ type PfnTrimCommandPool uintptr
 
 func (fn PfnTrimCommandPool) Call(device Device, commandPool CommandPool, flags CommandPoolTrimFlags) {
 	C.bridge_vkTrimCommandPool(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkCommandPool)(unsafe.Pointer(uintptr(commandPool))), (C.VkCommandPoolTrimFlags)(uint32(flags)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnTrimCommandPool) String() string { return "vkTrimCommandPool" }
@@ -11082,6 +12350,7 @@ type PfnGetDeviceQueue2 uintptr
 
 func (fn PfnGetDeviceQueue2) Call(device Device, pQueueInfo *DeviceQueueInfo2, pQueue *Queue) {
 	C.bridge_vkGetDeviceQueue2(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkDeviceQueueInfo2)(unsafe.Pointer(pQueueInfo)), (*C.VkQueue)(unsafe.Pointer(pQueue)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetDeviceQueue2) String() string { return "vkGetDeviceQueue2" }
@@ -11091,6 +12360,7 @@ type PfnCreateSamplerYcbcrConversion uintptr
 
 func (fn PfnCreateSamplerYcbcrConversion) Call(device Device, pCreateInfo *SamplerYcbcrConversionCreateInfo, pAllocator *AllocationCallbacks, pYcbcrConversion *SamplerYcbcrConversion) Result {
 	ret := C.bridge_vkCreateSamplerYcbcrConversion(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkSamplerYcbcrConversionCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkSamplerYcbcrConversion)(unsafe.Pointer(pYcbcrConversion)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateSamplerYcbcrConversion) String() string { return "vkCreateSamplerYcbcrConversion" }
@@ -11100,6 +12370,7 @@ type PfnDestroySamplerYcbcrConversion uintptr
 
 func (fn PfnDestroySamplerYcbcrConversion) Call(device Device, ycbcrConversion SamplerYcbcrConversion, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroySamplerYcbcrConversion(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkSamplerYcbcrConversion)(unsafe.Pointer(uintptr(ycbcrConversion))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroySamplerYcbcrConversion) String() string { return "vkDestroySamplerYcbcrConversion" }
@@ -11109,6 +12380,7 @@ type PfnCreateDescriptorUpdateTemplate uintptr
 
 func (fn PfnCreateDescriptorUpdateTemplate) Call(device Device, pCreateInfo *DescriptorUpdateTemplateCreateInfo, pAllocator *AllocationCallbacks, pDescriptorUpdateTemplate *DescriptorUpdateTemplate) Result {
 	ret := C.bridge_vkCreateDescriptorUpdateTemplate(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkDescriptorUpdateTemplateCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkDescriptorUpdateTemplate)(unsafe.Pointer(pDescriptorUpdateTemplate)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateDescriptorUpdateTemplate) String() string {
@@ -11120,6 +12392,7 @@ type PfnDestroyDescriptorUpdateTemplate uintptr
 
 func (fn PfnDestroyDescriptorUpdateTemplate) Call(device Device, descriptorUpdateTemplate DescriptorUpdateTemplate, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyDescriptorUpdateTemplate(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkDescriptorUpdateTemplate)(unsafe.Pointer(uintptr(descriptorUpdateTemplate))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyDescriptorUpdateTemplate) String() string {
@@ -11131,6 +12404,7 @@ type PfnUpdateDescriptorSetWithTemplate uintptr
 
 func (fn PfnUpdateDescriptorSetWithTemplate) Call(device Device, descriptorSet DescriptorSet, descriptorUpdateTemplate DescriptorUpdateTemplate, pData unsafe.Pointer) {
 	C.bridge_vkUpdateDescriptorSetWithTemplate(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkDescriptorSet)(unsafe.Pointer(uintptr(descriptorSet))), (C.VkDescriptorUpdateTemplate)(unsafe.Pointer(uintptr(descriptorUpdateTemplate))), (unsafe.Pointer)(pData))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnUpdateDescriptorSetWithTemplate) String() string {
@@ -11142,6 +12416,7 @@ type PfnGetPhysicalDeviceExternalBufferProperties uintptr
 
 func (fn PfnGetPhysicalDeviceExternalBufferProperties) Call(physicalDevice PhysicalDevice, pExternalBufferInfo *PhysicalDeviceExternalBufferInfo, pExternalBufferProperties *ExternalBufferProperties) {
 	C.bridge_vkGetPhysicalDeviceExternalBufferProperties(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkPhysicalDeviceExternalBufferInfo)(unsafe.Pointer(pExternalBufferInfo)), (*C.VkExternalBufferProperties)(unsafe.Pointer(pExternalBufferProperties)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceExternalBufferProperties) String() string {
@@ -11153,6 +12428,7 @@ type PfnGetPhysicalDeviceExternalFenceProperties uintptr
 
 func (fn PfnGetPhysicalDeviceExternalFenceProperties) Call(physicalDevice PhysicalDevice, pExternalFenceInfo *PhysicalDeviceExternalFenceInfo, pExternalFenceProperties *ExternalFenceProperties) {
 	C.bridge_vkGetPhysicalDeviceExternalFenceProperties(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkPhysicalDeviceExternalFenceInfo)(unsafe.Pointer(pExternalFenceInfo)), (*C.VkExternalFenceProperties)(unsafe.Pointer(pExternalFenceProperties)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceExternalFenceProperties) String() string {
@@ -11164,6 +12440,7 @@ type PfnGetPhysicalDeviceExternalSemaphoreProperties uintptr
 
 func (fn PfnGetPhysicalDeviceExternalSemaphoreProperties) Call(physicalDevice PhysicalDevice, pExternalSemaphoreInfo *PhysicalDeviceExternalSemaphoreInfo, pExternalSemaphoreProperties *ExternalSemaphoreProperties) {
 	C.bridge_vkGetPhysicalDeviceExternalSemaphoreProperties(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkPhysicalDeviceExternalSemaphoreInfo)(unsafe.Pointer(pExternalSemaphoreInfo)), (*C.VkExternalSemaphoreProperties)(unsafe.Pointer(pExternalSemaphoreProperties)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceExternalSemaphoreProperties) String() string {
@@ -11175,9 +12452,1356 @@ type PfnGetDescriptorSetLayoutSupport uintptr
 
 func (fn PfnGetDescriptorSetLayoutSupport) Call(device Device, pCreateInfo *DescriptorSetLayoutCreateInfo, pSupport *DescriptorSetLayoutSupport) {
 	C.bridge_vkGetDescriptorSetLayoutSupport(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkDescriptorSetLayoutCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkDescriptorSetLayoutSupport)(unsafe.Pointer(pSupport)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetDescriptorSetLayoutSupport) String() string { return "vkGetDescriptorSetLayoutSupport" }
+
+const VERSION_1_2 = 1
+const MAX_DRIVER_NAME_SIZE = 256
+const MAX_DRIVER_INFO_SIZE = 256
+
+// DriverId -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDriverId.html
+type DriverId int32
+
+const (
+	DRIVER_ID_AMD_PROPRIETARY               DriverId = 1
+	DRIVER_ID_AMD_OPEN_SOURCE               DriverId = 2
+	DRIVER_ID_MESA_RADV                     DriverId = 3
+	DRIVER_ID_NVIDIA_PROPRIETARY            DriverId = 4
+	DRIVER_ID_INTEL_PROPRIETARY_WINDOWS     DriverId = 5
+	DRIVER_ID_INTEL_OPEN_SOURCE_MESA        DriverId = 6
+	DRIVER_ID_IMAGINATION_PROPRIETARY       DriverId = 7
+	DRIVER_ID_QUALCOMM_PROPRIETARY          DriverId = 8
+	DRIVER_ID_ARM_PROPRIETARY               DriverId = 9
+	DRIVER_ID_GOOGLE_SWIFTSHADER            DriverId = 10
+	DRIVER_ID_GGP_PROPRIETARY               DriverId = 11
+	DRIVER_ID_BROADCOM_PROPRIETARY          DriverId = 12
+	DRIVER_ID_MESA_LLVMPIPE                 DriverId = 13
+	DRIVER_ID_MOLTENVK                      DriverId = 14
+	DRIVER_ID_COREAVI_PROPRIETARY           DriverId = 15
+	DRIVER_ID_AMD_PROPRIETARY_KHR           DriverId = DRIVER_ID_AMD_PROPRIETARY
+	DRIVER_ID_AMD_OPEN_SOURCE_KHR           DriverId = DRIVER_ID_AMD_OPEN_SOURCE
+	DRIVER_ID_MESA_RADV_KHR                 DriverId = DRIVER_ID_MESA_RADV
+	DRIVER_ID_NVIDIA_PROPRIETARY_KHR        DriverId = DRIVER_ID_NVIDIA_PROPRIETARY
+	DRIVER_ID_INTEL_PROPRIETARY_WINDOWS_KHR DriverId = DRIVER_ID_INTEL_PROPRIETARY_WINDOWS
+	DRIVER_ID_INTEL_OPEN_SOURCE_MESA_KHR    DriverId = DRIVER_ID_INTEL_OPEN_SOURCE_MESA
+	DRIVER_ID_IMAGINATION_PROPRIETARY_KHR   DriverId = DRIVER_ID_IMAGINATION_PROPRIETARY
+	DRIVER_ID_QUALCOMM_PROPRIETARY_KHR      DriverId = DRIVER_ID_QUALCOMM_PROPRIETARY
+	DRIVER_ID_ARM_PROPRIETARY_KHR           DriverId = DRIVER_ID_ARM_PROPRIETARY
+	DRIVER_ID_GOOGLE_SWIFTSHADER_KHR        DriverId = DRIVER_ID_GOOGLE_SWIFTSHADER
+	DRIVER_ID_GGP_PROPRIETARY_KHR           DriverId = DRIVER_ID_GGP_PROPRIETARY
+	DRIVER_ID_BROADCOM_PROPRIETARY_KHR      DriverId = DRIVER_ID_BROADCOM_PROPRIETARY
+	DRIVER_ID_MAX_ENUM                      DriverId = 0x7FFFFFFF
+)
+
+func (x DriverId) String() string {
+	switch x {
+	case DRIVER_ID_AMD_PROPRIETARY:
+		return "DRIVER_ID_AMD_PROPRIETARY"
+	case DRIVER_ID_AMD_OPEN_SOURCE:
+		return "DRIVER_ID_AMD_OPEN_SOURCE"
+	case DRIVER_ID_MESA_RADV:
+		return "DRIVER_ID_MESA_RADV"
+	case DRIVER_ID_NVIDIA_PROPRIETARY:
+		return "DRIVER_ID_NVIDIA_PROPRIETARY"
+	case DRIVER_ID_INTEL_PROPRIETARY_WINDOWS:
+		return "DRIVER_ID_INTEL_PROPRIETARY_WINDOWS"
+	case DRIVER_ID_INTEL_OPEN_SOURCE_MESA:
+		return "DRIVER_ID_INTEL_OPEN_SOURCE_MESA"
+	case DRIVER_ID_IMAGINATION_PROPRIETARY:
+		return "DRIVER_ID_IMAGINATION_PROPRIETARY"
+	case DRIVER_ID_QUALCOMM_PROPRIETARY:
+		return "DRIVER_ID_QUALCOMM_PROPRIETARY"
+	case DRIVER_ID_ARM_PROPRIETARY:
+		return "DRIVER_ID_ARM_PROPRIETARY"
+	case DRIVER_ID_GOOGLE_SWIFTSHADER:
+		return "DRIVER_ID_GOOGLE_SWIFTSHADER"
+	case DRIVER_ID_GGP_PROPRIETARY:
+		return "DRIVER_ID_GGP_PROPRIETARY"
+	case DRIVER_ID_BROADCOM_PROPRIETARY:
+		return "DRIVER_ID_BROADCOM_PROPRIETARY"
+	case DRIVER_ID_MESA_LLVMPIPE:
+		return "DRIVER_ID_MESA_LLVMPIPE"
+	case DRIVER_ID_MOLTENVK:
+		return "DRIVER_ID_MOLTENVK"
+	case DRIVER_ID_COREAVI_PROPRIETARY:
+		return "DRIVER_ID_COREAVI_PROPRIETARY"
+	case DRIVER_ID_MAX_ENUM:
+		return "DRIVER_ID_MAX_ENUM"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// ShaderFloatControlsIndependence -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkShaderFloatControlsIndependence.html
+type ShaderFloatControlsIndependence int32
+
+const (
+	SHADER_FLOAT_CONTROLS_INDEPENDENCE_32_BIT_ONLY     ShaderFloatControlsIndependence = 0
+	SHADER_FLOAT_CONTROLS_INDEPENDENCE_ALL             ShaderFloatControlsIndependence = 1
+	SHADER_FLOAT_CONTROLS_INDEPENDENCE_NONE            ShaderFloatControlsIndependence = 2
+	SHADER_FLOAT_CONTROLS_INDEPENDENCE_32_BIT_ONLY_KHR ShaderFloatControlsIndependence = SHADER_FLOAT_CONTROLS_INDEPENDENCE_32_BIT_ONLY
+	SHADER_FLOAT_CONTROLS_INDEPENDENCE_ALL_KHR         ShaderFloatControlsIndependence = SHADER_FLOAT_CONTROLS_INDEPENDENCE_ALL
+	SHADER_FLOAT_CONTROLS_INDEPENDENCE_NONE_KHR        ShaderFloatControlsIndependence = SHADER_FLOAT_CONTROLS_INDEPENDENCE_NONE
+	SHADER_FLOAT_CONTROLS_INDEPENDENCE_MAX_ENUM        ShaderFloatControlsIndependence = 0x7FFFFFFF
+)
+
+func (x ShaderFloatControlsIndependence) String() string {
+	switch x {
+	case SHADER_FLOAT_CONTROLS_INDEPENDENCE_32_BIT_ONLY:
+		return "SHADER_FLOAT_CONTROLS_INDEPENDENCE_32_BIT_ONLY"
+	case SHADER_FLOAT_CONTROLS_INDEPENDENCE_ALL:
+		return "SHADER_FLOAT_CONTROLS_INDEPENDENCE_ALL"
+	case SHADER_FLOAT_CONTROLS_INDEPENDENCE_NONE:
+		return "SHADER_FLOAT_CONTROLS_INDEPENDENCE_NONE"
+	case SHADER_FLOAT_CONTROLS_INDEPENDENCE_MAX_ENUM:
+		return "SHADER_FLOAT_CONTROLS_INDEPENDENCE_MAX_ENUM"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// SamplerReductionMode -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerReductionMode.html
+type SamplerReductionMode int32
+
+const (
+	SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE     SamplerReductionMode = 0
+	SAMPLER_REDUCTION_MODE_MIN                  SamplerReductionMode = 1
+	SAMPLER_REDUCTION_MODE_MAX                  SamplerReductionMode = 2
+	SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT SamplerReductionMode = SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE
+	SAMPLER_REDUCTION_MODE_MIN_EXT              SamplerReductionMode = SAMPLER_REDUCTION_MODE_MIN
+	SAMPLER_REDUCTION_MODE_MAX_EXT              SamplerReductionMode = SAMPLER_REDUCTION_MODE_MAX
+	SAMPLER_REDUCTION_MODE_MAX_ENUM             SamplerReductionMode = 0x7FFFFFFF
+)
+
+func (x SamplerReductionMode) String() string {
+	switch x {
+	case SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE:
+		return "SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE"
+	case SAMPLER_REDUCTION_MODE_MIN:
+		return "SAMPLER_REDUCTION_MODE_MIN"
+	case SAMPLER_REDUCTION_MODE_MAX:
+		return "SAMPLER_REDUCTION_MODE_MAX"
+	case SAMPLER_REDUCTION_MODE_MAX_ENUM:
+		return "SAMPLER_REDUCTION_MODE_MAX_ENUM"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// SemaphoreType -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSemaphoreType.html
+type SemaphoreType int32
+
+const (
+	SEMAPHORE_TYPE_BINARY       SemaphoreType = 0
+	SEMAPHORE_TYPE_TIMELINE     SemaphoreType = 1
+	SEMAPHORE_TYPE_BINARY_KHR   SemaphoreType = SEMAPHORE_TYPE_BINARY
+	SEMAPHORE_TYPE_TIMELINE_KHR SemaphoreType = SEMAPHORE_TYPE_TIMELINE
+	SEMAPHORE_TYPE_MAX_ENUM     SemaphoreType = 0x7FFFFFFF
+)
+
+func (x SemaphoreType) String() string {
+	switch x {
+	case SEMAPHORE_TYPE_BINARY:
+		return "SEMAPHORE_TYPE_BINARY"
+	case SEMAPHORE_TYPE_TIMELINE:
+		return "SEMAPHORE_TYPE_TIMELINE"
+	case SEMAPHORE_TYPE_MAX_ENUM:
+		return "SEMAPHORE_TYPE_MAX_ENUM"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// ResolveModeFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkResolveModeFlags.html
+type ResolveModeFlags uint32
+
+const (
+	RESOLVE_MODE_NONE                ResolveModeFlags = 0
+	RESOLVE_MODE_SAMPLE_ZERO_BIT     ResolveModeFlags = 0x00000001
+	RESOLVE_MODE_AVERAGE_BIT         ResolveModeFlags = 0x00000002
+	RESOLVE_MODE_MIN_BIT             ResolveModeFlags = 0x00000004
+	RESOLVE_MODE_MAX_BIT             ResolveModeFlags = 0x00000008
+	RESOLVE_MODE_NONE_KHR            ResolveModeFlags = RESOLVE_MODE_NONE
+	RESOLVE_MODE_SAMPLE_ZERO_BIT_KHR ResolveModeFlags = RESOLVE_MODE_SAMPLE_ZERO_BIT
+	RESOLVE_MODE_AVERAGE_BIT_KHR     ResolveModeFlags = RESOLVE_MODE_AVERAGE_BIT
+	RESOLVE_MODE_MIN_BIT_KHR         ResolveModeFlags = RESOLVE_MODE_MIN_BIT
+	RESOLVE_MODE_MAX_BIT_KHR         ResolveModeFlags = RESOLVE_MODE_MAX_BIT
+	RESOLVE_MODE_FLAG_BITS_MAX_ENUM  ResolveModeFlags = 0x7FFFFFFF
+)
+
+func (x ResolveModeFlags) String() string {
+	var s string
+	for i := uint32(0); i < 32; i++ {
+		if int32(x)&(1<<i) != 0 {
+			switch ResolveModeFlags(1 << i) {
+			case RESOLVE_MODE_NONE:
+				s += "RESOLVE_MODE_NONE|"
+			case RESOLVE_MODE_SAMPLE_ZERO_BIT:
+				s += "RESOLVE_MODE_SAMPLE_ZERO_BIT|"
+			case RESOLVE_MODE_AVERAGE_BIT:
+				s += "RESOLVE_MODE_AVERAGE_BIT|"
+			case RESOLVE_MODE_MIN_BIT:
+				s += "RESOLVE_MODE_MIN_BIT|"
+			case RESOLVE_MODE_MAX_BIT:
+				s += "RESOLVE_MODE_MAX_BIT|"
+			}
+		}
+	}
+	return strings.TrimSuffix(s, `|`)
+}
+
+// DescriptorBindingFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorBindingFlags.html
+type DescriptorBindingFlags uint32
+
+const (
+	DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT               DescriptorBindingFlags = 0x00000001
+	DESCRIPTOR_BINDING_UPDATE_UNUSED_WHILE_PENDING_BIT     DescriptorBindingFlags = 0x00000002
+	DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT                 DescriptorBindingFlags = 0x00000004
+	DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT       DescriptorBindingFlags = 0x00000008
+	DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT_EXT           DescriptorBindingFlags = DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT
+	DESCRIPTOR_BINDING_UPDATE_UNUSED_WHILE_PENDING_BIT_EXT DescriptorBindingFlags = DESCRIPTOR_BINDING_UPDATE_UNUSED_WHILE_PENDING_BIT
+	DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT_EXT             DescriptorBindingFlags = DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT
+	DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT_EXT   DescriptorBindingFlags = DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT
+	DESCRIPTOR_BINDING_FLAG_BITS_MAX_ENUM                  DescriptorBindingFlags = 0x7FFFFFFF
+)
+
+func (x DescriptorBindingFlags) String() string {
+	var s string
+	for i := uint32(0); i < 32; i++ {
+		if int32(x)&(1<<i) != 0 {
+			switch DescriptorBindingFlags(1 << i) {
+			case DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT:
+				s += "DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT|"
+			case DESCRIPTOR_BINDING_UPDATE_UNUSED_WHILE_PENDING_BIT:
+				s += "DESCRIPTOR_BINDING_UPDATE_UNUSED_WHILE_PENDING_BIT|"
+			case DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT:
+				s += "DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT|"
+			case DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT:
+				s += "DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT|"
+			}
+		}
+	}
+	return strings.TrimSuffix(s, `|`)
+}
+
+// SemaphoreWaitFlags -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSemaphoreWaitFlags.html
+type SemaphoreWaitFlags uint32
+
+const (
+	SEMAPHORE_WAIT_ANY_BIT            SemaphoreWaitFlags = 0x00000001
+	SEMAPHORE_WAIT_ANY_BIT_KHR        SemaphoreWaitFlags = SEMAPHORE_WAIT_ANY_BIT
+	SEMAPHORE_WAIT_FLAG_BITS_MAX_ENUM SemaphoreWaitFlags = 0x7FFFFFFF
+)
+
+func (x SemaphoreWaitFlags) String() string {
+	var s string
+	for i := uint32(0); i < 32; i++ {
+		if int32(x)&(1<<i) != 0 {
+			switch SemaphoreWaitFlags(1 << i) {
+			case SEMAPHORE_WAIT_ANY_BIT:
+				s += "SEMAPHORE_WAIT_ANY_BIT|"
+			}
+		}
+	}
+	return strings.TrimSuffix(s, `|`)
+}
+
+// PhysicalDeviceVulkan11Features -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceVulkan11Features.html
+type PhysicalDeviceVulkan11Features struct {
+	SType                              StructureType
+	PNext                              unsafe.Pointer
+	StorageBuffer16BitAccess           Bool32
+	UniformAndStorageBuffer16BitAccess Bool32
+	StoragePushConstant16              Bool32
+	StorageInputOutput16               Bool32
+	Multiview                          Bool32
+	MultiviewGeometryShader            Bool32
+	MultiviewTessellationShader        Bool32
+	VariablePointersStorageBuffer      Bool32
+	VariablePointers                   Bool32
+	ProtectedMemory                    Bool32
+	SamplerYcbcrConversion             Bool32
+	ShaderDrawParameters               Bool32
+}
+
+func NewPhysicalDeviceVulkan11Features() *PhysicalDeviceVulkan11Features {
+	p := (*PhysicalDeviceVulkan11Features)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceVulkan11Features)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES
+	return p
+}
+func (p *PhysicalDeviceVulkan11Features) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceVulkan11Properties -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceVulkan11Properties.html
+type PhysicalDeviceVulkan11Properties struct {
+	SType                             StructureType
+	PNext                             unsafe.Pointer
+	DeviceUUID                        [UUID_SIZE]uint8
+	DriverUUID                        [UUID_SIZE]uint8
+	DeviceLUID                        [LUID_SIZE]uint8
+	DeviceNodeMask                    uint32
+	DeviceLUIDValid                   Bool32
+	SubgroupSize                      uint32
+	SubgroupSupportedStages           ShaderStageFlags
+	SubgroupSupportedOperations       SubgroupFeatureFlags
+	SubgroupQuadOperationsInAllStages Bool32
+	PointClippingBehavior             PointClippingBehavior
+	MaxMultiviewViewCount             uint32
+	MaxMultiviewInstanceIndex         uint32
+	ProtectedNoFault                  Bool32
+	MaxPerSetDescriptors              uint32
+	MaxMemoryAllocationSize           DeviceSize
+}
+
+func NewPhysicalDeviceVulkan11Properties() *PhysicalDeviceVulkan11Properties {
+	p := (*PhysicalDeviceVulkan11Properties)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceVulkan11Properties)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_PROPERTIES
+	return p
+}
+func (p *PhysicalDeviceVulkan11Properties) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceVulkan12Features -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceVulkan12Features.html
+type PhysicalDeviceVulkan12Features struct {
+	SType                                              StructureType
+	PNext                                              unsafe.Pointer
+	SamplerMirrorClampToEdge                           Bool32
+	DrawIndirectCount                                  Bool32
+	StorageBuffer8BitAccess                            Bool32
+	UniformAndStorageBuffer8BitAccess                  Bool32
+	StoragePushConstant8                               Bool32
+	ShaderBufferInt64Atomics                           Bool32
+	ShaderSharedInt64Atomics                           Bool32
+	ShaderFloat16                                      Bool32
+	ShaderInt8                                         Bool32
+	DescriptorIndexing                                 Bool32
+	ShaderInputAttachmentArrayDynamicIndexing          Bool32
+	ShaderUniformTexelBufferArrayDynamicIndexing       Bool32
+	ShaderStorageTexelBufferArrayDynamicIndexing       Bool32
+	ShaderUniformBufferArrayNonUniformIndexing         Bool32
+	ShaderSampledImageArrayNonUniformIndexing          Bool32
+	ShaderStorageBufferArrayNonUniformIndexing         Bool32
+	ShaderStorageImageArrayNonUniformIndexing          Bool32
+	ShaderInputAttachmentArrayNonUniformIndexing       Bool32
+	ShaderUniformTexelBufferArrayNonUniformIndexing    Bool32
+	ShaderStorageTexelBufferArrayNonUniformIndexing    Bool32
+	DescriptorBindingUniformBufferUpdateAfterBind      Bool32
+	DescriptorBindingSampledImageUpdateAfterBind       Bool32
+	DescriptorBindingStorageImageUpdateAfterBind       Bool32
+	DescriptorBindingStorageBufferUpdateAfterBind      Bool32
+	DescriptorBindingUniformTexelBufferUpdateAfterBind Bool32
+	DescriptorBindingStorageTexelBufferUpdateAfterBind Bool32
+	DescriptorBindingUpdateUnusedWhilePending          Bool32
+	DescriptorBindingPartiallyBound                    Bool32
+	DescriptorBindingVariableDescriptorCount           Bool32
+	RuntimeDescriptorArray                             Bool32
+	SamplerFilterMinmax                                Bool32
+	ScalarBlockLayout                                  Bool32
+	ImagelessFramebuffer                               Bool32
+	UniformBufferStandardLayout                        Bool32
+	ShaderSubgroupExtendedTypes                        Bool32
+	SeparateDepthStencilLayouts                        Bool32
+	HostQueryReset                                     Bool32
+	TimelineSemaphore                                  Bool32
+	BufferDeviceAddress                                Bool32
+	BufferDeviceAddressCaptureReplay                   Bool32
+	BufferDeviceAddressMultiDevice                     Bool32
+	VulkanMemoryModel                                  Bool32
+	VulkanMemoryModelDeviceScope                       Bool32
+	VulkanMemoryModelAvailabilityVisibilityChains      Bool32
+	ShaderOutputViewportIndex                          Bool32
+	ShaderOutputLayer                                  Bool32
+	SubgroupBroadcastDynamicId                         Bool32
+}
+
+func NewPhysicalDeviceVulkan12Features() *PhysicalDeviceVulkan12Features {
+	p := (*PhysicalDeviceVulkan12Features)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceVulkan12Features)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES
+	return p
+}
+func (p *PhysicalDeviceVulkan12Features) Free() { MemFree(unsafe.Pointer(p)) }
+
+// ConformanceVersion -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkConformanceVersion.html
+type ConformanceVersion struct {
+	Major    uint8
+	Minor    uint8
+	Subminor uint8
+	Patch    uint8
+}
+
+func NewConformanceVersion() *ConformanceVersion {
+	return (*ConformanceVersion)(MemAlloc(unsafe.Sizeof(*(*ConformanceVersion)(nil))))
+}
+func (p *ConformanceVersion) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceVulkan12Properties -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceVulkan12Properties.html
+type PhysicalDeviceVulkan12Properties struct {
+	SType                                                StructureType
+	PNext                                                unsafe.Pointer
+	DriverID                                             DriverId
+	DriverName                                           [MAX_DRIVER_NAME_SIZE]int8
+	DriverInfo                                           [MAX_DRIVER_INFO_SIZE]int8
+	ConformanceVersion                                   ConformanceVersion
+	DenormBehaviorIndependence                           ShaderFloatControlsIndependence
+	RoundingModeIndependence                             ShaderFloatControlsIndependence
+	ShaderSignedZeroInfNanPreserveFloat16                Bool32
+	ShaderSignedZeroInfNanPreserveFloat32                Bool32
+	ShaderSignedZeroInfNanPreserveFloat64                Bool32
+	ShaderDenormPreserveFloat16                          Bool32
+	ShaderDenormPreserveFloat32                          Bool32
+	ShaderDenormPreserveFloat64                          Bool32
+	ShaderDenormFlushToZeroFloat16                       Bool32
+	ShaderDenormFlushToZeroFloat32                       Bool32
+	ShaderDenormFlushToZeroFloat64                       Bool32
+	ShaderRoundingModeRTEFloat16                         Bool32
+	ShaderRoundingModeRTEFloat32                         Bool32
+	ShaderRoundingModeRTEFloat64                         Bool32
+	ShaderRoundingModeRTZFloat16                         Bool32
+	ShaderRoundingModeRTZFloat32                         Bool32
+	ShaderRoundingModeRTZFloat64                         Bool32
+	MaxUpdateAfterBindDescriptorsInAllPools              uint32
+	ShaderUniformBufferArrayNonUniformIndexingNative     Bool32
+	ShaderSampledImageArrayNonUniformIndexingNative      Bool32
+	ShaderStorageBufferArrayNonUniformIndexingNative     Bool32
+	ShaderStorageImageArrayNonUniformIndexingNative      Bool32
+	ShaderInputAttachmentArrayNonUniformIndexingNative   Bool32
+	RobustBufferAccessUpdateAfterBind                    Bool32
+	QuadDivergentImplicitLod                             Bool32
+	MaxPerStageDescriptorUpdateAfterBindSamplers         uint32
+	MaxPerStageDescriptorUpdateAfterBindUniformBuffers   uint32
+	MaxPerStageDescriptorUpdateAfterBindStorageBuffers   uint32
+	MaxPerStageDescriptorUpdateAfterBindSampledImages    uint32
+	MaxPerStageDescriptorUpdateAfterBindStorageImages    uint32
+	MaxPerStageDescriptorUpdateAfterBindInputAttachments uint32
+	MaxPerStageUpdateAfterBindResources                  uint32
+	MaxDescriptorSetUpdateAfterBindSamplers              uint32
+	MaxDescriptorSetUpdateAfterBindUniformBuffers        uint32
+	MaxDescriptorSetUpdateAfterBindUniformBuffersDynamic uint32
+	MaxDescriptorSetUpdateAfterBindStorageBuffers        uint32
+	MaxDescriptorSetUpdateAfterBindStorageBuffersDynamic uint32
+	MaxDescriptorSetUpdateAfterBindSampledImages         uint32
+	MaxDescriptorSetUpdateAfterBindStorageImages         uint32
+	MaxDescriptorSetUpdateAfterBindInputAttachments      uint32
+	SupportedDepthResolveModes                           ResolveModeFlags
+	SupportedStencilResolveModes                         ResolveModeFlags
+	IndependentResolveNone                               Bool32
+	IndependentResolve                                   Bool32
+	FilterMinmaxSingleComponentFormats                   Bool32
+	FilterMinmaxImageComponentMapping                    Bool32
+	MaxTimelineSemaphoreValueDifference                  uint64
+	FramebufferIntegerColorSampleCounts                  SampleCountFlags
+}
+
+func NewPhysicalDeviceVulkan12Properties() *PhysicalDeviceVulkan12Properties {
+	p := (*PhysicalDeviceVulkan12Properties)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceVulkan12Properties)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_PROPERTIES
+	return p
+}
+func (p *PhysicalDeviceVulkan12Properties) Free() { MemFree(unsafe.Pointer(p)) }
+
+// ImageFormatListCreateInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageFormatListCreateInfo.html
+type ImageFormatListCreateInfo struct {
+	SType           StructureType
+	PNext           unsafe.Pointer
+	ViewFormatCount uint32
+	PViewFormats    *Format
+}
+
+func NewImageFormatListCreateInfo() *ImageFormatListCreateInfo {
+	p := (*ImageFormatListCreateInfo)(MemAlloc(unsafe.Sizeof(*(*ImageFormatListCreateInfo)(nil))))
+	p.SType = STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO
+	return p
+}
+func (p *ImageFormatListCreateInfo) Free() { MemFree(unsafe.Pointer(p)) }
+
+// AttachmentDescription2 -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAttachmentDescription2.html
+type AttachmentDescription2 struct {
+	SType          StructureType
+	PNext          unsafe.Pointer
+	Flags          AttachmentDescriptionFlags
+	Format         Format
+	Samples        SampleCountFlags
+	LoadOp         AttachmentLoadOp
+	StoreOp        AttachmentStoreOp
+	StencilLoadOp  AttachmentLoadOp
+	StencilStoreOp AttachmentStoreOp
+	InitialLayout  ImageLayout
+	FinalLayout    ImageLayout
+}
+
+func NewAttachmentDescription2() *AttachmentDescription2 {
+	p := (*AttachmentDescription2)(MemAlloc(unsafe.Sizeof(*(*AttachmentDescription2)(nil))))
+	p.SType = STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_2
+	return p
+}
+func (p *AttachmentDescription2) Free() { MemFree(unsafe.Pointer(p)) }
+
+// AttachmentReference2 -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAttachmentReference2.html
+type AttachmentReference2 struct {
+	SType      StructureType
+	PNext      unsafe.Pointer
+	Attachment uint32
+	Layout     ImageLayout
+	AspectMask ImageAspectFlags
+}
+
+func NewAttachmentReference2() *AttachmentReference2 {
+	p := (*AttachmentReference2)(MemAlloc(unsafe.Sizeof(*(*AttachmentReference2)(nil))))
+	p.SType = STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2
+	return p
+}
+func (p *AttachmentReference2) Free() { MemFree(unsafe.Pointer(p)) }
+
+// SubpassDescription2 -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassDescription2.html
+type SubpassDescription2 struct {
+	SType                   StructureType
+	PNext                   unsafe.Pointer
+	Flags                   SubpassDescriptionFlags
+	PipelineBindPoint       PipelineBindPoint
+	ViewMask                uint32
+	InputAttachmentCount    uint32
+	PInputAttachments       *AttachmentReference2
+	ColorAttachmentCount    uint32
+	PColorAttachments       *AttachmentReference2
+	PResolveAttachments     *AttachmentReference2
+	PDepthStencilAttachment *AttachmentReference2
+	PreserveAttachmentCount uint32
+	PPreserveAttachments    *uint32
+}
+
+func NewSubpassDescription2() *SubpassDescription2 {
+	p := (*SubpassDescription2)(MemAlloc(unsafe.Sizeof(*(*SubpassDescription2)(nil))))
+	p.SType = STRUCTURE_TYPE_SUBPASS_DESCRIPTION_2
+	return p
+}
+func (p *SubpassDescription2) Free() { MemFree(unsafe.Pointer(p)) }
+
+// SubpassDependency2 -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassDependency2.html
+type SubpassDependency2 struct {
+	SType           StructureType
+	PNext           unsafe.Pointer
+	SrcSubpass      uint32
+	DstSubpass      uint32
+	SrcStageMask    PipelineStageFlags
+	DstStageMask    PipelineStageFlags
+	SrcAccessMask   AccessFlags
+	DstAccessMask   AccessFlags
+	DependencyFlags DependencyFlags
+	ViewOffset      int32
+}
+
+func NewSubpassDependency2() *SubpassDependency2 {
+	p := (*SubpassDependency2)(MemAlloc(unsafe.Sizeof(*(*SubpassDependency2)(nil))))
+	p.SType = STRUCTURE_TYPE_SUBPASS_DEPENDENCY_2
+	return p
+}
+func (p *SubpassDependency2) Free() { MemFree(unsafe.Pointer(p)) }
+
+// RenderPassCreateInfo2 -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassCreateInfo2.html
+type RenderPassCreateInfo2 struct {
+	SType                   StructureType
+	PNext                   unsafe.Pointer
+	Flags                   RenderPassCreateFlags
+	AttachmentCount         uint32
+	PAttachments            *AttachmentDescription2
+	SubpassCount            uint32
+	PSubpasses              *SubpassDescription2
+	DependencyCount         uint32
+	PDependencies           *SubpassDependency2
+	CorrelatedViewMaskCount uint32
+	PCorrelatedViewMasks    *uint32
+}
+
+func NewRenderPassCreateInfo2() *RenderPassCreateInfo2 {
+	p := (*RenderPassCreateInfo2)(MemAlloc(unsafe.Sizeof(*(*RenderPassCreateInfo2)(nil))))
+	p.SType = STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO_2
+	return p
+}
+func (p *RenderPassCreateInfo2) Free() { MemFree(unsafe.Pointer(p)) }
+
+// SubpassBeginInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassBeginInfo.html
+type SubpassBeginInfo struct {
+	SType    StructureType
+	PNext    unsafe.Pointer
+	Contents SubpassContents
+}
+
+func NewSubpassBeginInfo() *SubpassBeginInfo {
+	p := (*SubpassBeginInfo)(MemAlloc(unsafe.Sizeof(*(*SubpassBeginInfo)(nil))))
+	p.SType = STRUCTURE_TYPE_SUBPASS_BEGIN_INFO
+	return p
+}
+func (p *SubpassBeginInfo) Free() { MemFree(unsafe.Pointer(p)) }
+
+// SubpassEndInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassEndInfo.html
+type SubpassEndInfo struct {
+	SType StructureType
+	PNext unsafe.Pointer
+}
+
+func NewSubpassEndInfo() *SubpassEndInfo {
+	p := (*SubpassEndInfo)(MemAlloc(unsafe.Sizeof(*(*SubpassEndInfo)(nil))))
+	p.SType = STRUCTURE_TYPE_SUBPASS_END_INFO
+	return p
+}
+func (p *SubpassEndInfo) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDevice8BitStorageFeatures -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDevice8BitStorageFeatures.html
+type PhysicalDevice8BitStorageFeatures struct {
+	SType                             StructureType
+	PNext                             unsafe.Pointer
+	StorageBuffer8BitAccess           Bool32
+	UniformAndStorageBuffer8BitAccess Bool32
+	StoragePushConstant8              Bool32
+}
+
+func NewPhysicalDevice8BitStorageFeatures() *PhysicalDevice8BitStorageFeatures {
+	p := (*PhysicalDevice8BitStorageFeatures)(MemAlloc(unsafe.Sizeof(*(*PhysicalDevice8BitStorageFeatures)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_8BIT_STORAGE_FEATURES
+	return p
+}
+func (p *PhysicalDevice8BitStorageFeatures) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceDriverProperties -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceDriverProperties.html
+type PhysicalDeviceDriverProperties struct {
+	SType              StructureType
+	PNext              unsafe.Pointer
+	DriverID           DriverId
+	DriverName         [MAX_DRIVER_NAME_SIZE]int8
+	DriverInfo         [MAX_DRIVER_INFO_SIZE]int8
+	ConformanceVersion ConformanceVersion
+}
+
+func NewPhysicalDeviceDriverProperties() *PhysicalDeviceDriverProperties {
+	p := (*PhysicalDeviceDriverProperties)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceDriverProperties)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES
+	return p
+}
+func (p *PhysicalDeviceDriverProperties) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceShaderAtomicInt64Features -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceShaderAtomicInt64Features.html
+type PhysicalDeviceShaderAtomicInt64Features struct {
+	SType                    StructureType
+	PNext                    unsafe.Pointer
+	ShaderBufferInt64Atomics Bool32
+	ShaderSharedInt64Atomics Bool32
+}
+
+func NewPhysicalDeviceShaderAtomicInt64Features() *PhysicalDeviceShaderAtomicInt64Features {
+	p := (*PhysicalDeviceShaderAtomicInt64Features)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceShaderAtomicInt64Features)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_FLOAT16_INT8_FEATURES
+	return p
+}
+func (p *PhysicalDeviceShaderAtomicInt64Features) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceShaderFloat16Int8Features -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceShaderFloat16Int8Features.html
+type PhysicalDeviceShaderFloat16Int8Features struct {
+	SType         StructureType
+	PNext         unsafe.Pointer
+	ShaderFloat16 Bool32
+	ShaderInt8    Bool32
+}
+
+func NewPhysicalDeviceShaderFloat16Int8Features() *PhysicalDeviceShaderFloat16Int8Features {
+	p := (*PhysicalDeviceShaderFloat16Int8Features)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceShaderFloat16Int8Features)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_FLOAT_CONTROLS_PROPERTIES
+	return p
+}
+func (p *PhysicalDeviceShaderFloat16Int8Features) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceFloatControlsProperties -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceFloatControlsProperties.html
+type PhysicalDeviceFloatControlsProperties struct {
+	SType                                 StructureType
+	PNext                                 unsafe.Pointer
+	DenormBehaviorIndependence            ShaderFloatControlsIndependence
+	RoundingModeIndependence              ShaderFloatControlsIndependence
+	ShaderSignedZeroInfNanPreserveFloat16 Bool32
+	ShaderSignedZeroInfNanPreserveFloat32 Bool32
+	ShaderSignedZeroInfNanPreserveFloat64 Bool32
+	ShaderDenormPreserveFloat16           Bool32
+	ShaderDenormPreserveFloat32           Bool32
+	ShaderDenormPreserveFloat64           Bool32
+	ShaderDenormFlushToZeroFloat16        Bool32
+	ShaderDenormFlushToZeroFloat32        Bool32
+	ShaderDenormFlushToZeroFloat64        Bool32
+	ShaderRoundingModeRTEFloat16          Bool32
+	ShaderRoundingModeRTEFloat32          Bool32
+	ShaderRoundingModeRTEFloat64          Bool32
+	ShaderRoundingModeRTZFloat16          Bool32
+	ShaderRoundingModeRTZFloat32          Bool32
+	ShaderRoundingModeRTZFloat64          Bool32
+}
+
+func NewPhysicalDeviceFloatControlsProperties() *PhysicalDeviceFloatControlsProperties {
+	p := (*PhysicalDeviceFloatControlsProperties)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceFloatControlsProperties)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_FLOAT_CONTROLS_PROPERTIES
+	return p
+}
+func (p *PhysicalDeviceFloatControlsProperties) Free() { MemFree(unsafe.Pointer(p)) }
+
+// DescriptorSetLayoutBindingFlagsCreateInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetLayoutBindingFlagsCreateInfo.html
+type DescriptorSetLayoutBindingFlagsCreateInfo struct {
+	SType         StructureType
+	PNext         unsafe.Pointer
+	BindingCount  uint32
+	PBindingFlags *DescriptorBindingFlags
+}
+
+func NewDescriptorSetLayoutBindingFlagsCreateInfo() *DescriptorSetLayoutBindingFlagsCreateInfo {
+	p := (*DescriptorSetLayoutBindingFlagsCreateInfo)(MemAlloc(unsafe.Sizeof(*(*DescriptorSetLayoutBindingFlagsCreateInfo)(nil))))
+	p.SType = STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO
+	return p
+}
+func (p *DescriptorSetLayoutBindingFlagsCreateInfo) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceDescriptorIndexingFeatures -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceDescriptorIndexingFeatures.html
+type PhysicalDeviceDescriptorIndexingFeatures struct {
+	SType                                              StructureType
+	PNext                                              unsafe.Pointer
+	ShaderInputAttachmentArrayDynamicIndexing          Bool32
+	ShaderUniformTexelBufferArrayDynamicIndexing       Bool32
+	ShaderStorageTexelBufferArrayDynamicIndexing       Bool32
+	ShaderUniformBufferArrayNonUniformIndexing         Bool32
+	ShaderSampledImageArrayNonUniformIndexing          Bool32
+	ShaderStorageBufferArrayNonUniformIndexing         Bool32
+	ShaderStorageImageArrayNonUniformIndexing          Bool32
+	ShaderInputAttachmentArrayNonUniformIndexing       Bool32
+	ShaderUniformTexelBufferArrayNonUniformIndexing    Bool32
+	ShaderStorageTexelBufferArrayNonUniformIndexing    Bool32
+	DescriptorBindingUniformBufferUpdateAfterBind      Bool32
+	DescriptorBindingSampledImageUpdateAfterBind       Bool32
+	DescriptorBindingStorageImageUpdateAfterBind       Bool32
+	DescriptorBindingStorageBufferUpdateAfterBind      Bool32
+	DescriptorBindingUniformTexelBufferUpdateAfterBind Bool32
+	DescriptorBindingStorageTexelBufferUpdateAfterBind Bool32
+	DescriptorBindingUpdateUnusedWhilePending          Bool32
+	DescriptorBindingPartiallyBound                    Bool32
+	DescriptorBindingVariableDescriptorCount           Bool32
+	RuntimeDescriptorArray                             Bool32
+}
+
+func NewPhysicalDeviceDescriptorIndexingFeatures() *PhysicalDeviceDescriptorIndexingFeatures {
+	p := (*PhysicalDeviceDescriptorIndexingFeatures)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceDescriptorIndexingFeatures)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES
+	return p
+}
+func (p *PhysicalDeviceDescriptorIndexingFeatures) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceDescriptorIndexingProperties -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceDescriptorIndexingProperties.html
+type PhysicalDeviceDescriptorIndexingProperties struct {
+	SType                                                StructureType
+	PNext                                                unsafe.Pointer
+	MaxUpdateAfterBindDescriptorsInAllPools              uint32
+	ShaderUniformBufferArrayNonUniformIndexingNative     Bool32
+	ShaderSampledImageArrayNonUniformIndexingNative      Bool32
+	ShaderStorageBufferArrayNonUniformIndexingNative     Bool32
+	ShaderStorageImageArrayNonUniformIndexingNative      Bool32
+	ShaderInputAttachmentArrayNonUniformIndexingNative   Bool32
+	RobustBufferAccessUpdateAfterBind                    Bool32
+	QuadDivergentImplicitLod                             Bool32
+	MaxPerStageDescriptorUpdateAfterBindSamplers         uint32
+	MaxPerStageDescriptorUpdateAfterBindUniformBuffers   uint32
+	MaxPerStageDescriptorUpdateAfterBindStorageBuffers   uint32
+	MaxPerStageDescriptorUpdateAfterBindSampledImages    uint32
+	MaxPerStageDescriptorUpdateAfterBindStorageImages    uint32
+	MaxPerStageDescriptorUpdateAfterBindInputAttachments uint32
+	MaxPerStageUpdateAfterBindResources                  uint32
+	MaxDescriptorSetUpdateAfterBindSamplers              uint32
+	MaxDescriptorSetUpdateAfterBindUniformBuffers        uint32
+	MaxDescriptorSetUpdateAfterBindUniformBuffersDynamic uint32
+	MaxDescriptorSetUpdateAfterBindStorageBuffers        uint32
+	MaxDescriptorSetUpdateAfterBindStorageBuffersDynamic uint32
+	MaxDescriptorSetUpdateAfterBindSampledImages         uint32
+	MaxDescriptorSetUpdateAfterBindStorageImages         uint32
+	MaxDescriptorSetUpdateAfterBindInputAttachments      uint32
+}
+
+func NewPhysicalDeviceDescriptorIndexingProperties() *PhysicalDeviceDescriptorIndexingProperties {
+	p := (*PhysicalDeviceDescriptorIndexingProperties)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceDescriptorIndexingProperties)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_PROPERTIES
+	return p
+}
+func (p *PhysicalDeviceDescriptorIndexingProperties) Free() { MemFree(unsafe.Pointer(p)) }
+
+// DescriptorSetVariableDescriptorCountAllocateInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetVariableDescriptorCountAllocateInfo.html
+type DescriptorSetVariableDescriptorCountAllocateInfo struct {
+	SType              StructureType
+	PNext              unsafe.Pointer
+	DescriptorSetCount uint32
+	PDescriptorCounts  *uint32
+}
+
+func NewDescriptorSetVariableDescriptorCountAllocateInfo() *DescriptorSetVariableDescriptorCountAllocateInfo {
+	p := (*DescriptorSetVariableDescriptorCountAllocateInfo)(MemAlloc(unsafe.Sizeof(*(*DescriptorSetVariableDescriptorCountAllocateInfo)(nil))))
+	p.SType = STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO
+	return p
+}
+func (p *DescriptorSetVariableDescriptorCountAllocateInfo) Free() { MemFree(unsafe.Pointer(p)) }
+
+// DescriptorSetVariableDescriptorCountLayoutSupport -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetVariableDescriptorCountLayoutSupport.html
+type DescriptorSetVariableDescriptorCountLayoutSupport struct {
+	SType                      StructureType
+	PNext                      unsafe.Pointer
+	MaxVariableDescriptorCount uint32
+}
+
+func NewDescriptorSetVariableDescriptorCountLayoutSupport() *DescriptorSetVariableDescriptorCountLayoutSupport {
+	p := (*DescriptorSetVariableDescriptorCountLayoutSupport)(MemAlloc(unsafe.Sizeof(*(*DescriptorSetVariableDescriptorCountLayoutSupport)(nil))))
+	p.SType = STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_LAYOUT_SUPPORT
+	return p
+}
+func (p *DescriptorSetVariableDescriptorCountLayoutSupport) Free() { MemFree(unsafe.Pointer(p)) }
+
+// SubpassDescriptionDepthStencilResolve -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassDescriptionDepthStencilResolve.html
+type SubpassDescriptionDepthStencilResolve struct {
+	SType                          StructureType
+	PNext                          unsafe.Pointer
+	DepthResolveMode               ResolveModeFlags
+	StencilResolveMode             ResolveModeFlags
+	PDepthStencilResolveAttachment *AttachmentReference2
+}
+
+func NewSubpassDescriptionDepthStencilResolve() *SubpassDescriptionDepthStencilResolve {
+	p := (*SubpassDescriptionDepthStencilResolve)(MemAlloc(unsafe.Sizeof(*(*SubpassDescriptionDepthStencilResolve)(nil))))
+	p.SType = STRUCTURE_TYPE_SUBPASS_DESCRIPTION_DEPTH_STENCIL_RESOLVE
+	return p
+}
+func (p *SubpassDescriptionDepthStencilResolve) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceDepthStencilResolveProperties -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceDepthStencilResolveProperties.html
+type PhysicalDeviceDepthStencilResolveProperties struct {
+	SType                        StructureType
+	PNext                        unsafe.Pointer
+	SupportedDepthResolveModes   ResolveModeFlags
+	SupportedStencilResolveModes ResolveModeFlags
+	IndependentResolveNone       Bool32
+	IndependentResolve           Bool32
+}
+
+func NewPhysicalDeviceDepthStencilResolveProperties() *PhysicalDeviceDepthStencilResolveProperties {
+	p := (*PhysicalDeviceDepthStencilResolveProperties)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceDepthStencilResolveProperties)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_DEPTH_STENCIL_RESOLVE_PROPERTIES
+	return p
+}
+func (p *PhysicalDeviceDepthStencilResolveProperties) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceScalarBlockLayoutFeatures -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceScalarBlockLayoutFeatures.html
+type PhysicalDeviceScalarBlockLayoutFeatures struct {
+	SType             StructureType
+	PNext             unsafe.Pointer
+	ScalarBlockLayout Bool32
+}
+
+func NewPhysicalDeviceScalarBlockLayoutFeatures() *PhysicalDeviceScalarBlockLayoutFeatures {
+	p := (*PhysicalDeviceScalarBlockLayoutFeatures)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceScalarBlockLayoutFeatures)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SCALAR_BLOCK_LAYOUT_FEATURES
+	return p
+}
+func (p *PhysicalDeviceScalarBlockLayoutFeatures) Free() { MemFree(unsafe.Pointer(p)) }
+
+// ImageStencilUsageCreateInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageStencilUsageCreateInfo.html
+type ImageStencilUsageCreateInfo struct {
+	SType        StructureType
+	PNext        unsafe.Pointer
+	StencilUsage ImageUsageFlags
+}
+
+func NewImageStencilUsageCreateInfo() *ImageStencilUsageCreateInfo {
+	p := (*ImageStencilUsageCreateInfo)(MemAlloc(unsafe.Sizeof(*(*ImageStencilUsageCreateInfo)(nil))))
+	p.SType = STRUCTURE_TYPE_IMAGE_STENCIL_USAGE_CREATE_INFO
+	return p
+}
+func (p *ImageStencilUsageCreateInfo) Free() { MemFree(unsafe.Pointer(p)) }
+
+// SamplerReductionModeCreateInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerReductionModeCreateInfo.html
+type SamplerReductionModeCreateInfo struct {
+	SType         StructureType
+	PNext         unsafe.Pointer
+	ReductionMode SamplerReductionMode
+}
+
+func NewSamplerReductionModeCreateInfo() *SamplerReductionModeCreateInfo {
+	p := (*SamplerReductionModeCreateInfo)(MemAlloc(unsafe.Sizeof(*(*SamplerReductionModeCreateInfo)(nil))))
+	p.SType = STRUCTURE_TYPE_SAMPLER_REDUCTION_MODE_CREATE_INFO
+	return p
+}
+func (p *SamplerReductionModeCreateInfo) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceSamplerFilterMinmaxProperties -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceSamplerFilterMinmaxProperties.html
+type PhysicalDeviceSamplerFilterMinmaxProperties struct {
+	SType                              StructureType
+	PNext                              unsafe.Pointer
+	FilterMinmaxSingleComponentFormats Bool32
+	FilterMinmaxImageComponentMapping  Bool32
+}
+
+func NewPhysicalDeviceSamplerFilterMinmaxProperties() *PhysicalDeviceSamplerFilterMinmaxProperties {
+	p := (*PhysicalDeviceSamplerFilterMinmaxProperties)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceSamplerFilterMinmaxProperties)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_FILTER_MINMAX_PROPERTIES
+	return p
+}
+func (p *PhysicalDeviceSamplerFilterMinmaxProperties) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceVulkanMemoryModelFeatures -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceVulkanMemoryModelFeatures.html
+type PhysicalDeviceVulkanMemoryModelFeatures struct {
+	SType                                         StructureType
+	PNext                                         unsafe.Pointer
+	VulkanMemoryModel                             Bool32
+	VulkanMemoryModelDeviceScope                  Bool32
+	VulkanMemoryModelAvailabilityVisibilityChains Bool32
+}
+
+func NewPhysicalDeviceVulkanMemoryModelFeatures() *PhysicalDeviceVulkanMemoryModelFeatures {
+	p := (*PhysicalDeviceVulkanMemoryModelFeatures)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceVulkanMemoryModelFeatures)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_MEMORY_MODEL_FEATURES
+	return p
+}
+func (p *PhysicalDeviceVulkanMemoryModelFeatures) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceImagelessFramebufferFeatures -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceImagelessFramebufferFeatures.html
+type PhysicalDeviceImagelessFramebufferFeatures struct {
+	SType                StructureType
+	PNext                unsafe.Pointer
+	ImagelessFramebuffer Bool32
+}
+
+func NewPhysicalDeviceImagelessFramebufferFeatures() *PhysicalDeviceImagelessFramebufferFeatures {
+	p := (*PhysicalDeviceImagelessFramebufferFeatures)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceImagelessFramebufferFeatures)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGELESS_FRAMEBUFFER_FEATURES
+	return p
+}
+func (p *PhysicalDeviceImagelessFramebufferFeatures) Free() { MemFree(unsafe.Pointer(p)) }
+
+// FramebufferAttachmentImageInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFramebufferAttachmentImageInfo.html
+type FramebufferAttachmentImageInfo struct {
+	SType           StructureType
+	PNext           unsafe.Pointer
+	Flags           ImageCreateFlags
+	Usage           ImageUsageFlags
+	Width           uint32
+	Height          uint32
+	LayerCount      uint32
+	ViewFormatCount uint32
+	PViewFormats    *Format
+}
+
+func NewFramebufferAttachmentImageInfo() *FramebufferAttachmentImageInfo {
+	p := (*FramebufferAttachmentImageInfo)(MemAlloc(unsafe.Sizeof(*(*FramebufferAttachmentImageInfo)(nil))))
+	p.SType = STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO
+	return p
+}
+func (p *FramebufferAttachmentImageInfo) Free() { MemFree(unsafe.Pointer(p)) }
+
+// FramebufferAttachmentsCreateInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFramebufferAttachmentsCreateInfo.html
+type FramebufferAttachmentsCreateInfo struct {
+	SType                    StructureType
+	PNext                    unsafe.Pointer
+	AttachmentImageInfoCount uint32
+	PAttachmentImageInfos    *FramebufferAttachmentImageInfo
+}
+
+func NewFramebufferAttachmentsCreateInfo() *FramebufferAttachmentsCreateInfo {
+	p := (*FramebufferAttachmentsCreateInfo)(MemAlloc(unsafe.Sizeof(*(*FramebufferAttachmentsCreateInfo)(nil))))
+	p.SType = STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO
+	return p
+}
+func (p *FramebufferAttachmentsCreateInfo) Free() { MemFree(unsafe.Pointer(p)) }
+
+// RenderPassAttachmentBeginInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassAttachmentBeginInfo.html
+type RenderPassAttachmentBeginInfo struct {
+	SType           StructureType
+	PNext           unsafe.Pointer
+	AttachmentCount uint32
+	PAttachments    *ImageView
+}
+
+func NewRenderPassAttachmentBeginInfo() *RenderPassAttachmentBeginInfo {
+	p := (*RenderPassAttachmentBeginInfo)(MemAlloc(unsafe.Sizeof(*(*RenderPassAttachmentBeginInfo)(nil))))
+	p.SType = STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO
+	return p
+}
+func (p *RenderPassAttachmentBeginInfo) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceUniformBufferStandardLayoutFeatures -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceUniformBufferStandardLayoutFeatures.html
+type PhysicalDeviceUniformBufferStandardLayoutFeatures struct {
+	SType                       StructureType
+	PNext                       unsafe.Pointer
+	UniformBufferStandardLayout Bool32
+}
+
+func NewPhysicalDeviceUniformBufferStandardLayoutFeatures() *PhysicalDeviceUniformBufferStandardLayoutFeatures {
+	p := (*PhysicalDeviceUniformBufferStandardLayoutFeatures)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceUniformBufferStandardLayoutFeatures)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_UNIFORM_BUFFER_STANDARD_LAYOUT_FEATURES
+	return p
+}
+func (p *PhysicalDeviceUniformBufferStandardLayoutFeatures) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceShaderSubgroupExtendedTypesFeatures -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceShaderSubgroupExtendedTypesFeatures.html
+type PhysicalDeviceShaderSubgroupExtendedTypesFeatures struct {
+	SType                       StructureType
+	PNext                       unsafe.Pointer
+	ShaderSubgroupExtendedTypes Bool32
+}
+
+func NewPhysicalDeviceShaderSubgroupExtendedTypesFeatures() *PhysicalDeviceShaderSubgroupExtendedTypesFeatures {
+	p := (*PhysicalDeviceShaderSubgroupExtendedTypesFeatures)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceShaderSubgroupExtendedTypesFeatures)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_SUBGROUP_EXTENDED_TYPES_FEATURES
+	return p
+}
+func (p *PhysicalDeviceShaderSubgroupExtendedTypesFeatures) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceSeparateDepthStencilLayoutsFeatures -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceSeparateDepthStencilLayoutsFeatures.html
+type PhysicalDeviceSeparateDepthStencilLayoutsFeatures struct {
+	SType                       StructureType
+	PNext                       unsafe.Pointer
+	SeparateDepthStencilLayouts Bool32
+}
+
+func NewPhysicalDeviceSeparateDepthStencilLayoutsFeatures() *PhysicalDeviceSeparateDepthStencilLayoutsFeatures {
+	p := (*PhysicalDeviceSeparateDepthStencilLayoutsFeatures)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceSeparateDepthStencilLayoutsFeatures)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SEPARATE_DEPTH_STENCIL_LAYOUTS_FEATURES
+	return p
+}
+func (p *PhysicalDeviceSeparateDepthStencilLayoutsFeatures) Free() { MemFree(unsafe.Pointer(p)) }
+
+// AttachmentReferenceStencilLayout -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAttachmentReferenceStencilLayout.html
+type AttachmentReferenceStencilLayout struct {
+	SType         StructureType
+	PNext         unsafe.Pointer
+	StencilLayout ImageLayout
+}
+
+func NewAttachmentReferenceStencilLayout() *AttachmentReferenceStencilLayout {
+	p := (*AttachmentReferenceStencilLayout)(MemAlloc(unsafe.Sizeof(*(*AttachmentReferenceStencilLayout)(nil))))
+	p.SType = STRUCTURE_TYPE_ATTACHMENT_REFERENCE_STENCIL_LAYOUT
+	return p
+}
+func (p *AttachmentReferenceStencilLayout) Free() { MemFree(unsafe.Pointer(p)) }
+
+// AttachmentDescriptionStencilLayout -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAttachmentDescriptionStencilLayout.html
+type AttachmentDescriptionStencilLayout struct {
+	SType                StructureType
+	PNext                unsafe.Pointer
+	StencilInitialLayout ImageLayout
+	StencilFinalLayout   ImageLayout
+}
+
+func NewAttachmentDescriptionStencilLayout() *AttachmentDescriptionStencilLayout {
+	p := (*AttachmentDescriptionStencilLayout)(MemAlloc(unsafe.Sizeof(*(*AttachmentDescriptionStencilLayout)(nil))))
+	p.SType = STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_STENCIL_LAYOUT
+	return p
+}
+func (p *AttachmentDescriptionStencilLayout) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceHostQueryResetFeatures -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceHostQueryResetFeatures.html
+type PhysicalDeviceHostQueryResetFeatures struct {
+	SType          StructureType
+	PNext          unsafe.Pointer
+	HostQueryReset Bool32
+}
+
+func NewPhysicalDeviceHostQueryResetFeatures() *PhysicalDeviceHostQueryResetFeatures {
+	p := (*PhysicalDeviceHostQueryResetFeatures)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceHostQueryResetFeatures)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_HOST_QUERY_RESET_FEATURES
+	return p
+}
+func (p *PhysicalDeviceHostQueryResetFeatures) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceTimelineSemaphoreFeatures -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceTimelineSemaphoreFeatures.html
+type PhysicalDeviceTimelineSemaphoreFeatures struct {
+	SType             StructureType
+	PNext             unsafe.Pointer
+	TimelineSemaphore Bool32
+}
+
+func NewPhysicalDeviceTimelineSemaphoreFeatures() *PhysicalDeviceTimelineSemaphoreFeatures {
+	p := (*PhysicalDeviceTimelineSemaphoreFeatures)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceTimelineSemaphoreFeatures)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_TIMELINE_SEMAPHORE_FEATURES
+	return p
+}
+func (p *PhysicalDeviceTimelineSemaphoreFeatures) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceTimelineSemaphoreProperties -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceTimelineSemaphoreProperties.html
+type PhysicalDeviceTimelineSemaphoreProperties struct {
+	SType                               StructureType
+	PNext                               unsafe.Pointer
+	MaxTimelineSemaphoreValueDifference uint64
+}
+
+func NewPhysicalDeviceTimelineSemaphoreProperties() *PhysicalDeviceTimelineSemaphoreProperties {
+	p := (*PhysicalDeviceTimelineSemaphoreProperties)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceTimelineSemaphoreProperties)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_TIMELINE_SEMAPHORE_PROPERTIES
+	return p
+}
+func (p *PhysicalDeviceTimelineSemaphoreProperties) Free() { MemFree(unsafe.Pointer(p)) }
+
+// SemaphoreTypeCreateInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSemaphoreTypeCreateInfo.html
+type SemaphoreTypeCreateInfo struct {
+	SType         StructureType
+	PNext         unsafe.Pointer
+	SemaphoreType SemaphoreType
+	InitialValue  uint64
+}
+
+func NewSemaphoreTypeCreateInfo() *SemaphoreTypeCreateInfo {
+	p := (*SemaphoreTypeCreateInfo)(MemAlloc(unsafe.Sizeof(*(*SemaphoreTypeCreateInfo)(nil))))
+	p.SType = STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO
+	return p
+}
+func (p *SemaphoreTypeCreateInfo) Free() { MemFree(unsafe.Pointer(p)) }
+
+// TimelineSemaphoreSubmitInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkTimelineSemaphoreSubmitInfo.html
+type TimelineSemaphoreSubmitInfo struct {
+	SType                     StructureType
+	PNext                     unsafe.Pointer
+	WaitSemaphoreValueCount   uint32
+	PWaitSemaphoreValues      *uint64
+	SignalSemaphoreValueCount uint32
+	PSignalSemaphoreValues    *uint64
+}
+
+func NewTimelineSemaphoreSubmitInfo() *TimelineSemaphoreSubmitInfo {
+	p := (*TimelineSemaphoreSubmitInfo)(MemAlloc(unsafe.Sizeof(*(*TimelineSemaphoreSubmitInfo)(nil))))
+	p.SType = STRUCTURE_TYPE_TIMELINE_SEMAPHORE_SUBMIT_INFO
+	return p
+}
+func (p *TimelineSemaphoreSubmitInfo) Free() { MemFree(unsafe.Pointer(p)) }
+
+// SemaphoreWaitInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSemaphoreWaitInfo.html
+type SemaphoreWaitInfo struct {
+	SType          StructureType
+	PNext          unsafe.Pointer
+	Flags          SemaphoreWaitFlags
+	SemaphoreCount uint32
+	PSemaphores    *Semaphore
+	PValues        *uint64
+}
+
+func NewSemaphoreWaitInfo() *SemaphoreWaitInfo {
+	p := (*SemaphoreWaitInfo)(MemAlloc(unsafe.Sizeof(*(*SemaphoreWaitInfo)(nil))))
+	p.SType = STRUCTURE_TYPE_SEMAPHORE_WAIT_INFO
+	return p
+}
+func (p *SemaphoreWaitInfo) Free() { MemFree(unsafe.Pointer(p)) }
+
+// SemaphoreSignalInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSemaphoreSignalInfo.html
+type SemaphoreSignalInfo struct {
+	SType     StructureType
+	PNext     unsafe.Pointer
+	Semaphore Semaphore
+	Value     uint64
+}
+
+func NewSemaphoreSignalInfo() *SemaphoreSignalInfo {
+	p := (*SemaphoreSignalInfo)(MemAlloc(unsafe.Sizeof(*(*SemaphoreSignalInfo)(nil))))
+	p.SType = STRUCTURE_TYPE_SEMAPHORE_SIGNAL_INFO
+	return p
+}
+func (p *SemaphoreSignalInfo) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceBufferDeviceAddressFeatures -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceBufferDeviceAddressFeatures.html
+type PhysicalDeviceBufferDeviceAddressFeatures struct {
+	SType                            StructureType
+	PNext                            unsafe.Pointer
+	BufferDeviceAddress              Bool32
+	BufferDeviceAddressCaptureReplay Bool32
+	BufferDeviceAddressMultiDevice   Bool32
+}
+
+func NewPhysicalDeviceBufferDeviceAddressFeatures() *PhysicalDeviceBufferDeviceAddressFeatures {
+	p := (*PhysicalDeviceBufferDeviceAddressFeatures)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceBufferDeviceAddressFeatures)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_BUFFER_DEVICE_ADDRESS_FEATURES
+	return p
+}
+func (p *PhysicalDeviceBufferDeviceAddressFeatures) Free() { MemFree(unsafe.Pointer(p)) }
+
+// BufferDeviceAddressInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferDeviceAddressInfo.html
+type BufferDeviceAddressInfo struct {
+	SType  StructureType
+	PNext  unsafe.Pointer
+	Buffer Buffer
+}
+
+func NewBufferDeviceAddressInfo() *BufferDeviceAddressInfo {
+	p := (*BufferDeviceAddressInfo)(MemAlloc(unsafe.Sizeof(*(*BufferDeviceAddressInfo)(nil))))
+	p.SType = STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO
+	return p
+}
+func (p *BufferDeviceAddressInfo) Free() { MemFree(unsafe.Pointer(p)) }
+
+// BufferOpaqueCaptureAddressCreateInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferOpaqueCaptureAddressCreateInfo.html
+type BufferOpaqueCaptureAddressCreateInfo struct {
+	SType                StructureType
+	PNext                unsafe.Pointer
+	OpaqueCaptureAddress uint64
+}
+
+func NewBufferOpaqueCaptureAddressCreateInfo() *BufferOpaqueCaptureAddressCreateInfo {
+	p := (*BufferOpaqueCaptureAddressCreateInfo)(MemAlloc(unsafe.Sizeof(*(*BufferOpaqueCaptureAddressCreateInfo)(nil))))
+	p.SType = STRUCTURE_TYPE_BUFFER_OPAQUE_CAPTURE_ADDRESS_CREATE_INFO
+	return p
+}
+func (p *BufferOpaqueCaptureAddressCreateInfo) Free() { MemFree(unsafe.Pointer(p)) }
+
+// MemoryOpaqueCaptureAddressAllocateInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryOpaqueCaptureAddressAllocateInfo.html
+type MemoryOpaqueCaptureAddressAllocateInfo struct {
+	SType                StructureType
+	PNext                unsafe.Pointer
+	OpaqueCaptureAddress uint64
+}
+
+func NewMemoryOpaqueCaptureAddressAllocateInfo() *MemoryOpaqueCaptureAddressAllocateInfo {
+	p := (*MemoryOpaqueCaptureAddressAllocateInfo)(MemAlloc(unsafe.Sizeof(*(*MemoryOpaqueCaptureAddressAllocateInfo)(nil))))
+	p.SType = STRUCTURE_TYPE_MEMORY_OPAQUE_CAPTURE_ADDRESS_ALLOCATE_INFO
+	return p
+}
+func (p *MemoryOpaqueCaptureAddressAllocateInfo) Free() { MemFree(unsafe.Pointer(p)) }
+
+// DeviceMemoryOpaqueCaptureAddressInfo -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceMemoryOpaqueCaptureAddressInfo.html
+type DeviceMemoryOpaqueCaptureAddressInfo struct {
+	SType  StructureType
+	PNext  unsafe.Pointer
+	Memory DeviceMemory
+}
+
+func NewDeviceMemoryOpaqueCaptureAddressInfo() *DeviceMemoryOpaqueCaptureAddressInfo {
+	p := (*DeviceMemoryOpaqueCaptureAddressInfo)(MemAlloc(unsafe.Sizeof(*(*DeviceMemoryOpaqueCaptureAddressInfo)(nil))))
+	p.SType = STRUCTURE_TYPE_DEVICE_MEMORY_OPAQUE_CAPTURE_ADDRESS_INFO
+	return p
+}
+func (p *DeviceMemoryOpaqueCaptureAddressInfo) Free() { MemFree(unsafe.Pointer(p)) }
+
+//  PfnCmdDrawIndirectCount -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdDrawIndirectCount.html
+type PfnCmdDrawIndirectCount uintptr
+
+func (fn PfnCmdDrawIndirectCount) Call(commandBuffer CommandBuffer, buffer Buffer, offset DeviceSize, countBuffer Buffer, countBufferOffset DeviceSize, maxDrawCount, stride uint32) {
+	C.bridge_vkCmdDrawIndirectCount(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBuffer)(unsafe.Pointer(uintptr(buffer))), (C.VkDeviceSize)(offset), (C.VkBuffer)(unsafe.Pointer(uintptr(countBuffer))), (C.VkDeviceSize)(countBufferOffset), (C.uint32_t)(maxDrawCount), (C.uint32_t)(stride))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdDrawIndirectCount) String() string { return "vkCmdDrawIndirectCount" }
+
+//  PfnCmdDrawIndexedIndirectCount -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdDrawIndexedIndirectCount.html
+type PfnCmdDrawIndexedIndirectCount uintptr
+
+func (fn PfnCmdDrawIndexedIndirectCount) Call(commandBuffer CommandBuffer, buffer Buffer, offset DeviceSize, countBuffer Buffer, countBufferOffset DeviceSize, maxDrawCount, stride uint32) {
+	C.bridge_vkCmdDrawIndexedIndirectCount(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBuffer)(unsafe.Pointer(uintptr(buffer))), (C.VkDeviceSize)(offset), (C.VkBuffer)(unsafe.Pointer(uintptr(countBuffer))), (C.VkDeviceSize)(countBufferOffset), (C.uint32_t)(maxDrawCount), (C.uint32_t)(stride))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdDrawIndexedIndirectCount) String() string { return "vkCmdDrawIndexedIndirectCount" }
+
+//  PfnCreateRenderPass2 -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateRenderPass2.html
+type PfnCreateRenderPass2 uintptr
+
+func (fn PfnCreateRenderPass2) Call(device Device, pCreateInfo *RenderPassCreateInfo2, pAllocator *AllocationCallbacks, pRenderPass *RenderPass) Result {
+	ret := C.bridge_vkCreateRenderPass2(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkRenderPassCreateInfo2)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkRenderPass)(unsafe.Pointer(pRenderPass)))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnCreateRenderPass2) String() string { return "vkCreateRenderPass2" }
+
+//  PfnCmdBeginRenderPass2 -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBeginRenderPass2.html
+type PfnCmdBeginRenderPass2 uintptr
+
+func (fn PfnCmdBeginRenderPass2) Call(commandBuffer CommandBuffer, pRenderPassBegin *RenderPassBeginInfo, pSubpassBeginInfo *SubpassBeginInfo) {
+	C.bridge_vkCmdBeginRenderPass2(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkRenderPassBeginInfo)(unsafe.Pointer(pRenderPassBegin)), (*C.VkSubpassBeginInfo)(unsafe.Pointer(pSubpassBeginInfo)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdBeginRenderPass2) String() string { return "vkCmdBeginRenderPass2" }
+
+//  PfnCmdNextSubpass2 -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdNextSubpass2.html
+type PfnCmdNextSubpass2 uintptr
+
+func (fn PfnCmdNextSubpass2) Call(commandBuffer CommandBuffer, pSubpassBeginInfo *SubpassBeginInfo, pSubpassEndInfo *SubpassEndInfo) {
+	C.bridge_vkCmdNextSubpass2(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkSubpassBeginInfo)(unsafe.Pointer(pSubpassBeginInfo)), (*C.VkSubpassEndInfo)(unsafe.Pointer(pSubpassEndInfo)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdNextSubpass2) String() string { return "vkCmdNextSubpass2" }
+
+//  PfnCmdEndRenderPass2 -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdEndRenderPass2.html
+type PfnCmdEndRenderPass2 uintptr
+
+func (fn PfnCmdEndRenderPass2) Call(commandBuffer CommandBuffer, pSubpassEndInfo *SubpassEndInfo) {
+	C.bridge_vkCmdEndRenderPass2(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkSubpassEndInfo)(unsafe.Pointer(pSubpassEndInfo)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdEndRenderPass2) String() string { return "vkCmdEndRenderPass2" }
+
+//  PfnResetQueryPool -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkResetQueryPool.html
+type PfnResetQueryPool uintptr
+
+func (fn PfnResetQueryPool) Call(device Device, queryPool QueryPool, firstQuery, queryCount uint32) {
+	C.bridge_vkResetQueryPool(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkQueryPool)(unsafe.Pointer(uintptr(queryPool))), (C.uint32_t)(firstQuery), (C.uint32_t)(queryCount))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnResetQueryPool) String() string { return "vkResetQueryPool" }
+
+//  PfnGetSemaphoreCounterValue -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetSemaphoreCounterValue.html
+type PfnGetSemaphoreCounterValue uintptr
+
+func (fn PfnGetSemaphoreCounterValue) Call(device Device, semaphore Semaphore, pValue *uint64) Result {
+	ret := C.bridge_vkGetSemaphoreCounterValue(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkSemaphore)(unsafe.Pointer(uintptr(semaphore))), (*C.uint64_t)(unsafe.Pointer(pValue)))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnGetSemaphoreCounterValue) String() string { return "vkGetSemaphoreCounterValue" }
+
+//  PfnWaitSemaphores -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkWaitSemaphores.html
+type PfnWaitSemaphores uintptr
+
+func (fn PfnWaitSemaphores) Call(device Device, pWaitInfo *SemaphoreWaitInfo, timeout uint64) Result {
+	ret := C.bridge_vkWaitSemaphores(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkSemaphoreWaitInfo)(unsafe.Pointer(pWaitInfo)), (C.uint64_t)(timeout))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnWaitSemaphores) String() string { return "vkWaitSemaphores" }
+
+//  PfnSignalSemaphore -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkSignalSemaphore.html
+type PfnSignalSemaphore uintptr
+
+func (fn PfnSignalSemaphore) Call(device Device, pSignalInfo *SemaphoreSignalInfo) Result {
+	ret := C.bridge_vkSignalSemaphore(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkSemaphoreSignalInfo)(unsafe.Pointer(pSignalInfo)))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnSignalSemaphore) String() string { return "vkSignalSemaphore" }
+
+//  PfnGetBufferDeviceAddress -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetBufferDeviceAddress.html
+type PfnGetBufferDeviceAddress uintptr
+
+func (fn PfnGetBufferDeviceAddress) Call(device Device, pInfo *BufferDeviceAddressInfo) DeviceAddress {
+	ret := C.bridge_vkGetBufferDeviceAddress(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkBufferDeviceAddressInfo)(unsafe.Pointer(pInfo)))
+	debugCheckAndBreak()
+	return DeviceAddress(ret)
+}
+func (fn PfnGetBufferDeviceAddress) String() string { return "vkGetBufferDeviceAddress" }
+
+//  PfnGetBufferOpaqueCaptureAddress -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetBufferOpaqueCaptureAddress.html
+type PfnGetBufferOpaqueCaptureAddress uintptr
+
+func (fn PfnGetBufferOpaqueCaptureAddress) Call(device Device, pInfo *BufferDeviceAddressInfo) uint64 {
+	ret := C.bridge_vkGetBufferOpaqueCaptureAddress(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkBufferDeviceAddressInfo)(unsafe.Pointer(pInfo)))
+	debugCheckAndBreak()
+	return uint64(ret)
+}
+func (fn PfnGetBufferOpaqueCaptureAddress) String() string { return "vkGetBufferOpaqueCaptureAddress" }
+
+//  PfnGetDeviceMemoryOpaqueCaptureAddress -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDeviceMemoryOpaqueCaptureAddress.html
+type PfnGetDeviceMemoryOpaqueCaptureAddress uintptr
+
+func (fn PfnGetDeviceMemoryOpaqueCaptureAddress) Call(device Device, pInfo *DeviceMemoryOpaqueCaptureAddressInfo) uint64 {
+	ret := C.bridge_vkGetDeviceMemoryOpaqueCaptureAddress(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkDeviceMemoryOpaqueCaptureAddressInfo)(unsafe.Pointer(pInfo)))
+	debugCheckAndBreak()
+	return uint64(ret)
+}
+func (fn PfnGetDeviceMemoryOpaqueCaptureAddress) String() string {
+	return "vkGetDeviceMemoryOpaqueCaptureAddress"
+}
 
 const KHR_surface = 1
 
@@ -11187,6 +13811,40 @@ type SurfaceKHR NonDispatchableHandle
 const KHR_SURFACE_SPEC_VERSION = 25
 
 var KHR_SURFACE_EXTENSION_NAME = "VK_KHR_surface"
+
+// PresentModeKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPresentModeKHR.html
+type PresentModeKHR int32
+
+const (
+	PRESENT_MODE_IMMEDIATE_KHR                 PresentModeKHR = 0
+	PRESENT_MODE_MAILBOX_KHR                   PresentModeKHR = 1
+	PRESENT_MODE_FIFO_KHR                      PresentModeKHR = 2
+	PRESENT_MODE_FIFO_RELAXED_KHR              PresentModeKHR = 3
+	PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR     PresentModeKHR = 1000111000
+	PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR PresentModeKHR = 1000111001
+	PRESENT_MODE_MAX_ENUM_KHR                  PresentModeKHR = 0x7FFFFFFF
+)
+
+func (x PresentModeKHR) String() string {
+	switch x {
+	case PRESENT_MODE_IMMEDIATE_KHR:
+		return "PRESENT_MODE_IMMEDIATE_KHR"
+	case PRESENT_MODE_MAILBOX_KHR:
+		return "PRESENT_MODE_MAILBOX_KHR"
+	case PRESENT_MODE_FIFO_KHR:
+		return "PRESENT_MODE_FIFO_KHR"
+	case PRESENT_MODE_FIFO_RELAXED_KHR:
+		return "PRESENT_MODE_FIFO_RELAXED_KHR"
+	case PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR:
+		return "PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR"
+	case PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR:
+		return "PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR"
+	case PRESENT_MODE_MAX_ENUM_KHR:
+		return "PRESENT_MODE_MAX_ENUM_KHR"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
 
 // ColorSpaceKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkColorSpaceKHR.html
 type ColorSpaceKHR int32
@@ -11210,9 +13868,6 @@ const (
 	COLOR_SPACE_DISPLAY_NATIVE_AMD          ColorSpaceKHR = 1000213000
 	COLORSPACE_SRGB_NONLINEAR_KHR           ColorSpaceKHR = COLOR_SPACE_SRGB_NONLINEAR_KHR
 	COLOR_SPACE_DCI_P3_LINEAR_EXT           ColorSpaceKHR = COLOR_SPACE_DISPLAY_P3_LINEAR_EXT
-	COLOR_SPACE_BEGIN_RANGE_KHR             ColorSpaceKHR = COLOR_SPACE_SRGB_NONLINEAR_KHR
-	COLOR_SPACE_END_RANGE_KHR               ColorSpaceKHR = COLOR_SPACE_SRGB_NONLINEAR_KHR
-	COLOR_SPACE_RANGE_SIZE_KHR              ColorSpaceKHR = (COLOR_SPACE_SRGB_NONLINEAR_KHR - COLOR_SPACE_SRGB_NONLINEAR_KHR + 1)
 	COLOR_SPACE_MAX_ENUM_KHR                ColorSpaceKHR = 0x7FFFFFFF
 )
 
@@ -11252,43 +13907,6 @@ func (x ColorSpaceKHR) String() string {
 		return "COLOR_SPACE_DISPLAY_NATIVE_AMD"
 	case COLOR_SPACE_MAX_ENUM_KHR:
 		return "COLOR_SPACE_MAX_ENUM_KHR"
-	default:
-		return fmt.Sprint(int32(x))
-	}
-}
-
-// PresentModeKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPresentModeKHR.html
-type PresentModeKHR int32
-
-const (
-	PRESENT_MODE_IMMEDIATE_KHR                 PresentModeKHR = 0
-	PRESENT_MODE_MAILBOX_KHR                   PresentModeKHR = 1
-	PRESENT_MODE_FIFO_KHR                      PresentModeKHR = 2
-	PRESENT_MODE_FIFO_RELAXED_KHR              PresentModeKHR = 3
-	PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR     PresentModeKHR = 1000111000
-	PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR PresentModeKHR = 1000111001
-	PRESENT_MODE_BEGIN_RANGE_KHR               PresentModeKHR = PRESENT_MODE_IMMEDIATE_KHR
-	PRESENT_MODE_END_RANGE_KHR                 PresentModeKHR = PRESENT_MODE_FIFO_RELAXED_KHR
-	PRESENT_MODE_RANGE_SIZE_KHR                PresentModeKHR = (PRESENT_MODE_FIFO_RELAXED_KHR - PRESENT_MODE_IMMEDIATE_KHR + 1)
-	PRESENT_MODE_MAX_ENUM_KHR                  PresentModeKHR = 0x7FFFFFFF
-)
-
-func (x PresentModeKHR) String() string {
-	switch x {
-	case PRESENT_MODE_IMMEDIATE_KHR:
-		return "PRESENT_MODE_IMMEDIATE_KHR"
-	case PRESENT_MODE_MAILBOX_KHR:
-		return "PRESENT_MODE_MAILBOX_KHR"
-	case PRESENT_MODE_FIFO_KHR:
-		return "PRESENT_MODE_FIFO_KHR"
-	case PRESENT_MODE_FIFO_RELAXED_KHR:
-		return "PRESENT_MODE_FIFO_RELAXED_KHR"
-	case PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR:
-		return "PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR"
-	case PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR:
-		return "PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR"
-	case PRESENT_MODE_MAX_ENUM_KHR:
-		return "PRESENT_MODE_MAX_ENUM_KHR"
 	default:
 		return fmt.Sprint(int32(x))
 	}
@@ -11404,6 +14022,7 @@ type PfnDestroySurfaceKHR uintptr
 
 func (fn PfnDestroySurfaceKHR) Call(instance Instance, surface SurfaceKHR, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroySurfaceKHR(C.uintptr_t(fn), (C.VkInstance)(unsafe.Pointer(uintptr(instance))), (C.VkSurfaceKHR)(unsafe.Pointer(uintptr(surface))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroySurfaceKHR) String() string { return "vkDestroySurfaceKHR" }
@@ -11413,6 +14032,7 @@ type PfnGetPhysicalDeviceSurfaceSupportKHR uintptr
 
 func (fn PfnGetPhysicalDeviceSurfaceSupportKHR) Call(physicalDevice PhysicalDevice, queueFamilyIndex uint32, surface SurfaceKHR, pSupported *Bool32) Result {
 	ret := C.bridge_vkGetPhysicalDeviceSurfaceSupportKHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.uint32_t)(queueFamilyIndex), (C.VkSurfaceKHR)(unsafe.Pointer(uintptr(surface))), (*C.VkBool32)(unsafe.Pointer(pSupported)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPhysicalDeviceSurfaceSupportKHR) String() string {
@@ -11424,6 +14044,7 @@ type PfnGetPhysicalDeviceSurfaceCapabilitiesKHR uintptr
 
 func (fn PfnGetPhysicalDeviceSurfaceCapabilitiesKHR) Call(physicalDevice PhysicalDevice, surface SurfaceKHR, pSurfaceCapabilities *SurfaceCapabilitiesKHR) Result {
 	ret := C.bridge_vkGetPhysicalDeviceSurfaceCapabilitiesKHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.VkSurfaceKHR)(unsafe.Pointer(uintptr(surface))), (*C.VkSurfaceCapabilitiesKHR)(unsafe.Pointer(pSurfaceCapabilities)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPhysicalDeviceSurfaceCapabilitiesKHR) String() string {
@@ -11435,6 +14056,7 @@ type PfnGetPhysicalDeviceSurfaceFormatsKHR uintptr
 
 func (fn PfnGetPhysicalDeviceSurfaceFormatsKHR) Call(physicalDevice PhysicalDevice, surface SurfaceKHR, pSurfaceFormatCount *uint32, pSurfaceFormats *SurfaceFormatKHR) Result {
 	ret := C.bridge_vkGetPhysicalDeviceSurfaceFormatsKHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.VkSurfaceKHR)(unsafe.Pointer(uintptr(surface))), (*C.uint32_t)(unsafe.Pointer(pSurfaceFormatCount)), (*C.VkSurfaceFormatKHR)(unsafe.Pointer(pSurfaceFormats)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPhysicalDeviceSurfaceFormatsKHR) String() string {
@@ -11446,6 +14068,7 @@ type PfnGetPhysicalDeviceSurfacePresentModesKHR uintptr
 
 func (fn PfnGetPhysicalDeviceSurfacePresentModesKHR) Call(physicalDevice PhysicalDevice, surface SurfaceKHR, pPresentModeCount *uint32, pPresentModes *PresentModeKHR) Result {
 	ret := C.bridge_vkGetPhysicalDeviceSurfacePresentModesKHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.VkSurfaceKHR)(unsafe.Pointer(uintptr(surface))), (*C.uint32_t)(unsafe.Pointer(pPresentModeCount)), (*C.VkPresentModeKHR)(unsafe.Pointer(pPresentModes)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPhysicalDeviceSurfacePresentModesKHR) String() string {
@@ -11663,6 +14286,7 @@ type PfnCreateSwapchainKHR uintptr
 
 func (fn PfnCreateSwapchainKHR) Call(device Device, pCreateInfo *SwapchainCreateInfoKHR, pAllocator *AllocationCallbacks, pSwapchain *SwapchainKHR) Result {
 	ret := C.bridge_vkCreateSwapchainKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkSwapchainCreateInfoKHR)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkSwapchainKHR)(unsafe.Pointer(pSwapchain)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateSwapchainKHR) String() string { return "vkCreateSwapchainKHR" }
@@ -11672,6 +14296,7 @@ type PfnDestroySwapchainKHR uintptr
 
 func (fn PfnDestroySwapchainKHR) Call(device Device, swapchain SwapchainKHR, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroySwapchainKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkSwapchainKHR)(unsafe.Pointer(uintptr(swapchain))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroySwapchainKHR) String() string { return "vkDestroySwapchainKHR" }
@@ -11681,6 +14306,7 @@ type PfnGetSwapchainImagesKHR uintptr
 
 func (fn PfnGetSwapchainImagesKHR) Call(device Device, swapchain SwapchainKHR, pSwapchainImageCount *uint32, pSwapchainImages *Image) Result {
 	ret := C.bridge_vkGetSwapchainImagesKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkSwapchainKHR)(unsafe.Pointer(uintptr(swapchain))), (*C.uint32_t)(unsafe.Pointer(pSwapchainImageCount)), (*C.VkImage)(unsafe.Pointer(pSwapchainImages)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetSwapchainImagesKHR) String() string { return "vkGetSwapchainImagesKHR" }
@@ -11690,6 +14316,7 @@ type PfnAcquireNextImageKHR uintptr
 
 func (fn PfnAcquireNextImageKHR) Call(device Device, swapchain SwapchainKHR, timeout uint64, semaphore Semaphore, fence Fence, pImageIndex *uint32) Result {
 	ret := C.bridge_vkAcquireNextImageKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkSwapchainKHR)(unsafe.Pointer(uintptr(swapchain))), (C.uint64_t)(timeout), (C.VkSemaphore)(unsafe.Pointer(uintptr(semaphore))), (C.VkFence)(unsafe.Pointer(uintptr(fence))), (*C.uint32_t)(unsafe.Pointer(pImageIndex)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnAcquireNextImageKHR) String() string { return "vkAcquireNextImageKHR" }
@@ -11699,6 +14326,7 @@ type PfnQueuePresentKHR uintptr
 
 func (fn PfnQueuePresentKHR) Call(queue Queue, pPresentInfo *PresentInfoKHR) Result {
 	ret := C.bridge_vkQueuePresentKHR(C.uintptr_t(fn), (C.VkQueue)(unsafe.Pointer(uintptr(queue))), (*C.VkPresentInfoKHR)(unsafe.Pointer(pPresentInfo)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnQueuePresentKHR) String() string { return "vkQueuePresentKHR" }
@@ -11708,6 +14336,7 @@ type PfnGetDeviceGroupPresentCapabilitiesKHR uintptr
 
 func (fn PfnGetDeviceGroupPresentCapabilitiesKHR) Call(device Device, pDeviceGroupPresentCapabilities *DeviceGroupPresentCapabilitiesKHR) Result {
 	ret := C.bridge_vkGetDeviceGroupPresentCapabilitiesKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkDeviceGroupPresentCapabilitiesKHR)(unsafe.Pointer(pDeviceGroupPresentCapabilities)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetDeviceGroupPresentCapabilitiesKHR) String() string {
@@ -11719,6 +14348,7 @@ type PfnGetDeviceGroupSurfacePresentModesKHR uintptr
 
 func (fn PfnGetDeviceGroupSurfacePresentModesKHR) Call(device Device, surface SurfaceKHR, pModes *DeviceGroupPresentModeFlagsKHR) Result {
 	ret := C.bridge_vkGetDeviceGroupSurfacePresentModesKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkSurfaceKHR)(unsafe.Pointer(uintptr(surface))), (*C.VkDeviceGroupPresentModeFlagsKHR)(unsafe.Pointer(pModes)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetDeviceGroupSurfacePresentModesKHR) String() string {
@@ -11730,6 +14360,7 @@ type PfnGetPhysicalDevicePresentRectanglesKHR uintptr
 
 func (fn PfnGetPhysicalDevicePresentRectanglesKHR) Call(physicalDevice PhysicalDevice, surface SurfaceKHR, pRectCount *uint32, pRects *Rect2D) Result {
 	ret := C.bridge_vkGetPhysicalDevicePresentRectanglesKHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.VkSurfaceKHR)(unsafe.Pointer(uintptr(surface))), (*C.uint32_t)(unsafe.Pointer(pRectCount)), (*C.VkRect2D)(unsafe.Pointer(pRects)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPhysicalDevicePresentRectanglesKHR) String() string {
@@ -11741,6 +14372,7 @@ type PfnAcquireNextImage2KHR uintptr
 
 func (fn PfnAcquireNextImage2KHR) Call(device Device, pAcquireInfo *AcquireNextImageInfoKHR, pImageIndex *uint32) Result {
 	ret := C.bridge_vkAcquireNextImage2KHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkAcquireNextImageInfoKHR)(unsafe.Pointer(pAcquireInfo)), (*C.uint32_t)(unsafe.Pointer(pImageIndex)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnAcquireNextImage2KHR) String() string { return "vkAcquireNextImage2KHR" }
@@ -11757,6 +14389,7 @@ const KHR_DISPLAY_SPEC_VERSION = 23
 
 var KHR_DISPLAY_EXTENSION_NAME = "VK_KHR_display"
 
+type DisplayModeCreateFlagsKHR uint32 // reserved
 // DisplayPlaneAlphaFlagsKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayPlaneAlphaFlagsKHR.html
 type DisplayPlaneAlphaFlagsKHR uint32
 
@@ -11787,24 +14420,7 @@ func (x DisplayPlaneAlphaFlagsKHR) String() string {
 	return strings.TrimSuffix(s, `|`)
 }
 
-type DisplayModeCreateFlagsKHR uint32    // reserved
 type DisplaySurfaceCreateFlagsKHR uint32 // reserved
-// DisplayPropertiesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayPropertiesKHR.html
-type DisplayPropertiesKHR struct {
-	Display              DisplayKHR
-	DisplayName          *int8
-	PhysicalDimensions   Extent2D
-	PhysicalResolution   Extent2D
-	SupportedTransforms  SurfaceTransformFlagsKHR
-	PlaneReorderPossible Bool32
-	PersistentContent    Bool32
-}
-
-func NewDisplayPropertiesKHR() *DisplayPropertiesKHR {
-	return (*DisplayPropertiesKHR)(MemAlloc(unsafe.Sizeof(*(*DisplayPropertiesKHR)(nil))))
-}
-func (p *DisplayPropertiesKHR) Free() { MemFree(unsafe.Pointer(p)) }
-
 // DisplayModeParametersKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayModeParametersKHR.html
 type DisplayModeParametersKHR struct {
 	VisibleRegion Extent2D
@@ -11815,17 +14431,6 @@ func NewDisplayModeParametersKHR() *DisplayModeParametersKHR {
 	return (*DisplayModeParametersKHR)(MemAlloc(unsafe.Sizeof(*(*DisplayModeParametersKHR)(nil))))
 }
 func (p *DisplayModeParametersKHR) Free() { MemFree(unsafe.Pointer(p)) }
-
-// DisplayModePropertiesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayModePropertiesKHR.html
-type DisplayModePropertiesKHR struct {
-	DisplayMode DisplayModeKHR
-	Parameters  DisplayModeParametersKHR
-}
-
-func NewDisplayModePropertiesKHR() *DisplayModePropertiesKHR {
-	return (*DisplayModePropertiesKHR)(MemAlloc(unsafe.Sizeof(*(*DisplayModePropertiesKHR)(nil))))
-}
-func (p *DisplayModePropertiesKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
 // DisplayModeCreateInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayModeCreateInfoKHR.html
 type DisplayModeCreateInfoKHR struct {
@@ -11841,6 +14446,17 @@ func NewDisplayModeCreateInfoKHR() *DisplayModeCreateInfoKHR {
 	return p
 }
 func (p *DisplayModeCreateInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// DisplayModePropertiesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayModePropertiesKHR.html
+type DisplayModePropertiesKHR struct {
+	DisplayMode DisplayModeKHR
+	Parameters  DisplayModeParametersKHR
+}
+
+func NewDisplayModePropertiesKHR() *DisplayModePropertiesKHR {
+	return (*DisplayModePropertiesKHR)(MemAlloc(unsafe.Sizeof(*(*DisplayModePropertiesKHR)(nil))))
+}
+func (p *DisplayModePropertiesKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
 // DisplayPlaneCapabilitiesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayPlaneCapabilitiesKHR.html
 type DisplayPlaneCapabilitiesKHR struct {
@@ -11871,6 +14487,22 @@ func NewDisplayPlanePropertiesKHR() *DisplayPlanePropertiesKHR {
 }
 func (p *DisplayPlanePropertiesKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
+// DisplayPropertiesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplayPropertiesKHR.html
+type DisplayPropertiesKHR struct {
+	Display              DisplayKHR
+	DisplayName          *int8
+	PhysicalDimensions   Extent2D
+	PhysicalResolution   Extent2D
+	SupportedTransforms  SurfaceTransformFlagsKHR
+	PlaneReorderPossible Bool32
+	PersistentContent    Bool32
+}
+
+func NewDisplayPropertiesKHR() *DisplayPropertiesKHR {
+	return (*DisplayPropertiesKHR)(MemAlloc(unsafe.Sizeof(*(*DisplayPropertiesKHR)(nil))))
+}
+func (p *DisplayPropertiesKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
 // DisplaySurfaceCreateInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDisplaySurfaceCreateInfoKHR.html
 type DisplaySurfaceCreateInfoKHR struct {
 	SType           StructureType
@@ -11897,6 +14529,7 @@ type PfnGetPhysicalDeviceDisplayPropertiesKHR uintptr
 
 func (fn PfnGetPhysicalDeviceDisplayPropertiesKHR) Call(physicalDevice PhysicalDevice, pPropertyCount *uint32, pProperties *DisplayPropertiesKHR) Result {
 	ret := C.bridge_vkGetPhysicalDeviceDisplayPropertiesKHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.uint32_t)(unsafe.Pointer(pPropertyCount)), (*C.VkDisplayPropertiesKHR)(unsafe.Pointer(pProperties)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPhysicalDeviceDisplayPropertiesKHR) String() string {
@@ -11908,6 +14541,7 @@ type PfnGetPhysicalDeviceDisplayPlanePropertiesKHR uintptr
 
 func (fn PfnGetPhysicalDeviceDisplayPlanePropertiesKHR) Call(physicalDevice PhysicalDevice, pPropertyCount *uint32, pProperties *DisplayPlanePropertiesKHR) Result {
 	ret := C.bridge_vkGetPhysicalDeviceDisplayPlanePropertiesKHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.uint32_t)(unsafe.Pointer(pPropertyCount)), (*C.VkDisplayPlanePropertiesKHR)(unsafe.Pointer(pProperties)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPhysicalDeviceDisplayPlanePropertiesKHR) String() string {
@@ -11919,6 +14553,7 @@ type PfnGetDisplayPlaneSupportedDisplaysKHR uintptr
 
 func (fn PfnGetDisplayPlaneSupportedDisplaysKHR) Call(physicalDevice PhysicalDevice, planeIndex uint32, pDisplayCount *uint32, pDisplays *DisplayKHR) Result {
 	ret := C.bridge_vkGetDisplayPlaneSupportedDisplaysKHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.uint32_t)(planeIndex), (*C.uint32_t)(unsafe.Pointer(pDisplayCount)), (*C.VkDisplayKHR)(unsafe.Pointer(pDisplays)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetDisplayPlaneSupportedDisplaysKHR) String() string {
@@ -11930,6 +14565,7 @@ type PfnGetDisplayModePropertiesKHR uintptr
 
 func (fn PfnGetDisplayModePropertiesKHR) Call(physicalDevice PhysicalDevice, display DisplayKHR, pPropertyCount *uint32, pProperties *DisplayModePropertiesKHR) Result {
 	ret := C.bridge_vkGetDisplayModePropertiesKHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.VkDisplayKHR)(unsafe.Pointer(uintptr(display))), (*C.uint32_t)(unsafe.Pointer(pPropertyCount)), (*C.VkDisplayModePropertiesKHR)(unsafe.Pointer(pProperties)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetDisplayModePropertiesKHR) String() string { return "vkGetDisplayModePropertiesKHR" }
@@ -11939,6 +14575,7 @@ type PfnCreateDisplayModeKHR uintptr
 
 func (fn PfnCreateDisplayModeKHR) Call(physicalDevice PhysicalDevice, display DisplayKHR, pCreateInfo *DisplayModeCreateInfoKHR, pAllocator *AllocationCallbacks, pMode *DisplayModeKHR) Result {
 	ret := C.bridge_vkCreateDisplayModeKHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.VkDisplayKHR)(unsafe.Pointer(uintptr(display))), (*C.VkDisplayModeCreateInfoKHR)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkDisplayModeKHR)(unsafe.Pointer(pMode)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateDisplayModeKHR) String() string { return "vkCreateDisplayModeKHR" }
@@ -11948,6 +14585,7 @@ type PfnGetDisplayPlaneCapabilitiesKHR uintptr
 
 func (fn PfnGetDisplayPlaneCapabilitiesKHR) Call(physicalDevice PhysicalDevice, mode DisplayModeKHR, planeIndex uint32, pCapabilities *DisplayPlaneCapabilitiesKHR) Result {
 	ret := C.bridge_vkGetDisplayPlaneCapabilitiesKHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.VkDisplayModeKHR)(unsafe.Pointer(uintptr(mode))), (C.uint32_t)(planeIndex), (*C.VkDisplayPlaneCapabilitiesKHR)(unsafe.Pointer(pCapabilities)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetDisplayPlaneCapabilitiesKHR) String() string {
@@ -11959,6 +14597,7 @@ type PfnCreateDisplayPlaneSurfaceKHR uintptr
 
 func (fn PfnCreateDisplayPlaneSurfaceKHR) Call(instance Instance, pCreateInfo *DisplaySurfaceCreateInfoKHR, pAllocator *AllocationCallbacks, pSurface *SurfaceKHR) Result {
 	ret := C.bridge_vkCreateDisplayPlaneSurfaceKHR(C.uintptr_t(fn), (C.VkInstance)(unsafe.Pointer(uintptr(instance))), (*C.VkDisplaySurfaceCreateInfoKHR)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkSurfaceKHR)(unsafe.Pointer(pSurface)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateDisplayPlaneSurfaceKHR) String() string { return "vkCreateDisplayPlaneSurfaceKHR" }
@@ -11989,6 +14628,7 @@ type PfnCreateSharedSwapchainsKHR uintptr
 
 func (fn PfnCreateSharedSwapchainsKHR) Call(device Device, swapchainCount uint32, pCreateInfos *SwapchainCreateInfoKHR, pAllocator *AllocationCallbacks, pSwapchains *SwapchainKHR) Result {
 	ret := C.bridge_vkCreateSharedSwapchainsKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.uint32_t)(swapchainCount), (*C.VkSwapchainCreateInfoKHR)(unsafe.Pointer(pCreateInfos)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkSwapchainKHR)(unsafe.Pointer(pSwapchains)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateSharedSwapchainsKHR) String() string { return "vkCreateSharedSwapchainsKHR" }
@@ -12027,6 +14667,7 @@ type PfnGetPhysicalDeviceFeatures2KHR uintptr
 
 func (fn PfnGetPhysicalDeviceFeatures2KHR) Call(physicalDevice PhysicalDevice, pFeatures *PhysicalDeviceFeatures2) {
 	C.bridge_vkGetPhysicalDeviceFeatures2KHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkPhysicalDeviceFeatures2)(unsafe.Pointer(pFeatures)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceFeatures2KHR) String() string { return "vkGetPhysicalDeviceFeatures2KHR" }
@@ -12036,6 +14677,7 @@ type PfnGetPhysicalDeviceProperties2KHR uintptr
 
 func (fn PfnGetPhysicalDeviceProperties2KHR) Call(physicalDevice PhysicalDevice, pProperties *PhysicalDeviceProperties2) {
 	C.bridge_vkGetPhysicalDeviceProperties2KHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkPhysicalDeviceProperties2)(unsafe.Pointer(pProperties)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceProperties2KHR) String() string {
@@ -12047,6 +14689,7 @@ type PfnGetPhysicalDeviceFormatProperties2KHR uintptr
 
 func (fn PfnGetPhysicalDeviceFormatProperties2KHR) Call(physicalDevice PhysicalDevice, format Format, pFormatProperties *FormatProperties2) {
 	C.bridge_vkGetPhysicalDeviceFormatProperties2KHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.VkFormat)(format), (*C.VkFormatProperties2)(unsafe.Pointer(pFormatProperties)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceFormatProperties2KHR) String() string {
@@ -12058,6 +14701,7 @@ type PfnGetPhysicalDeviceImageFormatProperties2KHR uintptr
 
 func (fn PfnGetPhysicalDeviceImageFormatProperties2KHR) Call(physicalDevice PhysicalDevice, pImageFormatInfo *PhysicalDeviceImageFormatInfo2, pImageFormatProperties *ImageFormatProperties2) Result {
 	ret := C.bridge_vkGetPhysicalDeviceImageFormatProperties2KHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkPhysicalDeviceImageFormatInfo2)(unsafe.Pointer(pImageFormatInfo)), (*C.VkImageFormatProperties2)(unsafe.Pointer(pImageFormatProperties)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPhysicalDeviceImageFormatProperties2KHR) String() string {
@@ -12069,6 +14713,7 @@ type PfnGetPhysicalDeviceQueueFamilyProperties2KHR uintptr
 
 func (fn PfnGetPhysicalDeviceQueueFamilyProperties2KHR) Call(physicalDevice PhysicalDevice, pQueueFamilyPropertyCount *uint32, pQueueFamilyProperties *QueueFamilyProperties2) {
 	C.bridge_vkGetPhysicalDeviceQueueFamilyProperties2KHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.uint32_t)(unsafe.Pointer(pQueueFamilyPropertyCount)), (*C.VkQueueFamilyProperties2)(unsafe.Pointer(pQueueFamilyProperties)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceQueueFamilyProperties2KHR) String() string {
@@ -12080,6 +14725,7 @@ type PfnGetPhysicalDeviceMemoryProperties2KHR uintptr
 
 func (fn PfnGetPhysicalDeviceMemoryProperties2KHR) Call(physicalDevice PhysicalDevice, pMemoryProperties *PhysicalDeviceMemoryProperties2) {
 	C.bridge_vkGetPhysicalDeviceMemoryProperties2KHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkPhysicalDeviceMemoryProperties2)(unsafe.Pointer(pMemoryProperties)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceMemoryProperties2KHR) String() string {
@@ -12091,6 +14737,7 @@ type PfnGetPhysicalDeviceSparseImageFormatProperties2KHR uintptr
 
 func (fn PfnGetPhysicalDeviceSparseImageFormatProperties2KHR) Call(physicalDevice PhysicalDevice, pFormatInfo *PhysicalDeviceSparseImageFormatInfo2, pPropertyCount *uint32, pProperties *SparseImageFormatProperties2) {
 	C.bridge_vkGetPhysicalDeviceSparseImageFormatProperties2KHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkPhysicalDeviceSparseImageFormatInfo2)(unsafe.Pointer(pFormatInfo)), (*C.uint32_t)(unsafe.Pointer(pPropertyCount)), (*C.VkSparseImageFormatProperties2)(unsafe.Pointer(pProperties)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceSparseImageFormatProperties2KHR) String() string {
@@ -12116,6 +14763,7 @@ type PfnGetDeviceGroupPeerMemoryFeaturesKHR uintptr
 
 func (fn PfnGetDeviceGroupPeerMemoryFeaturesKHR) Call(device Device, heapIndex, localDeviceIndex, remoteDeviceIndex uint32, pPeerMemoryFeatures *PeerMemoryFeatureFlags) {
 	C.bridge_vkGetDeviceGroupPeerMemoryFeaturesKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.uint32_t)(heapIndex), (C.uint32_t)(localDeviceIndex), (C.uint32_t)(remoteDeviceIndex), (*C.VkPeerMemoryFeatureFlags)(unsafe.Pointer(pPeerMemoryFeatures)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetDeviceGroupPeerMemoryFeaturesKHR) String() string {
@@ -12127,6 +14775,7 @@ type PfnCmdSetDeviceMaskKHR uintptr
 
 func (fn PfnCmdSetDeviceMaskKHR) Call(commandBuffer CommandBuffer, deviceMask uint32) {
 	C.bridge_vkCmdSetDeviceMaskKHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(deviceMask))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdSetDeviceMaskKHR) String() string { return "vkCmdSetDeviceMaskKHR" }
@@ -12136,6 +14785,7 @@ type PfnCmdDispatchBaseKHR uintptr
 
 func (fn PfnCmdDispatchBaseKHR) Call(commandBuffer CommandBuffer, baseGroupX, baseGroupY, baseGroupZ, groupCountX, groupCountY, groupCountZ uint32) {
 	C.bridge_vkCmdDispatchBaseKHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(baseGroupX), (C.uint32_t)(baseGroupY), (C.uint32_t)(baseGroupZ), (C.uint32_t)(groupCountX), (C.uint32_t)(groupCountY), (C.uint32_t)(groupCountZ))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdDispatchBaseKHR) String() string { return "vkCmdDispatchBaseKHR" }
@@ -12155,6 +14805,7 @@ type PfnTrimCommandPoolKHR uintptr
 
 func (fn PfnTrimCommandPoolKHR) Call(device Device, commandPool CommandPool, flags CommandPoolTrimFlags) {
 	C.bridge_vkTrimCommandPoolKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkCommandPool)(unsafe.Pointer(uintptr(commandPool))), (C.VkCommandPoolTrimFlags)(uint32(flags)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnTrimCommandPoolKHR) String() string { return "vkTrimCommandPoolKHR" }
@@ -12172,6 +14823,7 @@ type PfnEnumeratePhysicalDeviceGroupsKHR uintptr
 
 func (fn PfnEnumeratePhysicalDeviceGroupsKHR) Call(instance Instance, pPhysicalDeviceGroupCount *uint32, pPhysicalDeviceGroupProperties *PhysicalDeviceGroupProperties) Result {
 	ret := C.bridge_vkEnumeratePhysicalDeviceGroupsKHR(C.uintptr_t(fn), (C.VkInstance)(unsafe.Pointer(uintptr(instance))), (*C.uint32_t)(unsafe.Pointer(pPhysicalDeviceGroupCount)), (*C.VkPhysicalDeviceGroupProperties)(unsafe.Pointer(pPhysicalDeviceGroupProperties)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnEnumeratePhysicalDeviceGroupsKHR) String() string {
@@ -12197,6 +14849,7 @@ type PfnGetPhysicalDeviceExternalBufferPropertiesKHR uintptr
 
 func (fn PfnGetPhysicalDeviceExternalBufferPropertiesKHR) Call(physicalDevice PhysicalDevice, pExternalBufferInfo *PhysicalDeviceExternalBufferInfo, pExternalBufferProperties *ExternalBufferProperties) {
 	C.bridge_vkGetPhysicalDeviceExternalBufferPropertiesKHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkPhysicalDeviceExternalBufferInfo)(unsafe.Pointer(pExternalBufferInfo)), (*C.VkExternalBufferProperties)(unsafe.Pointer(pExternalBufferProperties)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceExternalBufferPropertiesKHR) String() string {
@@ -12266,6 +14919,7 @@ type PfnGetMemoryFdKHR uintptr
 
 func (fn PfnGetMemoryFdKHR) Call(device Device, pGetFdInfo *MemoryGetFdInfoKHR, pFd *int) Result {
 	ret := C.bridge_vkGetMemoryFdKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkMemoryGetFdInfoKHR)(unsafe.Pointer(pGetFdInfo)), (*C.int)(unsafe.Pointer(pFd)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetMemoryFdKHR) String() string { return "vkGetMemoryFdKHR" }
@@ -12275,6 +14929,7 @@ type PfnGetMemoryFdPropertiesKHR uintptr
 
 func (fn PfnGetMemoryFdPropertiesKHR) Call(device Device, handleType ExternalMemoryHandleTypeFlags, fd int, pMemoryFdProperties *MemoryFdPropertiesKHR) Result {
 	ret := C.bridge_vkGetMemoryFdPropertiesKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkExternalMemoryHandleTypeFlagBits)(handleType), (C.int)(fd), (*C.VkMemoryFdPropertiesKHR)(unsafe.Pointer(pMemoryFdProperties)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetMemoryFdPropertiesKHR) String() string { return "vkGetMemoryFdPropertiesKHR" }
@@ -12294,6 +14949,7 @@ type PfnGetPhysicalDeviceExternalSemaphorePropertiesKHR uintptr
 
 func (fn PfnGetPhysicalDeviceExternalSemaphorePropertiesKHR) Call(physicalDevice PhysicalDevice, pExternalSemaphoreInfo *PhysicalDeviceExternalSemaphoreInfo, pExternalSemaphoreProperties *ExternalSemaphoreProperties) {
 	C.bridge_vkGetPhysicalDeviceExternalSemaphorePropertiesKHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkPhysicalDeviceExternalSemaphoreInfo)(unsafe.Pointer(pExternalSemaphoreInfo)), (*C.VkExternalSemaphoreProperties)(unsafe.Pointer(pExternalSemaphoreProperties)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceExternalSemaphorePropertiesKHR) String() string {
@@ -12350,6 +15006,7 @@ type PfnImportSemaphoreFdKHR uintptr
 
 func (fn PfnImportSemaphoreFdKHR) Call(device Device, pImportSemaphoreFdInfo *ImportSemaphoreFdInfoKHR) Result {
 	ret := C.bridge_vkImportSemaphoreFdKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkImportSemaphoreFdInfoKHR)(unsafe.Pointer(pImportSemaphoreFdInfo)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnImportSemaphoreFdKHR) String() string { return "vkImportSemaphoreFdKHR" }
@@ -12359,6 +15016,7 @@ type PfnGetSemaphoreFdKHR uintptr
 
 func (fn PfnGetSemaphoreFdKHR) Call(device Device, pGetFdInfo *SemaphoreGetFdInfoKHR, pFd *int) Result {
 	ret := C.bridge_vkGetSemaphoreFdKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkSemaphoreGetFdInfoKHR)(unsafe.Pointer(pGetFdInfo)), (*C.int)(unsafe.Pointer(pFd)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetSemaphoreFdKHR) String() string { return "vkGetSemaphoreFdKHR" }
@@ -12387,6 +15045,7 @@ type PfnCmdPushDescriptorSetKHR uintptr
 
 func (fn PfnCmdPushDescriptorSetKHR) Call(commandBuffer CommandBuffer, pipelineBindPoint PipelineBindPoint, layout PipelineLayout, set, descriptorWriteCount uint32, pDescriptorWrites *WriteDescriptorSet) {
 	C.bridge_vkCmdPushDescriptorSetKHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkPipelineBindPoint)(pipelineBindPoint), (C.VkPipelineLayout)(unsafe.Pointer(uintptr(layout))), (C.uint32_t)(set), (C.uint32_t)(descriptorWriteCount), (*C.VkWriteDescriptorSet)(unsafe.Pointer(pDescriptorWrites)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdPushDescriptorSetKHR) String() string { return "vkCmdPushDescriptorSetKHR" }
@@ -12396,6 +15055,7 @@ type PfnCmdPushDescriptorSetWithTemplateKHR uintptr
 
 func (fn PfnCmdPushDescriptorSetWithTemplateKHR) Call(commandBuffer CommandBuffer, descriptorUpdateTemplate DescriptorUpdateTemplate, layout PipelineLayout, set uint32, pData unsafe.Pointer) {
 	C.bridge_vkCmdPushDescriptorSetWithTemplateKHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkDescriptorUpdateTemplate)(unsafe.Pointer(uintptr(descriptorUpdateTemplate))), (C.VkPipelineLayout)(unsafe.Pointer(uintptr(layout))), (C.uint32_t)(set), (unsafe.Pointer)(pData))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdPushDescriptorSetWithTemplateKHR) String() string {
@@ -12407,20 +15067,8 @@ const KHR_SHADER_FLOAT16_INT8_SPEC_VERSION = 1
 
 var KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME = "VK_KHR_shader_float16_int8"
 
-// PhysicalDeviceShaderFloat16Int8FeaturesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceShaderFloat16Int8FeaturesKHR.html
-type PhysicalDeviceShaderFloat16Int8FeaturesKHR struct {
-	SType         StructureType
-	PNext         unsafe.Pointer
-	ShaderFloat16 Bool32
-	ShaderInt8    Bool32
-}
-
-func NewPhysicalDeviceShaderFloat16Int8FeaturesKHR() *PhysicalDeviceShaderFloat16Int8FeaturesKHR {
-	return (*PhysicalDeviceShaderFloat16Int8FeaturesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceShaderFloat16Int8FeaturesKHR)(nil))))
-}
-func (p *PhysicalDeviceShaderFloat16Int8FeaturesKHR) Free() { MemFree(unsafe.Pointer(p)) }
-
-type PhysicalDeviceFloat16Int8FeaturesKHR = PhysicalDeviceShaderFloat16Int8FeaturesKHR
+type PhysicalDeviceShaderFloat16Int8FeaturesKHR = PhysicalDeviceShaderFloat16Int8Features
+type PhysicalDeviceFloat16Int8FeaturesKHR = PhysicalDeviceShaderFloat16Int8Features
 
 const KHR_16bit_storage = 1
 const KHR_16BIT_STORAGE_SPEC_VERSION = 1
@@ -12430,7 +15078,7 @@ var KHR_16BIT_STORAGE_EXTENSION_NAME = "VK_KHR_16bit_storage"
 type PhysicalDevice16BitStorageFeaturesKHR = PhysicalDevice16BitStorageFeatures
 
 const KHR_incremental_present = 1
-const KHR_INCREMENTAL_PRESENT_SPEC_VERSION = 1
+const KHR_INCREMENTAL_PRESENT_SPEC_VERSION = 2
 
 var KHR_INCREMENTAL_PRESENT_EXTENSION_NAME = "VK_KHR_incremental_present"
 
@@ -12489,6 +15137,7 @@ type PfnCreateDescriptorUpdateTemplateKHR uintptr
 
 func (fn PfnCreateDescriptorUpdateTemplateKHR) Call(device Device, pCreateInfo *DescriptorUpdateTemplateCreateInfo, pAllocator *AllocationCallbacks, pDescriptorUpdateTemplate *DescriptorUpdateTemplate) Result {
 	ret := C.bridge_vkCreateDescriptorUpdateTemplateKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkDescriptorUpdateTemplateCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkDescriptorUpdateTemplate)(unsafe.Pointer(pDescriptorUpdateTemplate)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateDescriptorUpdateTemplateKHR) String() string {
@@ -12500,6 +15149,7 @@ type PfnDestroyDescriptorUpdateTemplateKHR uintptr
 
 func (fn PfnDestroyDescriptorUpdateTemplateKHR) Call(device Device, descriptorUpdateTemplate DescriptorUpdateTemplate, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyDescriptorUpdateTemplateKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkDescriptorUpdateTemplate)(unsafe.Pointer(uintptr(descriptorUpdateTemplate))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyDescriptorUpdateTemplateKHR) String() string {
@@ -12511,6 +15161,7 @@ type PfnUpdateDescriptorSetWithTemplateKHR uintptr
 
 func (fn PfnUpdateDescriptorSetWithTemplateKHR) Call(device Device, descriptorSet DescriptorSet, descriptorUpdateTemplate DescriptorUpdateTemplate, pData unsafe.Pointer) {
 	C.bridge_vkUpdateDescriptorSetWithTemplateKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkDescriptorSet)(unsafe.Pointer(uintptr(descriptorSet))), (C.VkDescriptorUpdateTemplate)(unsafe.Pointer(uintptr(descriptorUpdateTemplate))), (unsafe.Pointer)(pData))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnUpdateDescriptorSetWithTemplateKHR) String() string {
@@ -12522,212 +15173,30 @@ const KHR_IMAGELESS_FRAMEBUFFER_SPEC_VERSION = 1
 
 var KHR_IMAGELESS_FRAMEBUFFER_EXTENSION_NAME = "VK_KHR_imageless_framebuffer"
 
-// PhysicalDeviceImagelessFramebufferFeaturesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceImagelessFramebufferFeaturesKHR.html
-type PhysicalDeviceImagelessFramebufferFeaturesKHR struct {
-	SType                StructureType
-	PNext                unsafe.Pointer
-	ImagelessFramebuffer Bool32
-}
-
-func NewPhysicalDeviceImagelessFramebufferFeaturesKHR() *PhysicalDeviceImagelessFramebufferFeaturesKHR {
-	p := (*PhysicalDeviceImagelessFramebufferFeaturesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceImagelessFramebufferFeaturesKHR)(nil))))
-	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGELESS_FRAMEBUFFER_FEATURES_KHR
-	return p
-}
-func (p *PhysicalDeviceImagelessFramebufferFeaturesKHR) Free() { MemFree(unsafe.Pointer(p)) }
-
-// FramebufferAttachmentImageInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFramebufferAttachmentImageInfoKHR.html
-type FramebufferAttachmentImageInfoKHR struct {
-	SType           StructureType
-	PNext           unsafe.Pointer
-	Flags           ImageCreateFlags
-	Usage           ImageUsageFlags
-	Width           uint32
-	Height          uint32
-	LayerCount      uint32
-	ViewFormatCount uint32
-	PViewFormats    *Format
-}
-
-func NewFramebufferAttachmentImageInfoKHR() *FramebufferAttachmentImageInfoKHR {
-	p := (*FramebufferAttachmentImageInfoKHR)(MemAlloc(unsafe.Sizeof(*(*FramebufferAttachmentImageInfoKHR)(nil))))
-	p.SType = STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENT_IMAGE_INFO_KHR
-	return p
-}
-func (p *FramebufferAttachmentImageInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
-
-// FramebufferAttachmentsCreateInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFramebufferAttachmentsCreateInfoKHR.html
-type FramebufferAttachmentsCreateInfoKHR struct {
-	SType                    StructureType
-	PNext                    unsafe.Pointer
-	AttachmentImageInfoCount uint32
-	PAttachmentImageInfos    *FramebufferAttachmentImageInfoKHR
-}
-
-func NewFramebufferAttachmentsCreateInfoKHR() *FramebufferAttachmentsCreateInfoKHR {
-	p := (*FramebufferAttachmentsCreateInfoKHR)(MemAlloc(unsafe.Sizeof(*(*FramebufferAttachmentsCreateInfoKHR)(nil))))
-	p.SType = STRUCTURE_TYPE_FRAMEBUFFER_ATTACHMENTS_CREATE_INFO_KHR
-	return p
-}
-func (p *FramebufferAttachmentsCreateInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
-
-// RenderPassAttachmentBeginInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassAttachmentBeginInfoKHR.html
-type RenderPassAttachmentBeginInfoKHR struct {
-	SType           StructureType
-	PNext           unsafe.Pointer
-	AttachmentCount uint32
-	PAttachments    *ImageView
-}
-
-func NewRenderPassAttachmentBeginInfoKHR() *RenderPassAttachmentBeginInfoKHR {
-	p := (*RenderPassAttachmentBeginInfoKHR)(MemAlloc(unsafe.Sizeof(*(*RenderPassAttachmentBeginInfoKHR)(nil))))
-	p.SType = STRUCTURE_TYPE_RENDER_PASS_ATTACHMENT_BEGIN_INFO_KHR
-	return p
-}
-func (p *RenderPassAttachmentBeginInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+type PhysicalDeviceImagelessFramebufferFeaturesKHR = PhysicalDeviceImagelessFramebufferFeatures
+type FramebufferAttachmentsCreateInfoKHR = FramebufferAttachmentsCreateInfo
+type FramebufferAttachmentImageInfoKHR = FramebufferAttachmentImageInfo
+type RenderPassAttachmentBeginInfoKHR = RenderPassAttachmentBeginInfo
 
 const KHR_create_renderpass2 = 1
 const KHR_CREATE_RENDERPASS_2_SPEC_VERSION = 1
 
 var KHR_CREATE_RENDERPASS_2_EXTENSION_NAME = "VK_KHR_create_renderpass2"
 
-// AttachmentDescription2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAttachmentDescription2KHR.html
-type AttachmentDescription2KHR struct {
-	SType          StructureType
-	PNext          unsafe.Pointer
-	Flags          AttachmentDescriptionFlags
-	Format         Format
-	Samples        SampleCountFlags
-	LoadOp         AttachmentLoadOp
-	StoreOp        AttachmentStoreOp
-	StencilLoadOp  AttachmentLoadOp
-	StencilStoreOp AttachmentStoreOp
-	InitialLayout  ImageLayout
-	FinalLayout    ImageLayout
-}
-
-func NewAttachmentDescription2KHR() *AttachmentDescription2KHR {
-	p := (*AttachmentDescription2KHR)(MemAlloc(unsafe.Sizeof(*(*AttachmentDescription2KHR)(nil))))
-	p.SType = STRUCTURE_TYPE_ATTACHMENT_DESCRIPTION_2_KHR
-	return p
-}
-func (p *AttachmentDescription2KHR) Free() { MemFree(unsafe.Pointer(p)) }
-
-// AttachmentReference2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAttachmentReference2KHR.html
-type AttachmentReference2KHR struct {
-	SType      StructureType
-	PNext      unsafe.Pointer
-	Attachment uint32
-	Layout     ImageLayout
-	AspectMask ImageAspectFlags
-}
-
-func NewAttachmentReference2KHR() *AttachmentReference2KHR {
-	p := (*AttachmentReference2KHR)(MemAlloc(unsafe.Sizeof(*(*AttachmentReference2KHR)(nil))))
-	p.SType = STRUCTURE_TYPE_ATTACHMENT_REFERENCE_2_KHR
-	return p
-}
-func (p *AttachmentReference2KHR) Free() { MemFree(unsafe.Pointer(p)) }
-
-// SubpassDescription2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassDescription2KHR.html
-type SubpassDescription2KHR struct {
-	SType                   StructureType
-	PNext                   unsafe.Pointer
-	Flags                   SubpassDescriptionFlags
-	PipelineBindPoint       PipelineBindPoint
-	ViewMask                uint32
-	InputAttachmentCount    uint32
-	PInputAttachments       *AttachmentReference2KHR
-	ColorAttachmentCount    uint32
-	PColorAttachments       *AttachmentReference2KHR
-	PResolveAttachments     *AttachmentReference2KHR
-	PDepthStencilAttachment *AttachmentReference2KHR
-	PreserveAttachmentCount uint32
-	PPreserveAttachments    *uint32
-}
-
-func NewSubpassDescription2KHR() *SubpassDescription2KHR {
-	p := (*SubpassDescription2KHR)(MemAlloc(unsafe.Sizeof(*(*SubpassDescription2KHR)(nil))))
-	p.SType = STRUCTURE_TYPE_SUBPASS_DESCRIPTION_2_KHR
-	return p
-}
-func (p *SubpassDescription2KHR) Free() { MemFree(unsafe.Pointer(p)) }
-
-// SubpassDependency2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassDependency2KHR.html
-type SubpassDependency2KHR struct {
-	SType           StructureType
-	PNext           unsafe.Pointer
-	SrcSubpass      uint32
-	DstSubpass      uint32
-	SrcStageMask    PipelineStageFlags
-	DstStageMask    PipelineStageFlags
-	SrcAccessMask   AccessFlags
-	DstAccessMask   AccessFlags
-	DependencyFlags DependencyFlags
-	ViewOffset      int32
-}
-
-func NewSubpassDependency2KHR() *SubpassDependency2KHR {
-	p := (*SubpassDependency2KHR)(MemAlloc(unsafe.Sizeof(*(*SubpassDependency2KHR)(nil))))
-	p.SType = STRUCTURE_TYPE_SUBPASS_DEPENDENCY_2_KHR
-	return p
-}
-func (p *SubpassDependency2KHR) Free() { MemFree(unsafe.Pointer(p)) }
-
-// RenderPassCreateInfo2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassCreateInfo2KHR.html
-type RenderPassCreateInfo2KHR struct {
-	SType                   StructureType
-	PNext                   unsafe.Pointer
-	Flags                   RenderPassCreateFlags
-	AttachmentCount         uint32
-	PAttachments            *AttachmentDescription2KHR
-	SubpassCount            uint32
-	PSubpasses              *SubpassDescription2KHR
-	DependencyCount         uint32
-	PDependencies           *SubpassDependency2KHR
-	CorrelatedViewMaskCount uint32
-	PCorrelatedViewMasks    *uint32
-}
-
-func NewRenderPassCreateInfo2KHR() *RenderPassCreateInfo2KHR {
-	p := (*RenderPassCreateInfo2KHR)(MemAlloc(unsafe.Sizeof(*(*RenderPassCreateInfo2KHR)(nil))))
-	p.SType = STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO_2_KHR
-	return p
-}
-func (p *RenderPassCreateInfo2KHR) Free() { MemFree(unsafe.Pointer(p)) }
-
-// SubpassBeginInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassBeginInfoKHR.html
-type SubpassBeginInfoKHR struct {
-	SType    StructureType
-	PNext    unsafe.Pointer
-	Contents SubpassContents
-}
-
-func NewSubpassBeginInfoKHR() *SubpassBeginInfoKHR {
-	p := (*SubpassBeginInfoKHR)(MemAlloc(unsafe.Sizeof(*(*SubpassBeginInfoKHR)(nil))))
-	p.SType = STRUCTURE_TYPE_SUBPASS_BEGIN_INFO_KHR
-	return p
-}
-func (p *SubpassBeginInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
-
-// SubpassEndInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassEndInfoKHR.html
-type SubpassEndInfoKHR struct {
-	SType StructureType
-	PNext unsafe.Pointer
-}
-
-func NewSubpassEndInfoKHR() *SubpassEndInfoKHR {
-	p := (*SubpassEndInfoKHR)(MemAlloc(unsafe.Sizeof(*(*SubpassEndInfoKHR)(nil))))
-	p.SType = STRUCTURE_TYPE_SUBPASS_END_INFO_KHR
-	return p
-}
-func (p *SubpassEndInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+type RenderPassCreateInfo2KHR = RenderPassCreateInfo2
+type AttachmentDescription2KHR = AttachmentDescription2
+type AttachmentReference2KHR = AttachmentReference2
+type SubpassDescription2KHR = SubpassDescription2
+type SubpassDependency2KHR = SubpassDependency2
+type SubpassBeginInfoKHR = SubpassBeginInfo
+type SubpassEndInfoKHR = SubpassEndInfo
 
 //  PfnCreateRenderPass2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateRenderPass2KHR.html
 type PfnCreateRenderPass2KHR uintptr
 
-func (fn PfnCreateRenderPass2KHR) Call(device Device, pCreateInfo *RenderPassCreateInfo2KHR, pAllocator *AllocationCallbacks, pRenderPass *RenderPass) Result {
-	ret := C.bridge_vkCreateRenderPass2KHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkRenderPassCreateInfo2KHR)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkRenderPass)(unsafe.Pointer(pRenderPass)))
+func (fn PfnCreateRenderPass2KHR) Call(device Device, pCreateInfo *RenderPassCreateInfo2, pAllocator *AllocationCallbacks, pRenderPass *RenderPass) Result {
+	ret := C.bridge_vkCreateRenderPass2KHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkRenderPassCreateInfo2)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkRenderPass)(unsafe.Pointer(pRenderPass)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateRenderPass2KHR) String() string { return "vkCreateRenderPass2KHR" }
@@ -12735,8 +15204,9 @@ func (fn PfnCreateRenderPass2KHR) String() string { return "vkCreateRenderPass2K
 //  PfnCmdBeginRenderPass2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBeginRenderPass2KHR.html
 type PfnCmdBeginRenderPass2KHR uintptr
 
-func (fn PfnCmdBeginRenderPass2KHR) Call(commandBuffer CommandBuffer, pRenderPassBegin *RenderPassBeginInfo, pSubpassBeginInfo *SubpassBeginInfoKHR) {
-	C.bridge_vkCmdBeginRenderPass2KHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkRenderPassBeginInfo)(unsafe.Pointer(pRenderPassBegin)), (*C.VkSubpassBeginInfoKHR)(unsafe.Pointer(pSubpassBeginInfo)))
+func (fn PfnCmdBeginRenderPass2KHR) Call(commandBuffer CommandBuffer, pRenderPassBegin *RenderPassBeginInfo, pSubpassBeginInfo *SubpassBeginInfo) {
+	C.bridge_vkCmdBeginRenderPass2KHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkRenderPassBeginInfo)(unsafe.Pointer(pRenderPassBegin)), (*C.VkSubpassBeginInfo)(unsafe.Pointer(pSubpassBeginInfo)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdBeginRenderPass2KHR) String() string { return "vkCmdBeginRenderPass2KHR" }
@@ -12744,8 +15214,9 @@ func (fn PfnCmdBeginRenderPass2KHR) String() string { return "vkCmdBeginRenderPa
 //  PfnCmdNextSubpass2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdNextSubpass2KHR.html
 type PfnCmdNextSubpass2KHR uintptr
 
-func (fn PfnCmdNextSubpass2KHR) Call(commandBuffer CommandBuffer, pSubpassBeginInfo *SubpassBeginInfoKHR, pSubpassEndInfo *SubpassEndInfoKHR) {
-	C.bridge_vkCmdNextSubpass2KHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkSubpassBeginInfoKHR)(unsafe.Pointer(pSubpassBeginInfo)), (*C.VkSubpassEndInfoKHR)(unsafe.Pointer(pSubpassEndInfo)))
+func (fn PfnCmdNextSubpass2KHR) Call(commandBuffer CommandBuffer, pSubpassBeginInfo *SubpassBeginInfo, pSubpassEndInfo *SubpassEndInfo) {
+	C.bridge_vkCmdNextSubpass2KHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkSubpassBeginInfo)(unsafe.Pointer(pSubpassBeginInfo)), (*C.VkSubpassEndInfo)(unsafe.Pointer(pSubpassEndInfo)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdNextSubpass2KHR) String() string { return "vkCmdNextSubpass2KHR" }
@@ -12753,8 +15224,9 @@ func (fn PfnCmdNextSubpass2KHR) String() string { return "vkCmdNextSubpass2KHR" 
 //  PfnCmdEndRenderPass2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdEndRenderPass2KHR.html
 type PfnCmdEndRenderPass2KHR uintptr
 
-func (fn PfnCmdEndRenderPass2KHR) Call(commandBuffer CommandBuffer, pSubpassEndInfo *SubpassEndInfoKHR) {
-	C.bridge_vkCmdEndRenderPass2KHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkSubpassEndInfoKHR)(unsafe.Pointer(pSubpassEndInfo)))
+func (fn PfnCmdEndRenderPass2KHR) Call(commandBuffer CommandBuffer, pSubpassEndInfo *SubpassEndInfo) {
+	C.bridge_vkCmdEndRenderPass2KHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkSubpassEndInfo)(unsafe.Pointer(pSubpassEndInfo)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdEndRenderPass2KHR) String() string { return "vkCmdEndRenderPass2KHR" }
@@ -12783,6 +15255,7 @@ type PfnGetSwapchainStatusKHR uintptr
 
 func (fn PfnGetSwapchainStatusKHR) Call(device Device, swapchain SwapchainKHR) Result {
 	ret := C.bridge_vkGetSwapchainStatusKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkSwapchainKHR)(unsafe.Pointer(uintptr(swapchain))))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetSwapchainStatusKHR) String() string { return "vkGetSwapchainStatusKHR" }
@@ -12802,6 +15275,7 @@ type PfnGetPhysicalDeviceExternalFencePropertiesKHR uintptr
 
 func (fn PfnGetPhysicalDeviceExternalFencePropertiesKHR) Call(physicalDevice PhysicalDevice, pExternalFenceInfo *PhysicalDeviceExternalFenceInfo, pExternalFenceProperties *ExternalFenceProperties) {
 	C.bridge_vkGetPhysicalDeviceExternalFencePropertiesKHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkPhysicalDeviceExternalFenceInfo)(unsafe.Pointer(pExternalFenceInfo)), (*C.VkExternalFenceProperties)(unsafe.Pointer(pExternalFenceProperties)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceExternalFencePropertiesKHR) String() string {
@@ -12858,6 +15332,7 @@ type PfnImportFenceFdKHR uintptr
 
 func (fn PfnImportFenceFdKHR) Call(device Device, pImportFenceFdInfo *ImportFenceFdInfoKHR) Result {
 	ret := C.bridge_vkImportFenceFdKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkImportFenceFdInfoKHR)(unsafe.Pointer(pImportFenceFdInfo)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnImportFenceFdKHR) String() string { return "vkImportFenceFdKHR" }
@@ -12867,9 +15342,322 @@ type PfnGetFenceFdKHR uintptr
 
 func (fn PfnGetFenceFdKHR) Call(device Device, pGetFdInfo *FenceGetFdInfoKHR, pFd *int) Result {
 	ret := C.bridge_vkGetFenceFdKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkFenceGetFdInfoKHR)(unsafe.Pointer(pGetFdInfo)), (*C.int)(unsafe.Pointer(pFd)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetFenceFdKHR) String() string { return "vkGetFenceFdKHR" }
+
+const KHR_performance_query = 1
+const KHR_PERFORMANCE_QUERY_SPEC_VERSION = 1
+
+var KHR_PERFORMANCE_QUERY_EXTENSION_NAME = "VK_KHR_performance_query"
+
+// PerformanceCounterUnitKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPerformanceCounterUnitKHR.html
+type PerformanceCounterUnitKHR int32
+
+const (
+	PERFORMANCE_COUNTER_UNIT_GENERIC_KHR          PerformanceCounterUnitKHR = 0
+	PERFORMANCE_COUNTER_UNIT_PERCENTAGE_KHR       PerformanceCounterUnitKHR = 1
+	PERFORMANCE_COUNTER_UNIT_NANOSECONDS_KHR      PerformanceCounterUnitKHR = 2
+	PERFORMANCE_COUNTER_UNIT_BYTES_KHR            PerformanceCounterUnitKHR = 3
+	PERFORMANCE_COUNTER_UNIT_BYTES_PER_SECOND_KHR PerformanceCounterUnitKHR = 4
+	PERFORMANCE_COUNTER_UNIT_KELVIN_KHR           PerformanceCounterUnitKHR = 5
+	PERFORMANCE_COUNTER_UNIT_WATTS_KHR            PerformanceCounterUnitKHR = 6
+	PERFORMANCE_COUNTER_UNIT_VOLTS_KHR            PerformanceCounterUnitKHR = 7
+	PERFORMANCE_COUNTER_UNIT_AMPS_KHR             PerformanceCounterUnitKHR = 8
+	PERFORMANCE_COUNTER_UNIT_HERTZ_KHR            PerformanceCounterUnitKHR = 9
+	PERFORMANCE_COUNTER_UNIT_CYCLES_KHR           PerformanceCounterUnitKHR = 10
+	PERFORMANCE_COUNTER_UNIT_MAX_ENUM_KHR         PerformanceCounterUnitKHR = 0x7FFFFFFF
+)
+
+func (x PerformanceCounterUnitKHR) String() string {
+	switch x {
+	case PERFORMANCE_COUNTER_UNIT_GENERIC_KHR:
+		return "PERFORMANCE_COUNTER_UNIT_GENERIC_KHR"
+	case PERFORMANCE_COUNTER_UNIT_PERCENTAGE_KHR:
+		return "PERFORMANCE_COUNTER_UNIT_PERCENTAGE_KHR"
+	case PERFORMANCE_COUNTER_UNIT_NANOSECONDS_KHR:
+		return "PERFORMANCE_COUNTER_UNIT_NANOSECONDS_KHR"
+	case PERFORMANCE_COUNTER_UNIT_BYTES_KHR:
+		return "PERFORMANCE_COUNTER_UNIT_BYTES_KHR"
+	case PERFORMANCE_COUNTER_UNIT_BYTES_PER_SECOND_KHR:
+		return "PERFORMANCE_COUNTER_UNIT_BYTES_PER_SECOND_KHR"
+	case PERFORMANCE_COUNTER_UNIT_KELVIN_KHR:
+		return "PERFORMANCE_COUNTER_UNIT_KELVIN_KHR"
+	case PERFORMANCE_COUNTER_UNIT_WATTS_KHR:
+		return "PERFORMANCE_COUNTER_UNIT_WATTS_KHR"
+	case PERFORMANCE_COUNTER_UNIT_VOLTS_KHR:
+		return "PERFORMANCE_COUNTER_UNIT_VOLTS_KHR"
+	case PERFORMANCE_COUNTER_UNIT_AMPS_KHR:
+		return "PERFORMANCE_COUNTER_UNIT_AMPS_KHR"
+	case PERFORMANCE_COUNTER_UNIT_HERTZ_KHR:
+		return "PERFORMANCE_COUNTER_UNIT_HERTZ_KHR"
+	case PERFORMANCE_COUNTER_UNIT_CYCLES_KHR:
+		return "PERFORMANCE_COUNTER_UNIT_CYCLES_KHR"
+	case PERFORMANCE_COUNTER_UNIT_MAX_ENUM_KHR:
+		return "PERFORMANCE_COUNTER_UNIT_MAX_ENUM_KHR"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// PerformanceCounterScopeKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPerformanceCounterScopeKHR.html
+type PerformanceCounterScopeKHR int32
+
+const (
+	PERFORMANCE_COUNTER_SCOPE_COMMAND_BUFFER_KHR PerformanceCounterScopeKHR = 0
+	PERFORMANCE_COUNTER_SCOPE_RENDER_PASS_KHR    PerformanceCounterScopeKHR = 1
+	PERFORMANCE_COUNTER_SCOPE_COMMAND_KHR        PerformanceCounterScopeKHR = 2
+	QUERY_SCOPE_COMMAND_BUFFER_KHR               PerformanceCounterScopeKHR = PERFORMANCE_COUNTER_SCOPE_COMMAND_BUFFER_KHR
+	QUERY_SCOPE_RENDER_PASS_KHR                  PerformanceCounterScopeKHR = PERFORMANCE_COUNTER_SCOPE_RENDER_PASS_KHR
+	QUERY_SCOPE_COMMAND_KHR                      PerformanceCounterScopeKHR = PERFORMANCE_COUNTER_SCOPE_COMMAND_KHR
+	PERFORMANCE_COUNTER_SCOPE_MAX_ENUM_KHR       PerformanceCounterScopeKHR = 0x7FFFFFFF
+)
+
+func (x PerformanceCounterScopeKHR) String() string {
+	switch x {
+	case PERFORMANCE_COUNTER_SCOPE_COMMAND_BUFFER_KHR:
+		return "PERFORMANCE_COUNTER_SCOPE_COMMAND_BUFFER_KHR"
+	case PERFORMANCE_COUNTER_SCOPE_RENDER_PASS_KHR:
+		return "PERFORMANCE_COUNTER_SCOPE_RENDER_PASS_KHR"
+	case PERFORMANCE_COUNTER_SCOPE_COMMAND_KHR:
+		return "PERFORMANCE_COUNTER_SCOPE_COMMAND_KHR"
+	case PERFORMANCE_COUNTER_SCOPE_MAX_ENUM_KHR:
+		return "PERFORMANCE_COUNTER_SCOPE_MAX_ENUM_KHR"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// PerformanceCounterStorageKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPerformanceCounterStorageKHR.html
+type PerformanceCounterStorageKHR int32
+
+const (
+	PERFORMANCE_COUNTER_STORAGE_INT32_KHR    PerformanceCounterStorageKHR = 0
+	PERFORMANCE_COUNTER_STORAGE_INT64_KHR    PerformanceCounterStorageKHR = 1
+	PERFORMANCE_COUNTER_STORAGE_UINT32_KHR   PerformanceCounterStorageKHR = 2
+	PERFORMANCE_COUNTER_STORAGE_UINT64_KHR   PerformanceCounterStorageKHR = 3
+	PERFORMANCE_COUNTER_STORAGE_FLOAT32_KHR  PerformanceCounterStorageKHR = 4
+	PERFORMANCE_COUNTER_STORAGE_FLOAT64_KHR  PerformanceCounterStorageKHR = 5
+	PERFORMANCE_COUNTER_STORAGE_MAX_ENUM_KHR PerformanceCounterStorageKHR = 0x7FFFFFFF
+)
+
+func (x PerformanceCounterStorageKHR) String() string {
+	switch x {
+	case PERFORMANCE_COUNTER_STORAGE_INT32_KHR:
+		return "PERFORMANCE_COUNTER_STORAGE_INT32_KHR"
+	case PERFORMANCE_COUNTER_STORAGE_INT64_KHR:
+		return "PERFORMANCE_COUNTER_STORAGE_INT64_KHR"
+	case PERFORMANCE_COUNTER_STORAGE_UINT32_KHR:
+		return "PERFORMANCE_COUNTER_STORAGE_UINT32_KHR"
+	case PERFORMANCE_COUNTER_STORAGE_UINT64_KHR:
+		return "PERFORMANCE_COUNTER_STORAGE_UINT64_KHR"
+	case PERFORMANCE_COUNTER_STORAGE_FLOAT32_KHR:
+		return "PERFORMANCE_COUNTER_STORAGE_FLOAT32_KHR"
+	case PERFORMANCE_COUNTER_STORAGE_FLOAT64_KHR:
+		return "PERFORMANCE_COUNTER_STORAGE_FLOAT64_KHR"
+	case PERFORMANCE_COUNTER_STORAGE_MAX_ENUM_KHR:
+		return "PERFORMANCE_COUNTER_STORAGE_MAX_ENUM_KHR"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// PerformanceCounterDescriptionFlagsKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPerformanceCounterDescriptionFlagsKHR.html
+type PerformanceCounterDescriptionFlagsKHR uint32
+
+const (
+	PERFORMANCE_COUNTER_DESCRIPTION_PERFORMANCE_IMPACTING_BIT_KHR PerformanceCounterDescriptionFlagsKHR = 0x00000001
+	PERFORMANCE_COUNTER_DESCRIPTION_CONCURRENTLY_IMPACTED_BIT_KHR PerformanceCounterDescriptionFlagsKHR = 0x00000002
+	PERFORMANCE_COUNTER_DESCRIPTION_PERFORMANCE_IMPACTING_KHR     PerformanceCounterDescriptionFlagsKHR = PERFORMANCE_COUNTER_DESCRIPTION_PERFORMANCE_IMPACTING_BIT_KHR
+	PERFORMANCE_COUNTER_DESCRIPTION_CONCURRENTLY_IMPACTED_KHR     PerformanceCounterDescriptionFlagsKHR = PERFORMANCE_COUNTER_DESCRIPTION_CONCURRENTLY_IMPACTED_BIT_KHR
+	PERFORMANCE_COUNTER_DESCRIPTION_FLAG_BITS_MAX_ENUM_KHR        PerformanceCounterDescriptionFlagsKHR = 0x7FFFFFFF
+)
+
+func (x PerformanceCounterDescriptionFlagsKHR) String() string {
+	var s string
+	for i := uint32(0); i < 32; i++ {
+		if int32(x)&(1<<i) != 0 {
+			switch PerformanceCounterDescriptionFlagsKHR(1 << i) {
+			case PERFORMANCE_COUNTER_DESCRIPTION_PERFORMANCE_IMPACTING_BIT_KHR:
+				s += "PERFORMANCE_COUNTER_DESCRIPTION_PERFORMANCE_IMPACTING_BIT_KHR|"
+			case PERFORMANCE_COUNTER_DESCRIPTION_CONCURRENTLY_IMPACTED_BIT_KHR:
+				s += "PERFORMANCE_COUNTER_DESCRIPTION_CONCURRENTLY_IMPACTED_BIT_KHR|"
+			}
+		}
+	}
+	return strings.TrimSuffix(s, `|`)
+}
+
+// AcquireProfilingLockFlagsKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAcquireProfilingLockFlagsKHR.html
+type AcquireProfilingLockFlagsKHR uint32
+
+const (
+	ACQUIRE_PROFILING_LOCK_FLAG_BITS_MAX_ENUM_KHR AcquireProfilingLockFlagsKHR = 0x7FFFFFFF
+)
+
+func (x AcquireProfilingLockFlagsKHR) String() string {
+	var s string
+	for i := uint32(0); i < 32; i++ {
+		if int32(x)&(1<<i) != 0 {
+			switch AcquireProfilingLockFlagsKHR(1 << i) {
+			}
+		}
+	}
+	return strings.TrimSuffix(s, `|`)
+}
+
+// PhysicalDevicePerformanceQueryFeaturesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDevicePerformanceQueryFeaturesKHR.html
+type PhysicalDevicePerformanceQueryFeaturesKHR struct {
+	SType                                StructureType
+	PNext                                unsafe.Pointer
+	PerformanceCounterQueryPools         Bool32
+	PerformanceCounterMultipleQueryPools Bool32
+}
+
+func NewPhysicalDevicePerformanceQueryFeaturesKHR() *PhysicalDevicePerformanceQueryFeaturesKHR {
+	p := (*PhysicalDevicePerformanceQueryFeaturesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDevicePerformanceQueryFeaturesKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_PERFORMANCE_QUERY_FEATURES_KHR
+	return p
+}
+func (p *PhysicalDevicePerformanceQueryFeaturesKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDevicePerformanceQueryPropertiesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDevicePerformanceQueryPropertiesKHR.html
+type PhysicalDevicePerformanceQueryPropertiesKHR struct {
+	SType                         StructureType
+	PNext                         unsafe.Pointer
+	AllowCommandBufferQueryCopies Bool32
+}
+
+func NewPhysicalDevicePerformanceQueryPropertiesKHR() *PhysicalDevicePerformanceQueryPropertiesKHR {
+	p := (*PhysicalDevicePerformanceQueryPropertiesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDevicePerformanceQueryPropertiesKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_PERFORMANCE_QUERY_PROPERTIES_KHR
+	return p
+}
+func (p *PhysicalDevicePerformanceQueryPropertiesKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PerformanceCounterKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPerformanceCounterKHR.html
+type PerformanceCounterKHR struct {
+	SType   StructureType
+	PNext   unsafe.Pointer
+	Unit    PerformanceCounterUnitKHR
+	Scope   PerformanceCounterScopeKHR
+	Storage PerformanceCounterStorageKHR
+	Uuid    [UUID_SIZE]uint8
+}
+
+func NewPerformanceCounterKHR() *PerformanceCounterKHR {
+	p := (*PerformanceCounterKHR)(MemAlloc(unsafe.Sizeof(*(*PerformanceCounterKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PERFORMANCE_COUNTER_KHR
+	return p
+}
+func (p *PerformanceCounterKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PerformanceCounterDescriptionKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPerformanceCounterDescriptionKHR.html
+type PerformanceCounterDescriptionKHR struct {
+	SType       StructureType
+	PNext       unsafe.Pointer
+	Flags       PerformanceCounterDescriptionFlagsKHR
+	Name        [MAX_DESCRIPTION_SIZE]int8
+	Category    [MAX_DESCRIPTION_SIZE]int8
+	Description [MAX_DESCRIPTION_SIZE]int8
+}
+
+func NewPerformanceCounterDescriptionKHR() *PerformanceCounterDescriptionKHR {
+	p := (*PerformanceCounterDescriptionKHR)(MemAlloc(unsafe.Sizeof(*(*PerformanceCounterDescriptionKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PERFORMANCE_COUNTER_DESCRIPTION_KHR
+	return p
+}
+func (p *PerformanceCounterDescriptionKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// QueryPoolPerformanceCreateInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueryPoolPerformanceCreateInfoKHR.html
+type QueryPoolPerformanceCreateInfoKHR struct {
+	SType             StructureType
+	PNext             unsafe.Pointer
+	QueueFamilyIndex  uint32
+	CounterIndexCount uint32
+	PCounterIndices   *uint32
+}
+
+func NewQueryPoolPerformanceCreateInfoKHR() *QueryPoolPerformanceCreateInfoKHR {
+	p := (*QueryPoolPerformanceCreateInfoKHR)(MemAlloc(unsafe.Sizeof(*(*QueryPoolPerformanceCreateInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_QUERY_POOL_PERFORMANCE_CREATE_INFO_KHR
+	return p
+}
+func (p *QueryPoolPerformanceCreateInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// AcquireProfilingLockInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAcquireProfilingLockInfoKHR.html
+type AcquireProfilingLockInfoKHR struct {
+	SType   StructureType
+	PNext   unsafe.Pointer
+	Flags   AcquireProfilingLockFlagsKHR
+	Timeout uint64
+}
+
+func NewAcquireProfilingLockInfoKHR() *AcquireProfilingLockInfoKHR {
+	p := (*AcquireProfilingLockInfoKHR)(MemAlloc(unsafe.Sizeof(*(*AcquireProfilingLockInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_ACQUIRE_PROFILING_LOCK_INFO_KHR
+	return p
+}
+func (p *AcquireProfilingLockInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PerformanceQuerySubmitInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPerformanceQuerySubmitInfoKHR.html
+type PerformanceQuerySubmitInfoKHR struct {
+	SType            StructureType
+	PNext            unsafe.Pointer
+	CounterPassIndex uint32
+}
+
+func NewPerformanceQuerySubmitInfoKHR() *PerformanceQuerySubmitInfoKHR {
+	p := (*PerformanceQuerySubmitInfoKHR)(MemAlloc(unsafe.Sizeof(*(*PerformanceQuerySubmitInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PERFORMANCE_QUERY_SUBMIT_INFO_KHR
+	return p
+}
+func (p *PerformanceQuerySubmitInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+//  PfnEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR.html
+type PfnEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR uintptr
+
+func (fn PfnEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR) Call(physicalDevice PhysicalDevice, queueFamilyIndex uint32, pCounterCount *uint32, pCounters *PerformanceCounterKHR, pCounterDescriptions *PerformanceCounterDescriptionKHR) Result {
+	ret := C.bridge_vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.uint32_t)(queueFamilyIndex), (*C.uint32_t)(unsafe.Pointer(pCounterCount)), (*C.VkPerformanceCounterKHR)(unsafe.Pointer(pCounters)), (*C.VkPerformanceCounterDescriptionKHR)(unsafe.Pointer(pCounterDescriptions)))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR) String() string {
+	return "vkEnumeratePhysicalDeviceQueueFamilyPerformanceQueryCountersKHR"
+}
+
+//  PfnGetPhysicalDeviceQueueFamilyPerformanceQueryPassesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceQueueFamilyPerformanceQueryPassesKHR.html
+type PfnGetPhysicalDeviceQueueFamilyPerformanceQueryPassesKHR uintptr
+
+func (fn PfnGetPhysicalDeviceQueueFamilyPerformanceQueryPassesKHR) Call(physicalDevice PhysicalDevice, pPerformanceQueryCreateInfo *QueryPoolPerformanceCreateInfoKHR, pNumPasses *uint32) {
+	C.bridge_vkGetPhysicalDeviceQueueFamilyPerformanceQueryPassesKHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkQueryPoolPerformanceCreateInfoKHR)(unsafe.Pointer(pPerformanceQueryCreateInfo)), (*C.uint32_t)(unsafe.Pointer(pNumPasses)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnGetPhysicalDeviceQueueFamilyPerformanceQueryPassesKHR) String() string {
+	return "vkGetPhysicalDeviceQueueFamilyPerformanceQueryPassesKHR"
+}
+
+//  PfnAcquireProfilingLockKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkAcquireProfilingLockKHR.html
+type PfnAcquireProfilingLockKHR uintptr
+
+func (fn PfnAcquireProfilingLockKHR) Call(device Device, pInfo *AcquireProfilingLockInfoKHR) Result {
+	ret := C.bridge_vkAcquireProfilingLockKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkAcquireProfilingLockInfoKHR)(unsafe.Pointer(pInfo)))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnAcquireProfilingLockKHR) String() string { return "vkAcquireProfilingLockKHR" }
+
+//  PfnReleaseProfilingLockKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkReleaseProfilingLockKHR.html
+type PfnReleaseProfilingLockKHR uintptr
+
+func (fn PfnReleaseProfilingLockKHR) Call(device Device) {
+	C.bridge_vkReleaseProfilingLockKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnReleaseProfilingLockKHR) String() string { return "vkReleaseProfilingLockKHR" }
 
 const KHR_maintenance2 = 1
 const KHR_MAINTENANCE2_SPEC_VERSION = 1
@@ -12936,6 +15724,7 @@ type PfnGetPhysicalDeviceSurfaceCapabilities2KHR uintptr
 
 func (fn PfnGetPhysicalDeviceSurfaceCapabilities2KHR) Call(physicalDevice PhysicalDevice, pSurfaceInfo *PhysicalDeviceSurfaceInfo2KHR, pSurfaceCapabilities *SurfaceCapabilities2KHR) Result {
 	ret := C.bridge_vkGetPhysicalDeviceSurfaceCapabilities2KHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkPhysicalDeviceSurfaceInfo2KHR)(unsafe.Pointer(pSurfaceInfo)), (*C.VkSurfaceCapabilities2KHR)(unsafe.Pointer(pSurfaceCapabilities)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPhysicalDeviceSurfaceCapabilities2KHR) String() string {
@@ -12947,6 +15736,7 @@ type PfnGetPhysicalDeviceSurfaceFormats2KHR uintptr
 
 func (fn PfnGetPhysicalDeviceSurfaceFormats2KHR) Call(physicalDevice PhysicalDevice, pSurfaceInfo *PhysicalDeviceSurfaceInfo2KHR, pSurfaceFormatCount *uint32, pSurfaceFormats *SurfaceFormat2KHR) Result {
 	ret := C.bridge_vkGetPhysicalDeviceSurfaceFormats2KHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkPhysicalDeviceSurfaceInfo2KHR)(unsafe.Pointer(pSurfaceInfo)), (*C.uint32_t)(unsafe.Pointer(pSurfaceFormatCount)), (*C.VkSurfaceFormat2KHR)(unsafe.Pointer(pSurfaceFormats)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPhysicalDeviceSurfaceFormats2KHR) String() string {
@@ -13042,6 +15832,7 @@ type PfnGetPhysicalDeviceDisplayProperties2KHR uintptr
 
 func (fn PfnGetPhysicalDeviceDisplayProperties2KHR) Call(physicalDevice PhysicalDevice, pPropertyCount *uint32, pProperties *DisplayProperties2KHR) Result {
 	ret := C.bridge_vkGetPhysicalDeviceDisplayProperties2KHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.uint32_t)(unsafe.Pointer(pPropertyCount)), (*C.VkDisplayProperties2KHR)(unsafe.Pointer(pProperties)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPhysicalDeviceDisplayProperties2KHR) String() string {
@@ -13053,6 +15844,7 @@ type PfnGetPhysicalDeviceDisplayPlaneProperties2KHR uintptr
 
 func (fn PfnGetPhysicalDeviceDisplayPlaneProperties2KHR) Call(physicalDevice PhysicalDevice, pPropertyCount *uint32, pProperties *DisplayPlaneProperties2KHR) Result {
 	ret := C.bridge_vkGetPhysicalDeviceDisplayPlaneProperties2KHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.uint32_t)(unsafe.Pointer(pPropertyCount)), (*C.VkDisplayPlaneProperties2KHR)(unsafe.Pointer(pProperties)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPhysicalDeviceDisplayPlaneProperties2KHR) String() string {
@@ -13064,6 +15856,7 @@ type PfnGetDisplayModeProperties2KHR uintptr
 
 func (fn PfnGetDisplayModeProperties2KHR) Call(physicalDevice PhysicalDevice, display DisplayKHR, pPropertyCount *uint32, pProperties *DisplayModeProperties2KHR) Result {
 	ret := C.bridge_vkGetDisplayModeProperties2KHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.VkDisplayKHR)(unsafe.Pointer(uintptr(display))), (*C.uint32_t)(unsafe.Pointer(pPropertyCount)), (*C.VkDisplayModeProperties2KHR)(unsafe.Pointer(pProperties)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetDisplayModeProperties2KHR) String() string { return "vkGetDisplayModeProperties2KHR" }
@@ -13073,6 +15866,7 @@ type PfnGetDisplayPlaneCapabilities2KHR uintptr
 
 func (fn PfnGetDisplayPlaneCapabilities2KHR) Call(physicalDevice PhysicalDevice, pDisplayPlaneInfo *DisplayPlaneInfo2KHR, pCapabilities *DisplayPlaneCapabilities2KHR) Result {
 	ret := C.bridge_vkGetDisplayPlaneCapabilities2KHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkDisplayPlaneInfo2KHR)(unsafe.Pointer(pDisplayPlaneInfo)), (*C.VkDisplayPlaneCapabilities2KHR)(unsafe.Pointer(pCapabilities)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetDisplayPlaneCapabilities2KHR) String() string {
@@ -13105,6 +15899,7 @@ var KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME = "VK_KHR_get_memory_requiremen
 type BufferMemoryRequirementsInfo2KHR = BufferMemoryRequirementsInfo2
 type ImageMemoryRequirementsInfo2KHR = ImageMemoryRequirementsInfo2
 type ImageSparseMemoryRequirementsInfo2KHR = ImageSparseMemoryRequirementsInfo2
+type MemoryRequirements2KHR = MemoryRequirements2
 type SparseImageMemoryRequirements2KHR = SparseImageMemoryRequirements2
 
 //  PfnGetImageMemoryRequirements2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetImageMemoryRequirements2KHR.html
@@ -13112,6 +15907,7 @@ type PfnGetImageMemoryRequirements2KHR uintptr
 
 func (fn PfnGetImageMemoryRequirements2KHR) Call(device Device, pInfo *ImageMemoryRequirementsInfo2, pMemoryRequirements *MemoryRequirements2) {
 	C.bridge_vkGetImageMemoryRequirements2KHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkImageMemoryRequirementsInfo2)(unsafe.Pointer(pInfo)), (*C.VkMemoryRequirements2)(unsafe.Pointer(pMemoryRequirements)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetImageMemoryRequirements2KHR) String() string {
@@ -13123,6 +15919,7 @@ type PfnGetBufferMemoryRequirements2KHR uintptr
 
 func (fn PfnGetBufferMemoryRequirements2KHR) Call(device Device, pInfo *BufferMemoryRequirementsInfo2, pMemoryRequirements *MemoryRequirements2) {
 	C.bridge_vkGetBufferMemoryRequirements2KHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkBufferMemoryRequirementsInfo2)(unsafe.Pointer(pInfo)), (*C.VkMemoryRequirements2)(unsafe.Pointer(pMemoryRequirements)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetBufferMemoryRequirements2KHR) String() string {
@@ -13134,6 +15931,7 @@ type PfnGetImageSparseMemoryRequirements2KHR uintptr
 
 func (fn PfnGetImageSparseMemoryRequirements2KHR) Call(device Device, pInfo *ImageSparseMemoryRequirementsInfo2, pSparseMemoryRequirementCount *uint32, pSparseMemoryRequirements *SparseImageMemoryRequirements2) {
 	C.bridge_vkGetImageSparseMemoryRequirements2KHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkImageSparseMemoryRequirementsInfo2)(unsafe.Pointer(pInfo)), (*C.uint32_t)(unsafe.Pointer(pSparseMemoryRequirementCount)), (*C.VkSparseImageMemoryRequirements2)(unsafe.Pointer(pSparseMemoryRequirements)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetImageSparseMemoryRequirements2KHR) String() string {
@@ -13145,20 +15943,7 @@ const KHR_IMAGE_FORMAT_LIST_SPEC_VERSION = 1
 
 var KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME = "VK_KHR_image_format_list"
 
-// ImageFormatListCreateInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageFormatListCreateInfoKHR.html
-type ImageFormatListCreateInfoKHR struct {
-	SType           StructureType
-	PNext           unsafe.Pointer
-	ViewFormatCount uint32
-	PViewFormats    *Format
-}
-
-func NewImageFormatListCreateInfoKHR() *ImageFormatListCreateInfoKHR {
-	p := (*ImageFormatListCreateInfoKHR)(MemAlloc(unsafe.Sizeof(*(*ImageFormatListCreateInfoKHR)(nil))))
-	p.SType = STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR
-	return p
-}
-func (p *ImageFormatListCreateInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+type ImageFormatListCreateInfoKHR = ImageFormatListCreateInfo
 
 const KHR_sampler_ycbcr_conversion = 1
 
@@ -13183,6 +15968,7 @@ type PfnCreateSamplerYcbcrConversionKHR uintptr
 
 func (fn PfnCreateSamplerYcbcrConversionKHR) Call(device Device, pCreateInfo *SamplerYcbcrConversionCreateInfo, pAllocator *AllocationCallbacks, pYcbcrConversion *SamplerYcbcrConversion) Result {
 	ret := C.bridge_vkCreateSamplerYcbcrConversionKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkSamplerYcbcrConversionCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkSamplerYcbcrConversion)(unsafe.Pointer(pYcbcrConversion)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateSamplerYcbcrConversionKHR) String() string {
@@ -13194,6 +15980,7 @@ type PfnDestroySamplerYcbcrConversionKHR uintptr
 
 func (fn PfnDestroySamplerYcbcrConversionKHR) Call(device Device, ycbcrConversion SamplerYcbcrConversion, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroySamplerYcbcrConversionKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkSamplerYcbcrConversion)(unsafe.Pointer(uintptr(ycbcrConversion))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroySamplerYcbcrConversionKHR) String() string {
@@ -13213,6 +16000,7 @@ type PfnBindBufferMemory2KHR uintptr
 
 func (fn PfnBindBufferMemory2KHR) Call(device Device, bindInfoCount uint32, pBindInfos *BindBufferMemoryInfo) Result {
 	ret := C.bridge_vkBindBufferMemory2KHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.uint32_t)(bindInfoCount), (*C.VkBindBufferMemoryInfo)(unsafe.Pointer(pBindInfos)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnBindBufferMemory2KHR) String() string { return "vkBindBufferMemory2KHR" }
@@ -13222,6 +16010,7 @@ type PfnBindImageMemory2KHR uintptr
 
 func (fn PfnBindImageMemory2KHR) Call(device Device, bindInfoCount uint32, pBindInfos *BindImageMemoryInfo) Result {
 	ret := C.bridge_vkBindImageMemory2KHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.uint32_t)(bindInfoCount), (*C.VkBindImageMemoryInfo)(unsafe.Pointer(pBindInfos)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnBindImageMemory2KHR) String() string { return "vkBindImageMemory2KHR" }
@@ -13239,6 +16028,7 @@ type PfnGetDescriptorSetLayoutSupportKHR uintptr
 
 func (fn PfnGetDescriptorSetLayoutSupportKHR) Call(device Device, pCreateInfo *DescriptorSetLayoutCreateInfo, pSupport *DescriptorSetLayoutSupport) {
 	C.bridge_vkGetDescriptorSetLayoutSupportKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkDescriptorSetLayoutCreateInfo)(unsafe.Pointer(pCreateInfo)), (*C.VkDescriptorSetLayoutSupport)(unsafe.Pointer(pSupport)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetDescriptorSetLayoutSupportKHR) String() string {
@@ -13255,6 +16045,7 @@ type PfnCmdDrawIndirectCountKHR uintptr
 
 func (fn PfnCmdDrawIndirectCountKHR) Call(commandBuffer CommandBuffer, buffer Buffer, offset DeviceSize, countBuffer Buffer, countBufferOffset DeviceSize, maxDrawCount, stride uint32) {
 	C.bridge_vkCmdDrawIndirectCountKHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBuffer)(unsafe.Pointer(uintptr(buffer))), (C.VkDeviceSize)(offset), (C.VkBuffer)(unsafe.Pointer(uintptr(countBuffer))), (C.VkDeviceSize)(countBufferOffset), (C.uint32_t)(maxDrawCount), (C.uint32_t)(stride))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdDrawIndirectCountKHR) String() string { return "vkCmdDrawIndirectCountKHR" }
@@ -13264,304 +16055,308 @@ type PfnCmdDrawIndexedIndirectCountKHR uintptr
 
 func (fn PfnCmdDrawIndexedIndirectCountKHR) Call(commandBuffer CommandBuffer, buffer Buffer, offset DeviceSize, countBuffer Buffer, countBufferOffset DeviceSize, maxDrawCount, stride uint32) {
 	C.bridge_vkCmdDrawIndexedIndirectCountKHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBuffer)(unsafe.Pointer(uintptr(buffer))), (C.VkDeviceSize)(offset), (C.VkBuffer)(unsafe.Pointer(uintptr(countBuffer))), (C.VkDeviceSize)(countBufferOffset), (C.uint32_t)(maxDrawCount), (C.uint32_t)(stride))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdDrawIndexedIndirectCountKHR) String() string {
 	return "vkCmdDrawIndexedIndirectCountKHR"
 }
 
+const KHR_shader_subgroup_extended_types = 1
+const KHR_SHADER_SUBGROUP_EXTENDED_TYPES_SPEC_VERSION = 1
+
+var KHR_SHADER_SUBGROUP_EXTENDED_TYPES_EXTENSION_NAME = "VK_KHR_shader_subgroup_extended_types"
+
+type PhysicalDeviceShaderSubgroupExtendedTypesFeaturesKHR = PhysicalDeviceShaderSubgroupExtendedTypesFeatures
+
 const KHR_8bit_storage = 1
 const KHR_8BIT_STORAGE_SPEC_VERSION = 1
 
 var KHR_8BIT_STORAGE_EXTENSION_NAME = "VK_KHR_8bit_storage"
 
-// PhysicalDevice8BitStorageFeaturesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDevice8BitStorageFeaturesKHR.html
-type PhysicalDevice8BitStorageFeaturesKHR struct {
-	SType                             StructureType
-	PNext                             unsafe.Pointer
-	StorageBuffer8BitAccess           Bool32
-	UniformAndStorageBuffer8BitAccess Bool32
-	StoragePushConstant8              Bool32
-}
-
-func NewPhysicalDevice8BitStorageFeaturesKHR() *PhysicalDevice8BitStorageFeaturesKHR {
-	p := (*PhysicalDevice8BitStorageFeaturesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDevice8BitStorageFeaturesKHR)(nil))))
-	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_8BIT_STORAGE_FEATURES_KHR
-	return p
-}
-func (p *PhysicalDevice8BitStorageFeaturesKHR) Free() { MemFree(unsafe.Pointer(p)) }
+type PhysicalDevice8BitStorageFeaturesKHR = PhysicalDevice8BitStorageFeatures
 
 const KHR_shader_atomic_int64 = 1
 const KHR_SHADER_ATOMIC_INT64_SPEC_VERSION = 1
 
 var KHR_SHADER_ATOMIC_INT64_EXTENSION_NAME = "VK_KHR_shader_atomic_int64"
 
-// PhysicalDeviceShaderAtomicInt64FeaturesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceShaderAtomicInt64FeaturesKHR.html
-type PhysicalDeviceShaderAtomicInt64FeaturesKHR struct {
-	SType                    StructureType
-	PNext                    unsafe.Pointer
-	ShaderBufferInt64Atomics Bool32
-	ShaderSharedInt64Atomics Bool32
+type PhysicalDeviceShaderAtomicInt64FeaturesKHR = PhysicalDeviceShaderAtomicInt64Features
+
+const KHR_shader_clock = 1
+const KHR_SHADER_CLOCK_SPEC_VERSION = 1
+
+var KHR_SHADER_CLOCK_EXTENSION_NAME = "VK_KHR_shader_clock"
+
+// PhysicalDeviceShaderClockFeaturesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceShaderClockFeaturesKHR.html
+type PhysicalDeviceShaderClockFeaturesKHR struct {
+	SType               StructureType
+	PNext               unsafe.Pointer
+	ShaderSubgroupClock Bool32
+	ShaderDeviceClock   Bool32
 }
 
-func NewPhysicalDeviceShaderAtomicInt64FeaturesKHR() *PhysicalDeviceShaderAtomicInt64FeaturesKHR {
-	p := (*PhysicalDeviceShaderAtomicInt64FeaturesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceShaderAtomicInt64FeaturesKHR)(nil))))
-	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_INT64_FEATURES_KHR
+func NewPhysicalDeviceShaderClockFeaturesKHR() *PhysicalDeviceShaderClockFeaturesKHR {
+	p := (*PhysicalDeviceShaderClockFeaturesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceShaderClockFeaturesKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CLOCK_FEATURES_KHR
 	return p
 }
-func (p *PhysicalDeviceShaderAtomicInt64FeaturesKHR) Free() { MemFree(unsafe.Pointer(p)) }
+func (p *PhysicalDeviceShaderClockFeaturesKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
 const KHR_driver_properties = 1
-const MAX_DRIVER_NAME_SIZE_KHR = 256
-const MAX_DRIVER_INFO_SIZE_KHR = 256
 const KHR_DRIVER_PROPERTIES_SPEC_VERSION = 1
 
 var KHR_DRIVER_PROPERTIES_EXTENSION_NAME = "VK_KHR_driver_properties"
 
-// DriverIdKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDriverIdKHR.html
-type DriverIdKHR int32
-
-const (
-	DRIVER_ID_AMD_PROPRIETARY_KHR           DriverIdKHR = 1
-	DRIVER_ID_AMD_OPEN_SOURCE_KHR           DriverIdKHR = 2
-	DRIVER_ID_MESA_RADV_KHR                 DriverIdKHR = 3
-	DRIVER_ID_NVIDIA_PROPRIETARY_KHR        DriverIdKHR = 4
-	DRIVER_ID_INTEL_PROPRIETARY_WINDOWS_KHR DriverIdKHR = 5
-	DRIVER_ID_INTEL_OPEN_SOURCE_MESA_KHR    DriverIdKHR = 6
-	DRIVER_ID_IMAGINATION_PROPRIETARY_KHR   DriverIdKHR = 7
-	DRIVER_ID_QUALCOMM_PROPRIETARY_KHR      DriverIdKHR = 8
-	DRIVER_ID_ARM_PROPRIETARY_KHR           DriverIdKHR = 9
-	DRIVER_ID_GOOGLE_SWIFTSHADER_KHR        DriverIdKHR = 10
-	DRIVER_ID_GGP_PROPRIETARY_KHR           DriverIdKHR = 11
-	DRIVER_ID_BROADCOM_PROPRIETARY_KHR      DriverIdKHR = 12
-	DRIVER_ID_BEGIN_RANGE_KHR               DriverIdKHR = DRIVER_ID_AMD_PROPRIETARY_KHR
-	DRIVER_ID_END_RANGE_KHR                 DriverIdKHR = DRIVER_ID_BROADCOM_PROPRIETARY_KHR
-	DRIVER_ID_RANGE_SIZE_KHR                DriverIdKHR = (DRIVER_ID_BROADCOM_PROPRIETARY_KHR - DRIVER_ID_AMD_PROPRIETARY_KHR + 1)
-	DRIVER_ID_MAX_ENUM_KHR                  DriverIdKHR = 0x7FFFFFFF
-)
-
-func (x DriverIdKHR) String() string {
-	switch x {
-	case DRIVER_ID_AMD_PROPRIETARY_KHR:
-		return "DRIVER_ID_AMD_PROPRIETARY_KHR"
-	case DRIVER_ID_AMD_OPEN_SOURCE_KHR:
-		return "DRIVER_ID_AMD_OPEN_SOURCE_KHR"
-	case DRIVER_ID_MESA_RADV_KHR:
-		return "DRIVER_ID_MESA_RADV_KHR"
-	case DRIVER_ID_NVIDIA_PROPRIETARY_KHR:
-		return "DRIVER_ID_NVIDIA_PROPRIETARY_KHR"
-	case DRIVER_ID_INTEL_PROPRIETARY_WINDOWS_KHR:
-		return "DRIVER_ID_INTEL_PROPRIETARY_WINDOWS_KHR"
-	case DRIVER_ID_INTEL_OPEN_SOURCE_MESA_KHR:
-		return "DRIVER_ID_INTEL_OPEN_SOURCE_MESA_KHR"
-	case DRIVER_ID_IMAGINATION_PROPRIETARY_KHR:
-		return "DRIVER_ID_IMAGINATION_PROPRIETARY_KHR"
-	case DRIVER_ID_QUALCOMM_PROPRIETARY_KHR:
-		return "DRIVER_ID_QUALCOMM_PROPRIETARY_KHR"
-	case DRIVER_ID_ARM_PROPRIETARY_KHR:
-		return "DRIVER_ID_ARM_PROPRIETARY_KHR"
-	case DRIVER_ID_GOOGLE_SWIFTSHADER_KHR:
-		return "DRIVER_ID_GOOGLE_SWIFTSHADER_KHR"
-	case DRIVER_ID_GGP_PROPRIETARY_KHR:
-		return "DRIVER_ID_GGP_PROPRIETARY_KHR"
-	case DRIVER_ID_BROADCOM_PROPRIETARY_KHR:
-		return "DRIVER_ID_BROADCOM_PROPRIETARY_KHR"
-	case DRIVER_ID_MAX_ENUM_KHR:
-		return "DRIVER_ID_MAX_ENUM_KHR"
-	default:
-		return fmt.Sprint(int32(x))
-	}
-}
-
-// ConformanceVersionKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkConformanceVersionKHR.html
-type ConformanceVersionKHR struct {
-	Major    uint8
-	Minor    uint8
-	Subminor uint8
-	Patch    uint8
-}
-
-func NewConformanceVersionKHR() *ConformanceVersionKHR {
-	return (*ConformanceVersionKHR)(MemAlloc(unsafe.Sizeof(*(*ConformanceVersionKHR)(nil))))
-}
-func (p *ConformanceVersionKHR) Free() { MemFree(unsafe.Pointer(p)) }
-
-// PhysicalDeviceDriverPropertiesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceDriverPropertiesKHR.html
-type PhysicalDeviceDriverPropertiesKHR struct {
-	SType              StructureType
-	PNext              unsafe.Pointer
-	DriverID           DriverIdKHR
-	DriverName         [MAX_DRIVER_NAME_SIZE_KHR]int8
-	DriverInfo         [MAX_DRIVER_INFO_SIZE_KHR]int8
-	ConformanceVersion ConformanceVersionKHR
-}
-
-func NewPhysicalDeviceDriverPropertiesKHR() *PhysicalDeviceDriverPropertiesKHR {
-	p := (*PhysicalDeviceDriverPropertiesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceDriverPropertiesKHR)(nil))))
-	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES_KHR
-	return p
-}
-func (p *PhysicalDeviceDriverPropertiesKHR) Free() { MemFree(unsafe.Pointer(p)) }
+type DriverIdKHR = DriverId
+type ConformanceVersionKHR = ConformanceVersion
+type PhysicalDeviceDriverPropertiesKHR = PhysicalDeviceDriverProperties
 
 const KHR_shader_float_controls = 1
 const KHR_SHADER_FLOAT_CONTROLS_SPEC_VERSION = 4
 
 var KHR_SHADER_FLOAT_CONTROLS_EXTENSION_NAME = "VK_KHR_shader_float_controls"
 
-// ShaderFloatControlsIndependenceKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkShaderFloatControlsIndependenceKHR.html
-type ShaderFloatControlsIndependenceKHR int32
-
-const (
-	SHADER_FLOAT_CONTROLS_INDEPENDENCE_32_BIT_ONLY_KHR ShaderFloatControlsIndependenceKHR = 0
-	SHADER_FLOAT_CONTROLS_INDEPENDENCE_ALL_KHR         ShaderFloatControlsIndependenceKHR = 1
-	SHADER_FLOAT_CONTROLS_INDEPENDENCE_NONE_KHR        ShaderFloatControlsIndependenceKHR = 2
-	SHADER_FLOAT_CONTROLS_INDEPENDENCE_BEGIN_RANGE_KHR ShaderFloatControlsIndependenceKHR = SHADER_FLOAT_CONTROLS_INDEPENDENCE_32_BIT_ONLY_KHR
-	SHADER_FLOAT_CONTROLS_INDEPENDENCE_END_RANGE_KHR   ShaderFloatControlsIndependenceKHR = SHADER_FLOAT_CONTROLS_INDEPENDENCE_NONE_KHR
-	SHADER_FLOAT_CONTROLS_INDEPENDENCE_RANGE_SIZE_KHR  ShaderFloatControlsIndependenceKHR = (SHADER_FLOAT_CONTROLS_INDEPENDENCE_NONE_KHR - SHADER_FLOAT_CONTROLS_INDEPENDENCE_32_BIT_ONLY_KHR + 1)
-	SHADER_FLOAT_CONTROLS_INDEPENDENCE_MAX_ENUM_KHR    ShaderFloatControlsIndependenceKHR = 0x7FFFFFFF
-)
-
-func (x ShaderFloatControlsIndependenceKHR) String() string {
-	switch x {
-	case SHADER_FLOAT_CONTROLS_INDEPENDENCE_32_BIT_ONLY_KHR:
-		return "SHADER_FLOAT_CONTROLS_INDEPENDENCE_32_BIT_ONLY_KHR"
-	case SHADER_FLOAT_CONTROLS_INDEPENDENCE_ALL_KHR:
-		return "SHADER_FLOAT_CONTROLS_INDEPENDENCE_ALL_KHR"
-	case SHADER_FLOAT_CONTROLS_INDEPENDENCE_NONE_KHR:
-		return "SHADER_FLOAT_CONTROLS_INDEPENDENCE_NONE_KHR"
-	case SHADER_FLOAT_CONTROLS_INDEPENDENCE_MAX_ENUM_KHR:
-		return "SHADER_FLOAT_CONTROLS_INDEPENDENCE_MAX_ENUM_KHR"
-	default:
-		return fmt.Sprint(int32(x))
-	}
-}
-
-// PhysicalDeviceFloatControlsPropertiesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceFloatControlsPropertiesKHR.html
-type PhysicalDeviceFloatControlsPropertiesKHR struct {
-	SType                                 StructureType
-	PNext                                 unsafe.Pointer
-	DenormBehaviorIndependence            ShaderFloatControlsIndependenceKHR
-	RoundingModeIndependence              ShaderFloatControlsIndependenceKHR
-	ShaderSignedZeroInfNanPreserveFloat16 Bool32
-	ShaderSignedZeroInfNanPreserveFloat32 Bool32
-	ShaderSignedZeroInfNanPreserveFloat64 Bool32
-	ShaderDenormPreserveFloat16           Bool32
-	ShaderDenormPreserveFloat32           Bool32
-	ShaderDenormPreserveFloat64           Bool32
-	ShaderDenormFlushToZeroFloat16        Bool32
-	ShaderDenormFlushToZeroFloat32        Bool32
-	ShaderDenormFlushToZeroFloat64        Bool32
-	ShaderRoundingModeRTEFloat16          Bool32
-	ShaderRoundingModeRTEFloat32          Bool32
-	ShaderRoundingModeRTEFloat64          Bool32
-	ShaderRoundingModeRTZFloat16          Bool32
-	ShaderRoundingModeRTZFloat32          Bool32
-	ShaderRoundingModeRTZFloat64          Bool32
-}
-
-func NewPhysicalDeviceFloatControlsPropertiesKHR() *PhysicalDeviceFloatControlsPropertiesKHR {
-	p := (*PhysicalDeviceFloatControlsPropertiesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceFloatControlsPropertiesKHR)(nil))))
-	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_FLOAT_CONTROLS_PROPERTIES_KHR
-	return p
-}
-func (p *PhysicalDeviceFloatControlsPropertiesKHR) Free() { MemFree(unsafe.Pointer(p)) }
+type ShaderFloatControlsIndependenceKHR = ShaderFloatControlsIndependence
+type PhysicalDeviceFloatControlsPropertiesKHR = PhysicalDeviceFloatControlsProperties
 
 const KHR_depth_stencil_resolve = 1
 const KHR_DEPTH_STENCIL_RESOLVE_SPEC_VERSION = 1
 
 var KHR_DEPTH_STENCIL_RESOLVE_EXTENSION_NAME = "VK_KHR_depth_stencil_resolve"
 
-// ResolveModeFlagsKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkResolveModeFlagsKHR.html
-type ResolveModeFlagsKHR uint32
-
-const (
-	RESOLVE_MODE_NONE_KHR               ResolveModeFlagsKHR = 0
-	RESOLVE_MODE_SAMPLE_ZERO_BIT_KHR    ResolveModeFlagsKHR = 0x00000001
-	RESOLVE_MODE_AVERAGE_BIT_KHR        ResolveModeFlagsKHR = 0x00000002
-	RESOLVE_MODE_MIN_BIT_KHR            ResolveModeFlagsKHR = 0x00000004
-	RESOLVE_MODE_MAX_BIT_KHR            ResolveModeFlagsKHR = 0x00000008
-	RESOLVE_MODE_FLAG_BITS_MAX_ENUM_KHR ResolveModeFlagsKHR = 0x7FFFFFFF
-)
-
-func (x ResolveModeFlagsKHR) String() string {
-	var s string
-	for i := uint32(0); i < 32; i++ {
-		if int32(x)&(1<<i) != 0 {
-			switch ResolveModeFlagsKHR(1 << i) {
-			case RESOLVE_MODE_NONE_KHR:
-				s += "RESOLVE_MODE_NONE_KHR|"
-			case RESOLVE_MODE_SAMPLE_ZERO_BIT_KHR:
-				s += "RESOLVE_MODE_SAMPLE_ZERO_BIT_KHR|"
-			case RESOLVE_MODE_AVERAGE_BIT_KHR:
-				s += "RESOLVE_MODE_AVERAGE_BIT_KHR|"
-			case RESOLVE_MODE_MIN_BIT_KHR:
-				s += "RESOLVE_MODE_MIN_BIT_KHR|"
-			case RESOLVE_MODE_MAX_BIT_KHR:
-				s += "RESOLVE_MODE_MAX_BIT_KHR|"
-			}
-		}
-	}
-	return strings.TrimSuffix(s, `|`)
-}
-
-// SubpassDescriptionDepthStencilResolveKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubpassDescriptionDepthStencilResolveKHR.html
-type SubpassDescriptionDepthStencilResolveKHR struct {
-	SType                          StructureType
-	PNext                          unsafe.Pointer
-	DepthResolveMode               ResolveModeFlagsKHR
-	StencilResolveMode             ResolveModeFlagsKHR
-	PDepthStencilResolveAttachment *AttachmentReference2KHR
-}
-
-func NewSubpassDescriptionDepthStencilResolveKHR() *SubpassDescriptionDepthStencilResolveKHR {
-	p := (*SubpassDescriptionDepthStencilResolveKHR)(MemAlloc(unsafe.Sizeof(*(*SubpassDescriptionDepthStencilResolveKHR)(nil))))
-	p.SType = STRUCTURE_TYPE_SUBPASS_DESCRIPTION_DEPTH_STENCIL_RESOLVE_KHR
-	return p
-}
-func (p *SubpassDescriptionDepthStencilResolveKHR) Free() { MemFree(unsafe.Pointer(p)) }
-
-// PhysicalDeviceDepthStencilResolvePropertiesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceDepthStencilResolvePropertiesKHR.html
-type PhysicalDeviceDepthStencilResolvePropertiesKHR struct {
-	SType                        StructureType
-	PNext                        unsafe.Pointer
-	SupportedDepthResolveModes   ResolveModeFlagsKHR
-	SupportedStencilResolveModes ResolveModeFlagsKHR
-	IndependentResolveNone       Bool32
-	IndependentResolve           Bool32
-}
-
-func NewPhysicalDeviceDepthStencilResolvePropertiesKHR() *PhysicalDeviceDepthStencilResolvePropertiesKHR {
-	p := (*PhysicalDeviceDepthStencilResolvePropertiesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceDepthStencilResolvePropertiesKHR)(nil))))
-	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_DEPTH_STENCIL_RESOLVE_PROPERTIES_KHR
-	return p
-}
-func (p *PhysicalDeviceDepthStencilResolvePropertiesKHR) Free() { MemFree(unsafe.Pointer(p)) }
+type ResolveModeFlagsKHR = ResolveModeFlags
+type SubpassDescriptionDepthStencilResolveKHR = SubpassDescriptionDepthStencilResolve
+type PhysicalDeviceDepthStencilResolvePropertiesKHR = PhysicalDeviceDepthStencilResolveProperties
 
 const KHR_swapchain_mutable_format = 1
 const KHR_SWAPCHAIN_MUTABLE_FORMAT_SPEC_VERSION = 1
 
 var KHR_SWAPCHAIN_MUTABLE_FORMAT_EXTENSION_NAME = "VK_KHR_swapchain_mutable_format"
 
+const KHR_timeline_semaphore = 1
+const KHR_TIMELINE_SEMAPHORE_SPEC_VERSION = 2
+
+var KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME = "VK_KHR_timeline_semaphore"
+
+type SemaphoreTypeKHR = SemaphoreType
+type SemaphoreWaitFlagsKHR = SemaphoreWaitFlags
+type PhysicalDeviceTimelineSemaphoreFeaturesKHR = PhysicalDeviceTimelineSemaphoreFeatures
+type PhysicalDeviceTimelineSemaphorePropertiesKHR = PhysicalDeviceTimelineSemaphoreProperties
+type SemaphoreTypeCreateInfoKHR = SemaphoreTypeCreateInfo
+type TimelineSemaphoreSubmitInfoKHR = TimelineSemaphoreSubmitInfo
+type SemaphoreWaitInfoKHR = SemaphoreWaitInfo
+type SemaphoreSignalInfoKHR = SemaphoreSignalInfo
+
+//  PfnGetSemaphoreCounterValueKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetSemaphoreCounterValueKHR.html
+type PfnGetSemaphoreCounterValueKHR uintptr
+
+func (fn PfnGetSemaphoreCounterValueKHR) Call(device Device, semaphore Semaphore, pValue *uint64) Result {
+	ret := C.bridge_vkGetSemaphoreCounterValueKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkSemaphore)(unsafe.Pointer(uintptr(semaphore))), (*C.uint64_t)(unsafe.Pointer(pValue)))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnGetSemaphoreCounterValueKHR) String() string { return "vkGetSemaphoreCounterValueKHR" }
+
+//  PfnWaitSemaphoresKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkWaitSemaphoresKHR.html
+type PfnWaitSemaphoresKHR uintptr
+
+func (fn PfnWaitSemaphoresKHR) Call(device Device, pWaitInfo *SemaphoreWaitInfo, timeout uint64) Result {
+	ret := C.bridge_vkWaitSemaphoresKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkSemaphoreWaitInfo)(unsafe.Pointer(pWaitInfo)), (C.uint64_t)(timeout))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnWaitSemaphoresKHR) String() string { return "vkWaitSemaphoresKHR" }
+
+//  PfnSignalSemaphoreKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkSignalSemaphoreKHR.html
+type PfnSignalSemaphoreKHR uintptr
+
+func (fn PfnSignalSemaphoreKHR) Call(device Device, pSignalInfo *SemaphoreSignalInfo) Result {
+	ret := C.bridge_vkSignalSemaphoreKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkSemaphoreSignalInfo)(unsafe.Pointer(pSignalInfo)))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnSignalSemaphoreKHR) String() string { return "vkSignalSemaphoreKHR" }
+
 const KHR_vulkan_memory_model = 1
 const KHR_VULKAN_MEMORY_MODEL_SPEC_VERSION = 3
 
 var KHR_VULKAN_MEMORY_MODEL_EXTENSION_NAME = "VK_KHR_vulkan_memory_model"
 
-// PhysicalDeviceVulkanMemoryModelFeaturesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceVulkanMemoryModelFeaturesKHR.html
-type PhysicalDeviceVulkanMemoryModelFeaturesKHR struct {
-	SType                                         StructureType
-	PNext                                         unsafe.Pointer
-	VulkanMemoryModel                             Bool32
-	VulkanMemoryModelDeviceScope                  Bool32
-	VulkanMemoryModelAvailabilityVisibilityChains Bool32
+type PhysicalDeviceVulkanMemoryModelFeaturesKHR = PhysicalDeviceVulkanMemoryModelFeatures
+
+const KHR_shader_terminate_invocation = 1
+const KHR_SHADER_TERMINATE_INVOCATION_SPEC_VERSION = 1
+
+var KHR_SHADER_TERMINATE_INVOCATION_EXTENSION_NAME = "VK_KHR_shader_terminate_invocation"
+
+// PhysicalDeviceShaderTerminateInvocationFeaturesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceShaderTerminateInvocationFeaturesKHR.html
+type PhysicalDeviceShaderTerminateInvocationFeaturesKHR struct {
+	SType                     StructureType
+	PNext                     unsafe.Pointer
+	ShaderTerminateInvocation Bool32
 }
 
-func NewPhysicalDeviceVulkanMemoryModelFeaturesKHR() *PhysicalDeviceVulkanMemoryModelFeaturesKHR {
-	p := (*PhysicalDeviceVulkanMemoryModelFeaturesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceVulkanMemoryModelFeaturesKHR)(nil))))
-	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_MEMORY_MODEL_FEATURES_KHR
+func NewPhysicalDeviceShaderTerminateInvocationFeaturesKHR() *PhysicalDeviceShaderTerminateInvocationFeaturesKHR {
+	p := (*PhysicalDeviceShaderTerminateInvocationFeaturesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceShaderTerminateInvocationFeaturesKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_TERMINATE_INVOCATION_FEATURES_KHR
 	return p
 }
-func (p *PhysicalDeviceVulkanMemoryModelFeaturesKHR) Free() { MemFree(unsafe.Pointer(p)) }
+func (p *PhysicalDeviceShaderTerminateInvocationFeaturesKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+const KHR_fragment_shading_rate = 1
+const KHR_FRAGMENT_SHADING_RATE_SPEC_VERSION = 1
+
+var KHR_FRAGMENT_SHADING_RATE_EXTENSION_NAME = "VK_KHR_fragment_shading_rate"
+
+// FragmentShadingRateCombinerOpKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFragmentShadingRateCombinerOpKHR.html
+type FragmentShadingRateCombinerOpKHR int32
+
+const (
+	FRAGMENT_SHADING_RATE_COMBINER_OP_KEEP_KHR     FragmentShadingRateCombinerOpKHR = 0
+	FRAGMENT_SHADING_RATE_COMBINER_OP_REPLACE_KHR  FragmentShadingRateCombinerOpKHR = 1
+	FRAGMENT_SHADING_RATE_COMBINER_OP_MIN_KHR      FragmentShadingRateCombinerOpKHR = 2
+	FRAGMENT_SHADING_RATE_COMBINER_OP_MAX_KHR      FragmentShadingRateCombinerOpKHR = 3
+	FRAGMENT_SHADING_RATE_COMBINER_OP_MUL_KHR      FragmentShadingRateCombinerOpKHR = 4
+	FRAGMENT_SHADING_RATE_COMBINER_OP_MAX_ENUM_KHR FragmentShadingRateCombinerOpKHR = 0x7FFFFFFF
+)
+
+func (x FragmentShadingRateCombinerOpKHR) String() string {
+	switch x {
+	case FRAGMENT_SHADING_RATE_COMBINER_OP_KEEP_KHR:
+		return "FRAGMENT_SHADING_RATE_COMBINER_OP_KEEP_KHR"
+	case FRAGMENT_SHADING_RATE_COMBINER_OP_REPLACE_KHR:
+		return "FRAGMENT_SHADING_RATE_COMBINER_OP_REPLACE_KHR"
+	case FRAGMENT_SHADING_RATE_COMBINER_OP_MIN_KHR:
+		return "FRAGMENT_SHADING_RATE_COMBINER_OP_MIN_KHR"
+	case FRAGMENT_SHADING_RATE_COMBINER_OP_MAX_KHR:
+		return "FRAGMENT_SHADING_RATE_COMBINER_OP_MAX_KHR"
+	case FRAGMENT_SHADING_RATE_COMBINER_OP_MUL_KHR:
+		return "FRAGMENT_SHADING_RATE_COMBINER_OP_MUL_KHR"
+	case FRAGMENT_SHADING_RATE_COMBINER_OP_MAX_ENUM_KHR:
+		return "FRAGMENT_SHADING_RATE_COMBINER_OP_MAX_ENUM_KHR"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// FragmentShadingRateAttachmentInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFragmentShadingRateAttachmentInfoKHR.html
+type FragmentShadingRateAttachmentInfoKHR struct {
+	SType                          StructureType
+	PNext                          unsafe.Pointer
+	PFragmentShadingRateAttachment *AttachmentReference2
+	ShadingRateAttachmentTexelSize Extent2D
+}
+
+func NewFragmentShadingRateAttachmentInfoKHR() *FragmentShadingRateAttachmentInfoKHR {
+	p := (*FragmentShadingRateAttachmentInfoKHR)(MemAlloc(unsafe.Sizeof(*(*FragmentShadingRateAttachmentInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_FRAGMENT_SHADING_RATE_ATTACHMENT_INFO_KHR
+	return p
+}
+func (p *FragmentShadingRateAttachmentInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PipelineFragmentShadingRateStateCreateInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineFragmentShadingRateStateCreateInfoKHR.html
+type PipelineFragmentShadingRateStateCreateInfoKHR struct {
+	SType        StructureType
+	PNext        unsafe.Pointer
+	FragmentSize Extent2D
+	CombinerOps  [2]FragmentShadingRateCombinerOpKHR
+}
+
+func NewPipelineFragmentShadingRateStateCreateInfoKHR() *PipelineFragmentShadingRateStateCreateInfoKHR {
+	p := (*PipelineFragmentShadingRateStateCreateInfoKHR)(MemAlloc(unsafe.Sizeof(*(*PipelineFragmentShadingRateStateCreateInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PIPELINE_FRAGMENT_SHADING_RATE_STATE_CREATE_INFO_KHR
+	return p
+}
+func (p *PipelineFragmentShadingRateStateCreateInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceFragmentShadingRateFeaturesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceFragmentShadingRateFeaturesKHR.html
+type PhysicalDeviceFragmentShadingRateFeaturesKHR struct {
+	SType                         StructureType
+	PNext                         unsafe.Pointer
+	PipelineFragmentShadingRate   Bool32
+	PrimitiveFragmentShadingRate  Bool32
+	AttachmentFragmentShadingRate Bool32
+}
+
+func NewPhysicalDeviceFragmentShadingRateFeaturesKHR() *PhysicalDeviceFragmentShadingRateFeaturesKHR {
+	p := (*PhysicalDeviceFragmentShadingRateFeaturesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceFragmentShadingRateFeaturesKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_FEATURES_KHR
+	return p
+}
+func (p *PhysicalDeviceFragmentShadingRateFeaturesKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceFragmentShadingRatePropertiesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceFragmentShadingRatePropertiesKHR.html
+type PhysicalDeviceFragmentShadingRatePropertiesKHR struct {
+	SType                                                StructureType
+	PNext                                                unsafe.Pointer
+	MinFragmentShadingRateAttachmentTexelSize            Extent2D
+	MaxFragmentShadingRateAttachmentTexelSize            Extent2D
+	MaxFragmentShadingRateAttachmentTexelSizeAspectRatio uint32
+	PrimitiveFragmentShadingRateWithMultipleViewports    Bool32
+	LayeredShadingRateAttachments                        Bool32
+	FragmentShadingRateNonTrivialCombinerOps             Bool32
+	MaxFragmentSize                                      Extent2D
+	MaxFragmentSizeAspectRatio                           uint32
+	MaxFragmentShadingRateCoverageSamples                uint32
+	MaxFragmentShadingRateRasterizationSamples           SampleCountFlags
+	FragmentShadingRateWithShaderDepthStencilWrites      Bool32
+	FragmentShadingRateWithSampleMask                    Bool32
+	FragmentShadingRateWithShaderSampleMask              Bool32
+	FragmentShadingRateWithConservativeRasterization     Bool32
+	FragmentShadingRateWithFragmentShaderInterlock       Bool32
+	FragmentShadingRateWithCustomSampleLocations         Bool32
+	FragmentShadingRateStrictMultiplyCombiner            Bool32
+}
+
+func NewPhysicalDeviceFragmentShadingRatePropertiesKHR() *PhysicalDeviceFragmentShadingRatePropertiesKHR {
+	p := (*PhysicalDeviceFragmentShadingRatePropertiesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceFragmentShadingRatePropertiesKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_PROPERTIES_KHR
+	return p
+}
+func (p *PhysicalDeviceFragmentShadingRatePropertiesKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceFragmentShadingRateKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceFragmentShadingRateKHR.html
+type PhysicalDeviceFragmentShadingRateKHR struct {
+	SType        StructureType
+	PNext        unsafe.Pointer
+	SampleCounts SampleCountFlags
+	FragmentSize Extent2D
+}
+
+func NewPhysicalDeviceFragmentShadingRateKHR() *PhysicalDeviceFragmentShadingRateKHR {
+	p := (*PhysicalDeviceFragmentShadingRateKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceFragmentShadingRateKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_KHR
+	return p
+}
+func (p *PhysicalDeviceFragmentShadingRateKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+//  PfnGetPhysicalDeviceFragmentShadingRatesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceFragmentShadingRatesKHR.html
+type PfnGetPhysicalDeviceFragmentShadingRatesKHR uintptr
+
+func (fn PfnGetPhysicalDeviceFragmentShadingRatesKHR) Call(physicalDevice PhysicalDevice, pFragmentShadingRateCount *uint32, pFragmentShadingRates *PhysicalDeviceFragmentShadingRateKHR) Result {
+	ret := C.bridge_vkGetPhysicalDeviceFragmentShadingRatesKHR(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.uint32_t)(unsafe.Pointer(pFragmentShadingRateCount)), (*C.VkPhysicalDeviceFragmentShadingRateKHR)(unsafe.Pointer(pFragmentShadingRates)))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnGetPhysicalDeviceFragmentShadingRatesKHR) String() string {
+	return "vkGetPhysicalDeviceFragmentShadingRatesKHR"
+}
+
+//  PfnCmdSetFragmentShadingRateKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetFragmentShadingRateKHR.html
+type PfnCmdSetFragmentShadingRateKHR uintptr
+
+func (fn PfnCmdSetFragmentShadingRateKHR) Call(commandBuffer CommandBuffer, pFragmentSize *Extent2D, combinerOp *[2]FragmentShadingRateCombinerOpKHR) {
+	C.bridge_vkCmdSetFragmentShadingRateKHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkExtent2D)(unsafe.Pointer(pFragmentSize)), (*C.VkFragmentShadingRateCombinerOpKHR)(unsafe.Pointer(combinerOp)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdSetFragmentShadingRateKHR) String() string { return "vkCmdSetFragmentShadingRateKHR" }
+
+const KHR_spirv_1_4 = 1
+const KHR_SPIRV_1_4_SPEC_VERSION = 1
+
+var KHR_SPIRV_1_4_EXTENSION_NAME = "VK_KHR_spirv_1_4"
 
 const KHR_surface_protected_capabilities = 1
 const KHR_SURFACE_PROTECTED_CAPABILITIES_SPEC_VERSION = 1
@@ -13582,24 +16377,127 @@ func NewSurfaceProtectedCapabilitiesKHR() *SurfaceProtectedCapabilitiesKHR {
 }
 func (p *SurfaceProtectedCapabilitiesKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
+const KHR_separate_depth_stencil_layouts = 1
+const KHR_SEPARATE_DEPTH_STENCIL_LAYOUTS_SPEC_VERSION = 1
+
+var KHR_SEPARATE_DEPTH_STENCIL_LAYOUTS_EXTENSION_NAME = "VK_KHR_separate_depth_stencil_layouts"
+
+type PhysicalDeviceSeparateDepthStencilLayoutsFeaturesKHR = PhysicalDeviceSeparateDepthStencilLayoutsFeatures
+type AttachmentReferenceStencilLayoutKHR = AttachmentReferenceStencilLayout
+type AttachmentDescriptionStencilLayoutKHR = AttachmentDescriptionStencilLayout
+
 const KHR_uniform_buffer_standard_layout = 1
 const KHR_UNIFORM_BUFFER_STANDARD_LAYOUT_SPEC_VERSION = 1
 
 var KHR_UNIFORM_BUFFER_STANDARD_LAYOUT_EXTENSION_NAME = "VK_KHR_uniform_buffer_standard_layout"
 
-// PhysicalDeviceUniformBufferStandardLayoutFeaturesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceUniformBufferStandardLayoutFeaturesKHR.html
-type PhysicalDeviceUniformBufferStandardLayoutFeaturesKHR struct {
-	SType                       StructureType
-	PNext                       unsafe.Pointer
-	UniformBufferStandardLayout Bool32
+type PhysicalDeviceUniformBufferStandardLayoutFeaturesKHR = PhysicalDeviceUniformBufferStandardLayoutFeatures
+
+const KHR_buffer_device_address = 1
+const KHR_BUFFER_DEVICE_ADDRESS_SPEC_VERSION = 1
+
+var KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME = "VK_KHR_buffer_device_address"
+
+type PhysicalDeviceBufferDeviceAddressFeaturesKHR = PhysicalDeviceBufferDeviceAddressFeatures
+type BufferDeviceAddressInfoKHR = BufferDeviceAddressInfo
+type BufferOpaqueCaptureAddressCreateInfoKHR = BufferOpaqueCaptureAddressCreateInfo
+type MemoryOpaqueCaptureAddressAllocateInfoKHR = MemoryOpaqueCaptureAddressAllocateInfo
+type DeviceMemoryOpaqueCaptureAddressInfoKHR = DeviceMemoryOpaqueCaptureAddressInfo
+
+//  PfnGetBufferDeviceAddressKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetBufferDeviceAddressKHR.html
+type PfnGetBufferDeviceAddressKHR uintptr
+
+func (fn PfnGetBufferDeviceAddressKHR) Call(device Device, pInfo *BufferDeviceAddressInfo) DeviceAddress {
+	ret := C.bridge_vkGetBufferDeviceAddressKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkBufferDeviceAddressInfo)(unsafe.Pointer(pInfo)))
+	debugCheckAndBreak()
+	return DeviceAddress(ret)
+}
+func (fn PfnGetBufferDeviceAddressKHR) String() string { return "vkGetBufferDeviceAddressKHR" }
+
+//  PfnGetBufferOpaqueCaptureAddressKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetBufferOpaqueCaptureAddressKHR.html
+type PfnGetBufferOpaqueCaptureAddressKHR uintptr
+
+func (fn PfnGetBufferOpaqueCaptureAddressKHR) Call(device Device, pInfo *BufferDeviceAddressInfo) uint64 {
+	ret := C.bridge_vkGetBufferOpaqueCaptureAddressKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkBufferDeviceAddressInfo)(unsafe.Pointer(pInfo)))
+	debugCheckAndBreak()
+	return uint64(ret)
+}
+func (fn PfnGetBufferOpaqueCaptureAddressKHR) String() string {
+	return "vkGetBufferOpaqueCaptureAddressKHR"
 }
 
-func NewPhysicalDeviceUniformBufferStandardLayoutFeaturesKHR() *PhysicalDeviceUniformBufferStandardLayoutFeaturesKHR {
-	p := (*PhysicalDeviceUniformBufferStandardLayoutFeaturesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceUniformBufferStandardLayoutFeaturesKHR)(nil))))
-	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_UNIFORM_BUFFER_STANDARD_LAYOUT_FEATURES_KHR
-	return p
+//  PfnGetDeviceMemoryOpaqueCaptureAddressKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDeviceMemoryOpaqueCaptureAddressKHR.html
+type PfnGetDeviceMemoryOpaqueCaptureAddressKHR uintptr
+
+func (fn PfnGetDeviceMemoryOpaqueCaptureAddressKHR) Call(device Device, pInfo *DeviceMemoryOpaqueCaptureAddressInfo) uint64 {
+	ret := C.bridge_vkGetDeviceMemoryOpaqueCaptureAddressKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkDeviceMemoryOpaqueCaptureAddressInfo)(unsafe.Pointer(pInfo)))
+	debugCheckAndBreak()
+	return uint64(ret)
 }
-func (p *PhysicalDeviceUniformBufferStandardLayoutFeaturesKHR) Free() { MemFree(unsafe.Pointer(p)) }
+func (fn PfnGetDeviceMemoryOpaqueCaptureAddressKHR) String() string {
+	return "vkGetDeviceMemoryOpaqueCaptureAddressKHR"
+}
+
+const KHR_deferred_host_operations = 1
+
+// DeferredOperationKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeferredOperationKHR.html
+type DeferredOperationKHR NonDispatchableHandle
+
+const KHR_DEFERRED_HOST_OPERATIONS_SPEC_VERSION = 4
+
+var KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME = "VK_KHR_deferred_host_operations"
+
+//  PfnCreateDeferredOperationKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateDeferredOperationKHR.html
+type PfnCreateDeferredOperationKHR uintptr
+
+func (fn PfnCreateDeferredOperationKHR) Call(device Device, pAllocator *AllocationCallbacks, pDeferredOperation *DeferredOperationKHR) Result {
+	ret := C.bridge_vkCreateDeferredOperationKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkDeferredOperationKHR)(unsafe.Pointer(pDeferredOperation)))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnCreateDeferredOperationKHR) String() string { return "vkCreateDeferredOperationKHR" }
+
+//  PfnDestroyDeferredOperationKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyDeferredOperationKHR.html
+type PfnDestroyDeferredOperationKHR uintptr
+
+func (fn PfnDestroyDeferredOperationKHR) Call(device Device, operation DeferredOperationKHR, pAllocator *AllocationCallbacks) {
+	C.bridge_vkDestroyDeferredOperationKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkDeferredOperationKHR)(unsafe.Pointer(uintptr(operation))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnDestroyDeferredOperationKHR) String() string { return "vkDestroyDeferredOperationKHR" }
+
+//  PfnGetDeferredOperationMaxConcurrencyKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDeferredOperationMaxConcurrencyKHR.html
+type PfnGetDeferredOperationMaxConcurrencyKHR uintptr
+
+func (fn PfnGetDeferredOperationMaxConcurrencyKHR) Call(device Device, operation DeferredOperationKHR) uint32 {
+	ret := C.bridge_vkGetDeferredOperationMaxConcurrencyKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkDeferredOperationKHR)(unsafe.Pointer(uintptr(operation))))
+	debugCheckAndBreak()
+	return uint32(ret)
+}
+func (fn PfnGetDeferredOperationMaxConcurrencyKHR) String() string {
+	return "vkGetDeferredOperationMaxConcurrencyKHR"
+}
+
+//  PfnGetDeferredOperationResultKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDeferredOperationResultKHR.html
+type PfnGetDeferredOperationResultKHR uintptr
+
+func (fn PfnGetDeferredOperationResultKHR) Call(device Device, operation DeferredOperationKHR) Result {
+	ret := C.bridge_vkGetDeferredOperationResultKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkDeferredOperationKHR)(unsafe.Pointer(uintptr(operation))))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnGetDeferredOperationResultKHR) String() string { return "vkGetDeferredOperationResultKHR" }
+
+//  PfnDeferredOperationJoinKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDeferredOperationJoinKHR.html
+type PfnDeferredOperationJoinKHR uintptr
+
+func (fn PfnDeferredOperationJoinKHR) Call(device Device, operation DeferredOperationKHR) Result {
+	ret := C.bridge_vkDeferredOperationJoinKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkDeferredOperationKHR)(unsafe.Pointer(uintptr(operation))))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnDeferredOperationJoinKHR) String() string { return "vkDeferredOperationJoinKHR" }
 
 const KHR_pipeline_executable_properties = 1
 const KHR_PIPELINE_EXECUTABLE_PROPERTIES_SPEC_VERSION = 1
@@ -13610,14 +16508,11 @@ var KHR_PIPELINE_EXECUTABLE_PROPERTIES_EXTENSION_NAME = "VK_KHR_pipeline_executa
 type PipelineExecutableStatisticFormatKHR int32
 
 const (
-	PIPELINE_EXECUTABLE_STATISTIC_FORMAT_BOOL32_KHR      PipelineExecutableStatisticFormatKHR = 0
-	PIPELINE_EXECUTABLE_STATISTIC_FORMAT_INT64_KHR       PipelineExecutableStatisticFormatKHR = 1
-	PIPELINE_EXECUTABLE_STATISTIC_FORMAT_UINT64_KHR      PipelineExecutableStatisticFormatKHR = 2
-	PIPELINE_EXECUTABLE_STATISTIC_FORMAT_FLOAT64_KHR     PipelineExecutableStatisticFormatKHR = 3
-	PIPELINE_EXECUTABLE_STATISTIC_FORMAT_BEGIN_RANGE_KHR PipelineExecutableStatisticFormatKHR = PIPELINE_EXECUTABLE_STATISTIC_FORMAT_BOOL32_KHR
-	PIPELINE_EXECUTABLE_STATISTIC_FORMAT_END_RANGE_KHR   PipelineExecutableStatisticFormatKHR = PIPELINE_EXECUTABLE_STATISTIC_FORMAT_FLOAT64_KHR
-	PIPELINE_EXECUTABLE_STATISTIC_FORMAT_RANGE_SIZE_KHR  PipelineExecutableStatisticFormatKHR = (PIPELINE_EXECUTABLE_STATISTIC_FORMAT_FLOAT64_KHR - PIPELINE_EXECUTABLE_STATISTIC_FORMAT_BOOL32_KHR + 1)
-	PIPELINE_EXECUTABLE_STATISTIC_FORMAT_MAX_ENUM_KHR    PipelineExecutableStatisticFormatKHR = 0x7FFFFFFF
+	PIPELINE_EXECUTABLE_STATISTIC_FORMAT_BOOL32_KHR   PipelineExecutableStatisticFormatKHR = 0
+	PIPELINE_EXECUTABLE_STATISTIC_FORMAT_INT64_KHR    PipelineExecutableStatisticFormatKHR = 1
+	PIPELINE_EXECUTABLE_STATISTIC_FORMAT_UINT64_KHR   PipelineExecutableStatisticFormatKHR = 2
+	PIPELINE_EXECUTABLE_STATISTIC_FORMAT_FLOAT64_KHR  PipelineExecutableStatisticFormatKHR = 3
+	PIPELINE_EXECUTABLE_STATISTIC_FORMAT_MAX_ENUM_KHR PipelineExecutableStatisticFormatKHR = 0x7FFFFFFF
 )
 
 func (x PipelineExecutableStatisticFormatKHR) String() string {
@@ -13645,7 +16540,9 @@ type PhysicalDevicePipelineExecutablePropertiesFeaturesKHR struct {
 }
 
 func NewPhysicalDevicePipelineExecutablePropertiesFeaturesKHR() *PhysicalDevicePipelineExecutablePropertiesFeaturesKHR {
-	return (*PhysicalDevicePipelineExecutablePropertiesFeaturesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDevicePipelineExecutablePropertiesFeaturesKHR)(nil))))
+	p := (*PhysicalDevicePipelineExecutablePropertiesFeaturesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDevicePipelineExecutablePropertiesFeaturesKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_PIPELINE_EXECUTABLE_PROPERTIES_FEATURES_KHR
+	return p
 }
 func (p *PhysicalDevicePipelineExecutablePropertiesFeaturesKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -13657,7 +16554,9 @@ type PipelineInfoKHR struct {
 }
 
 func NewPipelineInfoKHR() *PipelineInfoKHR {
-	return (*PipelineInfoKHR)(MemAlloc(unsafe.Sizeof(*(*PipelineInfoKHR)(nil))))
+	p := (*PipelineInfoKHR)(MemAlloc(unsafe.Sizeof(*(*PipelineInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PIPELINE_INFO_KHR
+	return p
 }
 func (p *PipelineInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -13672,7 +16571,9 @@ type PipelineExecutablePropertiesKHR struct {
 }
 
 func NewPipelineExecutablePropertiesKHR() *PipelineExecutablePropertiesKHR {
-	return (*PipelineExecutablePropertiesKHR)(MemAlloc(unsafe.Sizeof(*(*PipelineExecutablePropertiesKHR)(nil))))
+	p := (*PipelineExecutablePropertiesKHR)(MemAlloc(unsafe.Sizeof(*(*PipelineExecutablePropertiesKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PIPELINE_EXECUTABLE_PROPERTIES_KHR
+	return p
 }
 func (p *PipelineExecutablePropertiesKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -13685,7 +16586,9 @@ type PipelineExecutableInfoKHR struct {
 }
 
 func NewPipelineExecutableInfoKHR() *PipelineExecutableInfoKHR {
-	return (*PipelineExecutableInfoKHR)(MemAlloc(unsafe.Sizeof(*(*PipelineExecutableInfoKHR)(nil))))
+	p := (*PipelineExecutableInfoKHR)(MemAlloc(unsafe.Sizeof(*(*PipelineExecutableInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PIPELINE_EXECUTABLE_INFO_KHR
+	return p
 }
 func (p *PipelineExecutableInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -13700,7 +16603,9 @@ type PipelineExecutableStatisticKHR struct {
 }
 
 func NewPipelineExecutableStatisticKHR() *PipelineExecutableStatisticKHR {
-	return (*PipelineExecutableStatisticKHR)(MemAlloc(unsafe.Sizeof(*(*PipelineExecutableStatisticKHR)(nil))))
+	p := (*PipelineExecutableStatisticKHR)(MemAlloc(unsafe.Sizeof(*(*PipelineExecutableStatisticKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PIPELINE_EXECUTABLE_STATISTIC_KHR
+	return p
 }
 func (p *PipelineExecutableStatisticKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -13716,7 +16621,9 @@ type PipelineExecutableInternalRepresentationKHR struct {
 }
 
 func NewPipelineExecutableInternalRepresentationKHR() *PipelineExecutableInternalRepresentationKHR {
-	return (*PipelineExecutableInternalRepresentationKHR)(MemAlloc(unsafe.Sizeof(*(*PipelineExecutableInternalRepresentationKHR)(nil))))
+	p := (*PipelineExecutableInternalRepresentationKHR)(MemAlloc(unsafe.Sizeof(*(*PipelineExecutableInternalRepresentationKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PIPELINE_EXECUTABLE_INTERNAL_REPRESENTATION_KHR
+	return p
 }
 func (p *PipelineExecutableInternalRepresentationKHR) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -13725,6 +16632,7 @@ type PfnGetPipelineExecutablePropertiesKHR uintptr
 
 func (fn PfnGetPipelineExecutablePropertiesKHR) Call(device Device, pPipelineInfo *PipelineInfoKHR, pExecutableCount *uint32, pProperties *PipelineExecutablePropertiesKHR) Result {
 	ret := C.bridge_vkGetPipelineExecutablePropertiesKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkPipelineInfoKHR)(unsafe.Pointer(pPipelineInfo)), (*C.uint32_t)(unsafe.Pointer(pExecutableCount)), (*C.VkPipelineExecutablePropertiesKHR)(unsafe.Pointer(pProperties)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPipelineExecutablePropertiesKHR) String() string {
@@ -13736,6 +16644,7 @@ type PfnGetPipelineExecutableStatisticsKHR uintptr
 
 func (fn PfnGetPipelineExecutableStatisticsKHR) Call(device Device, pExecutableInfo *PipelineExecutableInfoKHR, pStatisticCount *uint32, pStatistics *PipelineExecutableStatisticKHR) Result {
 	ret := C.bridge_vkGetPipelineExecutableStatisticsKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkPipelineExecutableInfoKHR)(unsafe.Pointer(pExecutableInfo)), (*C.uint32_t)(unsafe.Pointer(pStatisticCount)), (*C.VkPipelineExecutableStatisticKHR)(unsafe.Pointer(pStatistics)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPipelineExecutableStatisticsKHR) String() string {
@@ -13747,18 +16656,635 @@ type PfnGetPipelineExecutableInternalRepresentationsKHR uintptr
 
 func (fn PfnGetPipelineExecutableInternalRepresentationsKHR) Call(device Device, pExecutableInfo *PipelineExecutableInfoKHR, pInternalRepresentationCount *uint32, pInternalRepresentations *PipelineExecutableInternalRepresentationKHR) Result {
 	ret := C.bridge_vkGetPipelineExecutableInternalRepresentationsKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkPipelineExecutableInfoKHR)(unsafe.Pointer(pExecutableInfo)), (*C.uint32_t)(unsafe.Pointer(pInternalRepresentationCount)), (*C.VkPipelineExecutableInternalRepresentationKHR)(unsafe.Pointer(pInternalRepresentations)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPipelineExecutableInternalRepresentationsKHR) String() string {
 	return "vkGetPipelineExecutableInternalRepresentationsKHR"
 }
 
+const KHR_pipeline_library = 1
+const KHR_PIPELINE_LIBRARY_SPEC_VERSION = 1
+
+var KHR_PIPELINE_LIBRARY_EXTENSION_NAME = "VK_KHR_pipeline_library"
+
+// PipelineLibraryCreateInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineLibraryCreateInfoKHR.html
+type PipelineLibraryCreateInfoKHR struct {
+	SType        StructureType
+	PNext        unsafe.Pointer
+	LibraryCount uint32
+	PLibraries   *Pipeline
+}
+
+func NewPipelineLibraryCreateInfoKHR() *PipelineLibraryCreateInfoKHR {
+	p := (*PipelineLibraryCreateInfoKHR)(MemAlloc(unsafe.Sizeof(*(*PipelineLibraryCreateInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PIPELINE_LIBRARY_CREATE_INFO_KHR
+	return p
+}
+func (p *PipelineLibraryCreateInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+const KHR_shader_non_semantic_info = 1
+const KHR_SHADER_NON_SEMANTIC_INFO_SPEC_VERSION = 1
+
+var KHR_SHADER_NON_SEMANTIC_INFO_EXTENSION_NAME = "VK_KHR_shader_non_semantic_info"
+
+const KHR_synchronization2 = 1
+const KHR_SYNCHRONIZATION_2_SPEC_VERSION = 1
+
+var KHR_SYNCHRONIZATION_2_EXTENSION_NAME = "VK_KHR_synchronization2"
+
+type PipelineStageFlags2KHR = Flags64
+type AccessFlags2KHR = Flags64
+
+// SubmitFlagsKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubmitFlagsKHR.html
+type SubmitFlagsKHR uint32
+
+const (
+	SUBMIT_PROTECTED_BIT_KHR      SubmitFlagsKHR = 0x00000001
+	SUBMIT_FLAG_BITS_MAX_ENUM_KHR SubmitFlagsKHR = 0x7FFFFFFF
+)
+
+func (x SubmitFlagsKHR) String() string {
+	var s string
+	for i := uint32(0); i < 32; i++ {
+		if int32(x)&(1<<i) != 0 {
+			switch SubmitFlagsKHR(1 << i) {
+			case SUBMIT_PROTECTED_BIT_KHR:
+				s += "SUBMIT_PROTECTED_BIT_KHR|"
+			}
+		}
+	}
+	return strings.TrimSuffix(s, `|`)
+}
+
+// MemoryBarrier2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMemoryBarrier2KHR.html
+type MemoryBarrier2KHR struct {
+	SType         StructureType
+	PNext         unsafe.Pointer
+	SrcStageMask  PipelineStageFlags2KHR
+	SrcAccessMask AccessFlags2KHR
+	DstStageMask  PipelineStageFlags2KHR
+	DstAccessMask AccessFlags2KHR
+}
+
+func NewMemoryBarrier2KHR() *MemoryBarrier2KHR {
+	p := (*MemoryBarrier2KHR)(MemAlloc(unsafe.Sizeof(*(*MemoryBarrier2KHR)(nil))))
+	p.SType = STRUCTURE_TYPE_MEMORY_BARRIER_2_KHR
+	return p
+}
+func (p *MemoryBarrier2KHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// BufferMemoryBarrier2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferMemoryBarrier2KHR.html
+type BufferMemoryBarrier2KHR struct {
+	SType               StructureType
+	PNext               unsafe.Pointer
+	SrcStageMask        PipelineStageFlags2KHR
+	SrcAccessMask       AccessFlags2KHR
+	DstStageMask        PipelineStageFlags2KHR
+	DstAccessMask       AccessFlags2KHR
+	SrcQueueFamilyIndex uint32
+	DstQueueFamilyIndex uint32
+	Buffer              Buffer
+	Offset              DeviceSize
+	Size                DeviceSize
+}
+
+func NewBufferMemoryBarrier2KHR() *BufferMemoryBarrier2KHR {
+	p := (*BufferMemoryBarrier2KHR)(MemAlloc(unsafe.Sizeof(*(*BufferMemoryBarrier2KHR)(nil))))
+	p.SType = STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER_2_KHR
+	return p
+}
+func (p *BufferMemoryBarrier2KHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// ImageMemoryBarrier2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageMemoryBarrier2KHR.html
+type ImageMemoryBarrier2KHR struct {
+	SType               StructureType
+	PNext               unsafe.Pointer
+	SrcStageMask        PipelineStageFlags2KHR
+	SrcAccessMask       AccessFlags2KHR
+	DstStageMask        PipelineStageFlags2KHR
+	DstAccessMask       AccessFlags2KHR
+	OldLayout           ImageLayout
+	NewLayout           ImageLayout
+	SrcQueueFamilyIndex uint32
+	DstQueueFamilyIndex uint32
+	Image               Image
+	SubresourceRange    ImageSubresourceRange
+}
+
+func NewImageMemoryBarrier2KHR() *ImageMemoryBarrier2KHR {
+	p := (*ImageMemoryBarrier2KHR)(MemAlloc(unsafe.Sizeof(*(*ImageMemoryBarrier2KHR)(nil))))
+	p.SType = STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER_2_KHR
+	return p
+}
+func (p *ImageMemoryBarrier2KHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// DependencyInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDependencyInfoKHR.html
+type DependencyInfoKHR struct {
+	SType                    StructureType
+	PNext                    unsafe.Pointer
+	DependencyFlags          DependencyFlags
+	MemoryBarrierCount       uint32
+	PMemoryBarriers          *MemoryBarrier2KHR
+	BufferMemoryBarrierCount uint32
+	PBufferMemoryBarriers    *BufferMemoryBarrier2KHR
+	ImageMemoryBarrierCount  uint32
+	PImageMemoryBarriers     *ImageMemoryBarrier2KHR
+}
+
+func NewDependencyInfoKHR() *DependencyInfoKHR {
+	p := (*DependencyInfoKHR)(MemAlloc(unsafe.Sizeof(*(*DependencyInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_DEPENDENCY_INFO_KHR
+	return p
+}
+func (p *DependencyInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// SemaphoreSubmitInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSemaphoreSubmitInfoKHR.html
+type SemaphoreSubmitInfoKHR struct {
+	SType       StructureType
+	PNext       unsafe.Pointer
+	Semaphore   Semaphore
+	Value       uint64
+	StageMask   PipelineStageFlags2KHR
+	DeviceIndex uint32
+}
+
+func NewSemaphoreSubmitInfoKHR() *SemaphoreSubmitInfoKHR {
+	p := (*SemaphoreSubmitInfoKHR)(MemAlloc(unsafe.Sizeof(*(*SemaphoreSubmitInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_SEMAPHORE_SUBMIT_INFO_KHR
+	return p
+}
+func (p *SemaphoreSubmitInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// CommandBufferSubmitInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandBufferSubmitInfoKHR.html
+type CommandBufferSubmitInfoKHR struct {
+	SType         StructureType
+	PNext         unsafe.Pointer
+	CommandBuffer CommandBuffer
+	DeviceMask    uint32
+}
+
+func NewCommandBufferSubmitInfoKHR() *CommandBufferSubmitInfoKHR {
+	p := (*CommandBufferSubmitInfoKHR)(MemAlloc(unsafe.Sizeof(*(*CommandBufferSubmitInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_COMMAND_BUFFER_SUBMIT_INFO_KHR
+	return p
+}
+func (p *CommandBufferSubmitInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// SubmitInfo2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSubmitInfo2KHR.html
+type SubmitInfo2KHR struct {
+	SType                    StructureType
+	PNext                    unsafe.Pointer
+	Flags                    SubmitFlagsKHR
+	WaitSemaphoreInfoCount   uint32
+	PWaitSemaphoreInfos      *SemaphoreSubmitInfoKHR
+	CommandBufferInfoCount   uint32
+	PCommandBufferInfos      *CommandBufferSubmitInfoKHR
+	SignalSemaphoreInfoCount uint32
+	PSignalSemaphoreInfos    *SemaphoreSubmitInfoKHR
+}
+
+func NewSubmitInfo2KHR() *SubmitInfo2KHR {
+	p := (*SubmitInfo2KHR)(MemAlloc(unsafe.Sizeof(*(*SubmitInfo2KHR)(nil))))
+	p.SType = STRUCTURE_TYPE_SUBMIT_INFO_2_KHR
+	return p
+}
+func (p *SubmitInfo2KHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceSynchronization2FeaturesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceSynchronization2FeaturesKHR.html
+type PhysicalDeviceSynchronization2FeaturesKHR struct {
+	SType            StructureType
+	PNext            unsafe.Pointer
+	Synchronization2 Bool32
+}
+
+func NewPhysicalDeviceSynchronization2FeaturesKHR() *PhysicalDeviceSynchronization2FeaturesKHR {
+	p := (*PhysicalDeviceSynchronization2FeaturesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceSynchronization2FeaturesKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SYNCHRONIZATION_2_FEATURES_KHR
+	return p
+}
+func (p *PhysicalDeviceSynchronization2FeaturesKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// QueueFamilyCheckpointProperties2NV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueueFamilyCheckpointProperties2NV.html
+type QueueFamilyCheckpointProperties2NV struct {
+	SType                        StructureType
+	PNext                        unsafe.Pointer
+	CheckpointExecutionStageMask PipelineStageFlags2KHR
+}
+
+func NewQueueFamilyCheckpointProperties2NV() *QueueFamilyCheckpointProperties2NV {
+	p := (*QueueFamilyCheckpointProperties2NV)(MemAlloc(unsafe.Sizeof(*(*QueueFamilyCheckpointProperties2NV)(nil))))
+	p.SType = STRUCTURE_TYPE_QUEUE_FAMILY_CHECKPOINT_PROPERTIES_2_NV
+	return p
+}
+func (p *QueueFamilyCheckpointProperties2NV) Free() { MemFree(unsafe.Pointer(p)) }
+
+// CheckpointData2NV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCheckpointData2NV.html
+type CheckpointData2NV struct {
+	SType             StructureType
+	PNext             unsafe.Pointer
+	Stage             PipelineStageFlags2KHR
+	PCheckpointMarker unsafe.Pointer
+}
+
+func NewCheckpointData2NV() *CheckpointData2NV {
+	p := (*CheckpointData2NV)(MemAlloc(unsafe.Sizeof(*(*CheckpointData2NV)(nil))))
+	p.SType = STRUCTURE_TYPE_CHECKPOINT_DATA_2_NV
+	return p
+}
+func (p *CheckpointData2NV) Free() { MemFree(unsafe.Pointer(p)) }
+
+//  PfnCmdSetEvent2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetEvent2KHR.html
+type PfnCmdSetEvent2KHR uintptr
+
+func (fn PfnCmdSetEvent2KHR) Call(commandBuffer CommandBuffer, event Event, pDependencyInfo *DependencyInfoKHR) {
+	C.bridge_vkCmdSetEvent2KHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkEvent)(unsafe.Pointer(uintptr(event))), (*C.VkDependencyInfoKHR)(unsafe.Pointer(pDependencyInfo)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdSetEvent2KHR) String() string { return "vkCmdSetEvent2KHR" }
+
+//  PfnCmdResetEvent2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdResetEvent2KHR.html
+type PfnCmdResetEvent2KHR uintptr
+
+func (fn PfnCmdResetEvent2KHR) Call(commandBuffer CommandBuffer, event Event, stageMask PipelineStageFlags2KHR) {
+	C.bridge_vkCmdResetEvent2KHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkEvent)(unsafe.Pointer(uintptr(event))), (C.VkPipelineStageFlags2KHR)(uint32(stageMask)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdResetEvent2KHR) String() string { return "vkCmdResetEvent2KHR" }
+
+//  PfnCmdWaitEvents2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdWaitEvents2KHR.html
+type PfnCmdWaitEvents2KHR uintptr
+
+func (fn PfnCmdWaitEvents2KHR) Call(commandBuffer CommandBuffer, eventCount uint32, pEvents *Event, pDependencyInfos *DependencyInfoKHR) {
+	C.bridge_vkCmdWaitEvents2KHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(eventCount), (*C.VkEvent)(unsafe.Pointer(pEvents)), (*C.VkDependencyInfoKHR)(unsafe.Pointer(pDependencyInfos)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdWaitEvents2KHR) String() string { return "vkCmdWaitEvents2KHR" }
+
+//  PfnCmdPipelineBarrier2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdPipelineBarrier2KHR.html
+type PfnCmdPipelineBarrier2KHR uintptr
+
+func (fn PfnCmdPipelineBarrier2KHR) Call(commandBuffer CommandBuffer, pDependencyInfo *DependencyInfoKHR) {
+	C.bridge_vkCmdPipelineBarrier2KHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkDependencyInfoKHR)(unsafe.Pointer(pDependencyInfo)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdPipelineBarrier2KHR) String() string { return "vkCmdPipelineBarrier2KHR" }
+
+//  PfnCmdWriteTimestamp2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdWriteTimestamp2KHR.html
+type PfnCmdWriteTimestamp2KHR uintptr
+
+func (fn PfnCmdWriteTimestamp2KHR) Call(commandBuffer CommandBuffer, stage PipelineStageFlags2KHR, queryPool QueryPool, query uint32) {
+	C.bridge_vkCmdWriteTimestamp2KHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkPipelineStageFlags2KHR)(uint32(stage)), (C.VkQueryPool)(unsafe.Pointer(uintptr(queryPool))), (C.uint32_t)(query))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdWriteTimestamp2KHR) String() string { return "vkCmdWriteTimestamp2KHR" }
+
+//  PfnQueueSubmit2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkQueueSubmit2KHR.html
+type PfnQueueSubmit2KHR uintptr
+
+func (fn PfnQueueSubmit2KHR) Call(queue Queue, submitCount uint32, pSubmits *SubmitInfo2KHR, fence Fence) Result {
+	ret := C.bridge_vkQueueSubmit2KHR(C.uintptr_t(fn), (C.VkQueue)(unsafe.Pointer(uintptr(queue))), (C.uint32_t)(submitCount), (*C.VkSubmitInfo2KHR)(unsafe.Pointer(pSubmits)), (C.VkFence)(unsafe.Pointer(uintptr(fence))))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnQueueSubmit2KHR) String() string { return "vkQueueSubmit2KHR" }
+
+//  PfnCmdWriteBufferMarker2AMD -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdWriteBufferMarker2AMD.html
+type PfnCmdWriteBufferMarker2AMD uintptr
+
+func (fn PfnCmdWriteBufferMarker2AMD) Call(commandBuffer CommandBuffer, stage PipelineStageFlags2KHR, dstBuffer Buffer, dstOffset DeviceSize, marker uint32) {
+	C.bridge_vkCmdWriteBufferMarker2AMD(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkPipelineStageFlags2KHR)(uint32(stage)), (C.VkBuffer)(unsafe.Pointer(uintptr(dstBuffer))), (C.VkDeviceSize)(dstOffset), (C.uint32_t)(marker))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdWriteBufferMarker2AMD) String() string { return "vkCmdWriteBufferMarker2AMD" }
+
+//  PfnGetQueueCheckpointData2NV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetQueueCheckpointData2NV.html
+type PfnGetQueueCheckpointData2NV uintptr
+
+func (fn PfnGetQueueCheckpointData2NV) Call(queue Queue, pCheckpointDataCount *uint32, pCheckpointData *CheckpointData2NV) {
+	C.bridge_vkGetQueueCheckpointData2NV(C.uintptr_t(fn), (C.VkQueue)(unsafe.Pointer(uintptr(queue))), (*C.uint32_t)(unsafe.Pointer(pCheckpointDataCount)), (*C.VkCheckpointData2NV)(unsafe.Pointer(pCheckpointData)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnGetQueueCheckpointData2NV) String() string { return "vkGetQueueCheckpointData2NV" }
+
+const KHR_zero_initialize_workgroup_memory = 1
+const KHR_ZERO_INITIALIZE_WORKGROUP_MEMORY_SPEC_VERSION = 1
+
+var KHR_ZERO_INITIALIZE_WORKGROUP_MEMORY_EXTENSION_NAME = "VK_KHR_zero_initialize_workgroup_memory"
+
+// PhysicalDeviceZeroInitializeWorkgroupMemoryFeaturesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceZeroInitializeWorkgroupMemoryFeaturesKHR.html
+type PhysicalDeviceZeroInitializeWorkgroupMemoryFeaturesKHR struct {
+	SType                               StructureType
+	PNext                               unsafe.Pointer
+	ShaderZeroInitializeWorkgroupMemory Bool32
+}
+
+func NewPhysicalDeviceZeroInitializeWorkgroupMemoryFeaturesKHR() *PhysicalDeviceZeroInitializeWorkgroupMemoryFeaturesKHR {
+	p := (*PhysicalDeviceZeroInitializeWorkgroupMemoryFeaturesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceZeroInitializeWorkgroupMemoryFeaturesKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_ZERO_INITIALIZE_WORKGROUP_MEMORY_FEATURES_KHR
+	return p
+}
+func (p *PhysicalDeviceZeroInitializeWorkgroupMemoryFeaturesKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+const KHR_workgroup_memory_explicit_layout = 1
+const KHR_WORKGROUP_MEMORY_EXPLICIT_LAYOUT_SPEC_VERSION = 1
+
+var KHR_WORKGROUP_MEMORY_EXPLICIT_LAYOUT_EXTENSION_NAME = "VK_KHR_workgroup_memory_explicit_layout"
+
+// PhysicalDeviceWorkgroupMemoryExplicitLayoutFeaturesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceWorkgroupMemoryExplicitLayoutFeaturesKHR.html
+type PhysicalDeviceWorkgroupMemoryExplicitLayoutFeaturesKHR struct {
+	SType                                          StructureType
+	PNext                                          unsafe.Pointer
+	WorkgroupMemoryExplicitLayout                  Bool32
+	WorkgroupMemoryExplicitLayoutScalarBlockLayout Bool32
+	WorkgroupMemoryExplicitLayout8BitAccess        Bool32
+	WorkgroupMemoryExplicitLayout16BitAccess       Bool32
+}
+
+func NewPhysicalDeviceWorkgroupMemoryExplicitLayoutFeaturesKHR() *PhysicalDeviceWorkgroupMemoryExplicitLayoutFeaturesKHR {
+	p := (*PhysicalDeviceWorkgroupMemoryExplicitLayoutFeaturesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceWorkgroupMemoryExplicitLayoutFeaturesKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_WORKGROUP_MEMORY_EXPLICIT_LAYOUT_FEATURES_KHR
+	return p
+}
+func (p *PhysicalDeviceWorkgroupMemoryExplicitLayoutFeaturesKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+const KHR_copy_commands2 = 1
+const KHR_COPY_COMMANDS_2_SPEC_VERSION = 1
+
+var KHR_COPY_COMMANDS_2_EXTENSION_NAME = "VK_KHR_copy_commands2"
+
+// BufferCopy2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferCopy2KHR.html
+type BufferCopy2KHR struct {
+	SType     StructureType
+	PNext     unsafe.Pointer
+	SrcOffset DeviceSize
+	DstOffset DeviceSize
+	Size      DeviceSize
+}
+
+func NewBufferCopy2KHR() *BufferCopy2KHR {
+	p := (*BufferCopy2KHR)(MemAlloc(unsafe.Sizeof(*(*BufferCopy2KHR)(nil))))
+	p.SType = STRUCTURE_TYPE_BUFFER_COPY_2_KHR
+	return p
+}
+func (p *BufferCopy2KHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// CopyBufferInfo2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCopyBufferInfo2KHR.html
+type CopyBufferInfo2KHR struct {
+	SType       StructureType
+	PNext       unsafe.Pointer
+	SrcBuffer   Buffer
+	DstBuffer   Buffer
+	RegionCount uint32
+	PRegions    *BufferCopy2KHR
+}
+
+func NewCopyBufferInfo2KHR() *CopyBufferInfo2KHR {
+	p := (*CopyBufferInfo2KHR)(MemAlloc(unsafe.Sizeof(*(*CopyBufferInfo2KHR)(nil))))
+	p.SType = STRUCTURE_TYPE_COPY_BUFFER_INFO_2_KHR
+	return p
+}
+func (p *CopyBufferInfo2KHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// ImageCopy2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageCopy2KHR.html
+type ImageCopy2KHR struct {
+	SType          StructureType
+	PNext          unsafe.Pointer
+	SrcSubresource ImageSubresourceLayers
+	SrcOffset      Offset3D
+	DstSubresource ImageSubresourceLayers
+	DstOffset      Offset3D
+	Extent         Extent3D
+}
+
+func NewImageCopy2KHR() *ImageCopy2KHR {
+	p := (*ImageCopy2KHR)(MemAlloc(unsafe.Sizeof(*(*ImageCopy2KHR)(nil))))
+	p.SType = STRUCTURE_TYPE_IMAGE_COPY_2_KHR
+	return p
+}
+func (p *ImageCopy2KHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// CopyImageInfo2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCopyImageInfo2KHR.html
+type CopyImageInfo2KHR struct {
+	SType          StructureType
+	PNext          unsafe.Pointer
+	SrcImage       Image
+	SrcImageLayout ImageLayout
+	DstImage       Image
+	DstImageLayout ImageLayout
+	RegionCount    uint32
+	PRegions       *ImageCopy2KHR
+}
+
+func NewCopyImageInfo2KHR() *CopyImageInfo2KHR {
+	p := (*CopyImageInfo2KHR)(MemAlloc(unsafe.Sizeof(*(*CopyImageInfo2KHR)(nil))))
+	p.SType = STRUCTURE_TYPE_COPY_IMAGE_INFO_2_KHR
+	return p
+}
+func (p *CopyImageInfo2KHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// BufferImageCopy2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferImageCopy2KHR.html
+type BufferImageCopy2KHR struct {
+	SType             StructureType
+	PNext             unsafe.Pointer
+	BufferOffset      DeviceSize
+	BufferRowLength   uint32
+	BufferImageHeight uint32
+	ImageSubresource  ImageSubresourceLayers
+	ImageOffset       Offset3D
+	ImageExtent       Extent3D
+}
+
+func NewBufferImageCopy2KHR() *BufferImageCopy2KHR {
+	p := (*BufferImageCopy2KHR)(MemAlloc(unsafe.Sizeof(*(*BufferImageCopy2KHR)(nil))))
+	p.SType = STRUCTURE_TYPE_BUFFER_IMAGE_COPY_2_KHR
+	return p
+}
+func (p *BufferImageCopy2KHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// CopyBufferToImageInfo2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCopyBufferToImageInfo2KHR.html
+type CopyBufferToImageInfo2KHR struct {
+	SType          StructureType
+	PNext          unsafe.Pointer
+	SrcBuffer      Buffer
+	DstImage       Image
+	DstImageLayout ImageLayout
+	RegionCount    uint32
+	PRegions       *BufferImageCopy2KHR
+}
+
+func NewCopyBufferToImageInfo2KHR() *CopyBufferToImageInfo2KHR {
+	p := (*CopyBufferToImageInfo2KHR)(MemAlloc(unsafe.Sizeof(*(*CopyBufferToImageInfo2KHR)(nil))))
+	p.SType = STRUCTURE_TYPE_COPY_BUFFER_TO_IMAGE_INFO_2_KHR
+	return p
+}
+func (p *CopyBufferToImageInfo2KHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// CopyImageToBufferInfo2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCopyImageToBufferInfo2KHR.html
+type CopyImageToBufferInfo2KHR struct {
+	SType          StructureType
+	PNext          unsafe.Pointer
+	SrcImage       Image
+	SrcImageLayout ImageLayout
+	DstBuffer      Buffer
+	RegionCount    uint32
+	PRegions       *BufferImageCopy2KHR
+}
+
+func NewCopyImageToBufferInfo2KHR() *CopyImageToBufferInfo2KHR {
+	p := (*CopyImageToBufferInfo2KHR)(MemAlloc(unsafe.Sizeof(*(*CopyImageToBufferInfo2KHR)(nil))))
+	p.SType = STRUCTURE_TYPE_COPY_IMAGE_TO_BUFFER_INFO_2_KHR
+	return p
+}
+func (p *CopyImageToBufferInfo2KHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// ImageBlit2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageBlit2KHR.html
+type ImageBlit2KHR struct {
+	SType          StructureType
+	PNext          unsafe.Pointer
+	SrcSubresource ImageSubresourceLayers
+	SrcOffsets     [2]Offset3D
+	DstSubresource ImageSubresourceLayers
+	DstOffsets     [2]Offset3D
+}
+
+func NewImageBlit2KHR() *ImageBlit2KHR {
+	p := (*ImageBlit2KHR)(MemAlloc(unsafe.Sizeof(*(*ImageBlit2KHR)(nil))))
+	p.SType = STRUCTURE_TYPE_IMAGE_BLIT_2_KHR
+	return p
+}
+func (p *ImageBlit2KHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// BlitImageInfo2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBlitImageInfo2KHR.html
+type BlitImageInfo2KHR struct {
+	SType          StructureType
+	PNext          unsafe.Pointer
+	SrcImage       Image
+	SrcImageLayout ImageLayout
+	DstImage       Image
+	DstImageLayout ImageLayout
+	RegionCount    uint32
+	PRegions       *ImageBlit2KHR
+	Filter         Filter
+}
+
+func NewBlitImageInfo2KHR() *BlitImageInfo2KHR {
+	p := (*BlitImageInfo2KHR)(MemAlloc(unsafe.Sizeof(*(*BlitImageInfo2KHR)(nil))))
+	p.SType = STRUCTURE_TYPE_BLIT_IMAGE_INFO_2_KHR
+	return p
+}
+func (p *BlitImageInfo2KHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// ImageResolve2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageResolve2KHR.html
+type ImageResolve2KHR struct {
+	SType          StructureType
+	PNext          unsafe.Pointer
+	SrcSubresource ImageSubresourceLayers
+	SrcOffset      Offset3D
+	DstSubresource ImageSubresourceLayers
+	DstOffset      Offset3D
+	Extent         Extent3D
+}
+
+func NewImageResolve2KHR() *ImageResolve2KHR {
+	p := (*ImageResolve2KHR)(MemAlloc(unsafe.Sizeof(*(*ImageResolve2KHR)(nil))))
+	p.SType = STRUCTURE_TYPE_IMAGE_RESOLVE_2_KHR
+	return p
+}
+func (p *ImageResolve2KHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// ResolveImageInfo2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkResolveImageInfo2KHR.html
+type ResolveImageInfo2KHR struct {
+	SType          StructureType
+	PNext          unsafe.Pointer
+	SrcImage       Image
+	SrcImageLayout ImageLayout
+	DstImage       Image
+	DstImageLayout ImageLayout
+	RegionCount    uint32
+	PRegions       *ImageResolve2KHR
+}
+
+func NewResolveImageInfo2KHR() *ResolveImageInfo2KHR {
+	p := (*ResolveImageInfo2KHR)(MemAlloc(unsafe.Sizeof(*(*ResolveImageInfo2KHR)(nil))))
+	p.SType = STRUCTURE_TYPE_RESOLVE_IMAGE_INFO_2_KHR
+	return p
+}
+func (p *ResolveImageInfo2KHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+//  PfnCmdCopyBuffer2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdCopyBuffer2KHR.html
+type PfnCmdCopyBuffer2KHR uintptr
+
+func (fn PfnCmdCopyBuffer2KHR) Call(commandBuffer CommandBuffer, pCopyBufferInfo *CopyBufferInfo2KHR) {
+	C.bridge_vkCmdCopyBuffer2KHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkCopyBufferInfo2KHR)(unsafe.Pointer(pCopyBufferInfo)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdCopyBuffer2KHR) String() string { return "vkCmdCopyBuffer2KHR" }
+
+//  PfnCmdCopyImage2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdCopyImage2KHR.html
+type PfnCmdCopyImage2KHR uintptr
+
+func (fn PfnCmdCopyImage2KHR) Call(commandBuffer CommandBuffer, pCopyImageInfo *CopyImageInfo2KHR) {
+	C.bridge_vkCmdCopyImage2KHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkCopyImageInfo2KHR)(unsafe.Pointer(pCopyImageInfo)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdCopyImage2KHR) String() string { return "vkCmdCopyImage2KHR" }
+
+//  PfnCmdCopyBufferToImage2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdCopyBufferToImage2KHR.html
+type PfnCmdCopyBufferToImage2KHR uintptr
+
+func (fn PfnCmdCopyBufferToImage2KHR) Call(commandBuffer CommandBuffer, pCopyBufferToImageInfo *CopyBufferToImageInfo2KHR) {
+	C.bridge_vkCmdCopyBufferToImage2KHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkCopyBufferToImageInfo2KHR)(unsafe.Pointer(pCopyBufferToImageInfo)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdCopyBufferToImage2KHR) String() string { return "vkCmdCopyBufferToImage2KHR" }
+
+//  PfnCmdCopyImageToBuffer2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdCopyImageToBuffer2KHR.html
+type PfnCmdCopyImageToBuffer2KHR uintptr
+
+func (fn PfnCmdCopyImageToBuffer2KHR) Call(commandBuffer CommandBuffer, pCopyImageToBufferInfo *CopyImageToBufferInfo2KHR) {
+	C.bridge_vkCmdCopyImageToBuffer2KHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkCopyImageToBufferInfo2KHR)(unsafe.Pointer(pCopyImageToBufferInfo)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdCopyImageToBuffer2KHR) String() string { return "vkCmdCopyImageToBuffer2KHR" }
+
+//  PfnCmdBlitImage2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBlitImage2KHR.html
+type PfnCmdBlitImage2KHR uintptr
+
+func (fn PfnCmdBlitImage2KHR) Call(commandBuffer CommandBuffer, pBlitImageInfo *BlitImageInfo2KHR) {
+	C.bridge_vkCmdBlitImage2KHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkBlitImageInfo2KHR)(unsafe.Pointer(pBlitImageInfo)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdBlitImage2KHR) String() string { return "vkCmdBlitImage2KHR" }
+
+//  PfnCmdResolveImage2KHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdResolveImage2KHR.html
+type PfnCmdResolveImage2KHR uintptr
+
+func (fn PfnCmdResolveImage2KHR) Call(commandBuffer CommandBuffer, pResolveImageInfo *ResolveImageInfo2KHR) {
+	C.bridge_vkCmdResolveImage2KHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkResolveImageInfo2KHR)(unsafe.Pointer(pResolveImageInfo)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdResolveImage2KHR) String() string { return "vkCmdResolveImage2KHR" }
+
 const EXT_debug_report = 1
 
 // DebugReportCallbackEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugReportCallbackEXT.html
 type DebugReportCallbackEXT NonDispatchableHandle
 
-const EXT_DEBUG_REPORT_SPEC_VERSION = 9
+const EXT_DEBUG_REPORT_SPEC_VERSION = 10
 
 var EXT_DEBUG_REPORT_EXTENSION_NAME = "VK_EXT_debug_report"
 
@@ -13797,19 +17323,15 @@ const (
 	DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT_EXT      DebugReportObjectTypeEXT = 28
 	DEBUG_REPORT_OBJECT_TYPE_DISPLAY_KHR_EXT                    DebugReportObjectTypeEXT = 29
 	DEBUG_REPORT_OBJECT_TYPE_DISPLAY_MODE_KHR_EXT               DebugReportObjectTypeEXT = 30
-	DEBUG_REPORT_OBJECT_TYPE_OBJECT_TABLE_NVX_EXT               DebugReportObjectTypeEXT = 31
-	DEBUG_REPORT_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NVX_EXT   DebugReportObjectTypeEXT = 32
 	DEBUG_REPORT_OBJECT_TYPE_VALIDATION_CACHE_EXT_EXT           DebugReportObjectTypeEXT = 33
 	DEBUG_REPORT_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION_EXT       DebugReportObjectTypeEXT = 1000156000
 	DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_EXT     DebugReportObjectTypeEXT = 1000085000
+	DEBUG_REPORT_OBJECT_TYPE_ACCELERATION_STRUCTURE_KHR_EXT     DebugReportObjectTypeEXT = 1000150000
 	DEBUG_REPORT_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV_EXT      DebugReportObjectTypeEXT = 1000165000
 	DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_EXT                   DebugReportObjectTypeEXT = DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT_EXT
 	DEBUG_REPORT_OBJECT_TYPE_VALIDATION_CACHE_EXT               DebugReportObjectTypeEXT = DEBUG_REPORT_OBJECT_TYPE_VALIDATION_CACHE_EXT_EXT
 	DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_KHR_EXT DebugReportObjectTypeEXT = DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_EXT
 	DEBUG_REPORT_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION_KHR_EXT   DebugReportObjectTypeEXT = DEBUG_REPORT_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION_EXT
-	DEBUG_REPORT_OBJECT_TYPE_BEGIN_RANGE_EXT                    DebugReportObjectTypeEXT = DEBUG_REPORT_OBJECT_TYPE_UNKNOWN_EXT
-	DEBUG_REPORT_OBJECT_TYPE_END_RANGE_EXT                      DebugReportObjectTypeEXT = DEBUG_REPORT_OBJECT_TYPE_VALIDATION_CACHE_EXT_EXT
-	DEBUG_REPORT_OBJECT_TYPE_RANGE_SIZE_EXT                     DebugReportObjectTypeEXT = (DEBUG_REPORT_OBJECT_TYPE_VALIDATION_CACHE_EXT_EXT - DEBUG_REPORT_OBJECT_TYPE_UNKNOWN_EXT + 1)
 	DEBUG_REPORT_OBJECT_TYPE_MAX_ENUM_EXT                       DebugReportObjectTypeEXT = 0x7FFFFFFF
 )
 
@@ -13877,16 +17399,14 @@ func (x DebugReportObjectTypeEXT) String() string {
 		return "DEBUG_REPORT_OBJECT_TYPE_DISPLAY_KHR_EXT"
 	case DEBUG_REPORT_OBJECT_TYPE_DISPLAY_MODE_KHR_EXT:
 		return "DEBUG_REPORT_OBJECT_TYPE_DISPLAY_MODE_KHR_EXT"
-	case DEBUG_REPORT_OBJECT_TYPE_OBJECT_TABLE_NVX_EXT:
-		return "DEBUG_REPORT_OBJECT_TYPE_OBJECT_TABLE_NVX_EXT"
-	case DEBUG_REPORT_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NVX_EXT:
-		return "DEBUG_REPORT_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NVX_EXT"
 	case DEBUG_REPORT_OBJECT_TYPE_VALIDATION_CACHE_EXT_EXT:
 		return "DEBUG_REPORT_OBJECT_TYPE_VALIDATION_CACHE_EXT_EXT"
 	case DEBUG_REPORT_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION_EXT:
 		return "DEBUG_REPORT_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION_EXT"
 	case DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_EXT:
 		return "DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_EXT"
+	case DEBUG_REPORT_OBJECT_TYPE_ACCELERATION_STRUCTURE_KHR_EXT:
+		return "DEBUG_REPORT_OBJECT_TYPE_ACCELERATION_STRUCTURE_KHR_EXT"
 	case DEBUG_REPORT_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV_EXT:
 		return "DEBUG_REPORT_OBJECT_TYPE_ACCELERATION_STRUCTURE_NV_EXT"
 	case DEBUG_REPORT_OBJECT_TYPE_MAX_ENUM_EXT:
@@ -13934,6 +17454,7 @@ type PfnDebugReportCallbackEXT uintptr
 
 func (fn PfnDebugReportCallbackEXT) Call(flags DebugReportFlagsEXT, objectType DebugReportObjectTypeEXT, object uint64, location uintptr, messageCode int32, pLayerPrefix, pMessage *int8, pUserData unsafe.Pointer) Bool32 {
 	ret := C.bridge_vkDebugReportCallbackEXT(C.uintptr_t(fn), (C.VkDebugReportFlagsEXT)(uint32(flags)), (C.VkDebugReportObjectTypeEXT)(objectType), (C.uint64_t)(object), (C.size_t)(location), (C.int32_t)(messageCode), (*C.char)(unsafe.Pointer(pLayerPrefix)), (*C.char)(unsafe.Pointer(pMessage)), (unsafe.Pointer)(pUserData))
+	debugCheckAndBreak()
 	return Bool32(ret)
 }
 func (fn PfnDebugReportCallbackEXT) String() string { return "vkDebugReportCallbackEXT" }
@@ -13959,6 +17480,7 @@ type PfnCreateDebugReportCallbackEXT uintptr
 
 func (fn PfnCreateDebugReportCallbackEXT) Call(instance Instance, pCreateInfo *DebugReportCallbackCreateInfoEXT, pAllocator *AllocationCallbacks, pCallback *DebugReportCallbackEXT) Result {
 	ret := C.bridge_vkCreateDebugReportCallbackEXT(C.uintptr_t(fn), (C.VkInstance)(unsafe.Pointer(uintptr(instance))), (*C.VkDebugReportCallbackCreateInfoEXT)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkDebugReportCallbackEXT)(unsafe.Pointer(pCallback)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateDebugReportCallbackEXT) String() string { return "vkCreateDebugReportCallbackEXT" }
@@ -13968,6 +17490,7 @@ type PfnDestroyDebugReportCallbackEXT uintptr
 
 func (fn PfnDestroyDebugReportCallbackEXT) Call(instance Instance, callback DebugReportCallbackEXT, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyDebugReportCallbackEXT(C.uintptr_t(fn), (C.VkInstance)(unsafe.Pointer(uintptr(instance))), (C.VkDebugReportCallbackEXT)(unsafe.Pointer(uintptr(callback))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyDebugReportCallbackEXT) String() string { return "vkDestroyDebugReportCallbackEXT" }
@@ -13977,6 +17500,7 @@ type PfnDebugReportMessageEXT uintptr
 
 func (fn PfnDebugReportMessageEXT) Call(instance Instance, flags DebugReportFlagsEXT, objectType DebugReportObjectTypeEXT, object uint64, location uintptr, messageCode int32, pLayerPrefix, pMessage *int8) {
 	C.bridge_vkDebugReportMessageEXT(C.uintptr_t(fn), (C.VkInstance)(unsafe.Pointer(uintptr(instance))), (C.VkDebugReportFlagsEXT)(uint32(flags)), (C.VkDebugReportObjectTypeEXT)(objectType), (C.uint64_t)(object), (C.size_t)(location), (C.int32_t)(messageCode), (*C.char)(unsafe.Pointer(pLayerPrefix)), (*C.char)(unsafe.Pointer(pMessage)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDebugReportMessageEXT) String() string { return "vkDebugReportMessageEXT" }
@@ -14005,12 +17529,9 @@ var AMD_RASTERIZATION_ORDER_EXTENSION_NAME = "VK_AMD_rasterization_order"
 type RasterizationOrderAMD int32
 
 const (
-	RASTERIZATION_ORDER_STRICT_AMD      RasterizationOrderAMD = 0
-	RASTERIZATION_ORDER_RELAXED_AMD     RasterizationOrderAMD = 1
-	RASTERIZATION_ORDER_BEGIN_RANGE_AMD RasterizationOrderAMD = RASTERIZATION_ORDER_STRICT_AMD
-	RASTERIZATION_ORDER_END_RANGE_AMD   RasterizationOrderAMD = RASTERIZATION_ORDER_RELAXED_AMD
-	RASTERIZATION_ORDER_RANGE_SIZE_AMD  RasterizationOrderAMD = (RASTERIZATION_ORDER_RELAXED_AMD - RASTERIZATION_ORDER_STRICT_AMD + 1)
-	RASTERIZATION_ORDER_MAX_ENUM_AMD    RasterizationOrderAMD = 0x7FFFFFFF
+	RASTERIZATION_ORDER_STRICT_AMD   RasterizationOrderAMD = 0
+	RASTERIZATION_ORDER_RELAXED_AMD  RasterizationOrderAMD = 1
+	RASTERIZATION_ORDER_MAX_ENUM_AMD RasterizationOrderAMD = 0x7FFFFFFF
 )
 
 func (x RasterizationOrderAMD) String() string {
@@ -14109,6 +17630,7 @@ type PfnDebugMarkerSetObjectTagEXT uintptr
 
 func (fn PfnDebugMarkerSetObjectTagEXT) Call(device Device, pTagInfo *DebugMarkerObjectTagInfoEXT) Result {
 	ret := C.bridge_vkDebugMarkerSetObjectTagEXT(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkDebugMarkerObjectTagInfoEXT)(unsafe.Pointer(pTagInfo)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnDebugMarkerSetObjectTagEXT) String() string { return "vkDebugMarkerSetObjectTagEXT" }
@@ -14118,6 +17640,7 @@ type PfnDebugMarkerSetObjectNameEXT uintptr
 
 func (fn PfnDebugMarkerSetObjectNameEXT) Call(device Device, pNameInfo *DebugMarkerObjectNameInfoEXT) Result {
 	ret := C.bridge_vkDebugMarkerSetObjectNameEXT(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkDebugMarkerObjectNameInfoEXT)(unsafe.Pointer(pNameInfo)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnDebugMarkerSetObjectNameEXT) String() string { return "vkDebugMarkerSetObjectNameEXT" }
@@ -14127,6 +17650,7 @@ type PfnCmdDebugMarkerBeginEXT uintptr
 
 func (fn PfnCmdDebugMarkerBeginEXT) Call(commandBuffer CommandBuffer, pMarkerInfo *DebugMarkerMarkerInfoEXT) {
 	C.bridge_vkCmdDebugMarkerBeginEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkDebugMarkerMarkerInfoEXT)(unsafe.Pointer(pMarkerInfo)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdDebugMarkerBeginEXT) String() string { return "vkCmdDebugMarkerBeginEXT" }
@@ -14136,6 +17660,7 @@ type PfnCmdDebugMarkerEndEXT uintptr
 
 func (fn PfnCmdDebugMarkerEndEXT) Call(commandBuffer CommandBuffer) {
 	C.bridge_vkCmdDebugMarkerEndEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdDebugMarkerEndEXT) String() string { return "vkCmdDebugMarkerEndEXT" }
@@ -14145,6 +17670,7 @@ type PfnCmdDebugMarkerInsertEXT uintptr
 
 func (fn PfnCmdDebugMarkerInsertEXT) Call(commandBuffer CommandBuffer, pMarkerInfo *DebugMarkerMarkerInfoEXT) {
 	C.bridge_vkCmdDebugMarkerInsertEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkDebugMarkerMarkerInfoEXT)(unsafe.Pointer(pMarkerInfo)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdDebugMarkerInsertEXT) String() string { return "vkCmdDebugMarkerInsertEXT" }
@@ -14266,6 +17792,7 @@ type PfnCmdBindTransformFeedbackBuffersEXT uintptr
 
 func (fn PfnCmdBindTransformFeedbackBuffersEXT) Call(commandBuffer CommandBuffer, firstBinding, bindingCount uint32, pBuffers *Buffer, pOffsets, pSizes *DeviceSize) {
 	C.bridge_vkCmdBindTransformFeedbackBuffersEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(firstBinding), (C.uint32_t)(bindingCount), (*C.VkBuffer)(unsafe.Pointer(pBuffers)), (*C.VkDeviceSize)(unsafe.Pointer(pOffsets)), (*C.VkDeviceSize)(unsafe.Pointer(pSizes)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdBindTransformFeedbackBuffersEXT) String() string {
@@ -14277,6 +17804,7 @@ type PfnCmdBeginTransformFeedbackEXT uintptr
 
 func (fn PfnCmdBeginTransformFeedbackEXT) Call(commandBuffer CommandBuffer, firstCounterBuffer, counterBufferCount uint32, pCounterBuffers *Buffer, pCounterBufferOffsets *DeviceSize) {
 	C.bridge_vkCmdBeginTransformFeedbackEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(firstCounterBuffer), (C.uint32_t)(counterBufferCount), (*C.VkBuffer)(unsafe.Pointer(pCounterBuffers)), (*C.VkDeviceSize)(unsafe.Pointer(pCounterBufferOffsets)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdBeginTransformFeedbackEXT) String() string { return "vkCmdBeginTransformFeedbackEXT" }
@@ -14286,6 +17814,7 @@ type PfnCmdEndTransformFeedbackEXT uintptr
 
 func (fn PfnCmdEndTransformFeedbackEXT) Call(commandBuffer CommandBuffer, firstCounterBuffer, counterBufferCount uint32, pCounterBuffers *Buffer, pCounterBufferOffsets *DeviceSize) {
 	C.bridge_vkCmdEndTransformFeedbackEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(firstCounterBuffer), (C.uint32_t)(counterBufferCount), (*C.VkBuffer)(unsafe.Pointer(pCounterBuffers)), (*C.VkDeviceSize)(unsafe.Pointer(pCounterBufferOffsets)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdEndTransformFeedbackEXT) String() string { return "vkCmdEndTransformFeedbackEXT" }
@@ -14295,6 +17824,7 @@ type PfnCmdBeginQueryIndexedEXT uintptr
 
 func (fn PfnCmdBeginQueryIndexedEXT) Call(commandBuffer CommandBuffer, queryPool QueryPool, query uint32, flags QueryControlFlags, index uint32) {
 	C.bridge_vkCmdBeginQueryIndexedEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkQueryPool)(unsafe.Pointer(uintptr(queryPool))), (C.uint32_t)(query), (C.VkQueryControlFlags)(uint32(flags)), (C.uint32_t)(index))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdBeginQueryIndexedEXT) String() string { return "vkCmdBeginQueryIndexedEXT" }
@@ -14304,6 +17834,7 @@ type PfnCmdEndQueryIndexedEXT uintptr
 
 func (fn PfnCmdEndQueryIndexedEXT) Call(commandBuffer CommandBuffer, queryPool QueryPool, query, index uint32) {
 	C.bridge_vkCmdEndQueryIndexedEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkQueryPool)(unsafe.Pointer(uintptr(queryPool))), (C.uint32_t)(query), (C.uint32_t)(index))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdEndQueryIndexedEXT) String() string { return "vkCmdEndQueryIndexedEXT" }
@@ -14313,12 +17844,13 @@ type PfnCmdDrawIndirectByteCountEXT uintptr
 
 func (fn PfnCmdDrawIndirectByteCountEXT) Call(commandBuffer CommandBuffer, instanceCount, firstInstance uint32, counterBuffer Buffer, counterBufferOffset DeviceSize, counterOffset, vertexStride uint32) {
 	C.bridge_vkCmdDrawIndirectByteCountEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(instanceCount), (C.uint32_t)(firstInstance), (C.VkBuffer)(unsafe.Pointer(uintptr(counterBuffer))), (C.VkDeviceSize)(counterBufferOffset), (C.uint32_t)(counterOffset), (C.uint32_t)(vertexStride))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdDrawIndirectByteCountEXT) String() string { return "vkCmdDrawIndirectByteCountEXT" }
 
 const NVX_image_view_handle = 1
-const NVX_IMAGE_VIEW_HANDLE_SPEC_VERSION = 1
+const NVX_IMAGE_VIEW_HANDLE_SPEC_VERSION = 2
 
 var NVX_IMAGE_VIEW_HANDLE_EXTENSION_NAME = "VK_NVX_image_view_handle"
 
@@ -14338,14 +17870,40 @@ func NewImageViewHandleInfoNVX() *ImageViewHandleInfoNVX {
 }
 func (p *ImageViewHandleInfoNVX) Free() { MemFree(unsafe.Pointer(p)) }
 
+// ImageViewAddressPropertiesNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageViewAddressPropertiesNVX.html
+type ImageViewAddressPropertiesNVX struct {
+	SType         StructureType
+	PNext         unsafe.Pointer
+	DeviceAddress DeviceAddress
+	Size          DeviceSize
+}
+
+func NewImageViewAddressPropertiesNVX() *ImageViewAddressPropertiesNVX {
+	p := (*ImageViewAddressPropertiesNVX)(MemAlloc(unsafe.Sizeof(*(*ImageViewAddressPropertiesNVX)(nil))))
+	p.SType = STRUCTURE_TYPE_IMAGE_VIEW_ADDRESS_PROPERTIES_NVX
+	return p
+}
+func (p *ImageViewAddressPropertiesNVX) Free() { MemFree(unsafe.Pointer(p)) }
+
 //  PfnGetImageViewHandleNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetImageViewHandleNVX.html
 type PfnGetImageViewHandleNVX uintptr
 
 func (fn PfnGetImageViewHandleNVX) Call(device Device, pInfo *ImageViewHandleInfoNVX) uint32 {
 	ret := C.bridge_vkGetImageViewHandleNVX(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkImageViewHandleInfoNVX)(unsafe.Pointer(pInfo)))
+	debugCheckAndBreak()
 	return uint32(ret)
 }
 func (fn PfnGetImageViewHandleNVX) String() string { return "vkGetImageViewHandleNVX" }
+
+//  PfnGetImageViewAddressNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetImageViewAddressNVX.html
+type PfnGetImageViewAddressNVX uintptr
+
+func (fn PfnGetImageViewAddressNVX) Call(device Device, imageView ImageView, pProperties *ImageViewAddressPropertiesNVX) Result {
+	ret := C.bridge_vkGetImageViewAddressNVX(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkImageView)(unsafe.Pointer(uintptr(imageView))), (*C.VkImageViewAddressPropertiesNVX)(unsafe.Pointer(pProperties)))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnGetImageViewAddressNVX) String() string { return "vkGetImageViewAddressNVX" }
 
 const AMD_draw_indirect_count = 1
 const AMD_DRAW_INDIRECT_COUNT_SPEC_VERSION = 2
@@ -14357,6 +17915,7 @@ type PfnCmdDrawIndirectCountAMD uintptr
 
 func (fn PfnCmdDrawIndirectCountAMD) Call(commandBuffer CommandBuffer, buffer Buffer, offset DeviceSize, countBuffer Buffer, countBufferOffset DeviceSize, maxDrawCount, stride uint32) {
 	C.bridge_vkCmdDrawIndirectCountAMD(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBuffer)(unsafe.Pointer(uintptr(buffer))), (C.VkDeviceSize)(offset), (C.VkBuffer)(unsafe.Pointer(uintptr(countBuffer))), (C.VkDeviceSize)(countBufferOffset), (C.uint32_t)(maxDrawCount), (C.uint32_t)(stride))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdDrawIndirectCountAMD) String() string { return "vkCmdDrawIndirectCountAMD" }
@@ -14366,6 +17925,7 @@ type PfnCmdDrawIndexedIndirectCountAMD uintptr
 
 func (fn PfnCmdDrawIndexedIndirectCountAMD) Call(commandBuffer CommandBuffer, buffer Buffer, offset DeviceSize, countBuffer Buffer, countBufferOffset DeviceSize, maxDrawCount, stride uint32) {
 	C.bridge_vkCmdDrawIndexedIndirectCountAMD(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBuffer)(unsafe.Pointer(uintptr(buffer))), (C.VkDeviceSize)(offset), (C.VkBuffer)(unsafe.Pointer(uintptr(countBuffer))), (C.VkDeviceSize)(countBufferOffset), (C.uint32_t)(maxDrawCount), (C.uint32_t)(stride))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdDrawIndexedIndirectCountAMD) String() string {
@@ -14418,9 +17978,6 @@ const (
 	SHADER_INFO_TYPE_STATISTICS_AMD  ShaderInfoTypeAMD = 0
 	SHADER_INFO_TYPE_BINARY_AMD      ShaderInfoTypeAMD = 1
 	SHADER_INFO_TYPE_DISASSEMBLY_AMD ShaderInfoTypeAMD = 2
-	SHADER_INFO_TYPE_BEGIN_RANGE_AMD ShaderInfoTypeAMD = SHADER_INFO_TYPE_STATISTICS_AMD
-	SHADER_INFO_TYPE_END_RANGE_AMD   ShaderInfoTypeAMD = SHADER_INFO_TYPE_DISASSEMBLY_AMD
-	SHADER_INFO_TYPE_RANGE_SIZE_AMD  ShaderInfoTypeAMD = (SHADER_INFO_TYPE_DISASSEMBLY_AMD - SHADER_INFO_TYPE_STATISTICS_AMD + 1)
 	SHADER_INFO_TYPE_MAX_ENUM_AMD    ShaderInfoTypeAMD = 0x7FFFFFFF
 )
 
@@ -14474,6 +18031,7 @@ type PfnGetShaderInfoAMD uintptr
 
 func (fn PfnGetShaderInfoAMD) Call(device Device, pipeline Pipeline, shaderStage ShaderStageFlags, infoType ShaderInfoTypeAMD, pInfoSize *uintptr, pInfo unsafe.Pointer) Result {
 	ret := C.bridge_vkGetShaderInfoAMD(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkPipeline)(unsafe.Pointer(uintptr(pipeline))), (C.VkShaderStageFlagBits)(shaderStage), (C.VkShaderInfoTypeAMD)(infoType), (*C.size_t)(unsafe.Pointer(pInfoSize)), (unsafe.Pointer)(pInfo))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetShaderInfoAMD) String() string { return "vkGetShaderInfoAMD" }
@@ -14587,6 +18145,7 @@ type PfnGetPhysicalDeviceExternalImageFormatPropertiesNV uintptr
 
 func (fn PfnGetPhysicalDeviceExternalImageFormatPropertiesNV) Call(physicalDevice PhysicalDevice, format Format, type_ ImageType, tiling ImageTiling, usage ImageUsageFlags, flags ImageCreateFlags, externalHandleType ExternalMemoryHandleTypeFlagsNV, pExternalImageFormatProperties *ExternalImageFormatPropertiesNV) Result {
 	ret := C.bridge_vkGetPhysicalDeviceExternalImageFormatPropertiesNV(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.VkFormat)(format), (C.VkImageType)(type_), (C.VkImageTiling)(tiling), (C.VkImageUsageFlags)(uint32(usage)), (C.VkImageCreateFlags)(uint32(flags)), (C.VkExternalMemoryHandleTypeFlagsNV)(uint32(externalHandleType)), (*C.VkExternalImageFormatPropertiesNV)(unsafe.Pointer(pExternalImageFormatProperties)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPhysicalDeviceExternalImageFormatPropertiesNV) String() string {
@@ -14635,12 +18194,9 @@ var EXT_VALIDATION_FLAGS_EXTENSION_NAME = "VK_EXT_validation_flags"
 type ValidationCheckEXT int32
 
 const (
-	VALIDATION_CHECK_ALL_EXT         ValidationCheckEXT = 0
-	VALIDATION_CHECK_SHADERS_EXT     ValidationCheckEXT = 1
-	VALIDATION_CHECK_BEGIN_RANGE_EXT ValidationCheckEXT = VALIDATION_CHECK_ALL_EXT
-	VALIDATION_CHECK_END_RANGE_EXT   ValidationCheckEXT = VALIDATION_CHECK_SHADERS_EXT
-	VALIDATION_CHECK_RANGE_SIZE_EXT  ValidationCheckEXT = (VALIDATION_CHECK_SHADERS_EXT - VALIDATION_CHECK_ALL_EXT + 1)
-	VALIDATION_CHECK_MAX_ENUM_EXT    ValidationCheckEXT = 0x7FFFFFFF
+	VALIDATION_CHECK_ALL_EXT      ValidationCheckEXT = 0
+	VALIDATION_CHECK_SHADERS_EXT  ValidationCheckEXT = 1
+	VALIDATION_CHECK_MAX_ENUM_EXT ValidationCheckEXT = 0x7FFFFFFF
 )
 
 func (x ValidationCheckEXT) String() string {
@@ -14694,7 +18250,9 @@ type PhysicalDeviceTextureCompressionASTCHDRFeaturesEXT struct {
 }
 
 func NewPhysicalDeviceTextureCompressionASTCHDRFeaturesEXT() *PhysicalDeviceTextureCompressionASTCHDRFeaturesEXT {
-	return (*PhysicalDeviceTextureCompressionASTCHDRFeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceTextureCompressionASTCHDRFeaturesEXT)(nil))))
+	p := (*PhysicalDeviceTextureCompressionASTCHDRFeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceTextureCompressionASTCHDRFeaturesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_TEXTURE_COMPRESSION_ASTC_HDR_FEATURES_EXT
+	return p
 }
 func (p *PhysicalDeviceTextureCompressionASTCHDRFeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -14807,6 +18365,7 @@ type PfnCmdBeginConditionalRenderingEXT uintptr
 
 func (fn PfnCmdBeginConditionalRenderingEXT) Call(commandBuffer CommandBuffer, pConditionalRenderingBegin *ConditionalRenderingBeginInfoEXT) {
 	C.bridge_vkCmdBeginConditionalRenderingEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkConditionalRenderingBeginInfoEXT)(unsafe.Pointer(pConditionalRenderingBegin)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdBeginConditionalRenderingEXT) String() string {
@@ -14818,448 +18377,10 @@ type PfnCmdEndConditionalRenderingEXT uintptr
 
 func (fn PfnCmdEndConditionalRenderingEXT) Call(commandBuffer CommandBuffer) {
 	C.bridge_vkCmdEndConditionalRenderingEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdEndConditionalRenderingEXT) String() string { return "vkCmdEndConditionalRenderingEXT" }
-
-const NVX_device_generated_commands = 1
-
-// ObjectTableNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectTableNVX.html
-type ObjectTableNVX NonDispatchableHandle
-
-// IndirectCommandsLayoutNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsLayoutNVX.html
-type IndirectCommandsLayoutNVX NonDispatchableHandle
-
-const NVX_DEVICE_GENERATED_COMMANDS_SPEC_VERSION = 3
-
-var NVX_DEVICE_GENERATED_COMMANDS_EXTENSION_NAME = "VK_NVX_device_generated_commands"
-
-// IndirectCommandsTokenTypeNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsTokenTypeNVX.html
-type IndirectCommandsTokenTypeNVX int32
-
-const (
-	INDIRECT_COMMANDS_TOKEN_TYPE_PIPELINE_NVX       IndirectCommandsTokenTypeNVX = 0
-	INDIRECT_COMMANDS_TOKEN_TYPE_DESCRIPTOR_SET_NVX IndirectCommandsTokenTypeNVX = 1
-	INDIRECT_COMMANDS_TOKEN_TYPE_INDEX_BUFFER_NVX   IndirectCommandsTokenTypeNVX = 2
-	INDIRECT_COMMANDS_TOKEN_TYPE_VERTEX_BUFFER_NVX  IndirectCommandsTokenTypeNVX = 3
-	INDIRECT_COMMANDS_TOKEN_TYPE_PUSH_CONSTANT_NVX  IndirectCommandsTokenTypeNVX = 4
-	INDIRECT_COMMANDS_TOKEN_TYPE_DRAW_INDEXED_NVX   IndirectCommandsTokenTypeNVX = 5
-	INDIRECT_COMMANDS_TOKEN_TYPE_DRAW_NVX           IndirectCommandsTokenTypeNVX = 6
-	INDIRECT_COMMANDS_TOKEN_TYPE_DISPATCH_NVX       IndirectCommandsTokenTypeNVX = 7
-	INDIRECT_COMMANDS_TOKEN_TYPE_BEGIN_RANGE_NVX    IndirectCommandsTokenTypeNVX = INDIRECT_COMMANDS_TOKEN_TYPE_PIPELINE_NVX
-	INDIRECT_COMMANDS_TOKEN_TYPE_END_RANGE_NVX      IndirectCommandsTokenTypeNVX = INDIRECT_COMMANDS_TOKEN_TYPE_DISPATCH_NVX
-	INDIRECT_COMMANDS_TOKEN_TYPE_RANGE_SIZE_NVX     IndirectCommandsTokenTypeNVX = (INDIRECT_COMMANDS_TOKEN_TYPE_DISPATCH_NVX - INDIRECT_COMMANDS_TOKEN_TYPE_PIPELINE_NVX + 1)
-	INDIRECT_COMMANDS_TOKEN_TYPE_MAX_ENUM_NVX       IndirectCommandsTokenTypeNVX = 0x7FFFFFFF
-)
-
-func (x IndirectCommandsTokenTypeNVX) String() string {
-	switch x {
-	case INDIRECT_COMMANDS_TOKEN_TYPE_PIPELINE_NVX:
-		return "INDIRECT_COMMANDS_TOKEN_TYPE_PIPELINE_NVX"
-	case INDIRECT_COMMANDS_TOKEN_TYPE_DESCRIPTOR_SET_NVX:
-		return "INDIRECT_COMMANDS_TOKEN_TYPE_DESCRIPTOR_SET_NVX"
-	case INDIRECT_COMMANDS_TOKEN_TYPE_INDEX_BUFFER_NVX:
-		return "INDIRECT_COMMANDS_TOKEN_TYPE_INDEX_BUFFER_NVX"
-	case INDIRECT_COMMANDS_TOKEN_TYPE_VERTEX_BUFFER_NVX:
-		return "INDIRECT_COMMANDS_TOKEN_TYPE_VERTEX_BUFFER_NVX"
-	case INDIRECT_COMMANDS_TOKEN_TYPE_PUSH_CONSTANT_NVX:
-		return "INDIRECT_COMMANDS_TOKEN_TYPE_PUSH_CONSTANT_NVX"
-	case INDIRECT_COMMANDS_TOKEN_TYPE_DRAW_INDEXED_NVX:
-		return "INDIRECT_COMMANDS_TOKEN_TYPE_DRAW_INDEXED_NVX"
-	case INDIRECT_COMMANDS_TOKEN_TYPE_DRAW_NVX:
-		return "INDIRECT_COMMANDS_TOKEN_TYPE_DRAW_NVX"
-	case INDIRECT_COMMANDS_TOKEN_TYPE_DISPATCH_NVX:
-		return "INDIRECT_COMMANDS_TOKEN_TYPE_DISPATCH_NVX"
-	case INDIRECT_COMMANDS_TOKEN_TYPE_MAX_ENUM_NVX:
-		return "INDIRECT_COMMANDS_TOKEN_TYPE_MAX_ENUM_NVX"
-	default:
-		return fmt.Sprint(int32(x))
-	}
-}
-
-// ObjectEntryTypeNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectEntryTypeNVX.html
-type ObjectEntryTypeNVX int32
-
-const (
-	OBJECT_ENTRY_TYPE_DESCRIPTOR_SET_NVX ObjectEntryTypeNVX = 0
-	OBJECT_ENTRY_TYPE_PIPELINE_NVX       ObjectEntryTypeNVX = 1
-	OBJECT_ENTRY_TYPE_INDEX_BUFFER_NVX   ObjectEntryTypeNVX = 2
-	OBJECT_ENTRY_TYPE_VERTEX_BUFFER_NVX  ObjectEntryTypeNVX = 3
-	OBJECT_ENTRY_TYPE_PUSH_CONSTANT_NVX  ObjectEntryTypeNVX = 4
-	OBJECT_ENTRY_TYPE_BEGIN_RANGE_NVX    ObjectEntryTypeNVX = OBJECT_ENTRY_TYPE_DESCRIPTOR_SET_NVX
-	OBJECT_ENTRY_TYPE_END_RANGE_NVX      ObjectEntryTypeNVX = OBJECT_ENTRY_TYPE_PUSH_CONSTANT_NVX
-	OBJECT_ENTRY_TYPE_RANGE_SIZE_NVX     ObjectEntryTypeNVX = (OBJECT_ENTRY_TYPE_PUSH_CONSTANT_NVX - OBJECT_ENTRY_TYPE_DESCRIPTOR_SET_NVX + 1)
-	OBJECT_ENTRY_TYPE_MAX_ENUM_NVX       ObjectEntryTypeNVX = 0x7FFFFFFF
-)
-
-func (x ObjectEntryTypeNVX) String() string {
-	switch x {
-	case OBJECT_ENTRY_TYPE_DESCRIPTOR_SET_NVX:
-		return "OBJECT_ENTRY_TYPE_DESCRIPTOR_SET_NVX"
-	case OBJECT_ENTRY_TYPE_PIPELINE_NVX:
-		return "OBJECT_ENTRY_TYPE_PIPELINE_NVX"
-	case OBJECT_ENTRY_TYPE_INDEX_BUFFER_NVX:
-		return "OBJECT_ENTRY_TYPE_INDEX_BUFFER_NVX"
-	case OBJECT_ENTRY_TYPE_VERTEX_BUFFER_NVX:
-		return "OBJECT_ENTRY_TYPE_VERTEX_BUFFER_NVX"
-	case OBJECT_ENTRY_TYPE_PUSH_CONSTANT_NVX:
-		return "OBJECT_ENTRY_TYPE_PUSH_CONSTANT_NVX"
-	case OBJECT_ENTRY_TYPE_MAX_ENUM_NVX:
-		return "OBJECT_ENTRY_TYPE_MAX_ENUM_NVX"
-	default:
-		return fmt.Sprint(int32(x))
-	}
-}
-
-// IndirectCommandsLayoutUsageFlagsNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsLayoutUsageFlagsNVX.html
-type IndirectCommandsLayoutUsageFlagsNVX uint32
-
-const (
-	INDIRECT_COMMANDS_LAYOUT_USAGE_UNORDERED_SEQUENCES_BIT_NVX IndirectCommandsLayoutUsageFlagsNVX = 0x00000001
-	INDIRECT_COMMANDS_LAYOUT_USAGE_SPARSE_SEQUENCES_BIT_NVX    IndirectCommandsLayoutUsageFlagsNVX = 0x00000002
-	INDIRECT_COMMANDS_LAYOUT_USAGE_EMPTY_EXECUTIONS_BIT_NVX    IndirectCommandsLayoutUsageFlagsNVX = 0x00000004
-	INDIRECT_COMMANDS_LAYOUT_USAGE_INDEXED_SEQUENCES_BIT_NVX   IndirectCommandsLayoutUsageFlagsNVX = 0x00000008
-	INDIRECT_COMMANDS_LAYOUT_USAGE_FLAG_BITS_MAX_ENUM_NVX      IndirectCommandsLayoutUsageFlagsNVX = 0x7FFFFFFF
-)
-
-func (x IndirectCommandsLayoutUsageFlagsNVX) String() string {
-	var s string
-	for i := uint32(0); i < 32; i++ {
-		if int32(x)&(1<<i) != 0 {
-			switch IndirectCommandsLayoutUsageFlagsNVX(1 << i) {
-			case INDIRECT_COMMANDS_LAYOUT_USAGE_UNORDERED_SEQUENCES_BIT_NVX:
-				s += "INDIRECT_COMMANDS_LAYOUT_USAGE_UNORDERED_SEQUENCES_BIT_NVX|"
-			case INDIRECT_COMMANDS_LAYOUT_USAGE_SPARSE_SEQUENCES_BIT_NVX:
-				s += "INDIRECT_COMMANDS_LAYOUT_USAGE_SPARSE_SEQUENCES_BIT_NVX|"
-			case INDIRECT_COMMANDS_LAYOUT_USAGE_EMPTY_EXECUTIONS_BIT_NVX:
-				s += "INDIRECT_COMMANDS_LAYOUT_USAGE_EMPTY_EXECUTIONS_BIT_NVX|"
-			case INDIRECT_COMMANDS_LAYOUT_USAGE_INDEXED_SEQUENCES_BIT_NVX:
-				s += "INDIRECT_COMMANDS_LAYOUT_USAGE_INDEXED_SEQUENCES_BIT_NVX|"
-			}
-		}
-	}
-	return strings.TrimSuffix(s, `|`)
-}
-
-// ObjectEntryUsageFlagsNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectEntryUsageFlagsNVX.html
-type ObjectEntryUsageFlagsNVX uint32
-
-const (
-	OBJECT_ENTRY_USAGE_GRAPHICS_BIT_NVX       ObjectEntryUsageFlagsNVX = 0x00000001
-	OBJECT_ENTRY_USAGE_COMPUTE_BIT_NVX        ObjectEntryUsageFlagsNVX = 0x00000002
-	OBJECT_ENTRY_USAGE_FLAG_BITS_MAX_ENUM_NVX ObjectEntryUsageFlagsNVX = 0x7FFFFFFF
-)
-
-func (x ObjectEntryUsageFlagsNVX) String() string {
-	var s string
-	for i := uint32(0); i < 32; i++ {
-		if int32(x)&(1<<i) != 0 {
-			switch ObjectEntryUsageFlagsNVX(1 << i) {
-			case OBJECT_ENTRY_USAGE_GRAPHICS_BIT_NVX:
-				s += "OBJECT_ENTRY_USAGE_GRAPHICS_BIT_NVX|"
-			case OBJECT_ENTRY_USAGE_COMPUTE_BIT_NVX:
-				s += "OBJECT_ENTRY_USAGE_COMPUTE_BIT_NVX|"
-			}
-		}
-	}
-	return strings.TrimSuffix(s, `|`)
-}
-
-// DeviceGeneratedCommandsFeaturesNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceGeneratedCommandsFeaturesNVX.html
-type DeviceGeneratedCommandsFeaturesNVX struct {
-	SType                      StructureType
-	PNext                      unsafe.Pointer
-	ComputeBindingPointSupport Bool32
-}
-
-func NewDeviceGeneratedCommandsFeaturesNVX() *DeviceGeneratedCommandsFeaturesNVX {
-	p := (*DeviceGeneratedCommandsFeaturesNVX)(MemAlloc(unsafe.Sizeof(*(*DeviceGeneratedCommandsFeaturesNVX)(nil))))
-	p.SType = STRUCTURE_TYPE_DEVICE_GENERATED_COMMANDS_FEATURES_NVX
-	return p
-}
-func (p *DeviceGeneratedCommandsFeaturesNVX) Free() { MemFree(unsafe.Pointer(p)) }
-
-// DeviceGeneratedCommandsLimitsNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceGeneratedCommandsLimitsNVX.html
-type DeviceGeneratedCommandsLimitsNVX struct {
-	SType                                 StructureType
-	PNext                                 unsafe.Pointer
-	MaxIndirectCommandsLayoutTokenCount   uint32
-	MaxObjectEntryCounts                  uint32
-	MinSequenceCountBufferOffsetAlignment uint32
-	MinSequenceIndexBufferOffsetAlignment uint32
-	MinCommandsTokenBufferOffsetAlignment uint32
-}
-
-func NewDeviceGeneratedCommandsLimitsNVX() *DeviceGeneratedCommandsLimitsNVX {
-	p := (*DeviceGeneratedCommandsLimitsNVX)(MemAlloc(unsafe.Sizeof(*(*DeviceGeneratedCommandsLimitsNVX)(nil))))
-	p.SType = STRUCTURE_TYPE_DEVICE_GENERATED_COMMANDS_LIMITS_NVX
-	return p
-}
-func (p *DeviceGeneratedCommandsLimitsNVX) Free() { MemFree(unsafe.Pointer(p)) }
-
-// IndirectCommandsTokenNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsTokenNVX.html
-type IndirectCommandsTokenNVX struct {
-	TokenType IndirectCommandsTokenTypeNVX
-	Buffer    Buffer
-	Offset    DeviceSize
-}
-
-func NewIndirectCommandsTokenNVX() *IndirectCommandsTokenNVX {
-	return (*IndirectCommandsTokenNVX)(MemAlloc(unsafe.Sizeof(*(*IndirectCommandsTokenNVX)(nil))))
-}
-func (p *IndirectCommandsTokenNVX) Free() { MemFree(unsafe.Pointer(p)) }
-
-// IndirectCommandsLayoutTokenNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsLayoutTokenNVX.html
-type IndirectCommandsLayoutTokenNVX struct {
-	TokenType    IndirectCommandsTokenTypeNVX
-	BindingUnit  uint32
-	DynamicCount uint32
-	Divisor      uint32
-}
-
-func NewIndirectCommandsLayoutTokenNVX() *IndirectCommandsLayoutTokenNVX {
-	return (*IndirectCommandsLayoutTokenNVX)(MemAlloc(unsafe.Sizeof(*(*IndirectCommandsLayoutTokenNVX)(nil))))
-}
-func (p *IndirectCommandsLayoutTokenNVX) Free() { MemFree(unsafe.Pointer(p)) }
-
-// IndirectCommandsLayoutCreateInfoNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsLayoutCreateInfoNVX.html
-type IndirectCommandsLayoutCreateInfoNVX struct {
-	SType             StructureType
-	PNext             unsafe.Pointer
-	PipelineBindPoint PipelineBindPoint
-	Flags             IndirectCommandsLayoutUsageFlagsNVX
-	TokenCount        uint32
-	PTokens           *IndirectCommandsLayoutTokenNVX
-}
-
-func NewIndirectCommandsLayoutCreateInfoNVX() *IndirectCommandsLayoutCreateInfoNVX {
-	p := (*IndirectCommandsLayoutCreateInfoNVX)(MemAlloc(unsafe.Sizeof(*(*IndirectCommandsLayoutCreateInfoNVX)(nil))))
-	p.SType = STRUCTURE_TYPE_INDIRECT_COMMANDS_LAYOUT_CREATE_INFO_NVX
-	return p
-}
-func (p *IndirectCommandsLayoutCreateInfoNVX) Free() { MemFree(unsafe.Pointer(p)) }
-
-// CmdProcessCommandsInfoNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCmdProcessCommandsInfoNVX.html
-type CmdProcessCommandsInfoNVX struct {
-	SType                      StructureType
-	PNext                      unsafe.Pointer
-	ObjectTable                ObjectTableNVX
-	IndirectCommandsLayout     IndirectCommandsLayoutNVX
-	IndirectCommandsTokenCount uint32
-	PIndirectCommandsTokens    *IndirectCommandsTokenNVX
-	MaxSequencesCount          uint32
-	TargetCommandBuffer        CommandBuffer
-	SequencesCountBuffer       Buffer
-	SequencesCountOffset       DeviceSize
-	SequencesIndexBuffer       Buffer
-	SequencesIndexOffset       DeviceSize
-}
-
-func NewCmdProcessCommandsInfoNVX() *CmdProcessCommandsInfoNVX {
-	p := (*CmdProcessCommandsInfoNVX)(MemAlloc(unsafe.Sizeof(*(*CmdProcessCommandsInfoNVX)(nil))))
-	p.SType = STRUCTURE_TYPE_CMD_PROCESS_COMMANDS_INFO_NVX
-	return p
-}
-func (p *CmdProcessCommandsInfoNVX) Free() { MemFree(unsafe.Pointer(p)) }
-
-// CmdReserveSpaceForCommandsInfoNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCmdReserveSpaceForCommandsInfoNVX.html
-type CmdReserveSpaceForCommandsInfoNVX struct {
-	SType                  StructureType
-	PNext                  unsafe.Pointer
-	ObjectTable            ObjectTableNVX
-	IndirectCommandsLayout IndirectCommandsLayoutNVX
-	MaxSequencesCount      uint32
-}
-
-func NewCmdReserveSpaceForCommandsInfoNVX() *CmdReserveSpaceForCommandsInfoNVX {
-	p := (*CmdReserveSpaceForCommandsInfoNVX)(MemAlloc(unsafe.Sizeof(*(*CmdReserveSpaceForCommandsInfoNVX)(nil))))
-	p.SType = STRUCTURE_TYPE_CMD_RESERVE_SPACE_FOR_COMMANDS_INFO_NVX
-	return p
-}
-func (p *CmdReserveSpaceForCommandsInfoNVX) Free() { MemFree(unsafe.Pointer(p)) }
-
-// ObjectTableCreateInfoNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectTableCreateInfoNVX.html
-type ObjectTableCreateInfoNVX struct {
-	SType                          StructureType
-	PNext                          unsafe.Pointer
-	ObjectCount                    uint32
-	PObjectEntryTypes              *ObjectEntryTypeNVX
-	PObjectEntryCounts             *uint32
-	PObjectEntryUsageFlags         *ObjectEntryUsageFlagsNVX
-	MaxUniformBuffersPerDescriptor uint32
-	MaxStorageBuffersPerDescriptor uint32
-	MaxStorageImagesPerDescriptor  uint32
-	MaxSampledImagesPerDescriptor  uint32
-	MaxPipelineLayouts             uint32
-}
-
-func NewObjectTableCreateInfoNVX() *ObjectTableCreateInfoNVX {
-	p := (*ObjectTableCreateInfoNVX)(MemAlloc(unsafe.Sizeof(*(*ObjectTableCreateInfoNVX)(nil))))
-	p.SType = STRUCTURE_TYPE_OBJECT_TABLE_CREATE_INFO_NVX
-	return p
-}
-func (p *ObjectTableCreateInfoNVX) Free() { MemFree(unsafe.Pointer(p)) }
-
-// ObjectTableEntryNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectTableEntryNVX.html
-type ObjectTableEntryNVX struct {
-	Type  ObjectEntryTypeNVX
-	Flags ObjectEntryUsageFlagsNVX
-}
-
-func NewObjectTableEntryNVX() *ObjectTableEntryNVX {
-	return (*ObjectTableEntryNVX)(MemAlloc(unsafe.Sizeof(*(*ObjectTableEntryNVX)(nil))))
-}
-func (p *ObjectTableEntryNVX) Free() { MemFree(unsafe.Pointer(p)) }
-
-// ObjectTablePipelineEntryNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectTablePipelineEntryNVX.html
-type ObjectTablePipelineEntryNVX struct {
-	Type     ObjectEntryTypeNVX
-	Flags    ObjectEntryUsageFlagsNVX
-	Pipeline Pipeline
-}
-
-func NewObjectTablePipelineEntryNVX() *ObjectTablePipelineEntryNVX {
-	return (*ObjectTablePipelineEntryNVX)(MemAlloc(unsafe.Sizeof(*(*ObjectTablePipelineEntryNVX)(nil))))
-}
-func (p *ObjectTablePipelineEntryNVX) Free() { MemFree(unsafe.Pointer(p)) }
-
-// ObjectTableDescriptorSetEntryNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectTableDescriptorSetEntryNVX.html
-type ObjectTableDescriptorSetEntryNVX struct {
-	Type           ObjectEntryTypeNVX
-	Flags          ObjectEntryUsageFlagsNVX
-	PipelineLayout PipelineLayout
-	DescriptorSet  DescriptorSet
-}
-
-func NewObjectTableDescriptorSetEntryNVX() *ObjectTableDescriptorSetEntryNVX {
-	return (*ObjectTableDescriptorSetEntryNVX)(MemAlloc(unsafe.Sizeof(*(*ObjectTableDescriptorSetEntryNVX)(nil))))
-}
-func (p *ObjectTableDescriptorSetEntryNVX) Free() { MemFree(unsafe.Pointer(p)) }
-
-// ObjectTableVertexBufferEntryNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectTableVertexBufferEntryNVX.html
-type ObjectTableVertexBufferEntryNVX struct {
-	Type   ObjectEntryTypeNVX
-	Flags  ObjectEntryUsageFlagsNVX
-	Buffer Buffer
-}
-
-func NewObjectTableVertexBufferEntryNVX() *ObjectTableVertexBufferEntryNVX {
-	return (*ObjectTableVertexBufferEntryNVX)(MemAlloc(unsafe.Sizeof(*(*ObjectTableVertexBufferEntryNVX)(nil))))
-}
-func (p *ObjectTableVertexBufferEntryNVX) Free() { MemFree(unsafe.Pointer(p)) }
-
-// ObjectTableIndexBufferEntryNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectTableIndexBufferEntryNVX.html
-type ObjectTableIndexBufferEntryNVX struct {
-	Type      ObjectEntryTypeNVX
-	Flags     ObjectEntryUsageFlagsNVX
-	Buffer    Buffer
-	IndexType IndexType
-}
-
-func NewObjectTableIndexBufferEntryNVX() *ObjectTableIndexBufferEntryNVX {
-	return (*ObjectTableIndexBufferEntryNVX)(MemAlloc(unsafe.Sizeof(*(*ObjectTableIndexBufferEntryNVX)(nil))))
-}
-func (p *ObjectTableIndexBufferEntryNVX) Free() { MemFree(unsafe.Pointer(p)) }
-
-// ObjectTablePushConstantEntryNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkObjectTablePushConstantEntryNVX.html
-type ObjectTablePushConstantEntryNVX struct {
-	Type           ObjectEntryTypeNVX
-	Flags          ObjectEntryUsageFlagsNVX
-	PipelineLayout PipelineLayout
-	StageFlags     ShaderStageFlags
-}
-
-func NewObjectTablePushConstantEntryNVX() *ObjectTablePushConstantEntryNVX {
-	return (*ObjectTablePushConstantEntryNVX)(MemAlloc(unsafe.Sizeof(*(*ObjectTablePushConstantEntryNVX)(nil))))
-}
-func (p *ObjectTablePushConstantEntryNVX) Free() { MemFree(unsafe.Pointer(p)) }
-
-//  PfnCmdProcessCommandsNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdProcessCommandsNVX.html
-type PfnCmdProcessCommandsNVX uintptr
-
-func (fn PfnCmdProcessCommandsNVX) Call(commandBuffer CommandBuffer, pProcessCommandsInfo *CmdProcessCommandsInfoNVX) {
-	C.bridge_vkCmdProcessCommandsNVX(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkCmdProcessCommandsInfoNVX)(unsafe.Pointer(pProcessCommandsInfo)))
-	return
-}
-func (fn PfnCmdProcessCommandsNVX) String() string { return "vkCmdProcessCommandsNVX" }
-
-//  PfnCmdReserveSpaceForCommandsNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdReserveSpaceForCommandsNVX.html
-type PfnCmdReserveSpaceForCommandsNVX uintptr
-
-func (fn PfnCmdReserveSpaceForCommandsNVX) Call(commandBuffer CommandBuffer, pReserveSpaceInfo *CmdReserveSpaceForCommandsInfoNVX) {
-	C.bridge_vkCmdReserveSpaceForCommandsNVX(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkCmdReserveSpaceForCommandsInfoNVX)(unsafe.Pointer(pReserveSpaceInfo)))
-	return
-}
-func (fn PfnCmdReserveSpaceForCommandsNVX) String() string { return "vkCmdReserveSpaceForCommandsNVX" }
-
-//  PfnCreateIndirectCommandsLayoutNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateIndirectCommandsLayoutNVX.html
-type PfnCreateIndirectCommandsLayoutNVX uintptr
-
-func (fn PfnCreateIndirectCommandsLayoutNVX) Call(device Device, pCreateInfo *IndirectCommandsLayoutCreateInfoNVX, pAllocator *AllocationCallbacks, pIndirectCommandsLayout *IndirectCommandsLayoutNVX) Result {
-	ret := C.bridge_vkCreateIndirectCommandsLayoutNVX(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkIndirectCommandsLayoutCreateInfoNVX)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkIndirectCommandsLayoutNVX)(unsafe.Pointer(pIndirectCommandsLayout)))
-	return Result(ret)
-}
-func (fn PfnCreateIndirectCommandsLayoutNVX) String() string {
-	return "vkCreateIndirectCommandsLayoutNVX"
-}
-
-//  PfnDestroyIndirectCommandsLayoutNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyIndirectCommandsLayoutNVX.html
-type PfnDestroyIndirectCommandsLayoutNVX uintptr
-
-func (fn PfnDestroyIndirectCommandsLayoutNVX) Call(device Device, indirectCommandsLayout IndirectCommandsLayoutNVX, pAllocator *AllocationCallbacks) {
-	C.bridge_vkDestroyIndirectCommandsLayoutNVX(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkIndirectCommandsLayoutNVX)(unsafe.Pointer(uintptr(indirectCommandsLayout))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
-	return
-}
-func (fn PfnDestroyIndirectCommandsLayoutNVX) String() string {
-	return "vkDestroyIndirectCommandsLayoutNVX"
-}
-
-//  PfnCreateObjectTableNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateObjectTableNVX.html
-type PfnCreateObjectTableNVX uintptr
-
-func (fn PfnCreateObjectTableNVX) Call(device Device, pCreateInfo *ObjectTableCreateInfoNVX, pAllocator *AllocationCallbacks, pObjectTable *ObjectTableNVX) Result {
-	ret := C.bridge_vkCreateObjectTableNVX(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkObjectTableCreateInfoNVX)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkObjectTableNVX)(unsafe.Pointer(pObjectTable)))
-	return Result(ret)
-}
-func (fn PfnCreateObjectTableNVX) String() string { return "vkCreateObjectTableNVX" }
-
-//  PfnDestroyObjectTableNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyObjectTableNVX.html
-type PfnDestroyObjectTableNVX uintptr
-
-func (fn PfnDestroyObjectTableNVX) Call(device Device, objectTable ObjectTableNVX, pAllocator *AllocationCallbacks) {
-	C.bridge_vkDestroyObjectTableNVX(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkObjectTableNVX)(unsafe.Pointer(uintptr(objectTable))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
-	return
-}
-func (fn PfnDestroyObjectTableNVX) String() string { return "vkDestroyObjectTableNVX" }
-
-//  PfnRegisterObjectsNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkRegisterObjectsNVX.html
-type PfnRegisterObjectsNVX uintptr
-
-func (fn PfnRegisterObjectsNVX) Call(device Device, objectTable ObjectTableNVX, objectCount uint32, ppObjectTableEntries **ObjectTableEntryNVX, pObjectIndices *uint32) Result {
-	ret := C.bridge_vkRegisterObjectsNVX(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkObjectTableNVX)(unsafe.Pointer(uintptr(objectTable))), (C.uint32_t)(objectCount), (**C.VkObjectTableEntryNVX)(unsafe.Pointer(ppObjectTableEntries)), (*C.uint32_t)(unsafe.Pointer(pObjectIndices)))
-	return Result(ret)
-}
-func (fn PfnRegisterObjectsNVX) String() string { return "vkRegisterObjectsNVX" }
-
-//  PfnUnregisterObjectsNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkUnregisterObjectsNVX.html
-type PfnUnregisterObjectsNVX uintptr
-
-func (fn PfnUnregisterObjectsNVX) Call(device Device, objectTable ObjectTableNVX, objectCount uint32, pObjectEntryTypes *ObjectEntryTypeNVX, pObjectIndices *uint32) Result {
-	ret := C.bridge_vkUnregisterObjectsNVX(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkObjectTableNVX)(unsafe.Pointer(uintptr(objectTable))), (C.uint32_t)(objectCount), (*C.VkObjectEntryTypeNVX)(unsafe.Pointer(pObjectEntryTypes)), (*C.uint32_t)(unsafe.Pointer(pObjectIndices)))
-	return Result(ret)
-}
-func (fn PfnUnregisterObjectsNVX) String() string { return "vkUnregisterObjectsNVX" }
-
-//  PfnGetPhysicalDeviceGeneratedCommandsPropertiesNVX -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX.html
-type PfnGetPhysicalDeviceGeneratedCommandsPropertiesNVX uintptr
-
-func (fn PfnGetPhysicalDeviceGeneratedCommandsPropertiesNVX) Call(physicalDevice PhysicalDevice, pFeatures *DeviceGeneratedCommandsFeaturesNVX, pLimits *DeviceGeneratedCommandsLimitsNVX) {
-	C.bridge_vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.VkDeviceGeneratedCommandsFeaturesNVX)(unsafe.Pointer(pFeatures)), (*C.VkDeviceGeneratedCommandsLimitsNVX)(unsafe.Pointer(pLimits)))
-	return
-}
-func (fn PfnGetPhysicalDeviceGeneratedCommandsPropertiesNVX) String() string {
-	return "vkGetPhysicalDeviceGeneratedCommandsPropertiesNVX"
-}
 
 const NV_clip_space_w_scaling = 1
 const NV_CLIP_SPACE_W_SCALING_SPEC_VERSION = 1
@@ -15298,6 +18419,7 @@ type PfnCmdSetViewportWScalingNV uintptr
 
 func (fn PfnCmdSetViewportWScalingNV) Call(commandBuffer CommandBuffer, firstViewport, viewportCount uint32, pViewportWScalings *ViewportWScalingNV) {
 	C.bridge_vkCmdSetViewportWScalingNV(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(firstViewport), (C.uint32_t)(viewportCount), (*C.VkViewportWScalingNV)(unsafe.Pointer(pViewportWScalings)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdSetViewportWScalingNV) String() string { return "vkCmdSetViewportWScalingNV" }
@@ -15312,6 +18434,7 @@ type PfnReleaseDisplayEXT uintptr
 
 func (fn PfnReleaseDisplayEXT) Call(physicalDevice PhysicalDevice, display DisplayKHR) Result {
 	ret := C.bridge_vkReleaseDisplayEXT(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.VkDisplayKHR)(unsafe.Pointer(uintptr(display))))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnReleaseDisplayEXT) String() string { return "vkReleaseDisplayEXT" }
@@ -15325,7 +18448,8 @@ var EXT_DISPLAY_SURFACE_COUNTER_EXTENSION_NAME = "VK_EXT_display_surface_counter
 type SurfaceCounterFlagsEXT uint32
 
 const (
-	SURFACE_COUNTER_VBLANK_EXT             SurfaceCounterFlagsEXT = 0x00000001
+	SURFACE_COUNTER_VBLANK_BIT_EXT         SurfaceCounterFlagsEXT = 0x00000001
+	SURFACE_COUNTER_VBLANK_EXT             SurfaceCounterFlagsEXT = SURFACE_COUNTER_VBLANK_BIT_EXT
 	SURFACE_COUNTER_FLAG_BITS_MAX_ENUM_EXT SurfaceCounterFlagsEXT = 0x7FFFFFFF
 )
 
@@ -15334,8 +18458,8 @@ func (x SurfaceCounterFlagsEXT) String() string {
 	for i := uint32(0); i < 32; i++ {
 		if int32(x)&(1<<i) != 0 {
 			switch SurfaceCounterFlagsEXT(1 << i) {
-			case SURFACE_COUNTER_VBLANK_EXT:
-				s += "SURFACE_COUNTER_VBLANK_EXT|"
+			case SURFACE_COUNTER_VBLANK_BIT_EXT:
+				s += "SURFACE_COUNTER_VBLANK_BIT_EXT|"
 			}
 		}
 	}
@@ -15371,6 +18495,7 @@ type PfnGetPhysicalDeviceSurfaceCapabilities2EXT uintptr
 
 func (fn PfnGetPhysicalDeviceSurfaceCapabilities2EXT) Call(physicalDevice PhysicalDevice, surface SurfaceKHR, pSurfaceCapabilities *SurfaceCapabilities2EXT) Result {
 	ret := C.bridge_vkGetPhysicalDeviceSurfaceCapabilities2EXT(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.VkSurfaceKHR)(unsafe.Pointer(uintptr(surface))), (*C.VkSurfaceCapabilities2EXT)(unsafe.Pointer(pSurfaceCapabilities)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPhysicalDeviceSurfaceCapabilities2EXT) String() string {
@@ -15386,13 +18511,10 @@ var EXT_DISPLAY_CONTROL_EXTENSION_NAME = "VK_EXT_display_control"
 type DisplayPowerStateEXT int32
 
 const (
-	DISPLAY_POWER_STATE_OFF_EXT         DisplayPowerStateEXT = 0
-	DISPLAY_POWER_STATE_SUSPEND_EXT     DisplayPowerStateEXT = 1
-	DISPLAY_POWER_STATE_ON_EXT          DisplayPowerStateEXT = 2
-	DISPLAY_POWER_STATE_BEGIN_RANGE_EXT DisplayPowerStateEXT = DISPLAY_POWER_STATE_OFF_EXT
-	DISPLAY_POWER_STATE_END_RANGE_EXT   DisplayPowerStateEXT = DISPLAY_POWER_STATE_ON_EXT
-	DISPLAY_POWER_STATE_RANGE_SIZE_EXT  DisplayPowerStateEXT = (DISPLAY_POWER_STATE_ON_EXT - DISPLAY_POWER_STATE_OFF_EXT + 1)
-	DISPLAY_POWER_STATE_MAX_ENUM_EXT    DisplayPowerStateEXT = 0x7FFFFFFF
+	DISPLAY_POWER_STATE_OFF_EXT      DisplayPowerStateEXT = 0
+	DISPLAY_POWER_STATE_SUSPEND_EXT  DisplayPowerStateEXT = 1
+	DISPLAY_POWER_STATE_ON_EXT       DisplayPowerStateEXT = 2
+	DISPLAY_POWER_STATE_MAX_ENUM_EXT DisplayPowerStateEXT = 0x7FFFFFFF
 )
 
 func (x DisplayPowerStateEXT) String() string {
@@ -15415,9 +18537,6 @@ type DeviceEventTypeEXT int32
 
 const (
 	DEVICE_EVENT_TYPE_DISPLAY_HOTPLUG_EXT DeviceEventTypeEXT = 0
-	DEVICE_EVENT_TYPE_BEGIN_RANGE_EXT     DeviceEventTypeEXT = DEVICE_EVENT_TYPE_DISPLAY_HOTPLUG_EXT
-	DEVICE_EVENT_TYPE_END_RANGE_EXT       DeviceEventTypeEXT = DEVICE_EVENT_TYPE_DISPLAY_HOTPLUG_EXT
-	DEVICE_EVENT_TYPE_RANGE_SIZE_EXT      DeviceEventTypeEXT = (DEVICE_EVENT_TYPE_DISPLAY_HOTPLUG_EXT - DEVICE_EVENT_TYPE_DISPLAY_HOTPLUG_EXT + 1)
 	DEVICE_EVENT_TYPE_MAX_ENUM_EXT        DeviceEventTypeEXT = 0x7FFFFFFF
 )
 
@@ -15437,9 +18556,6 @@ type DisplayEventTypeEXT int32
 
 const (
 	DISPLAY_EVENT_TYPE_FIRST_PIXEL_OUT_EXT DisplayEventTypeEXT = 0
-	DISPLAY_EVENT_TYPE_BEGIN_RANGE_EXT     DisplayEventTypeEXT = DISPLAY_EVENT_TYPE_FIRST_PIXEL_OUT_EXT
-	DISPLAY_EVENT_TYPE_END_RANGE_EXT       DisplayEventTypeEXT = DISPLAY_EVENT_TYPE_FIRST_PIXEL_OUT_EXT
-	DISPLAY_EVENT_TYPE_RANGE_SIZE_EXT      DisplayEventTypeEXT = (DISPLAY_EVENT_TYPE_FIRST_PIXEL_OUT_EXT - DISPLAY_EVENT_TYPE_FIRST_PIXEL_OUT_EXT + 1)
 	DISPLAY_EVENT_TYPE_MAX_ENUM_EXT        DisplayEventTypeEXT = 0x7FFFFFFF
 )
 
@@ -15515,6 +18631,7 @@ type PfnDisplayPowerControlEXT uintptr
 
 func (fn PfnDisplayPowerControlEXT) Call(device Device, display DisplayKHR, pDisplayPowerInfo *DisplayPowerInfoEXT) Result {
 	ret := C.bridge_vkDisplayPowerControlEXT(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkDisplayKHR)(unsafe.Pointer(uintptr(display))), (*C.VkDisplayPowerInfoEXT)(unsafe.Pointer(pDisplayPowerInfo)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnDisplayPowerControlEXT) String() string { return "vkDisplayPowerControlEXT" }
@@ -15524,6 +18641,7 @@ type PfnRegisterDeviceEventEXT uintptr
 
 func (fn PfnRegisterDeviceEventEXT) Call(device Device, pDeviceEventInfo *DeviceEventInfoEXT, pAllocator *AllocationCallbacks, pFence *Fence) Result {
 	ret := C.bridge_vkRegisterDeviceEventEXT(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkDeviceEventInfoEXT)(unsafe.Pointer(pDeviceEventInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkFence)(unsafe.Pointer(pFence)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnRegisterDeviceEventEXT) String() string { return "vkRegisterDeviceEventEXT" }
@@ -15533,6 +18651,7 @@ type PfnRegisterDisplayEventEXT uintptr
 
 func (fn PfnRegisterDisplayEventEXT) Call(device Device, display DisplayKHR, pDisplayEventInfo *DisplayEventInfoEXT, pAllocator *AllocationCallbacks, pFence *Fence) Result {
 	ret := C.bridge_vkRegisterDisplayEventEXT(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkDisplayKHR)(unsafe.Pointer(uintptr(display))), (*C.VkDisplayEventInfoEXT)(unsafe.Pointer(pDisplayEventInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkFence)(unsafe.Pointer(pFence)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnRegisterDisplayEventEXT) String() string { return "vkRegisterDisplayEventEXT" }
@@ -15542,6 +18661,7 @@ type PfnGetSwapchainCounterEXT uintptr
 
 func (fn PfnGetSwapchainCounterEXT) Call(device Device, swapchain SwapchainKHR, counter SurfaceCounterFlagsEXT, pCounterValue *uint64) Result {
 	ret := C.bridge_vkGetSwapchainCounterEXT(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkSwapchainKHR)(unsafe.Pointer(uintptr(swapchain))), (C.VkSurfaceCounterFlagBitsEXT)(counter), (*C.uint64_t)(unsafe.Pointer(pCounterValue)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetSwapchainCounterEXT) String() string { return "vkGetSwapchainCounterEXT" }
@@ -15606,6 +18726,7 @@ type PfnGetRefreshCycleDurationGOOGLE uintptr
 
 func (fn PfnGetRefreshCycleDurationGOOGLE) Call(device Device, swapchain SwapchainKHR, pDisplayTimingProperties *RefreshCycleDurationGOOGLE) Result {
 	ret := C.bridge_vkGetRefreshCycleDurationGOOGLE(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkSwapchainKHR)(unsafe.Pointer(uintptr(swapchain))), (*C.VkRefreshCycleDurationGOOGLE)(unsafe.Pointer(pDisplayTimingProperties)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetRefreshCycleDurationGOOGLE) String() string { return "vkGetRefreshCycleDurationGOOGLE" }
@@ -15615,6 +18736,7 @@ type PfnGetPastPresentationTimingGOOGLE uintptr
 
 func (fn PfnGetPastPresentationTimingGOOGLE) Call(device Device, swapchain SwapchainKHR, pPresentationTimingCount *uint32, pPresentationTimings *PastPresentationTimingGOOGLE) Result {
 	ret := C.bridge_vkGetPastPresentationTimingGOOGLE(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkSwapchainKHR)(unsafe.Pointer(uintptr(swapchain))), (*C.uint32_t)(unsafe.Pointer(pPresentationTimingCount)), (*C.VkPastPresentationTimingGOOGLE)(unsafe.Pointer(pPresentationTimings)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPastPresentationTimingGOOGLE) String() string {
@@ -15664,18 +18786,15 @@ var NV_VIEWPORT_SWIZZLE_EXTENSION_NAME = "VK_NV_viewport_swizzle"
 type ViewportCoordinateSwizzleNV int32
 
 const (
-	VIEWPORT_COORDINATE_SWIZZLE_POSITIVE_X_NV  ViewportCoordinateSwizzleNV = 0
-	VIEWPORT_COORDINATE_SWIZZLE_NEGATIVE_X_NV  ViewportCoordinateSwizzleNV = 1
-	VIEWPORT_COORDINATE_SWIZZLE_POSITIVE_Y_NV  ViewportCoordinateSwizzleNV = 2
-	VIEWPORT_COORDINATE_SWIZZLE_NEGATIVE_Y_NV  ViewportCoordinateSwizzleNV = 3
-	VIEWPORT_COORDINATE_SWIZZLE_POSITIVE_Z_NV  ViewportCoordinateSwizzleNV = 4
-	VIEWPORT_COORDINATE_SWIZZLE_NEGATIVE_Z_NV  ViewportCoordinateSwizzleNV = 5
-	VIEWPORT_COORDINATE_SWIZZLE_POSITIVE_W_NV  ViewportCoordinateSwizzleNV = 6
-	VIEWPORT_COORDINATE_SWIZZLE_NEGATIVE_W_NV  ViewportCoordinateSwizzleNV = 7
-	VIEWPORT_COORDINATE_SWIZZLE_BEGIN_RANGE_NV ViewportCoordinateSwizzleNV = VIEWPORT_COORDINATE_SWIZZLE_POSITIVE_X_NV
-	VIEWPORT_COORDINATE_SWIZZLE_END_RANGE_NV   ViewportCoordinateSwizzleNV = VIEWPORT_COORDINATE_SWIZZLE_NEGATIVE_W_NV
-	VIEWPORT_COORDINATE_SWIZZLE_RANGE_SIZE_NV  ViewportCoordinateSwizzleNV = (VIEWPORT_COORDINATE_SWIZZLE_NEGATIVE_W_NV - VIEWPORT_COORDINATE_SWIZZLE_POSITIVE_X_NV + 1)
-	VIEWPORT_COORDINATE_SWIZZLE_MAX_ENUM_NV    ViewportCoordinateSwizzleNV = 0x7FFFFFFF
+	VIEWPORT_COORDINATE_SWIZZLE_POSITIVE_X_NV ViewportCoordinateSwizzleNV = 0
+	VIEWPORT_COORDINATE_SWIZZLE_NEGATIVE_X_NV ViewportCoordinateSwizzleNV = 1
+	VIEWPORT_COORDINATE_SWIZZLE_POSITIVE_Y_NV ViewportCoordinateSwizzleNV = 2
+	VIEWPORT_COORDINATE_SWIZZLE_NEGATIVE_Y_NV ViewportCoordinateSwizzleNV = 3
+	VIEWPORT_COORDINATE_SWIZZLE_POSITIVE_Z_NV ViewportCoordinateSwizzleNV = 4
+	VIEWPORT_COORDINATE_SWIZZLE_NEGATIVE_Z_NV ViewportCoordinateSwizzleNV = 5
+	VIEWPORT_COORDINATE_SWIZZLE_POSITIVE_W_NV ViewportCoordinateSwizzleNV = 6
+	VIEWPORT_COORDINATE_SWIZZLE_NEGATIVE_W_NV ViewportCoordinateSwizzleNV = 7
+	VIEWPORT_COORDINATE_SWIZZLE_MAX_ENUM_NV   ViewportCoordinateSwizzleNV = 0x7FFFFFFF
 )
 
 func (x ViewportCoordinateSwizzleNV) String() string {
@@ -15742,12 +18861,9 @@ var EXT_DISCARD_RECTANGLES_EXTENSION_NAME = "VK_EXT_discard_rectangles"
 type DiscardRectangleModeEXT int32
 
 const (
-	DISCARD_RECTANGLE_MODE_INCLUSIVE_EXT   DiscardRectangleModeEXT = 0
-	DISCARD_RECTANGLE_MODE_EXCLUSIVE_EXT   DiscardRectangleModeEXT = 1
-	DISCARD_RECTANGLE_MODE_BEGIN_RANGE_EXT DiscardRectangleModeEXT = DISCARD_RECTANGLE_MODE_INCLUSIVE_EXT
-	DISCARD_RECTANGLE_MODE_END_RANGE_EXT   DiscardRectangleModeEXT = DISCARD_RECTANGLE_MODE_EXCLUSIVE_EXT
-	DISCARD_RECTANGLE_MODE_RANGE_SIZE_EXT  DiscardRectangleModeEXT = (DISCARD_RECTANGLE_MODE_EXCLUSIVE_EXT - DISCARD_RECTANGLE_MODE_INCLUSIVE_EXT + 1)
-	DISCARD_RECTANGLE_MODE_MAX_ENUM_EXT    DiscardRectangleModeEXT = 0x7FFFFFFF
+	DISCARD_RECTANGLE_MODE_INCLUSIVE_EXT DiscardRectangleModeEXT = 0
+	DISCARD_RECTANGLE_MODE_EXCLUSIVE_EXT DiscardRectangleModeEXT = 1
+	DISCARD_RECTANGLE_MODE_MAX_ENUM_EXT  DiscardRectangleModeEXT = 0x7FFFFFFF
 )
 
 func (x DiscardRectangleModeEXT) String() string {
@@ -15800,6 +18916,7 @@ type PfnCmdSetDiscardRectangleEXT uintptr
 
 func (fn PfnCmdSetDiscardRectangleEXT) Call(commandBuffer CommandBuffer, firstDiscardRectangle, discardRectangleCount uint32, pDiscardRectangles *Rect2D) {
 	C.bridge_vkCmdSetDiscardRectangleEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(firstDiscardRectangle), (C.uint32_t)(discardRectangleCount), (*C.VkRect2D)(unsafe.Pointer(pDiscardRectangles)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdSetDiscardRectangleEXT) String() string { return "vkCmdSetDiscardRectangleEXT" }
@@ -15816,9 +18933,6 @@ const (
 	CONSERVATIVE_RASTERIZATION_MODE_DISABLED_EXT      ConservativeRasterizationModeEXT = 0
 	CONSERVATIVE_RASTERIZATION_MODE_OVERESTIMATE_EXT  ConservativeRasterizationModeEXT = 1
 	CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT ConservativeRasterizationModeEXT = 2
-	CONSERVATIVE_RASTERIZATION_MODE_BEGIN_RANGE_EXT   ConservativeRasterizationModeEXT = CONSERVATIVE_RASTERIZATION_MODE_DISABLED_EXT
-	CONSERVATIVE_RASTERIZATION_MODE_END_RANGE_EXT     ConservativeRasterizationModeEXT = CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT
-	CONSERVATIVE_RASTERIZATION_MODE_RANGE_SIZE_EXT    ConservativeRasterizationModeEXT = (CONSERVATIVE_RASTERIZATION_MODE_UNDERESTIMATE_EXT - CONSERVATIVE_RASTERIZATION_MODE_DISABLED_EXT + 1)
 	CONSERVATIVE_RASTERIZATION_MODE_MAX_ENUM_EXT      ConservativeRasterizationModeEXT = 0x7FFFFFFF
 )
 
@@ -15956,6 +19070,7 @@ type PfnSetHdrMetadataEXT uintptr
 
 func (fn PfnSetHdrMetadataEXT) Call(device Device, swapchainCount uint32, pSwapchains *SwapchainKHR, pMetadata *HdrMetadataEXT) {
 	C.bridge_vkSetHdrMetadataEXT(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.uint32_t)(swapchainCount), (*C.VkSwapchainKHR)(unsafe.Pointer(pSwapchains)), (*C.VkHdrMetadataEXT)(unsafe.Pointer(pMetadata)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnSetHdrMetadataEXT) String() string { return "vkSetHdrMetadataEXT" }
@@ -15970,17 +19085,17 @@ const EXT_QUEUE_FAMILY_FOREIGN_SPEC_VERSION = 1
 
 var EXT_QUEUE_FAMILY_FOREIGN_EXTENSION_NAME = "VK_EXT_queue_family_foreign"
 
+const QUEUE_FAMILY_FOREIGN_EXT = uint32(0xFFFFFFFD)
 const EXT_debug_utils = 1
 
 // DebugUtilsMessengerEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsMessengerEXT.html
 type DebugUtilsMessengerEXT NonDispatchableHandle
 
-const EXT_DEBUG_UTILS_SPEC_VERSION = 1
+const EXT_DEBUG_UTILS_SPEC_VERSION = 2
 
 var EXT_DEBUG_UTILS_EXTENSION_NAME = "VK_EXT_debug_utils"
 
 type DebugUtilsMessengerCallbackDataFlagsEXT uint32 // reserved
-type DebugUtilsMessengerCreateFlagsEXT uint32       // reserved
 // DebugUtilsMessageSeverityFlagsEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsMessageSeverityFlagsEXT.html
 type DebugUtilsMessageSeverityFlagsEXT uint32
 
@@ -16038,6 +19153,22 @@ func (x DebugUtilsMessageTypeFlagsEXT) String() string {
 	return strings.TrimSuffix(s, `|`)
 }
 
+type DebugUtilsMessengerCreateFlagsEXT uint32 // reserved
+// DebugUtilsLabelEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsLabelEXT.html
+type DebugUtilsLabelEXT struct {
+	SType      StructureType
+	PNext      unsafe.Pointer
+	PLabelName *int8
+	Color      [4]float32
+}
+
+func NewDebugUtilsLabelEXT() *DebugUtilsLabelEXT {
+	p := (*DebugUtilsLabelEXT)(MemAlloc(unsafe.Sizeof(*(*DebugUtilsLabelEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT
+	return p
+}
+func (p *DebugUtilsLabelEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
 // DebugUtilsObjectNameInfoEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsObjectNameInfoEXT.html
 type DebugUtilsObjectNameInfoEXT struct {
 	SType        StructureType
@@ -16053,39 +19184,6 @@ func NewDebugUtilsObjectNameInfoEXT() *DebugUtilsObjectNameInfoEXT {
 	return p
 }
 func (p *DebugUtilsObjectNameInfoEXT) Free() { MemFree(unsafe.Pointer(p)) }
-
-// DebugUtilsObjectTagInfoEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsObjectTagInfoEXT.html
-type DebugUtilsObjectTagInfoEXT struct {
-	SType        StructureType
-	PNext        unsafe.Pointer
-	ObjectType   ObjectType
-	ObjectHandle uint64
-	TagName      uint64
-	TagSize      uintptr
-	PTag         unsafe.Pointer
-}
-
-func NewDebugUtilsObjectTagInfoEXT() *DebugUtilsObjectTagInfoEXT {
-	p := (*DebugUtilsObjectTagInfoEXT)(MemAlloc(unsafe.Sizeof(*(*DebugUtilsObjectTagInfoEXT)(nil))))
-	p.SType = STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_TAG_INFO_EXT
-	return p
-}
-func (p *DebugUtilsObjectTagInfoEXT) Free() { MemFree(unsafe.Pointer(p)) }
-
-// DebugUtilsLabelEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsLabelEXT.html
-type DebugUtilsLabelEXT struct {
-	SType      StructureType
-	PNext      unsafe.Pointer
-	PLabelName *int8
-	Color      [4]float32
-}
-
-func NewDebugUtilsLabelEXT() *DebugUtilsLabelEXT {
-	p := (*DebugUtilsLabelEXT)(MemAlloc(unsafe.Sizeof(*(*DebugUtilsLabelEXT)(nil))))
-	p.SType = STRUCTURE_TYPE_DEBUG_UTILS_LABEL_EXT
-	return p
-}
-func (p *DebugUtilsLabelEXT) Free() { MemFree(unsafe.Pointer(p)) }
 
 // DebugUtilsMessengerCallbackDataEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsMessengerCallbackDataEXT.html
 type DebugUtilsMessengerCallbackDataEXT struct {
@@ -16115,6 +19213,7 @@ type PfnDebugUtilsMessengerCallbackEXT uintptr
 
 func (fn PfnDebugUtilsMessengerCallbackEXT) Call(messageSeverity DebugUtilsMessageSeverityFlagsEXT, messageTypes DebugUtilsMessageTypeFlagsEXT, pCallbackData *DebugUtilsMessengerCallbackDataEXT, pUserData unsafe.Pointer) Bool32 {
 	ret := C.bridge_vkDebugUtilsMessengerCallbackEXT(C.uintptr_t(fn), (C.VkDebugUtilsMessageSeverityFlagBitsEXT)(messageSeverity), (C.VkDebugUtilsMessageTypeFlagsEXT)(uint32(messageTypes)), (*C.VkDebugUtilsMessengerCallbackDataEXT)(unsafe.Pointer(pCallbackData)), (unsafe.Pointer)(pUserData))
+	debugCheckAndBreak()
 	return Bool32(ret)
 }
 func (fn PfnDebugUtilsMessengerCallbackEXT) String() string {
@@ -16139,11 +19238,30 @@ func NewDebugUtilsMessengerCreateInfoEXT() *DebugUtilsMessengerCreateInfoEXT {
 }
 func (p *DebugUtilsMessengerCreateInfoEXT) Free() { MemFree(unsafe.Pointer(p)) }
 
+// DebugUtilsObjectTagInfoEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDebugUtilsObjectTagInfoEXT.html
+type DebugUtilsObjectTagInfoEXT struct {
+	SType        StructureType
+	PNext        unsafe.Pointer
+	ObjectType   ObjectType
+	ObjectHandle uint64
+	TagName      uint64
+	TagSize      uintptr
+	PTag         unsafe.Pointer
+}
+
+func NewDebugUtilsObjectTagInfoEXT() *DebugUtilsObjectTagInfoEXT {
+	p := (*DebugUtilsObjectTagInfoEXT)(MemAlloc(unsafe.Sizeof(*(*DebugUtilsObjectTagInfoEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_TAG_INFO_EXT
+	return p
+}
+func (p *DebugUtilsObjectTagInfoEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
 //  PfnSetDebugUtilsObjectNameEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkSetDebugUtilsObjectNameEXT.html
 type PfnSetDebugUtilsObjectNameEXT uintptr
 
 func (fn PfnSetDebugUtilsObjectNameEXT) Call(device Device, pNameInfo *DebugUtilsObjectNameInfoEXT) Result {
 	ret := C.bridge_vkSetDebugUtilsObjectNameEXT(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkDebugUtilsObjectNameInfoEXT)(unsafe.Pointer(pNameInfo)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnSetDebugUtilsObjectNameEXT) String() string { return "vkSetDebugUtilsObjectNameEXT" }
@@ -16153,6 +19271,7 @@ type PfnSetDebugUtilsObjectTagEXT uintptr
 
 func (fn PfnSetDebugUtilsObjectTagEXT) Call(device Device, pTagInfo *DebugUtilsObjectTagInfoEXT) Result {
 	ret := C.bridge_vkSetDebugUtilsObjectTagEXT(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkDebugUtilsObjectTagInfoEXT)(unsafe.Pointer(pTagInfo)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnSetDebugUtilsObjectTagEXT) String() string { return "vkSetDebugUtilsObjectTagEXT" }
@@ -16162,6 +19281,7 @@ type PfnQueueBeginDebugUtilsLabelEXT uintptr
 
 func (fn PfnQueueBeginDebugUtilsLabelEXT) Call(queue Queue, pLabelInfo *DebugUtilsLabelEXT) {
 	C.bridge_vkQueueBeginDebugUtilsLabelEXT(C.uintptr_t(fn), (C.VkQueue)(unsafe.Pointer(uintptr(queue))), (*C.VkDebugUtilsLabelEXT)(unsafe.Pointer(pLabelInfo)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnQueueBeginDebugUtilsLabelEXT) String() string { return "vkQueueBeginDebugUtilsLabelEXT" }
@@ -16171,6 +19291,7 @@ type PfnQueueEndDebugUtilsLabelEXT uintptr
 
 func (fn PfnQueueEndDebugUtilsLabelEXT) Call(queue Queue) {
 	C.bridge_vkQueueEndDebugUtilsLabelEXT(C.uintptr_t(fn), (C.VkQueue)(unsafe.Pointer(uintptr(queue))))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnQueueEndDebugUtilsLabelEXT) String() string { return "vkQueueEndDebugUtilsLabelEXT" }
@@ -16180,6 +19301,7 @@ type PfnQueueInsertDebugUtilsLabelEXT uintptr
 
 func (fn PfnQueueInsertDebugUtilsLabelEXT) Call(queue Queue, pLabelInfo *DebugUtilsLabelEXT) {
 	C.bridge_vkQueueInsertDebugUtilsLabelEXT(C.uintptr_t(fn), (C.VkQueue)(unsafe.Pointer(uintptr(queue))), (*C.VkDebugUtilsLabelEXT)(unsafe.Pointer(pLabelInfo)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnQueueInsertDebugUtilsLabelEXT) String() string { return "vkQueueInsertDebugUtilsLabelEXT" }
@@ -16189,6 +19311,7 @@ type PfnCmdBeginDebugUtilsLabelEXT uintptr
 
 func (fn PfnCmdBeginDebugUtilsLabelEXT) Call(commandBuffer CommandBuffer, pLabelInfo *DebugUtilsLabelEXT) {
 	C.bridge_vkCmdBeginDebugUtilsLabelEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkDebugUtilsLabelEXT)(unsafe.Pointer(pLabelInfo)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdBeginDebugUtilsLabelEXT) String() string { return "vkCmdBeginDebugUtilsLabelEXT" }
@@ -16198,6 +19321,7 @@ type PfnCmdEndDebugUtilsLabelEXT uintptr
 
 func (fn PfnCmdEndDebugUtilsLabelEXT) Call(commandBuffer CommandBuffer) {
 	C.bridge_vkCmdEndDebugUtilsLabelEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdEndDebugUtilsLabelEXT) String() string { return "vkCmdEndDebugUtilsLabelEXT" }
@@ -16207,6 +19331,7 @@ type PfnCmdInsertDebugUtilsLabelEXT uintptr
 
 func (fn PfnCmdInsertDebugUtilsLabelEXT) Call(commandBuffer CommandBuffer, pLabelInfo *DebugUtilsLabelEXT) {
 	C.bridge_vkCmdInsertDebugUtilsLabelEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkDebugUtilsLabelEXT)(unsafe.Pointer(pLabelInfo)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdInsertDebugUtilsLabelEXT) String() string { return "vkCmdInsertDebugUtilsLabelEXT" }
@@ -16216,6 +19341,7 @@ type PfnCreateDebugUtilsMessengerEXT uintptr
 
 func (fn PfnCreateDebugUtilsMessengerEXT) Call(instance Instance, pCreateInfo *DebugUtilsMessengerCreateInfoEXT, pAllocator *AllocationCallbacks, pMessenger *DebugUtilsMessengerEXT) Result {
 	ret := C.bridge_vkCreateDebugUtilsMessengerEXT(C.uintptr_t(fn), (C.VkInstance)(unsafe.Pointer(uintptr(instance))), (*C.VkDebugUtilsMessengerCreateInfoEXT)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkDebugUtilsMessengerEXT)(unsafe.Pointer(pMessenger)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateDebugUtilsMessengerEXT) String() string { return "vkCreateDebugUtilsMessengerEXT" }
@@ -16225,6 +19351,7 @@ type PfnDestroyDebugUtilsMessengerEXT uintptr
 
 func (fn PfnDestroyDebugUtilsMessengerEXT) Call(instance Instance, messenger DebugUtilsMessengerEXT, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyDebugUtilsMessengerEXT(C.uintptr_t(fn), (C.VkInstance)(unsafe.Pointer(uintptr(instance))), (C.VkDebugUtilsMessengerEXT)(unsafe.Pointer(uintptr(messenger))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyDebugUtilsMessengerEXT) String() string { return "vkDestroyDebugUtilsMessengerEXT" }
@@ -16234,6 +19361,7 @@ type PfnSubmitDebugUtilsMessageEXT uintptr
 
 func (fn PfnSubmitDebugUtilsMessageEXT) Call(instance Instance, messageSeverity DebugUtilsMessageSeverityFlagsEXT, messageTypes DebugUtilsMessageTypeFlagsEXT, pCallbackData *DebugUtilsMessengerCallbackDataEXT) {
 	C.bridge_vkSubmitDebugUtilsMessageEXT(C.uintptr_t(fn), (C.VkInstance)(unsafe.Pointer(uintptr(instance))), (C.VkDebugUtilsMessageSeverityFlagBitsEXT)(messageSeverity), (C.VkDebugUtilsMessageTypeFlagsEXT)(uint32(messageTypes)), (*C.VkDebugUtilsMessengerCallbackDataEXT)(unsafe.Pointer(pCallbackData)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnSubmitDebugUtilsMessageEXT) String() string { return "vkSubmitDebugUtilsMessageEXT" }
@@ -16243,62 +19371,9 @@ const EXT_SAMPLER_FILTER_MINMAX_SPEC_VERSION = 2
 
 var EXT_SAMPLER_FILTER_MINMAX_EXTENSION_NAME = "VK_EXT_sampler_filter_minmax"
 
-// SamplerReductionModeEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerReductionModeEXT.html
-type SamplerReductionModeEXT int32
-
-const (
-	SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT SamplerReductionModeEXT = 0
-	SAMPLER_REDUCTION_MODE_MIN_EXT              SamplerReductionModeEXT = 1
-	SAMPLER_REDUCTION_MODE_MAX_EXT              SamplerReductionModeEXT = 2
-	SAMPLER_REDUCTION_MODE_BEGIN_RANGE_EXT      SamplerReductionModeEXT = SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT
-	SAMPLER_REDUCTION_MODE_END_RANGE_EXT        SamplerReductionModeEXT = SAMPLER_REDUCTION_MODE_MAX_EXT
-	SAMPLER_REDUCTION_MODE_RANGE_SIZE_EXT       SamplerReductionModeEXT = (SAMPLER_REDUCTION_MODE_MAX_EXT - SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT + 1)
-	SAMPLER_REDUCTION_MODE_MAX_ENUM_EXT         SamplerReductionModeEXT = 0x7FFFFFFF
-)
-
-func (x SamplerReductionModeEXT) String() string {
-	switch x {
-	case SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT:
-		return "SAMPLER_REDUCTION_MODE_WEIGHTED_AVERAGE_EXT"
-	case SAMPLER_REDUCTION_MODE_MIN_EXT:
-		return "SAMPLER_REDUCTION_MODE_MIN_EXT"
-	case SAMPLER_REDUCTION_MODE_MAX_EXT:
-		return "SAMPLER_REDUCTION_MODE_MAX_EXT"
-	case SAMPLER_REDUCTION_MODE_MAX_ENUM_EXT:
-		return "SAMPLER_REDUCTION_MODE_MAX_ENUM_EXT"
-	default:
-		return fmt.Sprint(int32(x))
-	}
-}
-
-// SamplerReductionModeCreateInfoEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerReductionModeCreateInfoEXT.html
-type SamplerReductionModeCreateInfoEXT struct {
-	SType         StructureType
-	PNext         unsafe.Pointer
-	ReductionMode SamplerReductionModeEXT
-}
-
-func NewSamplerReductionModeCreateInfoEXT() *SamplerReductionModeCreateInfoEXT {
-	p := (*SamplerReductionModeCreateInfoEXT)(MemAlloc(unsafe.Sizeof(*(*SamplerReductionModeCreateInfoEXT)(nil))))
-	p.SType = STRUCTURE_TYPE_SAMPLER_REDUCTION_MODE_CREATE_INFO_EXT
-	return p
-}
-func (p *SamplerReductionModeCreateInfoEXT) Free() { MemFree(unsafe.Pointer(p)) }
-
-// PhysicalDeviceSamplerFilterMinmaxPropertiesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT.html
-type PhysicalDeviceSamplerFilterMinmaxPropertiesEXT struct {
-	SType                              StructureType
-	PNext                              unsafe.Pointer
-	FilterMinmaxSingleComponentFormats Bool32
-	FilterMinmaxImageComponentMapping  Bool32
-}
-
-func NewPhysicalDeviceSamplerFilterMinmaxPropertiesEXT() *PhysicalDeviceSamplerFilterMinmaxPropertiesEXT {
-	p := (*PhysicalDeviceSamplerFilterMinmaxPropertiesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceSamplerFilterMinmaxPropertiesEXT)(nil))))
-	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_FILTER_MINMAX_PROPERTIES_EXT
-	return p
-}
-func (p *PhysicalDeviceSamplerFilterMinmaxPropertiesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+type SamplerReductionModeEXT = SamplerReductionMode
+type SamplerReductionModeCreateInfoEXT = SamplerReductionModeCreateInfo
+type PhysicalDeviceSamplerFilterMinmaxPropertiesEXT = PhysicalDeviceSamplerFilterMinmaxProperties
 
 const AMD_gpu_shader_int16 = 1
 const AMD_GPU_SHADER_INT16_SPEC_VERSION = 2
@@ -16511,6 +19586,7 @@ type PfnCmdSetSampleLocationsEXT uintptr
 
 func (fn PfnCmdSetSampleLocationsEXT) Call(commandBuffer CommandBuffer, pSampleLocationsInfo *SampleLocationsInfoEXT) {
 	C.bridge_vkCmdSetSampleLocationsEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkSampleLocationsInfoEXT)(unsafe.Pointer(pSampleLocationsInfo)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdSetSampleLocationsEXT) String() string { return "vkCmdSetSampleLocationsEXT" }
@@ -16520,6 +19596,7 @@ type PfnGetPhysicalDeviceMultisamplePropertiesEXT uintptr
 
 func (fn PfnGetPhysicalDeviceMultisamplePropertiesEXT) Call(physicalDevice PhysicalDevice, samples SampleCountFlags, pMultisampleProperties *MultisamplePropertiesEXT) {
 	C.bridge_vkGetPhysicalDeviceMultisamplePropertiesEXT(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.VkSampleCountFlagBits)(samples), (*C.VkMultisamplePropertiesEXT)(unsafe.Pointer(pMultisampleProperties)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetPhysicalDeviceMultisamplePropertiesEXT) String() string {
@@ -16538,9 +19615,6 @@ const (
 	BLEND_OVERLAP_UNCORRELATED_EXT BlendOverlapEXT = 0
 	BLEND_OVERLAP_DISJOINT_EXT     BlendOverlapEXT = 1
 	BLEND_OVERLAP_CONJOINT_EXT     BlendOverlapEXT = 2
-	BLEND_OVERLAP_BEGIN_RANGE_EXT  BlendOverlapEXT = BLEND_OVERLAP_UNCORRELATED_EXT
-	BLEND_OVERLAP_END_RANGE_EXT    BlendOverlapEXT = BLEND_OVERLAP_CONJOINT_EXT
-	BLEND_OVERLAP_RANGE_SIZE_EXT   BlendOverlapEXT = (BLEND_OVERLAP_CONJOINT_EXT - BLEND_OVERLAP_UNCORRELATED_EXT + 1)
 	BLEND_OVERLAP_MAX_ENUM_EXT     BlendOverlapEXT = 0x7FFFFFFF
 )
 
@@ -16639,14 +19713,11 @@ var NV_FRAMEBUFFER_MIXED_SAMPLES_EXTENSION_NAME = "VK_NV_framebuffer_mixed_sampl
 type CoverageModulationModeNV int32
 
 const (
-	COVERAGE_MODULATION_MODE_NONE_NV        CoverageModulationModeNV = 0
-	COVERAGE_MODULATION_MODE_RGB_NV         CoverageModulationModeNV = 1
-	COVERAGE_MODULATION_MODE_ALPHA_NV       CoverageModulationModeNV = 2
-	COVERAGE_MODULATION_MODE_RGBA_NV        CoverageModulationModeNV = 3
-	COVERAGE_MODULATION_MODE_BEGIN_RANGE_NV CoverageModulationModeNV = COVERAGE_MODULATION_MODE_NONE_NV
-	COVERAGE_MODULATION_MODE_END_RANGE_NV   CoverageModulationModeNV = COVERAGE_MODULATION_MODE_RGBA_NV
-	COVERAGE_MODULATION_MODE_RANGE_SIZE_NV  CoverageModulationModeNV = (COVERAGE_MODULATION_MODE_RGBA_NV - COVERAGE_MODULATION_MODE_NONE_NV + 1)
-	COVERAGE_MODULATION_MODE_MAX_ENUM_NV    CoverageModulationModeNV = 0x7FFFFFFF
+	COVERAGE_MODULATION_MODE_NONE_NV     CoverageModulationModeNV = 0
+	COVERAGE_MODULATION_MODE_RGB_NV      CoverageModulationModeNV = 1
+	COVERAGE_MODULATION_MODE_ALPHA_NV    CoverageModulationModeNV = 2
+	COVERAGE_MODULATION_MODE_RGBA_NV     CoverageModulationModeNV = 3
+	COVERAGE_MODULATION_MODE_MAX_ENUM_NV CoverageModulationModeNV = 0x7FFFFFFF
 )
 
 func (x CoverageModulationModeNV) String() string {
@@ -16828,6 +19899,7 @@ type PfnGetImageDrmFormatModifierPropertiesEXT uintptr
 
 func (fn PfnGetImageDrmFormatModifierPropertiesEXT) Call(device Device, image Image, pProperties *ImageDrmFormatModifierPropertiesEXT) Result {
 	ret := C.bridge_vkGetImageDrmFormatModifierPropertiesEXT(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkImage)(unsafe.Pointer(uintptr(image))), (*C.VkImageDrmFormatModifierPropertiesEXT)(unsafe.Pointer(pProperties)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetImageDrmFormatModifierPropertiesEXT) String() string {
@@ -16847,11 +19919,8 @@ var EXT_VALIDATION_CACHE_EXTENSION_NAME = "VK_EXT_validation_cache"
 type ValidationCacheHeaderVersionEXT int32
 
 const (
-	VALIDATION_CACHE_HEADER_VERSION_ONE_EXT         ValidationCacheHeaderVersionEXT = 1
-	VALIDATION_CACHE_HEADER_VERSION_BEGIN_RANGE_EXT ValidationCacheHeaderVersionEXT = VALIDATION_CACHE_HEADER_VERSION_ONE_EXT
-	VALIDATION_CACHE_HEADER_VERSION_END_RANGE_EXT   ValidationCacheHeaderVersionEXT = VALIDATION_CACHE_HEADER_VERSION_ONE_EXT
-	VALIDATION_CACHE_HEADER_VERSION_RANGE_SIZE_EXT  ValidationCacheHeaderVersionEXT = (VALIDATION_CACHE_HEADER_VERSION_ONE_EXT - VALIDATION_CACHE_HEADER_VERSION_ONE_EXT + 1)
-	VALIDATION_CACHE_HEADER_VERSION_MAX_ENUM_EXT    ValidationCacheHeaderVersionEXT = 0x7FFFFFFF
+	VALIDATION_CACHE_HEADER_VERSION_ONE_EXT      ValidationCacheHeaderVersionEXT = 1
+	VALIDATION_CACHE_HEADER_VERSION_MAX_ENUM_EXT ValidationCacheHeaderVersionEXT = 0x7FFFFFFF
 )
 
 func (x ValidationCacheHeaderVersionEXT) String() string {
@@ -16901,6 +19970,7 @@ type PfnCreateValidationCacheEXT uintptr
 
 func (fn PfnCreateValidationCacheEXT) Call(device Device, pCreateInfo *ValidationCacheCreateInfoEXT, pAllocator *AllocationCallbacks, pValidationCache *ValidationCacheEXT) Result {
 	ret := C.bridge_vkCreateValidationCacheEXT(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkValidationCacheCreateInfoEXT)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkValidationCacheEXT)(unsafe.Pointer(pValidationCache)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateValidationCacheEXT) String() string { return "vkCreateValidationCacheEXT" }
@@ -16910,6 +19980,7 @@ type PfnDestroyValidationCacheEXT uintptr
 
 func (fn PfnDestroyValidationCacheEXT) Call(device Device, validationCache ValidationCacheEXT, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyValidationCacheEXT(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkValidationCacheEXT)(unsafe.Pointer(uintptr(validationCache))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyValidationCacheEXT) String() string { return "vkDestroyValidationCacheEXT" }
@@ -16919,6 +19990,7 @@ type PfnMergeValidationCachesEXT uintptr
 
 func (fn PfnMergeValidationCachesEXT) Call(device Device, dstCache ValidationCacheEXT, srcCacheCount uint32, pSrcCaches *ValidationCacheEXT) Result {
 	ret := C.bridge_vkMergeValidationCachesEXT(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkValidationCacheEXT)(unsafe.Pointer(uintptr(dstCache))), (C.uint32_t)(srcCacheCount), (*C.VkValidationCacheEXT)(unsafe.Pointer(pSrcCaches)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnMergeValidationCachesEXT) String() string { return "vkMergeValidationCachesEXT" }
@@ -16928,6 +20000,7 @@ type PfnGetValidationCacheDataEXT uintptr
 
 func (fn PfnGetValidationCacheDataEXT) Call(device Device, validationCache ValidationCacheEXT, pDataSize *uintptr, pData unsafe.Pointer) Result {
 	ret := C.bridge_vkGetValidationCacheDataEXT(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkValidationCacheEXT)(unsafe.Pointer(uintptr(validationCache))), (*C.size_t)(unsafe.Pointer(pDataSize)), (unsafe.Pointer)(pData))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetValidationCacheDataEXT) String() string { return "vkGetValidationCacheDataEXT" }
@@ -16937,148 +20010,11 @@ const EXT_DESCRIPTOR_INDEXING_SPEC_VERSION = 2
 
 var EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME = "VK_EXT_descriptor_indexing"
 
-// DescriptorBindingFlagsEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorBindingFlagsEXT.html
-type DescriptorBindingFlagsEXT uint32
-
-const (
-	DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT_EXT           DescriptorBindingFlagsEXT = 0x00000001
-	DESCRIPTOR_BINDING_UPDATE_UNUSED_WHILE_PENDING_BIT_EXT DescriptorBindingFlagsEXT = 0x00000002
-	DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT_EXT             DescriptorBindingFlagsEXT = 0x00000004
-	DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT_EXT   DescriptorBindingFlagsEXT = 0x00000008
-	DESCRIPTOR_BINDING_FLAG_BITS_MAX_ENUM_EXT              DescriptorBindingFlagsEXT = 0x7FFFFFFF
-)
-
-func (x DescriptorBindingFlagsEXT) String() string {
-	var s string
-	for i := uint32(0); i < 32; i++ {
-		if int32(x)&(1<<i) != 0 {
-			switch DescriptorBindingFlagsEXT(1 << i) {
-			case DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT_EXT:
-				s += "DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT_EXT|"
-			case DESCRIPTOR_BINDING_UPDATE_UNUSED_WHILE_PENDING_BIT_EXT:
-				s += "DESCRIPTOR_BINDING_UPDATE_UNUSED_WHILE_PENDING_BIT_EXT|"
-			case DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT_EXT:
-				s += "DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT_EXT|"
-			case DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT_EXT:
-				s += "DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT_EXT|"
-			}
-		}
-	}
-	return strings.TrimSuffix(s, `|`)
-}
-
-// DescriptorSetLayoutBindingFlagsCreateInfoEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetLayoutBindingFlagsCreateInfoEXT.html
-type DescriptorSetLayoutBindingFlagsCreateInfoEXT struct {
-	SType         StructureType
-	PNext         unsafe.Pointer
-	BindingCount  uint32
-	PBindingFlags *DescriptorBindingFlagsEXT
-}
-
-func NewDescriptorSetLayoutBindingFlagsCreateInfoEXT() *DescriptorSetLayoutBindingFlagsCreateInfoEXT {
-	p := (*DescriptorSetLayoutBindingFlagsCreateInfoEXT)(MemAlloc(unsafe.Sizeof(*(*DescriptorSetLayoutBindingFlagsCreateInfoEXT)(nil))))
-	p.SType = STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO_EXT
-	return p
-}
-func (p *DescriptorSetLayoutBindingFlagsCreateInfoEXT) Free() { MemFree(unsafe.Pointer(p)) }
-
-// PhysicalDeviceDescriptorIndexingFeaturesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceDescriptorIndexingFeaturesEXT.html
-type PhysicalDeviceDescriptorIndexingFeaturesEXT struct {
-	SType                                              StructureType
-	PNext                                              unsafe.Pointer
-	ShaderInputAttachmentArrayDynamicIndexing          Bool32
-	ShaderUniformTexelBufferArrayDynamicIndexing       Bool32
-	ShaderStorageTexelBufferArrayDynamicIndexing       Bool32
-	ShaderUniformBufferArrayNonUniformIndexing         Bool32
-	ShaderSampledImageArrayNonUniformIndexing          Bool32
-	ShaderStorageBufferArrayNonUniformIndexing         Bool32
-	ShaderStorageImageArrayNonUniformIndexing          Bool32
-	ShaderInputAttachmentArrayNonUniformIndexing       Bool32
-	ShaderUniformTexelBufferArrayNonUniformIndexing    Bool32
-	ShaderStorageTexelBufferArrayNonUniformIndexing    Bool32
-	DescriptorBindingUniformBufferUpdateAfterBind      Bool32
-	DescriptorBindingSampledImageUpdateAfterBind       Bool32
-	DescriptorBindingStorageImageUpdateAfterBind       Bool32
-	DescriptorBindingStorageBufferUpdateAfterBind      Bool32
-	DescriptorBindingUniformTexelBufferUpdateAfterBind Bool32
-	DescriptorBindingStorageTexelBufferUpdateAfterBind Bool32
-	DescriptorBindingUpdateUnusedWhilePending          Bool32
-	DescriptorBindingPartiallyBound                    Bool32
-	DescriptorBindingVariableDescriptorCount           Bool32
-	RuntimeDescriptorArray                             Bool32
-}
-
-func NewPhysicalDeviceDescriptorIndexingFeaturesEXT() *PhysicalDeviceDescriptorIndexingFeaturesEXT {
-	p := (*PhysicalDeviceDescriptorIndexingFeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceDescriptorIndexingFeaturesEXT)(nil))))
-	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES_EXT
-	return p
-}
-func (p *PhysicalDeviceDescriptorIndexingFeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
-
-// PhysicalDeviceDescriptorIndexingPropertiesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceDescriptorIndexingPropertiesEXT.html
-type PhysicalDeviceDescriptorIndexingPropertiesEXT struct {
-	SType                                                StructureType
-	PNext                                                unsafe.Pointer
-	MaxUpdateAfterBindDescriptorsInAllPools              uint32
-	ShaderUniformBufferArrayNonUniformIndexingNative     Bool32
-	ShaderSampledImageArrayNonUniformIndexingNative      Bool32
-	ShaderStorageBufferArrayNonUniformIndexingNative     Bool32
-	ShaderStorageImageArrayNonUniformIndexingNative      Bool32
-	ShaderInputAttachmentArrayNonUniformIndexingNative   Bool32
-	RobustBufferAccessUpdateAfterBind                    Bool32
-	QuadDivergentImplicitLod                             Bool32
-	MaxPerStageDescriptorUpdateAfterBindSamplers         uint32
-	MaxPerStageDescriptorUpdateAfterBindUniformBuffers   uint32
-	MaxPerStageDescriptorUpdateAfterBindStorageBuffers   uint32
-	MaxPerStageDescriptorUpdateAfterBindSampledImages    uint32
-	MaxPerStageDescriptorUpdateAfterBindStorageImages    uint32
-	MaxPerStageDescriptorUpdateAfterBindInputAttachments uint32
-	MaxPerStageUpdateAfterBindResources                  uint32
-	MaxDescriptorSetUpdateAfterBindSamplers              uint32
-	MaxDescriptorSetUpdateAfterBindUniformBuffers        uint32
-	MaxDescriptorSetUpdateAfterBindUniformBuffersDynamic uint32
-	MaxDescriptorSetUpdateAfterBindStorageBuffers        uint32
-	MaxDescriptorSetUpdateAfterBindStorageBuffersDynamic uint32
-	MaxDescriptorSetUpdateAfterBindSampledImages         uint32
-	MaxDescriptorSetUpdateAfterBindStorageImages         uint32
-	MaxDescriptorSetUpdateAfterBindInputAttachments      uint32
-}
-
-func NewPhysicalDeviceDescriptorIndexingPropertiesEXT() *PhysicalDeviceDescriptorIndexingPropertiesEXT {
-	p := (*PhysicalDeviceDescriptorIndexingPropertiesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceDescriptorIndexingPropertiesEXT)(nil))))
-	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_PROPERTIES_EXT
-	return p
-}
-func (p *PhysicalDeviceDescriptorIndexingPropertiesEXT) Free() { MemFree(unsafe.Pointer(p)) }
-
-// DescriptorSetVariableDescriptorCountAllocateInfoEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetVariableDescriptorCountAllocateInfoEXT.html
-type DescriptorSetVariableDescriptorCountAllocateInfoEXT struct {
-	SType              StructureType
-	PNext              unsafe.Pointer
-	DescriptorSetCount uint32
-	PDescriptorCounts  *uint32
-}
-
-func NewDescriptorSetVariableDescriptorCountAllocateInfoEXT() *DescriptorSetVariableDescriptorCountAllocateInfoEXT {
-	p := (*DescriptorSetVariableDescriptorCountAllocateInfoEXT)(MemAlloc(unsafe.Sizeof(*(*DescriptorSetVariableDescriptorCountAllocateInfoEXT)(nil))))
-	p.SType = STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO_EXT
-	return p
-}
-func (p *DescriptorSetVariableDescriptorCountAllocateInfoEXT) Free() { MemFree(unsafe.Pointer(p)) }
-
-// DescriptorSetVariableDescriptorCountLayoutSupportEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDescriptorSetVariableDescriptorCountLayoutSupportEXT.html
-type DescriptorSetVariableDescriptorCountLayoutSupportEXT struct {
-	SType                      StructureType
-	PNext                      unsafe.Pointer
-	MaxVariableDescriptorCount uint32
-}
-
-func NewDescriptorSetVariableDescriptorCountLayoutSupportEXT() *DescriptorSetVariableDescriptorCountLayoutSupportEXT {
-	p := (*DescriptorSetVariableDescriptorCountLayoutSupportEXT)(MemAlloc(unsafe.Sizeof(*(*DescriptorSetVariableDescriptorCountLayoutSupportEXT)(nil))))
-	p.SType = STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_LAYOUT_SUPPORT_EXT
-	return p
-}
-func (p *DescriptorSetVariableDescriptorCountLayoutSupportEXT) Free() { MemFree(unsafe.Pointer(p)) }
+type DescriptorBindingFlagsEXT = DescriptorBindingFlags
+type PhysicalDeviceDescriptorIndexingFeaturesEXT = PhysicalDeviceDescriptorIndexingFeatures
+type PhysicalDeviceDescriptorIndexingPropertiesEXT = PhysicalDeviceDescriptorIndexingProperties
+type DescriptorSetVariableDescriptorCountAllocateInfoEXT = DescriptorSetVariableDescriptorCountAllocateInfo
+type DescriptorSetVariableDescriptorCountLayoutSupportEXT = DescriptorSetVariableDescriptorCountLayoutSupport
 
 const EXT_shader_viewport_index_layer = 1
 const EXT_SHADER_VIEWPORT_INDEX_LAYER_SPEC_VERSION = 1
@@ -17106,9 +20042,6 @@ const (
 	SHADING_RATE_PALETTE_ENTRY_1_INVOCATION_PER_4X2_PIXELS_NV ShadingRatePaletteEntryNV = 9
 	SHADING_RATE_PALETTE_ENTRY_1_INVOCATION_PER_2X4_PIXELS_NV ShadingRatePaletteEntryNV = 10
 	SHADING_RATE_PALETTE_ENTRY_1_INVOCATION_PER_4X4_PIXELS_NV ShadingRatePaletteEntryNV = 11
-	SHADING_RATE_PALETTE_ENTRY_BEGIN_RANGE_NV                 ShadingRatePaletteEntryNV = SHADING_RATE_PALETTE_ENTRY_NO_INVOCATIONS_NV
-	SHADING_RATE_PALETTE_ENTRY_END_RANGE_NV                   ShadingRatePaletteEntryNV = SHADING_RATE_PALETTE_ENTRY_1_INVOCATION_PER_4X4_PIXELS_NV
-	SHADING_RATE_PALETTE_ENTRY_RANGE_SIZE_NV                  ShadingRatePaletteEntryNV = (SHADING_RATE_PALETTE_ENTRY_1_INVOCATION_PER_4X4_PIXELS_NV - SHADING_RATE_PALETTE_ENTRY_NO_INVOCATIONS_NV + 1)
 	SHADING_RATE_PALETTE_ENTRY_MAX_ENUM_NV                    ShadingRatePaletteEntryNV = 0x7FFFFFFF
 )
 
@@ -17153,9 +20086,6 @@ const (
 	COARSE_SAMPLE_ORDER_TYPE_CUSTOM_NV       CoarseSampleOrderTypeNV = 1
 	COARSE_SAMPLE_ORDER_TYPE_PIXEL_MAJOR_NV  CoarseSampleOrderTypeNV = 2
 	COARSE_SAMPLE_ORDER_TYPE_SAMPLE_MAJOR_NV CoarseSampleOrderTypeNV = 3
-	COARSE_SAMPLE_ORDER_TYPE_BEGIN_RANGE_NV  CoarseSampleOrderTypeNV = COARSE_SAMPLE_ORDER_TYPE_DEFAULT_NV
-	COARSE_SAMPLE_ORDER_TYPE_END_RANGE_NV    CoarseSampleOrderTypeNV = COARSE_SAMPLE_ORDER_TYPE_SAMPLE_MAJOR_NV
-	COARSE_SAMPLE_ORDER_TYPE_RANGE_SIZE_NV   CoarseSampleOrderTypeNV = (COARSE_SAMPLE_ORDER_TYPE_SAMPLE_MAJOR_NV - COARSE_SAMPLE_ORDER_TYPE_DEFAULT_NV + 1)
 	COARSE_SAMPLE_ORDER_TYPE_MAX_ENUM_NV     CoarseSampleOrderTypeNV = 0x7FFFFFFF
 )
 
@@ -17280,6 +20210,7 @@ type PfnCmdBindShadingRateImageNV uintptr
 
 func (fn PfnCmdBindShadingRateImageNV) Call(commandBuffer CommandBuffer, imageView ImageView, imageLayout ImageLayout) {
 	C.bridge_vkCmdBindShadingRateImageNV(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkImageView)(unsafe.Pointer(uintptr(imageView))), (C.VkImageLayout)(imageLayout))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdBindShadingRateImageNV) String() string { return "vkCmdBindShadingRateImageNV" }
@@ -17289,6 +20220,7 @@ type PfnCmdSetViewportShadingRatePaletteNV uintptr
 
 func (fn PfnCmdSetViewportShadingRatePaletteNV) Call(commandBuffer CommandBuffer, firstViewport, viewportCount uint32, pShadingRatePalettes *ShadingRatePaletteNV) {
 	C.bridge_vkCmdSetViewportShadingRatePaletteNV(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(firstViewport), (C.uint32_t)(viewportCount), (*C.VkShadingRatePaletteNV)(unsafe.Pointer(pShadingRatePalettes)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdSetViewportShadingRatePaletteNV) String() string {
@@ -17300,6 +20232,7 @@ type PfnCmdSetCoarseSampleOrderNV uintptr
 
 func (fn PfnCmdSetCoarseSampleOrderNV) Call(commandBuffer CommandBuffer, sampleOrderType CoarseSampleOrderTypeNV, customSampleOrderCount uint32, pCustomSampleOrders *CoarseSampleOrderCustomNV) {
 	C.bridge_vkCmdSetCoarseSampleOrderNV(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkCoarseSampleOrderTypeNV)(sampleOrderType), (C.uint32_t)(customSampleOrderCount), (*C.VkCoarseSampleOrderCustomNV)(unsafe.Pointer(pCustomSampleOrders)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdSetCoarseSampleOrderNV) String() string { return "vkCmdSetCoarseSampleOrderNV" }
@@ -17313,108 +20246,125 @@ const NV_RAY_TRACING_SPEC_VERSION = 3
 
 var NV_RAY_TRACING_EXTENSION_NAME = "VK_NV_ray_tracing"
 
-// AccelerationStructureTypeNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureTypeNV.html
-type AccelerationStructureTypeNV int32
+// RayTracingShaderGroupTypeKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRayTracingShaderGroupTypeKHR.html
+type RayTracingShaderGroupTypeKHR int32
 
 const (
-	ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_NV    AccelerationStructureTypeNV = 0
-	ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_NV AccelerationStructureTypeNV = 1
-	ACCELERATION_STRUCTURE_TYPE_BEGIN_RANGE_NV  AccelerationStructureTypeNV = ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_NV
-	ACCELERATION_STRUCTURE_TYPE_END_RANGE_NV    AccelerationStructureTypeNV = ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_NV
-	ACCELERATION_STRUCTURE_TYPE_RANGE_SIZE_NV   AccelerationStructureTypeNV = (ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_NV - ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_NV + 1)
-	ACCELERATION_STRUCTURE_TYPE_MAX_ENUM_NV     AccelerationStructureTypeNV = 0x7FFFFFFF
+	RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR              RayTracingShaderGroupTypeKHR = 0
+	RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_KHR  RayTracingShaderGroupTypeKHR = 1
+	RAY_TRACING_SHADER_GROUP_TYPE_PROCEDURAL_HIT_GROUP_KHR RayTracingShaderGroupTypeKHR = 2
+	RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_NV               RayTracingShaderGroupTypeKHR = RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR
+	RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_NV   RayTracingShaderGroupTypeKHR = RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_KHR
+	RAY_TRACING_SHADER_GROUP_TYPE_PROCEDURAL_HIT_GROUP_NV  RayTracingShaderGroupTypeKHR = RAY_TRACING_SHADER_GROUP_TYPE_PROCEDURAL_HIT_GROUP_KHR
+	RAY_TRACING_SHADER_GROUP_TYPE_MAX_ENUM_KHR             RayTracingShaderGroupTypeKHR = 0x7FFFFFFF
 )
 
-func (x AccelerationStructureTypeNV) String() string {
+func (x RayTracingShaderGroupTypeKHR) String() string {
 	switch x {
-	case ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_NV:
-		return "ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_NV"
-	case ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_NV:
-		return "ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_NV"
-	case ACCELERATION_STRUCTURE_TYPE_MAX_ENUM_NV:
-		return "ACCELERATION_STRUCTURE_TYPE_MAX_ENUM_NV"
+	case RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR:
+		return "RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_KHR"
+	case RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_KHR:
+		return "RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_KHR"
+	case RAY_TRACING_SHADER_GROUP_TYPE_PROCEDURAL_HIT_GROUP_KHR:
+		return "RAY_TRACING_SHADER_GROUP_TYPE_PROCEDURAL_HIT_GROUP_KHR"
+	case RAY_TRACING_SHADER_GROUP_TYPE_MAX_ENUM_KHR:
+		return "RAY_TRACING_SHADER_GROUP_TYPE_MAX_ENUM_KHR"
 	default:
 		return fmt.Sprint(int32(x))
 	}
 }
 
-// RayTracingShaderGroupTypeNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRayTracingShaderGroupTypeNV.html
-type RayTracingShaderGroupTypeNV int32
+type RayTracingShaderGroupTypeNV = RayTracingShaderGroupTypeKHR
+
+// GeometryTypeKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGeometryTypeKHR.html
+type GeometryTypeKHR int32
 
 const (
-	RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_NV              RayTracingShaderGroupTypeNV = 0
-	RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_NV  RayTracingShaderGroupTypeNV = 1
-	RAY_TRACING_SHADER_GROUP_TYPE_PROCEDURAL_HIT_GROUP_NV RayTracingShaderGroupTypeNV = 2
-	RAY_TRACING_SHADER_GROUP_TYPE_BEGIN_RANGE_NV          RayTracingShaderGroupTypeNV = RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_NV
-	RAY_TRACING_SHADER_GROUP_TYPE_END_RANGE_NV            RayTracingShaderGroupTypeNV = RAY_TRACING_SHADER_GROUP_TYPE_PROCEDURAL_HIT_GROUP_NV
-	RAY_TRACING_SHADER_GROUP_TYPE_RANGE_SIZE_NV           RayTracingShaderGroupTypeNV = (RAY_TRACING_SHADER_GROUP_TYPE_PROCEDURAL_HIT_GROUP_NV - RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_NV + 1)
-	RAY_TRACING_SHADER_GROUP_TYPE_MAX_ENUM_NV             RayTracingShaderGroupTypeNV = 0x7FFFFFFF
+	GEOMETRY_TYPE_TRIANGLES_KHR GeometryTypeKHR = 0
+	GEOMETRY_TYPE_AABBS_KHR     GeometryTypeKHR = 1
+	GEOMETRY_TYPE_INSTANCES_KHR GeometryTypeKHR = 2
+	GEOMETRY_TYPE_TRIANGLES_NV  GeometryTypeKHR = GEOMETRY_TYPE_TRIANGLES_KHR
+	GEOMETRY_TYPE_AABBS_NV      GeometryTypeKHR = GEOMETRY_TYPE_AABBS_KHR
+	GEOMETRY_TYPE_MAX_ENUM_KHR  GeometryTypeKHR = 0x7FFFFFFF
 )
 
-func (x RayTracingShaderGroupTypeNV) String() string {
+func (x GeometryTypeKHR) String() string {
 	switch x {
-	case RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_NV:
-		return "RAY_TRACING_SHADER_GROUP_TYPE_GENERAL_NV"
-	case RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_NV:
-		return "RAY_TRACING_SHADER_GROUP_TYPE_TRIANGLES_HIT_GROUP_NV"
-	case RAY_TRACING_SHADER_GROUP_TYPE_PROCEDURAL_HIT_GROUP_NV:
-		return "RAY_TRACING_SHADER_GROUP_TYPE_PROCEDURAL_HIT_GROUP_NV"
-	case RAY_TRACING_SHADER_GROUP_TYPE_MAX_ENUM_NV:
-		return "RAY_TRACING_SHADER_GROUP_TYPE_MAX_ENUM_NV"
+	case GEOMETRY_TYPE_TRIANGLES_KHR:
+		return "GEOMETRY_TYPE_TRIANGLES_KHR"
+	case GEOMETRY_TYPE_AABBS_KHR:
+		return "GEOMETRY_TYPE_AABBS_KHR"
+	case GEOMETRY_TYPE_INSTANCES_KHR:
+		return "GEOMETRY_TYPE_INSTANCES_KHR"
+	case GEOMETRY_TYPE_MAX_ENUM_KHR:
+		return "GEOMETRY_TYPE_MAX_ENUM_KHR"
 	default:
 		return fmt.Sprint(int32(x))
 	}
 }
 
-// GeometryTypeNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGeometryTypeNV.html
-type GeometryTypeNV int32
+type GeometryTypeNV = GeometryTypeKHR
+
+// AccelerationStructureTypeKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureTypeKHR.html
+type AccelerationStructureTypeKHR int32
 
 const (
-	GEOMETRY_TYPE_TRIANGLES_NV   GeometryTypeNV = 0
-	GEOMETRY_TYPE_AABBS_NV       GeometryTypeNV = 1
-	GEOMETRY_TYPE_BEGIN_RANGE_NV GeometryTypeNV = GEOMETRY_TYPE_TRIANGLES_NV
-	GEOMETRY_TYPE_END_RANGE_NV   GeometryTypeNV = GEOMETRY_TYPE_AABBS_NV
-	GEOMETRY_TYPE_RANGE_SIZE_NV  GeometryTypeNV = (GEOMETRY_TYPE_AABBS_NV - GEOMETRY_TYPE_TRIANGLES_NV + 1)
-	GEOMETRY_TYPE_MAX_ENUM_NV    GeometryTypeNV = 0x7FFFFFFF
+	ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR    AccelerationStructureTypeKHR = 0
+	ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR AccelerationStructureTypeKHR = 1
+	ACCELERATION_STRUCTURE_TYPE_GENERIC_KHR      AccelerationStructureTypeKHR = 2
+	ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_NV     AccelerationStructureTypeKHR = ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR
+	ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_NV  AccelerationStructureTypeKHR = ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR
+	ACCELERATION_STRUCTURE_TYPE_MAX_ENUM_KHR     AccelerationStructureTypeKHR = 0x7FFFFFFF
 )
 
-func (x GeometryTypeNV) String() string {
+func (x AccelerationStructureTypeKHR) String() string {
 	switch x {
-	case GEOMETRY_TYPE_TRIANGLES_NV:
-		return "GEOMETRY_TYPE_TRIANGLES_NV"
-	case GEOMETRY_TYPE_AABBS_NV:
-		return "GEOMETRY_TYPE_AABBS_NV"
-	case GEOMETRY_TYPE_MAX_ENUM_NV:
-		return "GEOMETRY_TYPE_MAX_ENUM_NV"
+	case ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR:
+		return "ACCELERATION_STRUCTURE_TYPE_TOP_LEVEL_KHR"
+	case ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR:
+		return "ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR"
+	case ACCELERATION_STRUCTURE_TYPE_GENERIC_KHR:
+		return "ACCELERATION_STRUCTURE_TYPE_GENERIC_KHR"
+	case ACCELERATION_STRUCTURE_TYPE_MAX_ENUM_KHR:
+		return "ACCELERATION_STRUCTURE_TYPE_MAX_ENUM_KHR"
 	default:
 		return fmt.Sprint(int32(x))
 	}
 }
 
-// CopyAccelerationStructureModeNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCopyAccelerationStructureModeNV.html
-type CopyAccelerationStructureModeNV int32
+type AccelerationStructureTypeNV = AccelerationStructureTypeKHR
+
+// CopyAccelerationStructureModeKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCopyAccelerationStructureModeKHR.html
+type CopyAccelerationStructureModeKHR int32
 
 const (
-	COPY_ACCELERATION_STRUCTURE_MODE_CLONE_NV       CopyAccelerationStructureModeNV = 0
-	COPY_ACCELERATION_STRUCTURE_MODE_COMPACT_NV     CopyAccelerationStructureModeNV = 1
-	COPY_ACCELERATION_STRUCTURE_MODE_BEGIN_RANGE_NV CopyAccelerationStructureModeNV = COPY_ACCELERATION_STRUCTURE_MODE_CLONE_NV
-	COPY_ACCELERATION_STRUCTURE_MODE_END_RANGE_NV   CopyAccelerationStructureModeNV = COPY_ACCELERATION_STRUCTURE_MODE_COMPACT_NV
-	COPY_ACCELERATION_STRUCTURE_MODE_RANGE_SIZE_NV  CopyAccelerationStructureModeNV = (COPY_ACCELERATION_STRUCTURE_MODE_COMPACT_NV - COPY_ACCELERATION_STRUCTURE_MODE_CLONE_NV + 1)
-	COPY_ACCELERATION_STRUCTURE_MODE_MAX_ENUM_NV    CopyAccelerationStructureModeNV = 0x7FFFFFFF
+	COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR       CopyAccelerationStructureModeKHR = 0
+	COPY_ACCELERATION_STRUCTURE_MODE_COMPACT_KHR     CopyAccelerationStructureModeKHR = 1
+	COPY_ACCELERATION_STRUCTURE_MODE_SERIALIZE_KHR   CopyAccelerationStructureModeKHR = 2
+	COPY_ACCELERATION_STRUCTURE_MODE_DESERIALIZE_KHR CopyAccelerationStructureModeKHR = 3
+	COPY_ACCELERATION_STRUCTURE_MODE_CLONE_NV        CopyAccelerationStructureModeKHR = COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR
+	COPY_ACCELERATION_STRUCTURE_MODE_COMPACT_NV      CopyAccelerationStructureModeKHR = COPY_ACCELERATION_STRUCTURE_MODE_COMPACT_KHR
+	COPY_ACCELERATION_STRUCTURE_MODE_MAX_ENUM_KHR    CopyAccelerationStructureModeKHR = 0x7FFFFFFF
 )
 
-func (x CopyAccelerationStructureModeNV) String() string {
+func (x CopyAccelerationStructureModeKHR) String() string {
 	switch x {
-	case COPY_ACCELERATION_STRUCTURE_MODE_CLONE_NV:
-		return "COPY_ACCELERATION_STRUCTURE_MODE_CLONE_NV"
-	case COPY_ACCELERATION_STRUCTURE_MODE_COMPACT_NV:
-		return "COPY_ACCELERATION_STRUCTURE_MODE_COMPACT_NV"
-	case COPY_ACCELERATION_STRUCTURE_MODE_MAX_ENUM_NV:
-		return "COPY_ACCELERATION_STRUCTURE_MODE_MAX_ENUM_NV"
+	case COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR:
+		return "COPY_ACCELERATION_STRUCTURE_MODE_CLONE_KHR"
+	case COPY_ACCELERATION_STRUCTURE_MODE_COMPACT_KHR:
+		return "COPY_ACCELERATION_STRUCTURE_MODE_COMPACT_KHR"
+	case COPY_ACCELERATION_STRUCTURE_MODE_SERIALIZE_KHR:
+		return "COPY_ACCELERATION_STRUCTURE_MODE_SERIALIZE_KHR"
+	case COPY_ACCELERATION_STRUCTURE_MODE_DESERIALIZE_KHR:
+		return "COPY_ACCELERATION_STRUCTURE_MODE_DESERIALIZE_KHR"
+	case COPY_ACCELERATION_STRUCTURE_MODE_MAX_ENUM_KHR:
+		return "COPY_ACCELERATION_STRUCTURE_MODE_MAX_ENUM_KHR"
 	default:
 		return fmt.Sprint(int32(x))
 	}
 }
+
+type CopyAccelerationStructureModeNV = CopyAccelerationStructureModeKHR
 
 // AccelerationStructureMemoryRequirementsTypeNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureMemoryRequirementsTypeNV.html
 type AccelerationStructureMemoryRequirementsTypeNV int32
@@ -17423,9 +20373,6 @@ const (
 	ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_OBJECT_NV         AccelerationStructureMemoryRequirementsTypeNV = 0
 	ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_BUILD_SCRATCH_NV  AccelerationStructureMemoryRequirementsTypeNV = 1
 	ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_UPDATE_SCRATCH_NV AccelerationStructureMemoryRequirementsTypeNV = 2
-	ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_BEGIN_RANGE_NV    AccelerationStructureMemoryRequirementsTypeNV = ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_OBJECT_NV
-	ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_END_RANGE_NV      AccelerationStructureMemoryRequirementsTypeNV = ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_UPDATE_SCRATCH_NV
-	ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_RANGE_SIZE_NV     AccelerationStructureMemoryRequirementsTypeNV = (ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_UPDATE_SCRATCH_NV - ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_OBJECT_NV + 1)
 	ACCELERATION_STRUCTURE_MEMORY_REQUIREMENTS_TYPE_MAX_ENUM_NV       AccelerationStructureMemoryRequirementsTypeNV = 0x7FFFFFFF
 )
 
@@ -17444,98 +20391,115 @@ func (x AccelerationStructureMemoryRequirementsTypeNV) String() string {
 	}
 }
 
-// GeometryFlagsNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGeometryFlagsNV.html
-type GeometryFlagsNV uint32
+// GeometryFlagsKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGeometryFlagsKHR.html
+type GeometryFlagsKHR uint32
 
 const (
-	GEOMETRY_OPAQUE_BIT_NV                          GeometryFlagsNV = 0x00000001
-	GEOMETRY_NO_DUPLICATE_ANY_HIT_INVOCATION_BIT_NV GeometryFlagsNV = 0x00000002
-	GEOMETRY_FLAG_BITS_MAX_ENUM_NV                  GeometryFlagsNV = 0x7FFFFFFF
+	GEOMETRY_OPAQUE_BIT_KHR                          GeometryFlagsKHR = 0x00000001
+	GEOMETRY_NO_DUPLICATE_ANY_HIT_INVOCATION_BIT_KHR GeometryFlagsKHR = 0x00000002
+	GEOMETRY_OPAQUE_BIT_NV                           GeometryFlagsKHR = GEOMETRY_OPAQUE_BIT_KHR
+	GEOMETRY_NO_DUPLICATE_ANY_HIT_INVOCATION_BIT_NV  GeometryFlagsKHR = GEOMETRY_NO_DUPLICATE_ANY_HIT_INVOCATION_BIT_KHR
+	GEOMETRY_FLAG_BITS_MAX_ENUM_KHR                  GeometryFlagsKHR = 0x7FFFFFFF
 )
 
-func (x GeometryFlagsNV) String() string {
+func (x GeometryFlagsKHR) String() string {
 	var s string
 	for i := uint32(0); i < 32; i++ {
 		if int32(x)&(1<<i) != 0 {
-			switch GeometryFlagsNV(1 << i) {
-			case GEOMETRY_OPAQUE_BIT_NV:
-				s += "GEOMETRY_OPAQUE_BIT_NV|"
-			case GEOMETRY_NO_DUPLICATE_ANY_HIT_INVOCATION_BIT_NV:
-				s += "GEOMETRY_NO_DUPLICATE_ANY_HIT_INVOCATION_BIT_NV|"
+			switch GeometryFlagsKHR(1 << i) {
+			case GEOMETRY_OPAQUE_BIT_KHR:
+				s += "GEOMETRY_OPAQUE_BIT_KHR|"
+			case GEOMETRY_NO_DUPLICATE_ANY_HIT_INVOCATION_BIT_KHR:
+				s += "GEOMETRY_NO_DUPLICATE_ANY_HIT_INVOCATION_BIT_KHR|"
 			}
 		}
 	}
 	return strings.TrimSuffix(s, `|`)
 }
 
-// GeometryInstanceFlagsNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGeometryInstanceFlagsNV.html
-type GeometryInstanceFlagsNV uint32
+type GeometryFlagsNV = GeometryFlagsKHR
+
+// GeometryInstanceFlagsKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGeometryInstanceFlagsKHR.html
+type GeometryInstanceFlagsKHR uint32
 
 const (
-	GEOMETRY_INSTANCE_TRIANGLE_CULL_DISABLE_BIT_NV           GeometryInstanceFlagsNV = 0x00000001
-	GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_NV GeometryInstanceFlagsNV = 0x00000002
-	GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_NV                    GeometryInstanceFlagsNV = 0x00000004
-	GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_NV                 GeometryInstanceFlagsNV = 0x00000008
-	GEOMETRY_INSTANCE_FLAG_BITS_MAX_ENUM_NV                  GeometryInstanceFlagsNV = 0x7FFFFFFF
+	GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR    GeometryInstanceFlagsKHR = 0x00000001
+	GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_KHR GeometryInstanceFlagsKHR = 0x00000002
+	GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_KHR                    GeometryInstanceFlagsKHR = 0x00000004
+	GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_KHR                 GeometryInstanceFlagsKHR = 0x00000008
+	GEOMETRY_INSTANCE_TRIANGLE_CULL_DISABLE_BIT_NV            GeometryInstanceFlagsKHR = GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR
+	GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_NV  GeometryInstanceFlagsKHR = GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_KHR
+	GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_NV                     GeometryInstanceFlagsKHR = GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_KHR
+	GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_NV                  GeometryInstanceFlagsKHR = GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_KHR
+	GEOMETRY_INSTANCE_FLAG_BITS_MAX_ENUM_KHR                  GeometryInstanceFlagsKHR = 0x7FFFFFFF
 )
 
-func (x GeometryInstanceFlagsNV) String() string {
+func (x GeometryInstanceFlagsKHR) String() string {
 	var s string
 	for i := uint32(0); i < 32; i++ {
 		if int32(x)&(1<<i) != 0 {
-			switch GeometryInstanceFlagsNV(1 << i) {
-			case GEOMETRY_INSTANCE_TRIANGLE_CULL_DISABLE_BIT_NV:
-				s += "GEOMETRY_INSTANCE_TRIANGLE_CULL_DISABLE_BIT_NV|"
-			case GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_NV:
-				s += "GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_NV|"
-			case GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_NV:
-				s += "GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_NV|"
-			case GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_NV:
-				s += "GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_NV|"
+			switch GeometryInstanceFlagsKHR(1 << i) {
+			case GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR:
+				s += "GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR|"
+			case GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_KHR:
+				s += "GEOMETRY_INSTANCE_TRIANGLE_FRONT_COUNTERCLOCKWISE_BIT_KHR|"
+			case GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_KHR:
+				s += "GEOMETRY_INSTANCE_FORCE_OPAQUE_BIT_KHR|"
+			case GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_KHR:
+				s += "GEOMETRY_INSTANCE_FORCE_NO_OPAQUE_BIT_KHR|"
 			}
 		}
 	}
 	return strings.TrimSuffix(s, `|`)
 }
 
-// BuildAccelerationStructureFlagsNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBuildAccelerationStructureFlagsNV.html
-type BuildAccelerationStructureFlagsNV uint32
+type GeometryInstanceFlagsNV = GeometryInstanceFlagsKHR
+
+// BuildAccelerationStructureFlagsKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBuildAccelerationStructureFlagsKHR.html
+type BuildAccelerationStructureFlagsKHR uint32
 
 const (
-	BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_NV      BuildAccelerationStructureFlagsNV = 0x00000001
-	BUILD_ACCELERATION_STRUCTURE_ALLOW_COMPACTION_BIT_NV  BuildAccelerationStructureFlagsNV = 0x00000002
-	BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_NV BuildAccelerationStructureFlagsNV = 0x00000004
-	BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_BUILD_BIT_NV BuildAccelerationStructureFlagsNV = 0x00000008
-	BUILD_ACCELERATION_STRUCTURE_LOW_MEMORY_BIT_NV        BuildAccelerationStructureFlagsNV = 0x00000010
-	BUILD_ACCELERATION_STRUCTURE_FLAG_BITS_MAX_ENUM_NV    BuildAccelerationStructureFlagsNV = 0x7FFFFFFF
+	BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_KHR      BuildAccelerationStructureFlagsKHR = 0x00000001
+	BUILD_ACCELERATION_STRUCTURE_ALLOW_COMPACTION_BIT_KHR  BuildAccelerationStructureFlagsKHR = 0x00000002
+	BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR BuildAccelerationStructureFlagsKHR = 0x00000004
+	BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_BUILD_BIT_KHR BuildAccelerationStructureFlagsKHR = 0x00000008
+	BUILD_ACCELERATION_STRUCTURE_LOW_MEMORY_BIT_KHR        BuildAccelerationStructureFlagsKHR = 0x00000010
+	BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_NV       BuildAccelerationStructureFlagsKHR = BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_KHR
+	BUILD_ACCELERATION_STRUCTURE_ALLOW_COMPACTION_BIT_NV   BuildAccelerationStructureFlagsKHR = BUILD_ACCELERATION_STRUCTURE_ALLOW_COMPACTION_BIT_KHR
+	BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_NV  BuildAccelerationStructureFlagsKHR = BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR
+	BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_BUILD_BIT_NV  BuildAccelerationStructureFlagsKHR = BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_BUILD_BIT_KHR
+	BUILD_ACCELERATION_STRUCTURE_LOW_MEMORY_BIT_NV         BuildAccelerationStructureFlagsKHR = BUILD_ACCELERATION_STRUCTURE_LOW_MEMORY_BIT_KHR
+	BUILD_ACCELERATION_STRUCTURE_FLAG_BITS_MAX_ENUM_KHR    BuildAccelerationStructureFlagsKHR = 0x7FFFFFFF
 )
 
-func (x BuildAccelerationStructureFlagsNV) String() string {
+func (x BuildAccelerationStructureFlagsKHR) String() string {
 	var s string
 	for i := uint32(0); i < 32; i++ {
 		if int32(x)&(1<<i) != 0 {
-			switch BuildAccelerationStructureFlagsNV(1 << i) {
-			case BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_NV:
-				s += "BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_NV|"
-			case BUILD_ACCELERATION_STRUCTURE_ALLOW_COMPACTION_BIT_NV:
-				s += "BUILD_ACCELERATION_STRUCTURE_ALLOW_COMPACTION_BIT_NV|"
-			case BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_NV:
-				s += "BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_NV|"
-			case BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_BUILD_BIT_NV:
-				s += "BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_BUILD_BIT_NV|"
-			case BUILD_ACCELERATION_STRUCTURE_LOW_MEMORY_BIT_NV:
-				s += "BUILD_ACCELERATION_STRUCTURE_LOW_MEMORY_BIT_NV|"
+			switch BuildAccelerationStructureFlagsKHR(1 << i) {
+			case BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_KHR:
+				s += "BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_KHR|"
+			case BUILD_ACCELERATION_STRUCTURE_ALLOW_COMPACTION_BIT_KHR:
+				s += "BUILD_ACCELERATION_STRUCTURE_ALLOW_COMPACTION_BIT_KHR|"
+			case BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR:
+				s += "BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR|"
+			case BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_BUILD_BIT_KHR:
+				s += "BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_BUILD_BIT_KHR|"
+			case BUILD_ACCELERATION_STRUCTURE_LOW_MEMORY_BIT_KHR:
+				s += "BUILD_ACCELERATION_STRUCTURE_LOW_MEMORY_BIT_KHR|"
 			}
 		}
 	}
 	return strings.TrimSuffix(s, `|`)
 }
+
+type BuildAccelerationStructureFlagsNV = BuildAccelerationStructureFlagsKHR
 
 // RayTracingShaderGroupCreateInfoNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRayTracingShaderGroupCreateInfoNV.html
 type RayTracingShaderGroupCreateInfoNV struct {
 	SType              StructureType
 	PNext              unsafe.Pointer
-	Type               RayTracingShaderGroupTypeNV
+	Type               RayTracingShaderGroupTypeKHR
 	GeneralShader      uint32
 	ClosestHitShader   uint32
 	AnyHitShader       uint32
@@ -17627,9 +20591,9 @@ func (p *GeometryDataNV) Free() { MemFree(unsafe.Pointer(p)) }
 type GeometryNV struct {
 	SType        StructureType
 	PNext        unsafe.Pointer
-	GeometryType GeometryTypeNV
+	GeometryType GeometryTypeKHR
 	Geometry     GeometryDataNV
-	Flags        GeometryFlagsNV
+	Flags        GeometryFlagsKHR
 }
 
 func NewGeometryNV() *GeometryNV {
@@ -17741,11 +20705,42 @@ func NewPhysicalDeviceRayTracingPropertiesNV() *PhysicalDeviceRayTracingProperti
 }
 func (p *PhysicalDeviceRayTracingPropertiesNV) Free() { MemFree(unsafe.Pointer(p)) }
 
+// TransformMatrixKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkTransformMatrixKHR.html
+type TransformMatrixKHR struct {
+	Matrix [3][4]float32
+}
+
+func NewTransformMatrixKHR() *TransformMatrixKHR {
+	return (*TransformMatrixKHR)(MemAlloc(unsafe.Sizeof(*(*TransformMatrixKHR)(nil))))
+}
+func (p *TransformMatrixKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+type TransformMatrixNV = TransformMatrixKHR
+
+// AabbPositionsKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAabbPositionsKHR.html
+type AabbPositionsKHR struct {
+	MinX float32
+	MinY float32
+	MinZ float32
+	MaxX float32
+	MaxY float32
+	MaxZ float32
+}
+
+func NewAabbPositionsKHR() *AabbPositionsKHR {
+	return (*AabbPositionsKHR)(MemAlloc(unsafe.Sizeof(*(*AabbPositionsKHR)(nil))))
+}
+func (p *AabbPositionsKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+type AabbPositionsNV = AabbPositionsKHR
+type AccelerationStructureInstanceNV = AccelerationStructureInstanceKHR
+
 //  PfnCreateAccelerationStructureNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateAccelerationStructureNV.html
 type PfnCreateAccelerationStructureNV uintptr
 
 func (fn PfnCreateAccelerationStructureNV) Call(device Device, pCreateInfo *AccelerationStructureCreateInfoNV, pAllocator *AllocationCallbacks, pAccelerationStructure *AccelerationStructureNV) Result {
 	ret := C.bridge_vkCreateAccelerationStructureNV(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkAccelerationStructureCreateInfoNV)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkAccelerationStructureNV)(unsafe.Pointer(pAccelerationStructure)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateAccelerationStructureNV) String() string { return "vkCreateAccelerationStructureNV" }
@@ -17755,6 +20750,7 @@ type PfnDestroyAccelerationStructureNV uintptr
 
 func (fn PfnDestroyAccelerationStructureNV) Call(device Device, accelerationStructure AccelerationStructureNV, pAllocator *AllocationCallbacks) {
 	C.bridge_vkDestroyAccelerationStructureNV(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkAccelerationStructureNV)(unsafe.Pointer(uintptr(accelerationStructure))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnDestroyAccelerationStructureNV) String() string {
@@ -17766,6 +20762,7 @@ type PfnGetAccelerationStructureMemoryRequirementsNV uintptr
 
 func (fn PfnGetAccelerationStructureMemoryRequirementsNV) Call(device Device, pInfo *AccelerationStructureMemoryRequirementsInfoNV, pMemoryRequirements *MemoryRequirements2KHR) {
 	C.bridge_vkGetAccelerationStructureMemoryRequirementsNV(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkAccelerationStructureMemoryRequirementsInfoNV)(unsafe.Pointer(pInfo)), (*C.VkMemoryRequirements2KHR)(unsafe.Pointer(pMemoryRequirements)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetAccelerationStructureMemoryRequirementsNV) String() string {
@@ -17777,6 +20774,7 @@ type PfnBindAccelerationStructureMemoryNV uintptr
 
 func (fn PfnBindAccelerationStructureMemoryNV) Call(device Device, bindInfoCount uint32, pBindInfos *BindAccelerationStructureMemoryInfoNV) Result {
 	ret := C.bridge_vkBindAccelerationStructureMemoryNV(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.uint32_t)(bindInfoCount), (*C.VkBindAccelerationStructureMemoryInfoNV)(unsafe.Pointer(pBindInfos)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnBindAccelerationStructureMemoryNV) String() string {
@@ -17788,6 +20786,7 @@ type PfnCmdBuildAccelerationStructureNV uintptr
 
 func (fn PfnCmdBuildAccelerationStructureNV) Call(commandBuffer CommandBuffer, pInfo *AccelerationStructureInfoNV, instanceData Buffer, instanceOffset DeviceSize, update Bool32, dst, src AccelerationStructureNV, scratch Buffer, scratchOffset DeviceSize) {
 	C.bridge_vkCmdBuildAccelerationStructureNV(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkAccelerationStructureInfoNV)(unsafe.Pointer(pInfo)), (C.VkBuffer)(unsafe.Pointer(uintptr(instanceData))), (C.VkDeviceSize)(instanceOffset), (C.VkBool32)(update), (C.VkAccelerationStructureNV)(unsafe.Pointer(uintptr(dst))), (C.VkAccelerationStructureNV)(unsafe.Pointer(uintptr(src))), (C.VkBuffer)(unsafe.Pointer(uintptr(scratch))), (C.VkDeviceSize)(scratchOffset))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdBuildAccelerationStructureNV) String() string {
@@ -17797,8 +20796,9 @@ func (fn PfnCmdBuildAccelerationStructureNV) String() string {
 //  PfnCmdCopyAccelerationStructureNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdCopyAccelerationStructureNV.html
 type PfnCmdCopyAccelerationStructureNV uintptr
 
-func (fn PfnCmdCopyAccelerationStructureNV) Call(commandBuffer CommandBuffer, dst, src AccelerationStructureNV, mode CopyAccelerationStructureModeNV) {
-	C.bridge_vkCmdCopyAccelerationStructureNV(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkAccelerationStructureNV)(unsafe.Pointer(uintptr(dst))), (C.VkAccelerationStructureNV)(unsafe.Pointer(uintptr(src))), (C.VkCopyAccelerationStructureModeNV)(mode))
+func (fn PfnCmdCopyAccelerationStructureNV) Call(commandBuffer CommandBuffer, dst, src AccelerationStructureNV, mode CopyAccelerationStructureModeKHR) {
+	C.bridge_vkCmdCopyAccelerationStructureNV(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkAccelerationStructureNV)(unsafe.Pointer(uintptr(dst))), (C.VkAccelerationStructureNV)(unsafe.Pointer(uintptr(src))), (C.VkCopyAccelerationStructureModeKHR)(mode))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdCopyAccelerationStructureNV) String() string {
@@ -17810,6 +20810,7 @@ type PfnCmdTraceRaysNV uintptr
 
 func (fn PfnCmdTraceRaysNV) Call(commandBuffer CommandBuffer, raygenShaderBindingTableBuffer Buffer, raygenShaderBindingOffset DeviceSize, missShaderBindingTableBuffer Buffer, missShaderBindingOffset, missShaderBindingStride DeviceSize, hitShaderBindingTableBuffer Buffer, hitShaderBindingOffset, hitShaderBindingStride DeviceSize, callableShaderBindingTableBuffer Buffer, callableShaderBindingOffset, callableShaderBindingStride DeviceSize, width, height, depth uint32) {
 	C.bridge_vkCmdTraceRaysNV(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBuffer)(unsafe.Pointer(uintptr(raygenShaderBindingTableBuffer))), (C.VkDeviceSize)(raygenShaderBindingOffset), (C.VkBuffer)(unsafe.Pointer(uintptr(missShaderBindingTableBuffer))), (C.VkDeviceSize)(missShaderBindingOffset), (C.VkDeviceSize)(missShaderBindingStride), (C.VkBuffer)(unsafe.Pointer(uintptr(hitShaderBindingTableBuffer))), (C.VkDeviceSize)(hitShaderBindingOffset), (C.VkDeviceSize)(hitShaderBindingStride), (C.VkBuffer)(unsafe.Pointer(uintptr(callableShaderBindingTableBuffer))), (C.VkDeviceSize)(callableShaderBindingOffset), (C.VkDeviceSize)(callableShaderBindingStride), (C.uint32_t)(width), (C.uint32_t)(height), (C.uint32_t)(depth))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdTraceRaysNV) String() string { return "vkCmdTraceRaysNV" }
@@ -17819,15 +20820,29 @@ type PfnCreateRayTracingPipelinesNV uintptr
 
 func (fn PfnCreateRayTracingPipelinesNV) Call(device Device, pipelineCache PipelineCache, createInfoCount uint32, pCreateInfos *RayTracingPipelineCreateInfoNV, pAllocator *AllocationCallbacks, pPipelines *Pipeline) Result {
 	ret := C.bridge_vkCreateRayTracingPipelinesNV(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkPipelineCache)(unsafe.Pointer(uintptr(pipelineCache))), (C.uint32_t)(createInfoCount), (*C.VkRayTracingPipelineCreateInfoNV)(unsafe.Pointer(pCreateInfos)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkPipeline)(unsafe.Pointer(pPipelines)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateRayTracingPipelinesNV) String() string { return "vkCreateRayTracingPipelinesNV" }
+
+//  PfnGetRayTracingShaderGroupHandlesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetRayTracingShaderGroupHandlesKHR.html
+type PfnGetRayTracingShaderGroupHandlesKHR uintptr
+
+func (fn PfnGetRayTracingShaderGroupHandlesKHR) Call(device Device, pipeline Pipeline, firstGroup, groupCount uint32, dataSize uintptr, pData unsafe.Pointer) Result {
+	ret := C.bridge_vkGetRayTracingShaderGroupHandlesKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkPipeline)(unsafe.Pointer(uintptr(pipeline))), (C.uint32_t)(firstGroup), (C.uint32_t)(groupCount), (C.size_t)(dataSize), (unsafe.Pointer)(pData))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnGetRayTracingShaderGroupHandlesKHR) String() string {
+	return "vkGetRayTracingShaderGroupHandlesKHR"
+}
 
 //  PfnGetRayTracingShaderGroupHandlesNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetRayTracingShaderGroupHandlesNV.html
 type PfnGetRayTracingShaderGroupHandlesNV uintptr
 
 func (fn PfnGetRayTracingShaderGroupHandlesNV) Call(device Device, pipeline Pipeline, firstGroup, groupCount uint32, dataSize uintptr, pData unsafe.Pointer) Result {
 	ret := C.bridge_vkGetRayTracingShaderGroupHandlesNV(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkPipeline)(unsafe.Pointer(uintptr(pipeline))), (C.uint32_t)(firstGroup), (C.uint32_t)(groupCount), (C.size_t)(dataSize), (unsafe.Pointer)(pData))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetRayTracingShaderGroupHandlesNV) String() string {
@@ -17839,6 +20854,7 @@ type PfnGetAccelerationStructureHandleNV uintptr
 
 func (fn PfnGetAccelerationStructureHandleNV) Call(device Device, accelerationStructure AccelerationStructureNV, dataSize uintptr, pData unsafe.Pointer) Result {
 	ret := C.bridge_vkGetAccelerationStructureHandleNV(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkAccelerationStructureNV)(unsafe.Pointer(uintptr(accelerationStructure))), (C.size_t)(dataSize), (unsafe.Pointer)(pData))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetAccelerationStructureHandleNV) String() string {
@@ -17850,6 +20866,7 @@ type PfnCmdWriteAccelerationStructuresPropertiesNV uintptr
 
 func (fn PfnCmdWriteAccelerationStructuresPropertiesNV) Call(commandBuffer CommandBuffer, accelerationStructureCount uint32, pAccelerationStructures *AccelerationStructureNV, queryType QueryType, queryPool QueryPool, firstQuery uint32) {
 	C.bridge_vkCmdWriteAccelerationStructuresPropertiesNV(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(accelerationStructureCount), (*C.VkAccelerationStructureNV)(unsafe.Pointer(pAccelerationStructures)), (C.VkQueryType)(queryType), (C.VkQueryPool)(unsafe.Pointer(uintptr(queryPool))), (C.uint32_t)(firstQuery))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdWriteAccelerationStructuresPropertiesNV) String() string {
@@ -17861,6 +20878,7 @@ type PfnCompileDeferredNV uintptr
 
 func (fn PfnCompileDeferredNV) Call(device Device, pipeline Pipeline, shader uint32) Result {
 	ret := C.bridge_vkCompileDeferredNV(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkPipeline)(unsafe.Pointer(uintptr(pipeline))), (C.uint32_t)(shader))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCompileDeferredNV) String() string { return "vkCompileDeferredNV" }
@@ -17899,7 +20917,7 @@ func NewPipelineRepresentativeFragmentTestStateCreateInfoNV() *PipelineRepresent
 func (p *PipelineRepresentativeFragmentTestStateCreateInfoNV) Free() { MemFree(unsafe.Pointer(p)) }
 
 const EXT_filter_cubic = 1
-const EXT_FILTER_CUBIC_SPEC_VERSION = 2
+const EXT_FILTER_CUBIC_SPEC_VERSION = 3
 
 var EXT_FILTER_CUBIC_EXTENSION_NAME = "VK_EXT_filter_cubic"
 
@@ -17932,6 +20950,11 @@ func NewFilterCubicImageViewImageFormatPropertiesEXT() *FilterCubicImageViewImag
 }
 func (p *FilterCubicImageViewImageFormatPropertiesEXT) Free() { MemFree(unsafe.Pointer(p)) }
 
+const QCOM_render_pass_shader_resolve = 1
+const QCOM_RENDER_PASS_SHADER_RESOLVE_SPEC_VERSION = 4
+
+var QCOM_RENDER_PASS_SHADER_RESOLVE_EXTENSION_NAME = "VK_QCOM_render_pass_shader_resolve"
+
 const EXT_global_priority = 1
 const EXT_GLOBAL_PRIORITY_SPEC_VERSION = 2
 
@@ -17941,14 +20964,11 @@ var EXT_GLOBAL_PRIORITY_EXTENSION_NAME = "VK_EXT_global_priority"
 type QueueGlobalPriorityEXT int32
 
 const (
-	QUEUE_GLOBAL_PRIORITY_LOW_EXT         QueueGlobalPriorityEXT = 128
-	QUEUE_GLOBAL_PRIORITY_MEDIUM_EXT      QueueGlobalPriorityEXT = 256
-	QUEUE_GLOBAL_PRIORITY_HIGH_EXT        QueueGlobalPriorityEXT = 512
-	QUEUE_GLOBAL_PRIORITY_REALTIME_EXT    QueueGlobalPriorityEXT = 1024
-	QUEUE_GLOBAL_PRIORITY_BEGIN_RANGE_EXT QueueGlobalPriorityEXT = QUEUE_GLOBAL_PRIORITY_LOW_EXT
-	QUEUE_GLOBAL_PRIORITY_END_RANGE_EXT   QueueGlobalPriorityEXT = QUEUE_GLOBAL_PRIORITY_REALTIME_EXT
-	QUEUE_GLOBAL_PRIORITY_RANGE_SIZE_EXT  QueueGlobalPriorityEXT = (QUEUE_GLOBAL_PRIORITY_REALTIME_EXT - QUEUE_GLOBAL_PRIORITY_LOW_EXT + 1)
-	QUEUE_GLOBAL_PRIORITY_MAX_ENUM_EXT    QueueGlobalPriorityEXT = 0x7FFFFFFF
+	QUEUE_GLOBAL_PRIORITY_LOW_EXT      QueueGlobalPriorityEXT = 128
+	QUEUE_GLOBAL_PRIORITY_MEDIUM_EXT   QueueGlobalPriorityEXT = 256
+	QUEUE_GLOBAL_PRIORITY_HIGH_EXT     QueueGlobalPriorityEXT = 512
+	QUEUE_GLOBAL_PRIORITY_REALTIME_EXT QueueGlobalPriorityEXT = 1024
+	QUEUE_GLOBAL_PRIORITY_MAX_ENUM_EXT QueueGlobalPriorityEXT = 0x7FFFFFFF
 )
 
 func (x QueueGlobalPriorityEXT) String() string {
@@ -18035,6 +21055,7 @@ type PfnGetMemoryHostPointerPropertiesEXT uintptr
 
 func (fn PfnGetMemoryHostPointerPropertiesEXT) Call(device Device, handleType ExternalMemoryHandleTypeFlags, pHostPointer unsafe.Pointer, pMemoryHostPointerProperties *MemoryHostPointerPropertiesEXT) Result {
 	ret := C.bridge_vkGetMemoryHostPointerPropertiesEXT(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkExternalMemoryHandleTypeFlagBits)(handleType), (unsafe.Pointer)(pHostPointer), (*C.VkMemoryHostPointerPropertiesEXT)(unsafe.Pointer(pMemoryHostPointerProperties)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetMemoryHostPointerPropertiesEXT) String() string {
@@ -18051,6 +21072,7 @@ type PfnCmdWriteBufferMarkerAMD uintptr
 
 func (fn PfnCmdWriteBufferMarkerAMD) Call(commandBuffer CommandBuffer, pipelineStage PipelineStageFlags, dstBuffer Buffer, dstOffset DeviceSize, marker uint32) {
 	C.bridge_vkCmdWriteBufferMarkerAMD(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkPipelineStageFlagBits)(pipelineStage), (C.VkBuffer)(unsafe.Pointer(uintptr(dstBuffer))), (C.VkDeviceSize)(dstOffset), (C.uint32_t)(marker))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdWriteBufferMarkerAMD) String() string { return "vkCmdWriteBufferMarkerAMD" }
@@ -18086,12 +21108,14 @@ type PipelineCompilerControlCreateInfoAMD struct {
 }
 
 func NewPipelineCompilerControlCreateInfoAMD() *PipelineCompilerControlCreateInfoAMD {
-	return (*PipelineCompilerControlCreateInfoAMD)(MemAlloc(unsafe.Sizeof(*(*PipelineCompilerControlCreateInfoAMD)(nil))))
+	p := (*PipelineCompilerControlCreateInfoAMD)(MemAlloc(unsafe.Sizeof(*(*PipelineCompilerControlCreateInfoAMD)(nil))))
+	p.SType = STRUCTURE_TYPE_PIPELINE_COMPILER_CONTROL_CREATE_INFO_AMD
+	return p
 }
 func (p *PipelineCompilerControlCreateInfoAMD) Free() { MemFree(unsafe.Pointer(p)) }
 
 const EXT_calibrated_timestamps = 1
-const EXT_CALIBRATED_TIMESTAMPS_SPEC_VERSION = 1
+const EXT_CALIBRATED_TIMESTAMPS_SPEC_VERSION = 2
 
 var EXT_CALIBRATED_TIMESTAMPS_EXTENSION_NAME = "VK_EXT_calibrated_timestamps"
 
@@ -18103,9 +21127,6 @@ const (
 	TIME_DOMAIN_CLOCK_MONOTONIC_EXT           TimeDomainEXT = 1
 	TIME_DOMAIN_CLOCK_MONOTONIC_RAW_EXT       TimeDomainEXT = 2
 	TIME_DOMAIN_QUERY_PERFORMANCE_COUNTER_EXT TimeDomainEXT = 3
-	TIME_DOMAIN_BEGIN_RANGE_EXT               TimeDomainEXT = TIME_DOMAIN_DEVICE_EXT
-	TIME_DOMAIN_END_RANGE_EXT                 TimeDomainEXT = TIME_DOMAIN_QUERY_PERFORMANCE_COUNTER_EXT
-	TIME_DOMAIN_RANGE_SIZE_EXT                TimeDomainEXT = (TIME_DOMAIN_QUERY_PERFORMANCE_COUNTER_EXT - TIME_DOMAIN_DEVICE_EXT + 1)
 	TIME_DOMAIN_MAX_ENUM_EXT                  TimeDomainEXT = 0x7FFFFFFF
 )
 
@@ -18145,6 +21166,7 @@ type PfnGetPhysicalDeviceCalibrateableTimeDomainsEXT uintptr
 
 func (fn PfnGetPhysicalDeviceCalibrateableTimeDomainsEXT) Call(physicalDevice PhysicalDevice, pTimeDomainCount *uint32, pTimeDomains *TimeDomainEXT) Result {
 	ret := C.bridge_vkGetPhysicalDeviceCalibrateableTimeDomainsEXT(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.uint32_t)(unsafe.Pointer(pTimeDomainCount)), (*C.VkTimeDomainEXT)(unsafe.Pointer(pTimeDomains)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPhysicalDeviceCalibrateableTimeDomainsEXT) String() string {
@@ -18156,6 +21178,7 @@ type PfnGetCalibratedTimestampsEXT uintptr
 
 func (fn PfnGetCalibratedTimestampsEXT) Call(device Device, timestampCount uint32, pTimestampInfos *CalibratedTimestampInfoEXT, pTimestamps, pMaxDeviation *uint64) Result {
 	ret := C.bridge_vkGetCalibratedTimestampsEXT(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.uint32_t)(timestampCount), (*C.VkCalibratedTimestampInfoEXT)(unsafe.Pointer(pTimestampInfos)), (*C.uint64_t)(unsafe.Pointer(pTimestamps)), (*C.uint64_t)(unsafe.Pointer(pMaxDeviation)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetCalibratedTimestampsEXT) String() string { return "vkGetCalibratedTimestampsEXT" }
@@ -18201,13 +21224,10 @@ var AMD_MEMORY_OVERALLOCATION_BEHAVIOR_EXTENSION_NAME = "VK_AMD_memory_overalloc
 type MemoryOverallocationBehaviorAMD int32
 
 const (
-	MEMORY_OVERALLOCATION_BEHAVIOR_DEFAULT_AMD     MemoryOverallocationBehaviorAMD = 0
-	MEMORY_OVERALLOCATION_BEHAVIOR_ALLOWED_AMD     MemoryOverallocationBehaviorAMD = 1
-	MEMORY_OVERALLOCATION_BEHAVIOR_DISALLOWED_AMD  MemoryOverallocationBehaviorAMD = 2
-	MEMORY_OVERALLOCATION_BEHAVIOR_BEGIN_RANGE_AMD MemoryOverallocationBehaviorAMD = MEMORY_OVERALLOCATION_BEHAVIOR_DEFAULT_AMD
-	MEMORY_OVERALLOCATION_BEHAVIOR_END_RANGE_AMD   MemoryOverallocationBehaviorAMD = MEMORY_OVERALLOCATION_BEHAVIOR_DISALLOWED_AMD
-	MEMORY_OVERALLOCATION_BEHAVIOR_RANGE_SIZE_AMD  MemoryOverallocationBehaviorAMD = (MEMORY_OVERALLOCATION_BEHAVIOR_DISALLOWED_AMD - MEMORY_OVERALLOCATION_BEHAVIOR_DEFAULT_AMD + 1)
-	MEMORY_OVERALLOCATION_BEHAVIOR_MAX_ENUM_AMD    MemoryOverallocationBehaviorAMD = 0x7FFFFFFF
+	MEMORY_OVERALLOCATION_BEHAVIOR_DEFAULT_AMD    MemoryOverallocationBehaviorAMD = 0
+	MEMORY_OVERALLOCATION_BEHAVIOR_ALLOWED_AMD    MemoryOverallocationBehaviorAMD = 1
+	MEMORY_OVERALLOCATION_BEHAVIOR_DISALLOWED_AMD MemoryOverallocationBehaviorAMD = 2
+	MEMORY_OVERALLOCATION_BEHAVIOR_MAX_ENUM_AMD   MemoryOverallocationBehaviorAMD = 0x7FFFFFFF
 )
 
 func (x MemoryOverallocationBehaviorAMD) String() string {
@@ -18445,6 +21465,7 @@ type PfnCmdDrawMeshTasksNV uintptr
 
 func (fn PfnCmdDrawMeshTasksNV) Call(commandBuffer CommandBuffer, taskCount, firstTask uint32) {
 	C.bridge_vkCmdDrawMeshTasksNV(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(taskCount), (C.uint32_t)(firstTask))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdDrawMeshTasksNV) String() string { return "vkCmdDrawMeshTasksNV" }
@@ -18454,6 +21475,7 @@ type PfnCmdDrawMeshTasksIndirectNV uintptr
 
 func (fn PfnCmdDrawMeshTasksIndirectNV) Call(commandBuffer CommandBuffer, buffer Buffer, offset DeviceSize, drawCount, stride uint32) {
 	C.bridge_vkCmdDrawMeshTasksIndirectNV(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBuffer)(unsafe.Pointer(uintptr(buffer))), (C.VkDeviceSize)(offset), (C.uint32_t)(drawCount), (C.uint32_t)(stride))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdDrawMeshTasksIndirectNV) String() string { return "vkCmdDrawMeshTasksIndirectNV" }
@@ -18463,6 +21485,7 @@ type PfnCmdDrawMeshTasksIndirectCountNV uintptr
 
 func (fn PfnCmdDrawMeshTasksIndirectCountNV) Call(commandBuffer CommandBuffer, buffer Buffer, offset DeviceSize, countBuffer Buffer, countBufferOffset DeviceSize, maxDrawCount, stride uint32) {
 	C.bridge_vkCmdDrawMeshTasksIndirectCountNV(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBuffer)(unsafe.Pointer(uintptr(buffer))), (C.VkDeviceSize)(offset), (C.VkBuffer)(unsafe.Pointer(uintptr(countBuffer))), (C.VkDeviceSize)(countBufferOffset), (C.uint32_t)(maxDrawCount), (C.uint32_t)(stride))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdDrawMeshTasksIndirectCountNV) String() string {
@@ -18546,6 +21569,7 @@ type PfnCmdSetExclusiveScissorNV uintptr
 
 func (fn PfnCmdSetExclusiveScissorNV) Call(commandBuffer CommandBuffer, firstExclusiveScissor, exclusiveScissorCount uint32, pExclusiveScissors *Rect2D) {
 	C.bridge_vkCmdSetExclusiveScissorNV(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(firstExclusiveScissor), (C.uint32_t)(exclusiveScissorCount), (*C.VkRect2D)(unsafe.Pointer(pExclusiveScissors)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdSetExclusiveScissorNV) String() string { return "vkCmdSetExclusiveScissorNV" }
@@ -18589,6 +21613,7 @@ type PfnCmdSetCheckpointNV uintptr
 
 func (fn PfnCmdSetCheckpointNV) Call(commandBuffer CommandBuffer, pCheckpointMarker unsafe.Pointer) {
 	C.bridge_vkCmdSetCheckpointNV(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (unsafe.Pointer)(pCheckpointMarker))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdSetCheckpointNV) String() string { return "vkCmdSetCheckpointNV" }
@@ -18598,6 +21623,7 @@ type PfnGetQueueCheckpointDataNV uintptr
 
 func (fn PfnGetQueueCheckpointDataNV) Call(queue Queue, pCheckpointDataCount *uint32, pCheckpointData *CheckpointDataNV) {
 	C.bridge_vkGetQueueCheckpointDataNV(C.uintptr_t(fn), (C.VkQueue)(unsafe.Pointer(uintptr(queue))), (*C.uint32_t)(unsafe.Pointer(pCheckpointDataCount)), (*C.VkCheckpointDataNV)(unsafe.Pointer(pCheckpointData)))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnGetQueueCheckpointDataNV) String() string { return "vkGetQueueCheckpointDataNV" }
@@ -18615,7 +21641,9 @@ type PhysicalDeviceShaderIntegerFunctions2FeaturesINTEL struct {
 }
 
 func NewPhysicalDeviceShaderIntegerFunctions2FeaturesINTEL() *PhysicalDeviceShaderIntegerFunctions2FeaturesINTEL {
-	return (*PhysicalDeviceShaderIntegerFunctions2FeaturesINTEL)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceShaderIntegerFunctions2FeaturesINTEL)(nil))))
+	p := (*PhysicalDeviceShaderIntegerFunctions2FeaturesINTEL)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceShaderIntegerFunctions2FeaturesINTEL)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_INTEGER_FUNCTIONS_2_FEATURES_INTEL
+	return p
 }
 func (p *PhysicalDeviceShaderIntegerFunctions2FeaturesINTEL) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -18624,7 +21652,7 @@ const INTEL_performance_query = 1
 // PerformanceConfigurationINTEL -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPerformanceConfigurationINTEL.html
 type PerformanceConfigurationINTEL NonDispatchableHandle
 
-const INTEL_PERFORMANCE_QUERY_SPEC_VERSION = 1
+const INTEL_PERFORMANCE_QUERY_SPEC_VERSION = 2
 
 var INTEL_PERFORMANCE_QUERY_EXTENSION_NAME = "VK_INTEL_performance_query"
 
@@ -18633,9 +21661,6 @@ type PerformanceConfigurationTypeINTEL int32
 
 const (
 	PERFORMANCE_CONFIGURATION_TYPE_COMMAND_QUEUE_METRICS_DISCOVERY_ACTIVATED_INTEL PerformanceConfigurationTypeINTEL = 0
-	PERFORMANCE_CONFIGURATION_TYPE_BEGIN_RANGE_INTEL                               PerformanceConfigurationTypeINTEL = PERFORMANCE_CONFIGURATION_TYPE_COMMAND_QUEUE_METRICS_DISCOVERY_ACTIVATED_INTEL
-	PERFORMANCE_CONFIGURATION_TYPE_END_RANGE_INTEL                                 PerformanceConfigurationTypeINTEL = PERFORMANCE_CONFIGURATION_TYPE_COMMAND_QUEUE_METRICS_DISCOVERY_ACTIVATED_INTEL
-	PERFORMANCE_CONFIGURATION_TYPE_RANGE_SIZE_INTEL                                PerformanceConfigurationTypeINTEL = (PERFORMANCE_CONFIGURATION_TYPE_COMMAND_QUEUE_METRICS_DISCOVERY_ACTIVATED_INTEL - PERFORMANCE_CONFIGURATION_TYPE_COMMAND_QUEUE_METRICS_DISCOVERY_ACTIVATED_INTEL + 1)
 	PERFORMANCE_CONFIGURATION_TYPE_MAX_ENUM_INTEL                                  PerformanceConfigurationTypeINTEL = 0x7FFFFFFF
 )
 
@@ -18654,11 +21679,8 @@ func (x PerformanceConfigurationTypeINTEL) String() string {
 type QueryPoolSamplingModeINTEL int32
 
 const (
-	QUERY_POOL_SAMPLING_MODE_MANUAL_INTEL      QueryPoolSamplingModeINTEL = 0
-	QUERY_POOL_SAMPLING_MODE_BEGIN_RANGE_INTEL QueryPoolSamplingModeINTEL = QUERY_POOL_SAMPLING_MODE_MANUAL_INTEL
-	QUERY_POOL_SAMPLING_MODE_END_RANGE_INTEL   QueryPoolSamplingModeINTEL = QUERY_POOL_SAMPLING_MODE_MANUAL_INTEL
-	QUERY_POOL_SAMPLING_MODE_RANGE_SIZE_INTEL  QueryPoolSamplingModeINTEL = (QUERY_POOL_SAMPLING_MODE_MANUAL_INTEL - QUERY_POOL_SAMPLING_MODE_MANUAL_INTEL + 1)
-	QUERY_POOL_SAMPLING_MODE_MAX_ENUM_INTEL    QueryPoolSamplingModeINTEL = 0x7FFFFFFF
+	QUERY_POOL_SAMPLING_MODE_MANUAL_INTEL   QueryPoolSamplingModeINTEL = 0
+	QUERY_POOL_SAMPLING_MODE_MAX_ENUM_INTEL QueryPoolSamplingModeINTEL = 0x7FFFFFFF
 )
 
 func (x QueryPoolSamplingModeINTEL) String() string {
@@ -18678,9 +21700,6 @@ type PerformanceOverrideTypeINTEL int32
 const (
 	PERFORMANCE_OVERRIDE_TYPE_NULL_HARDWARE_INTEL    PerformanceOverrideTypeINTEL = 0
 	PERFORMANCE_OVERRIDE_TYPE_FLUSH_GPU_CACHES_INTEL PerformanceOverrideTypeINTEL = 1
-	PERFORMANCE_OVERRIDE_TYPE_BEGIN_RANGE_INTEL      PerformanceOverrideTypeINTEL = PERFORMANCE_OVERRIDE_TYPE_NULL_HARDWARE_INTEL
-	PERFORMANCE_OVERRIDE_TYPE_END_RANGE_INTEL        PerformanceOverrideTypeINTEL = PERFORMANCE_OVERRIDE_TYPE_FLUSH_GPU_CACHES_INTEL
-	PERFORMANCE_OVERRIDE_TYPE_RANGE_SIZE_INTEL       PerformanceOverrideTypeINTEL = (PERFORMANCE_OVERRIDE_TYPE_FLUSH_GPU_CACHES_INTEL - PERFORMANCE_OVERRIDE_TYPE_NULL_HARDWARE_INTEL + 1)
 	PERFORMANCE_OVERRIDE_TYPE_MAX_ENUM_INTEL         PerformanceOverrideTypeINTEL = 0x7FFFFFFF
 )
 
@@ -18703,9 +21722,6 @@ type PerformanceParameterTypeINTEL int32
 const (
 	PERFORMANCE_PARAMETER_TYPE_HW_COUNTERS_SUPPORTED_INTEL    PerformanceParameterTypeINTEL = 0
 	PERFORMANCE_PARAMETER_TYPE_STREAM_MARKER_VALID_BITS_INTEL PerformanceParameterTypeINTEL = 1
-	PERFORMANCE_PARAMETER_TYPE_BEGIN_RANGE_INTEL              PerformanceParameterTypeINTEL = PERFORMANCE_PARAMETER_TYPE_HW_COUNTERS_SUPPORTED_INTEL
-	PERFORMANCE_PARAMETER_TYPE_END_RANGE_INTEL                PerformanceParameterTypeINTEL = PERFORMANCE_PARAMETER_TYPE_STREAM_MARKER_VALID_BITS_INTEL
-	PERFORMANCE_PARAMETER_TYPE_RANGE_SIZE_INTEL               PerformanceParameterTypeINTEL = (PERFORMANCE_PARAMETER_TYPE_STREAM_MARKER_VALID_BITS_INTEL - PERFORMANCE_PARAMETER_TYPE_HW_COUNTERS_SUPPORTED_INTEL + 1)
 	PERFORMANCE_PARAMETER_TYPE_MAX_ENUM_INTEL                 PerformanceParameterTypeINTEL = 0x7FFFFFFF
 )
 
@@ -18726,15 +21742,12 @@ func (x PerformanceParameterTypeINTEL) String() string {
 type PerformanceValueTypeINTEL int32
 
 const (
-	PERFORMANCE_VALUE_TYPE_UINT32_INTEL      PerformanceValueTypeINTEL = 0
-	PERFORMANCE_VALUE_TYPE_UINT64_INTEL      PerformanceValueTypeINTEL = 1
-	PERFORMANCE_VALUE_TYPE_FLOAT_INTEL       PerformanceValueTypeINTEL = 2
-	PERFORMANCE_VALUE_TYPE_BOOL_INTEL        PerformanceValueTypeINTEL = 3
-	PERFORMANCE_VALUE_TYPE_STRING_INTEL      PerformanceValueTypeINTEL = 4
-	PERFORMANCE_VALUE_TYPE_BEGIN_RANGE_INTEL PerformanceValueTypeINTEL = PERFORMANCE_VALUE_TYPE_UINT32_INTEL
-	PERFORMANCE_VALUE_TYPE_END_RANGE_INTEL   PerformanceValueTypeINTEL = PERFORMANCE_VALUE_TYPE_STRING_INTEL
-	PERFORMANCE_VALUE_TYPE_RANGE_SIZE_INTEL  PerformanceValueTypeINTEL = (PERFORMANCE_VALUE_TYPE_STRING_INTEL - PERFORMANCE_VALUE_TYPE_UINT32_INTEL + 1)
-	PERFORMANCE_VALUE_TYPE_MAX_ENUM_INTEL    PerformanceValueTypeINTEL = 0x7FFFFFFF
+	PERFORMANCE_VALUE_TYPE_UINT32_INTEL   PerformanceValueTypeINTEL = 0
+	PERFORMANCE_VALUE_TYPE_UINT64_INTEL   PerformanceValueTypeINTEL = 1
+	PERFORMANCE_VALUE_TYPE_FLOAT_INTEL    PerformanceValueTypeINTEL = 2
+	PERFORMANCE_VALUE_TYPE_BOOL_INTEL     PerformanceValueTypeINTEL = 3
+	PERFORMANCE_VALUE_TYPE_STRING_INTEL   PerformanceValueTypeINTEL = 4
+	PERFORMANCE_VALUE_TYPE_MAX_ENUM_INTEL PerformanceValueTypeINTEL = 0x7FFFFFFF
 )
 
 func (x PerformanceValueTypeINTEL) String() string {
@@ -18781,19 +21794,21 @@ func NewInitializePerformanceApiInfoINTEL() *InitializePerformanceApiInfoINTEL {
 }
 func (p *InitializePerformanceApiInfoINTEL) Free() { MemFree(unsafe.Pointer(p)) }
 
-// QueryPoolCreateInfoINTEL -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueryPoolCreateInfoINTEL.html
-type QueryPoolCreateInfoINTEL struct {
+// QueryPoolPerformanceQueryCreateInfoINTEL -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkQueryPoolPerformanceQueryCreateInfoINTEL.html
+type QueryPoolPerformanceQueryCreateInfoINTEL struct {
 	SType                       StructureType
 	PNext                       unsafe.Pointer
 	PerformanceCountersSampling QueryPoolSamplingModeINTEL
 }
 
-func NewQueryPoolCreateInfoINTEL() *QueryPoolCreateInfoINTEL {
-	p := (*QueryPoolCreateInfoINTEL)(MemAlloc(unsafe.Sizeof(*(*QueryPoolCreateInfoINTEL)(nil))))
-	p.SType = STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO_INTEL
+func NewQueryPoolPerformanceQueryCreateInfoINTEL() *QueryPoolPerformanceQueryCreateInfoINTEL {
+	p := (*QueryPoolPerformanceQueryCreateInfoINTEL)(MemAlloc(unsafe.Sizeof(*(*QueryPoolPerformanceQueryCreateInfoINTEL)(nil))))
+	p.SType = STRUCTURE_TYPE_QUERY_POOL_PERFORMANCE_QUERY_CREATE_INFO_INTEL
 	return p
 }
-func (p *QueryPoolCreateInfoINTEL) Free() { MemFree(unsafe.Pointer(p)) }
+func (p *QueryPoolPerformanceQueryCreateInfoINTEL) Free() { MemFree(unsafe.Pointer(p)) }
+
+type QueryPoolCreateInfoINTEL = QueryPoolPerformanceQueryCreateInfoINTEL
 
 // PerformanceMarkerInfoINTEL -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPerformanceMarkerInfoINTEL.html
 type PerformanceMarkerInfoINTEL struct {
@@ -18858,6 +21873,7 @@ type PfnInitializePerformanceApiINTEL uintptr
 
 func (fn PfnInitializePerformanceApiINTEL) Call(device Device, pInitializeInfo *InitializePerformanceApiInfoINTEL) Result {
 	ret := C.bridge_vkInitializePerformanceApiINTEL(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkInitializePerformanceApiInfoINTEL)(unsafe.Pointer(pInitializeInfo)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnInitializePerformanceApiINTEL) String() string { return "vkInitializePerformanceApiINTEL" }
@@ -18867,6 +21883,7 @@ type PfnUninitializePerformanceApiINTEL uintptr
 
 func (fn PfnUninitializePerformanceApiINTEL) Call(device Device) {
 	C.bridge_vkUninitializePerformanceApiINTEL(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnUninitializePerformanceApiINTEL) String() string {
@@ -18878,6 +21895,7 @@ type PfnCmdSetPerformanceMarkerINTEL uintptr
 
 func (fn PfnCmdSetPerformanceMarkerINTEL) Call(commandBuffer CommandBuffer, pMarkerInfo *PerformanceMarkerInfoINTEL) Result {
 	ret := C.bridge_vkCmdSetPerformanceMarkerINTEL(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkPerformanceMarkerInfoINTEL)(unsafe.Pointer(pMarkerInfo)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCmdSetPerformanceMarkerINTEL) String() string { return "vkCmdSetPerformanceMarkerINTEL" }
@@ -18887,6 +21905,7 @@ type PfnCmdSetPerformanceStreamMarkerINTEL uintptr
 
 func (fn PfnCmdSetPerformanceStreamMarkerINTEL) Call(commandBuffer CommandBuffer, pMarkerInfo *PerformanceStreamMarkerInfoINTEL) Result {
 	ret := C.bridge_vkCmdSetPerformanceStreamMarkerINTEL(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkPerformanceStreamMarkerInfoINTEL)(unsafe.Pointer(pMarkerInfo)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCmdSetPerformanceStreamMarkerINTEL) String() string {
@@ -18898,6 +21917,7 @@ type PfnCmdSetPerformanceOverrideINTEL uintptr
 
 func (fn PfnCmdSetPerformanceOverrideINTEL) Call(commandBuffer CommandBuffer, pOverrideInfo *PerformanceOverrideInfoINTEL) Result {
 	ret := C.bridge_vkCmdSetPerformanceOverrideINTEL(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkPerformanceOverrideInfoINTEL)(unsafe.Pointer(pOverrideInfo)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCmdSetPerformanceOverrideINTEL) String() string {
@@ -18909,6 +21929,7 @@ type PfnAcquirePerformanceConfigurationINTEL uintptr
 
 func (fn PfnAcquirePerformanceConfigurationINTEL) Call(device Device, pAcquireInfo *PerformanceConfigurationAcquireInfoINTEL, pConfiguration *PerformanceConfigurationINTEL) Result {
 	ret := C.bridge_vkAcquirePerformanceConfigurationINTEL(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkPerformanceConfigurationAcquireInfoINTEL)(unsafe.Pointer(pAcquireInfo)), (*C.VkPerformanceConfigurationINTEL)(unsafe.Pointer(pConfiguration)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnAcquirePerformanceConfigurationINTEL) String() string {
@@ -18920,6 +21941,7 @@ type PfnReleasePerformanceConfigurationINTEL uintptr
 
 func (fn PfnReleasePerformanceConfigurationINTEL) Call(device Device, configuration PerformanceConfigurationINTEL) Result {
 	ret := C.bridge_vkReleasePerformanceConfigurationINTEL(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkPerformanceConfigurationINTEL)(unsafe.Pointer(uintptr(configuration))))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnReleasePerformanceConfigurationINTEL) String() string {
@@ -18931,6 +21953,7 @@ type PfnQueueSetPerformanceConfigurationINTEL uintptr
 
 func (fn PfnQueueSetPerformanceConfigurationINTEL) Call(queue Queue, configuration PerformanceConfigurationINTEL) Result {
 	ret := C.bridge_vkQueueSetPerformanceConfigurationINTEL(C.uintptr_t(fn), (C.VkQueue)(unsafe.Pointer(uintptr(queue))), (C.VkPerformanceConfigurationINTEL)(unsafe.Pointer(uintptr(configuration))))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnQueueSetPerformanceConfigurationINTEL) String() string {
@@ -18942,6 +21965,7 @@ type PfnGetPerformanceParameterINTEL uintptr
 
 func (fn PfnGetPerformanceParameterINTEL) Call(device Device, parameter PerformanceParameterTypeINTEL, pValue *PerformanceValueINTEL) Result {
 	ret := C.bridge_vkGetPerformanceParameterINTEL(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkPerformanceParameterTypeINTEL)(parameter), (*C.VkPerformanceValueINTEL)(unsafe.Pointer(pValue)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPerformanceParameterINTEL) String() string { return "vkGetPerformanceParameterINTEL" }
@@ -19006,6 +22030,7 @@ type PfnSetLocalDimmingAMD uintptr
 
 func (fn PfnSetLocalDimmingAMD) Call(device Device, swapChain SwapchainKHR, localDimmingEnable Bool32) {
 	C.bridge_vkSetLocalDimmingAMD(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkSwapchainKHR)(unsafe.Pointer(uintptr(swapChain))), (C.VkBool32)(localDimmingEnable))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnSetLocalDimmingAMD) String() string { return "vkSetLocalDimmingAMD" }
@@ -19066,19 +22091,7 @@ const EXT_SCALAR_BLOCK_LAYOUT_SPEC_VERSION = 1
 
 var EXT_SCALAR_BLOCK_LAYOUT_EXTENSION_NAME = "VK_EXT_scalar_block_layout"
 
-// PhysicalDeviceScalarBlockLayoutFeaturesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceScalarBlockLayoutFeaturesEXT.html
-type PhysicalDeviceScalarBlockLayoutFeaturesEXT struct {
-	SType             StructureType
-	PNext             unsafe.Pointer
-	ScalarBlockLayout Bool32
-}
-
-func NewPhysicalDeviceScalarBlockLayoutFeaturesEXT() *PhysicalDeviceScalarBlockLayoutFeaturesEXT {
-	p := (*PhysicalDeviceScalarBlockLayoutFeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceScalarBlockLayoutFeaturesEXT)(nil))))
-	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SCALAR_BLOCK_LAYOUT_FEATURES_EXT
-	return p
-}
-func (p *PhysicalDeviceScalarBlockLayoutFeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+type PhysicalDeviceScalarBlockLayoutFeaturesEXT = PhysicalDeviceScalarBlockLayoutFeatures
 
 const GOOGLE_hlsl_functionality1 = 1
 const GOOGLE_HLSL_FUNCTIONALITY1_SPEC_VERSION = 1
@@ -19104,7 +22117,9 @@ type PhysicalDeviceSubgroupSizeControlFeaturesEXT struct {
 }
 
 func NewPhysicalDeviceSubgroupSizeControlFeaturesEXT() *PhysicalDeviceSubgroupSizeControlFeaturesEXT {
-	return (*PhysicalDeviceSubgroupSizeControlFeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceSubgroupSizeControlFeaturesEXT)(nil))))
+	p := (*PhysicalDeviceSubgroupSizeControlFeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceSubgroupSizeControlFeaturesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_SIZE_CONTROL_FEATURES_EXT
+	return p
 }
 func (p *PhysicalDeviceSubgroupSizeControlFeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -19119,7 +22134,9 @@ type PhysicalDeviceSubgroupSizeControlPropertiesEXT struct {
 }
 
 func NewPhysicalDeviceSubgroupSizeControlPropertiesEXT() *PhysicalDeviceSubgroupSizeControlPropertiesEXT {
-	return (*PhysicalDeviceSubgroupSizeControlPropertiesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceSubgroupSizeControlPropertiesEXT)(nil))))
+	p := (*PhysicalDeviceSubgroupSizeControlPropertiesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceSubgroupSizeControlPropertiesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SUBGROUP_SIZE_CONTROL_PROPERTIES_EXT
+	return p
 }
 func (p *PhysicalDeviceSubgroupSizeControlPropertiesEXT) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -19131,7 +22148,9 @@ type PipelineShaderStageRequiredSubgroupSizeCreateInfoEXT struct {
 }
 
 func NewPipelineShaderStageRequiredSubgroupSizeCreateInfoEXT() *PipelineShaderStageRequiredSubgroupSizeCreateInfoEXT {
-	return (*PipelineShaderStageRequiredSubgroupSizeCreateInfoEXT)(MemAlloc(unsafe.Sizeof(*(*PipelineShaderStageRequiredSubgroupSizeCreateInfoEXT)(nil))))
+	p := (*PipelineShaderStageRequiredSubgroupSizeCreateInfoEXT)(MemAlloc(unsafe.Sizeof(*(*PipelineShaderStageRequiredSubgroupSizeCreateInfoEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_REQUIRED_SUBGROUP_SIZE_CREATE_INFO_EXT
+	return p
 }
 func (p *PipelineShaderStageRequiredSubgroupSizeCreateInfoEXT) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -19167,7 +22186,9 @@ type PhysicalDeviceShaderCoreProperties2AMD struct {
 }
 
 func NewPhysicalDeviceShaderCoreProperties2AMD() *PhysicalDeviceShaderCoreProperties2AMD {
-	return (*PhysicalDeviceShaderCoreProperties2AMD)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceShaderCoreProperties2AMD)(nil))))
+	p := (*PhysicalDeviceShaderCoreProperties2AMD)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceShaderCoreProperties2AMD)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_CORE_PROPERTIES_2_AMD
+	return p
 }
 func (p *PhysicalDeviceShaderCoreProperties2AMD) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -19184,9 +22205,31 @@ type PhysicalDeviceCoherentMemoryFeaturesAMD struct {
 }
 
 func NewPhysicalDeviceCoherentMemoryFeaturesAMD() *PhysicalDeviceCoherentMemoryFeaturesAMD {
-	return (*PhysicalDeviceCoherentMemoryFeaturesAMD)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceCoherentMemoryFeaturesAMD)(nil))))
+	p := (*PhysicalDeviceCoherentMemoryFeaturesAMD)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceCoherentMemoryFeaturesAMD)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_COHERENT_MEMORY_FEATURES_AMD
+	return p
 }
 func (p *PhysicalDeviceCoherentMemoryFeaturesAMD) Free() { MemFree(unsafe.Pointer(p)) }
+
+const EXT_shader_image_atomic_int64 = 1
+const EXT_SHADER_IMAGE_ATOMIC_INT64_SPEC_VERSION = 1
+
+var EXT_SHADER_IMAGE_ATOMIC_INT64_EXTENSION_NAME = "VK_EXT_shader_image_atomic_int64"
+
+// PhysicalDeviceShaderImageAtomicInt64FeaturesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceShaderImageAtomicInt64FeaturesEXT.html
+type PhysicalDeviceShaderImageAtomicInt64FeaturesEXT struct {
+	SType                   StructureType
+	PNext                   unsafe.Pointer
+	ShaderImageInt64Atomics Bool32
+	SparseImageInt64Atomics Bool32
+}
+
+func NewPhysicalDeviceShaderImageAtomicInt64FeaturesEXT() *PhysicalDeviceShaderImageAtomicInt64FeaturesEXT {
+	p := (*PhysicalDeviceShaderImageAtomicInt64FeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceShaderImageAtomicInt64FeaturesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_IMAGE_ATOMIC_INT64_FEATURES_EXT
+	return p
+}
+func (p *PhysicalDeviceShaderImageAtomicInt64FeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
 
 const EXT_memory_budget = 1
 const EXT_MEMORY_BUDGET_SPEC_VERSION = 1
@@ -19261,9 +22304,6 @@ func NewPhysicalDeviceDedicatedAllocationImageAliasingFeaturesNV() *PhysicalDevi
 func (p *PhysicalDeviceDedicatedAllocationImageAliasingFeaturesNV) Free() { MemFree(unsafe.Pointer(p)) }
 
 const EXT_buffer_device_address = 1
-
-type DeviceAddress = uint64
-
 const EXT_BUFFER_DEVICE_ADDRESS_SPEC_VERSION = 2
 
 var EXT_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME = "VK_EXT_buffer_device_address"
@@ -19285,20 +22325,7 @@ func NewPhysicalDeviceBufferDeviceAddressFeaturesEXT() *PhysicalDeviceBufferDevi
 func (p *PhysicalDeviceBufferDeviceAddressFeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
 
 type PhysicalDeviceBufferAddressFeaturesEXT = PhysicalDeviceBufferDeviceAddressFeaturesEXT
-
-// BufferDeviceAddressInfoEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferDeviceAddressInfoEXT.html
-type BufferDeviceAddressInfoEXT struct {
-	SType  StructureType
-	PNext  unsafe.Pointer
-	Buffer Buffer
-}
-
-func NewBufferDeviceAddressInfoEXT() *BufferDeviceAddressInfoEXT {
-	p := (*BufferDeviceAddressInfoEXT)(MemAlloc(unsafe.Sizeof(*(*BufferDeviceAddressInfoEXT)(nil))))
-	p.SType = STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO_EXT
-	return p
-}
-func (p *BufferDeviceAddressInfoEXT) Free() { MemFree(unsafe.Pointer(p)) }
+type BufferDeviceAddressInfoEXT = BufferDeviceAddressInfo
 
 // BufferDeviceAddressCreateInfoEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBufferDeviceAddressCreateInfoEXT.html
 type BufferDeviceAddressCreateInfoEXT struct {
@@ -19317,33 +22344,96 @@ func (p *BufferDeviceAddressCreateInfoEXT) Free() { MemFree(unsafe.Pointer(p)) }
 //  PfnGetBufferDeviceAddressEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetBufferDeviceAddressEXT.html
 type PfnGetBufferDeviceAddressEXT uintptr
 
-func (fn PfnGetBufferDeviceAddressEXT) Call(device Device, pInfo *BufferDeviceAddressInfoEXT) DeviceAddress {
-	ret := C.bridge_vkGetBufferDeviceAddressEXT(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkBufferDeviceAddressInfoEXT)(unsafe.Pointer(pInfo)))
+func (fn PfnGetBufferDeviceAddressEXT) Call(device Device, pInfo *BufferDeviceAddressInfo) DeviceAddress {
+	ret := C.bridge_vkGetBufferDeviceAddressEXT(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkBufferDeviceAddressInfo)(unsafe.Pointer(pInfo)))
+	debugCheckAndBreak()
 	return DeviceAddress(ret)
 }
 func (fn PfnGetBufferDeviceAddressEXT) String() string { return "vkGetBufferDeviceAddressEXT" }
+
+const EXT_tooling_info = 1
+const EXT_TOOLING_INFO_SPEC_VERSION = 1
+
+var EXT_TOOLING_INFO_EXTENSION_NAME = "VK_EXT_tooling_info"
+
+// ToolPurposeFlagsEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkToolPurposeFlagsEXT.html
+type ToolPurposeFlagsEXT uint32
+
+const (
+	TOOL_PURPOSE_VALIDATION_BIT_EXT          ToolPurposeFlagsEXT = 0x00000001
+	TOOL_PURPOSE_PROFILING_BIT_EXT           ToolPurposeFlagsEXT = 0x00000002
+	TOOL_PURPOSE_TRACING_BIT_EXT             ToolPurposeFlagsEXT = 0x00000004
+	TOOL_PURPOSE_ADDITIONAL_FEATURES_BIT_EXT ToolPurposeFlagsEXT = 0x00000008
+	TOOL_PURPOSE_MODIFYING_FEATURES_BIT_EXT  ToolPurposeFlagsEXT = 0x00000010
+	TOOL_PURPOSE_DEBUG_REPORTING_BIT_EXT     ToolPurposeFlagsEXT = 0x00000020
+	TOOL_PURPOSE_DEBUG_MARKERS_BIT_EXT       ToolPurposeFlagsEXT = 0x00000040
+	TOOL_PURPOSE_FLAG_BITS_MAX_ENUM_EXT      ToolPurposeFlagsEXT = 0x7FFFFFFF
+)
+
+func (x ToolPurposeFlagsEXT) String() string {
+	var s string
+	for i := uint32(0); i < 32; i++ {
+		if int32(x)&(1<<i) != 0 {
+			switch ToolPurposeFlagsEXT(1 << i) {
+			case TOOL_PURPOSE_VALIDATION_BIT_EXT:
+				s += "TOOL_PURPOSE_VALIDATION_BIT_EXT|"
+			case TOOL_PURPOSE_PROFILING_BIT_EXT:
+				s += "TOOL_PURPOSE_PROFILING_BIT_EXT|"
+			case TOOL_PURPOSE_TRACING_BIT_EXT:
+				s += "TOOL_PURPOSE_TRACING_BIT_EXT|"
+			case TOOL_PURPOSE_ADDITIONAL_FEATURES_BIT_EXT:
+				s += "TOOL_PURPOSE_ADDITIONAL_FEATURES_BIT_EXT|"
+			case TOOL_PURPOSE_MODIFYING_FEATURES_BIT_EXT:
+				s += "TOOL_PURPOSE_MODIFYING_FEATURES_BIT_EXT|"
+			case TOOL_PURPOSE_DEBUG_REPORTING_BIT_EXT:
+				s += "TOOL_PURPOSE_DEBUG_REPORTING_BIT_EXT|"
+			case TOOL_PURPOSE_DEBUG_MARKERS_BIT_EXT:
+				s += "TOOL_PURPOSE_DEBUG_MARKERS_BIT_EXT|"
+			}
+		}
+	}
+	return strings.TrimSuffix(s, `|`)
+}
+
+// PhysicalDeviceToolPropertiesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceToolPropertiesEXT.html
+type PhysicalDeviceToolPropertiesEXT struct {
+	SType       StructureType
+	PNext       unsafe.Pointer
+	Name        [MAX_EXTENSION_NAME_SIZE]int8
+	Version     [MAX_EXTENSION_NAME_SIZE]int8
+	Purposes    ToolPurposeFlagsEXT
+	Description [MAX_DESCRIPTION_SIZE]int8
+	Layer       [MAX_EXTENSION_NAME_SIZE]int8
+}
+
+func NewPhysicalDeviceToolPropertiesEXT() *PhysicalDeviceToolPropertiesEXT {
+	p := (*PhysicalDeviceToolPropertiesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceToolPropertiesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_TOOL_PROPERTIES_EXT
+	return p
+}
+func (p *PhysicalDeviceToolPropertiesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+//  PfnGetPhysicalDeviceToolPropertiesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPhysicalDeviceToolPropertiesEXT.html
+type PfnGetPhysicalDeviceToolPropertiesEXT uintptr
+
+func (fn PfnGetPhysicalDeviceToolPropertiesEXT) Call(physicalDevice PhysicalDevice, pToolCount *uint32, pToolProperties *PhysicalDeviceToolPropertiesEXT) Result {
+	ret := C.bridge_vkGetPhysicalDeviceToolPropertiesEXT(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.uint32_t)(unsafe.Pointer(pToolCount)), (*C.VkPhysicalDeviceToolPropertiesEXT)(unsafe.Pointer(pToolProperties)))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnGetPhysicalDeviceToolPropertiesEXT) String() string {
+	return "vkGetPhysicalDeviceToolPropertiesEXT"
+}
 
 const EXT_separate_stencil_usage = 1
 const EXT_SEPARATE_STENCIL_USAGE_SPEC_VERSION = 1
 
 var EXT_SEPARATE_STENCIL_USAGE_EXTENSION_NAME = "VK_EXT_separate_stencil_usage"
 
-// ImageStencilUsageCreateInfoEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkImageStencilUsageCreateInfoEXT.html
-type ImageStencilUsageCreateInfoEXT struct {
-	SType        StructureType
-	PNext        unsafe.Pointer
-	StencilUsage ImageUsageFlags
-}
-
-func NewImageStencilUsageCreateInfoEXT() *ImageStencilUsageCreateInfoEXT {
-	p := (*ImageStencilUsageCreateInfoEXT)(MemAlloc(unsafe.Sizeof(*(*ImageStencilUsageCreateInfoEXT)(nil))))
-	p.SType = STRUCTURE_TYPE_IMAGE_STENCIL_USAGE_CREATE_INFO_EXT
-	return p
-}
-func (p *ImageStencilUsageCreateInfoEXT) Free() { MemFree(unsafe.Pointer(p)) }
+type ImageStencilUsageCreateInfoEXT = ImageStencilUsageCreateInfo
 
 const EXT_validation_features = 1
-const EXT_VALIDATION_FEATURES_SPEC_VERSION = 2
+const EXT_VALIDATION_FEATURES_SPEC_VERSION = 4
 
 var EXT_VALIDATION_FEATURES_EXTENSION_NAME = "VK_EXT_validation_features"
 
@@ -19354,9 +22444,8 @@ const (
 	VALIDATION_FEATURE_ENABLE_GPU_ASSISTED_EXT                      ValidationFeatureEnableEXT = 0
 	VALIDATION_FEATURE_ENABLE_GPU_ASSISTED_RESERVE_BINDING_SLOT_EXT ValidationFeatureEnableEXT = 1
 	VALIDATION_FEATURE_ENABLE_BEST_PRACTICES_EXT                    ValidationFeatureEnableEXT = 2
-	VALIDATION_FEATURE_ENABLE_BEGIN_RANGE_EXT                       ValidationFeatureEnableEXT = VALIDATION_FEATURE_ENABLE_GPU_ASSISTED_EXT
-	VALIDATION_FEATURE_ENABLE_END_RANGE_EXT                         ValidationFeatureEnableEXT = VALIDATION_FEATURE_ENABLE_BEST_PRACTICES_EXT
-	VALIDATION_FEATURE_ENABLE_RANGE_SIZE_EXT                        ValidationFeatureEnableEXT = (VALIDATION_FEATURE_ENABLE_BEST_PRACTICES_EXT - VALIDATION_FEATURE_ENABLE_GPU_ASSISTED_EXT + 1)
+	VALIDATION_FEATURE_ENABLE_DEBUG_PRINTF_EXT                      ValidationFeatureEnableEXT = 3
+	VALIDATION_FEATURE_ENABLE_SYNCHRONIZATION_VALIDATION_EXT        ValidationFeatureEnableEXT = 4
 	VALIDATION_FEATURE_ENABLE_MAX_ENUM_EXT                          ValidationFeatureEnableEXT = 0x7FFFFFFF
 )
 
@@ -19368,6 +22457,10 @@ func (x ValidationFeatureEnableEXT) String() string {
 		return "VALIDATION_FEATURE_ENABLE_GPU_ASSISTED_RESERVE_BINDING_SLOT_EXT"
 	case VALIDATION_FEATURE_ENABLE_BEST_PRACTICES_EXT:
 		return "VALIDATION_FEATURE_ENABLE_BEST_PRACTICES_EXT"
+	case VALIDATION_FEATURE_ENABLE_DEBUG_PRINTF_EXT:
+		return "VALIDATION_FEATURE_ENABLE_DEBUG_PRINTF_EXT"
+	case VALIDATION_FEATURE_ENABLE_SYNCHRONIZATION_VALIDATION_EXT:
+		return "VALIDATION_FEATURE_ENABLE_SYNCHRONIZATION_VALIDATION_EXT"
 	case VALIDATION_FEATURE_ENABLE_MAX_ENUM_EXT:
 		return "VALIDATION_FEATURE_ENABLE_MAX_ENUM_EXT"
 	default:
@@ -19386,9 +22479,6 @@ const (
 	VALIDATION_FEATURE_DISABLE_OBJECT_LIFETIMES_EXT ValidationFeatureDisableEXT = 4
 	VALIDATION_FEATURE_DISABLE_CORE_CHECKS_EXT      ValidationFeatureDisableEXT = 5
 	VALIDATION_FEATURE_DISABLE_UNIQUE_HANDLES_EXT   ValidationFeatureDisableEXT = 6
-	VALIDATION_FEATURE_DISABLE_BEGIN_RANGE_EXT      ValidationFeatureDisableEXT = VALIDATION_FEATURE_DISABLE_ALL_EXT
-	VALIDATION_FEATURE_DISABLE_END_RANGE_EXT        ValidationFeatureDisableEXT = VALIDATION_FEATURE_DISABLE_UNIQUE_HANDLES_EXT
-	VALIDATION_FEATURE_DISABLE_RANGE_SIZE_EXT       ValidationFeatureDisableEXT = (VALIDATION_FEATURE_DISABLE_UNIQUE_HANDLES_EXT - VALIDATION_FEATURE_DISABLE_ALL_EXT + 1)
 	VALIDATION_FEATURE_DISABLE_MAX_ENUM_EXT         ValidationFeatureDisableEXT = 0x7FFFFFFF
 )
 
@@ -19441,21 +22531,18 @@ var NV_COOPERATIVE_MATRIX_EXTENSION_NAME = "VK_NV_cooperative_matrix"
 type ComponentTypeNV int32
 
 const (
-	COMPONENT_TYPE_FLOAT16_NV     ComponentTypeNV = 0
-	COMPONENT_TYPE_FLOAT32_NV     ComponentTypeNV = 1
-	COMPONENT_TYPE_FLOAT64_NV     ComponentTypeNV = 2
-	COMPONENT_TYPE_SINT8_NV       ComponentTypeNV = 3
-	COMPONENT_TYPE_SINT16_NV      ComponentTypeNV = 4
-	COMPONENT_TYPE_SINT32_NV      ComponentTypeNV = 5
-	COMPONENT_TYPE_SINT64_NV      ComponentTypeNV = 6
-	COMPONENT_TYPE_UINT8_NV       ComponentTypeNV = 7
-	COMPONENT_TYPE_UINT16_NV      ComponentTypeNV = 8
-	COMPONENT_TYPE_UINT32_NV      ComponentTypeNV = 9
-	COMPONENT_TYPE_UINT64_NV      ComponentTypeNV = 10
-	COMPONENT_TYPE_BEGIN_RANGE_NV ComponentTypeNV = COMPONENT_TYPE_FLOAT16_NV
-	COMPONENT_TYPE_END_RANGE_NV   ComponentTypeNV = COMPONENT_TYPE_UINT64_NV
-	COMPONENT_TYPE_RANGE_SIZE_NV  ComponentTypeNV = (COMPONENT_TYPE_UINT64_NV - COMPONENT_TYPE_FLOAT16_NV + 1)
-	COMPONENT_TYPE_MAX_ENUM_NV    ComponentTypeNV = 0x7FFFFFFF
+	COMPONENT_TYPE_FLOAT16_NV  ComponentTypeNV = 0
+	COMPONENT_TYPE_FLOAT32_NV  ComponentTypeNV = 1
+	COMPONENT_TYPE_FLOAT64_NV  ComponentTypeNV = 2
+	COMPONENT_TYPE_SINT8_NV    ComponentTypeNV = 3
+	COMPONENT_TYPE_SINT16_NV   ComponentTypeNV = 4
+	COMPONENT_TYPE_SINT32_NV   ComponentTypeNV = 5
+	COMPONENT_TYPE_SINT64_NV   ComponentTypeNV = 6
+	COMPONENT_TYPE_UINT8_NV    ComponentTypeNV = 7
+	COMPONENT_TYPE_UINT16_NV   ComponentTypeNV = 8
+	COMPONENT_TYPE_UINT32_NV   ComponentTypeNV = 9
+	COMPONENT_TYPE_UINT64_NV   ComponentTypeNV = 10
+	COMPONENT_TYPE_MAX_ENUM_NV ComponentTypeNV = 0x7FFFFFFF
 )
 
 func (x ComponentTypeNV) String() string {
@@ -19497,9 +22584,6 @@ const (
 	SCOPE_WORKGROUP_NV    ScopeNV = 2
 	SCOPE_SUBGROUP_NV     ScopeNV = 3
 	SCOPE_QUEUE_FAMILY_NV ScopeNV = 5
-	SCOPE_BEGIN_RANGE_NV  ScopeNV = SCOPE_DEVICE_NV
-	SCOPE_END_RANGE_NV    ScopeNV = SCOPE_QUEUE_FAMILY_NV
-	SCOPE_RANGE_SIZE_NV   ScopeNV = (SCOPE_QUEUE_FAMILY_NV - SCOPE_DEVICE_NV + 1)
 	SCOPE_MAX_ENUM_NV     ScopeNV = 0x7FFFFFFF
 )
 
@@ -19575,6 +22659,7 @@ type PfnGetPhysicalDeviceCooperativeMatrixPropertiesNV uintptr
 
 func (fn PfnGetPhysicalDeviceCooperativeMatrixPropertiesNV) Call(physicalDevice PhysicalDevice, pPropertyCount *uint32, pProperties *CooperativeMatrixPropertiesNV) Result {
 	ret := C.bridge_vkGetPhysicalDeviceCooperativeMatrixPropertiesNV(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.uint32_t)(unsafe.Pointer(pPropertyCount)), (*C.VkCooperativeMatrixPropertiesNV)(unsafe.Pointer(pProperties)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPhysicalDeviceCooperativeMatrixPropertiesNV) String() string {
@@ -19590,12 +22675,9 @@ var NV_COVERAGE_REDUCTION_MODE_EXTENSION_NAME = "VK_NV_coverage_reduction_mode"
 type CoverageReductionModeNV int32
 
 const (
-	COVERAGE_REDUCTION_MODE_MERGE_NV       CoverageReductionModeNV = 0
-	COVERAGE_REDUCTION_MODE_TRUNCATE_NV    CoverageReductionModeNV = 1
-	COVERAGE_REDUCTION_MODE_BEGIN_RANGE_NV CoverageReductionModeNV = COVERAGE_REDUCTION_MODE_MERGE_NV
-	COVERAGE_REDUCTION_MODE_END_RANGE_NV   CoverageReductionModeNV = COVERAGE_REDUCTION_MODE_TRUNCATE_NV
-	COVERAGE_REDUCTION_MODE_RANGE_SIZE_NV  CoverageReductionModeNV = (COVERAGE_REDUCTION_MODE_TRUNCATE_NV - COVERAGE_REDUCTION_MODE_MERGE_NV + 1)
-	COVERAGE_REDUCTION_MODE_MAX_ENUM_NV    CoverageReductionModeNV = 0x7FFFFFFF
+	COVERAGE_REDUCTION_MODE_MERGE_NV    CoverageReductionModeNV = 0
+	COVERAGE_REDUCTION_MODE_TRUNCATE_NV CoverageReductionModeNV = 1
+	COVERAGE_REDUCTION_MODE_MAX_ENUM_NV CoverageReductionModeNV = 0x7FFFFFFF
 )
 
 func (x CoverageReductionModeNV) String() string {
@@ -19663,6 +22745,7 @@ type PfnGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV uintptr
 
 func (fn PfnGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV) Call(physicalDevice PhysicalDevice, pCombinationCount *uint32, pCombinations *FramebufferMixedSamplesCombinationNV) Result {
 	ret := C.bridge_vkGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (*C.uint32_t)(unsafe.Pointer(pCombinationCount)), (*C.VkFramebufferMixedSamplesCombinationNV)(unsafe.Pointer(pCombinations)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnGetPhysicalDeviceSupportedFramebufferMixedSamplesCombinationsNV) String() string {
@@ -19709,6 +22792,77 @@ func NewPhysicalDeviceYcbcrImageArraysFeaturesEXT() *PhysicalDeviceYcbcrImageArr
 }
 func (p *PhysicalDeviceYcbcrImageArraysFeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
 
+const EXT_provoking_vertex = 1
+const EXT_PROVOKING_VERTEX_SPEC_VERSION = 1
+
+var EXT_PROVOKING_VERTEX_EXTENSION_NAME = "VK_EXT_provoking_vertex"
+
+// ProvokingVertexModeEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkProvokingVertexModeEXT.html
+type ProvokingVertexModeEXT int32
+
+const (
+	PROVOKING_VERTEX_MODE_FIRST_VERTEX_EXT ProvokingVertexModeEXT = 0
+	PROVOKING_VERTEX_MODE_LAST_VERTEX_EXT  ProvokingVertexModeEXT = 1
+	PROVOKING_VERTEX_MODE_MAX_ENUM_EXT     ProvokingVertexModeEXT = 0x7FFFFFFF
+)
+
+func (x ProvokingVertexModeEXT) String() string {
+	switch x {
+	case PROVOKING_VERTEX_MODE_FIRST_VERTEX_EXT:
+		return "PROVOKING_VERTEX_MODE_FIRST_VERTEX_EXT"
+	case PROVOKING_VERTEX_MODE_LAST_VERTEX_EXT:
+		return "PROVOKING_VERTEX_MODE_LAST_VERTEX_EXT"
+	case PROVOKING_VERTEX_MODE_MAX_ENUM_EXT:
+		return "PROVOKING_VERTEX_MODE_MAX_ENUM_EXT"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// PhysicalDeviceProvokingVertexFeaturesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceProvokingVertexFeaturesEXT.html
+type PhysicalDeviceProvokingVertexFeaturesEXT struct {
+	SType                                     StructureType
+	PNext                                     unsafe.Pointer
+	ProvokingVertexLast                       Bool32
+	TransformFeedbackPreservesProvokingVertex Bool32
+}
+
+func NewPhysicalDeviceProvokingVertexFeaturesEXT() *PhysicalDeviceProvokingVertexFeaturesEXT {
+	p := (*PhysicalDeviceProvokingVertexFeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceProvokingVertexFeaturesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_PROVOKING_VERTEX_FEATURES_EXT
+	return p
+}
+func (p *PhysicalDeviceProvokingVertexFeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceProvokingVertexPropertiesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceProvokingVertexPropertiesEXT.html
+type PhysicalDeviceProvokingVertexPropertiesEXT struct {
+	SType                                                StructureType
+	PNext                                                unsafe.Pointer
+	ProvokingVertexModePerPipeline                       Bool32
+	TransformFeedbackPreservesTriangleFanProvokingVertex Bool32
+}
+
+func NewPhysicalDeviceProvokingVertexPropertiesEXT() *PhysicalDeviceProvokingVertexPropertiesEXT {
+	p := (*PhysicalDeviceProvokingVertexPropertiesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceProvokingVertexPropertiesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_PROVOKING_VERTEX_PROPERTIES_EXT
+	return p
+}
+func (p *PhysicalDeviceProvokingVertexPropertiesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PipelineRasterizationProvokingVertexStateCreateInfoEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineRasterizationProvokingVertexStateCreateInfoEXT.html
+type PipelineRasterizationProvokingVertexStateCreateInfoEXT struct {
+	SType               StructureType
+	PNext               unsafe.Pointer
+	ProvokingVertexMode ProvokingVertexModeEXT
+}
+
+func NewPipelineRasterizationProvokingVertexStateCreateInfoEXT() *PipelineRasterizationProvokingVertexStateCreateInfoEXT {
+	p := (*PipelineRasterizationProvokingVertexStateCreateInfoEXT)(MemAlloc(unsafe.Sizeof(*(*PipelineRasterizationProvokingVertexStateCreateInfoEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PIPELINE_RASTERIZATION_PROVOKING_VERTEX_STATE_CREATE_INFO_EXT
+	return p
+}
+func (p *PipelineRasterizationProvokingVertexStateCreateInfoEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
 const EXT_headless_surface = 1
 const EXT_HEADLESS_SURFACE_SPEC_VERSION = 1
 
@@ -19734,6 +22888,7 @@ type PfnCreateHeadlessSurfaceEXT uintptr
 
 func (fn PfnCreateHeadlessSurfaceEXT) Call(instance Instance, pCreateInfo *HeadlessSurfaceCreateInfoEXT, pAllocator *AllocationCallbacks, pSurface *SurfaceKHR) Result {
 	ret := C.bridge_vkCreateHeadlessSurfaceEXT(C.uintptr_t(fn), (C.VkInstance)(unsafe.Pointer(uintptr(instance))), (*C.VkHeadlessSurfaceCreateInfoEXT)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkSurfaceKHR)(unsafe.Pointer(pSurface)))
+	debugCheckAndBreak()
 	return Result(ret)
 }
 func (fn PfnCreateHeadlessSurfaceEXT) String() string { return "vkCreateHeadlessSurfaceEXT" }
@@ -19751,9 +22906,6 @@ const (
 	LINE_RASTERIZATION_MODE_RECTANGULAR_EXT        LineRasterizationModeEXT = 1
 	LINE_RASTERIZATION_MODE_BRESENHAM_EXT          LineRasterizationModeEXT = 2
 	LINE_RASTERIZATION_MODE_RECTANGULAR_SMOOTH_EXT LineRasterizationModeEXT = 3
-	LINE_RASTERIZATION_MODE_BEGIN_RANGE_EXT        LineRasterizationModeEXT = LINE_RASTERIZATION_MODE_DEFAULT_EXT
-	LINE_RASTERIZATION_MODE_END_RANGE_EXT          LineRasterizationModeEXT = LINE_RASTERIZATION_MODE_RECTANGULAR_SMOOTH_EXT
-	LINE_RASTERIZATION_MODE_RANGE_SIZE_EXT         LineRasterizationModeEXT = (LINE_RASTERIZATION_MODE_RECTANGULAR_SMOOTH_EXT - LINE_RASTERIZATION_MODE_DEFAULT_EXT + 1)
 	LINE_RASTERIZATION_MODE_MAX_ENUM_EXT           LineRasterizationModeEXT = 0x7FFFFFFF
 )
 
@@ -19787,7 +22939,9 @@ type PhysicalDeviceLineRasterizationFeaturesEXT struct {
 }
 
 func NewPhysicalDeviceLineRasterizationFeaturesEXT() *PhysicalDeviceLineRasterizationFeaturesEXT {
-	return (*PhysicalDeviceLineRasterizationFeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceLineRasterizationFeaturesEXT)(nil))))
+	p := (*PhysicalDeviceLineRasterizationFeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceLineRasterizationFeaturesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_LINE_RASTERIZATION_FEATURES_EXT
+	return p
 }
 func (p *PhysicalDeviceLineRasterizationFeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -19799,7 +22953,9 @@ type PhysicalDeviceLineRasterizationPropertiesEXT struct {
 }
 
 func NewPhysicalDeviceLineRasterizationPropertiesEXT() *PhysicalDeviceLineRasterizationPropertiesEXT {
-	return (*PhysicalDeviceLineRasterizationPropertiesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceLineRasterizationPropertiesEXT)(nil))))
+	p := (*PhysicalDeviceLineRasterizationPropertiesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceLineRasterizationPropertiesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_LINE_RASTERIZATION_PROPERTIES_EXT
+	return p
 }
 func (p *PhysicalDeviceLineRasterizationPropertiesEXT) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -19814,7 +22970,9 @@ type PipelineRasterizationLineStateCreateInfoEXT struct {
 }
 
 func NewPipelineRasterizationLineStateCreateInfoEXT() *PipelineRasterizationLineStateCreateInfoEXT {
-	return (*PipelineRasterizationLineStateCreateInfoEXT)(MemAlloc(unsafe.Sizeof(*(*PipelineRasterizationLineStateCreateInfoEXT)(nil))))
+	p := (*PipelineRasterizationLineStateCreateInfoEXT)(MemAlloc(unsafe.Sizeof(*(*PipelineRasterizationLineStateCreateInfoEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PIPELINE_RASTERIZATION_LINE_STATE_CREATE_INFO_EXT
+	return p
 }
 func (p *PipelineRasterizationLineStateCreateInfoEXT) Free() { MemFree(unsafe.Pointer(p)) }
 
@@ -19823,34 +22981,54 @@ type PfnCmdSetLineStippleEXT uintptr
 
 func (fn PfnCmdSetLineStippleEXT) Call(commandBuffer CommandBuffer, lineStippleFactor uint32, lineStipplePattern uint16) {
 	C.bridge_vkCmdSetLineStippleEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(lineStippleFactor), (C.uint16_t)(lineStipplePattern))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnCmdSetLineStippleEXT) String() string { return "vkCmdSetLineStippleEXT" }
+
+const EXT_shader_atomic_float = 1
+const EXT_SHADER_ATOMIC_FLOAT_SPEC_VERSION = 1
+
+var EXT_SHADER_ATOMIC_FLOAT_EXTENSION_NAME = "VK_EXT_shader_atomic_float"
+
+// PhysicalDeviceShaderAtomicFloatFeaturesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceShaderAtomicFloatFeaturesEXT.html
+type PhysicalDeviceShaderAtomicFloatFeaturesEXT struct {
+	SType                        StructureType
+	PNext                        unsafe.Pointer
+	ShaderBufferFloat32Atomics   Bool32
+	ShaderBufferFloat32AtomicAdd Bool32
+	ShaderBufferFloat64Atomics   Bool32
+	ShaderBufferFloat64AtomicAdd Bool32
+	ShaderSharedFloat32Atomics   Bool32
+	ShaderSharedFloat32AtomicAdd Bool32
+	ShaderSharedFloat64Atomics   Bool32
+	ShaderSharedFloat64AtomicAdd Bool32
+	ShaderImageFloat32Atomics    Bool32
+	ShaderImageFloat32AtomicAdd  Bool32
+	SparseImageFloat32Atomics    Bool32
+	SparseImageFloat32AtomicAdd  Bool32
+}
+
+func NewPhysicalDeviceShaderAtomicFloatFeaturesEXT() *PhysicalDeviceShaderAtomicFloatFeaturesEXT {
+	p := (*PhysicalDeviceShaderAtomicFloatFeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceShaderAtomicFloatFeaturesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_ATOMIC_FLOAT_FEATURES_EXT
+	return p
+}
+func (p *PhysicalDeviceShaderAtomicFloatFeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
 
 const EXT_host_query_reset = 1
 const EXT_HOST_QUERY_RESET_SPEC_VERSION = 1
 
 var EXT_HOST_QUERY_RESET_EXTENSION_NAME = "VK_EXT_host_query_reset"
 
-// PhysicalDeviceHostQueryResetFeaturesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceHostQueryResetFeaturesEXT.html
-type PhysicalDeviceHostQueryResetFeaturesEXT struct {
-	SType          StructureType
-	PNext          unsafe.Pointer
-	HostQueryReset Bool32
-}
-
-func NewPhysicalDeviceHostQueryResetFeaturesEXT() *PhysicalDeviceHostQueryResetFeaturesEXT {
-	p := (*PhysicalDeviceHostQueryResetFeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceHostQueryResetFeaturesEXT)(nil))))
-	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_HOST_QUERY_RESET_FEATURES_EXT
-	return p
-}
-func (p *PhysicalDeviceHostQueryResetFeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+type PhysicalDeviceHostQueryResetFeaturesEXT = PhysicalDeviceHostQueryResetFeatures
 
 //  PfnResetQueryPoolEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkResetQueryPoolEXT.html
 type PfnResetQueryPoolEXT uintptr
 
 func (fn PfnResetQueryPoolEXT) Call(device Device, queryPool QueryPool, firstQuery, queryCount uint32) {
 	C.bridge_vkResetQueryPoolEXT(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkQueryPool)(unsafe.Pointer(uintptr(queryPool))), (C.uint32_t)(firstQuery), (C.uint32_t)(queryCount))
+	debugCheckAndBreak()
 	return
 }
 func (fn PfnResetQueryPoolEXT) String() string { return "vkResetQueryPoolEXT" }
@@ -19868,9 +23046,152 @@ type PhysicalDeviceIndexTypeUint8FeaturesEXT struct {
 }
 
 func NewPhysicalDeviceIndexTypeUint8FeaturesEXT() *PhysicalDeviceIndexTypeUint8FeaturesEXT {
-	return (*PhysicalDeviceIndexTypeUint8FeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceIndexTypeUint8FeaturesEXT)(nil))))
+	p := (*PhysicalDeviceIndexTypeUint8FeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceIndexTypeUint8FeaturesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_INDEX_TYPE_UINT8_FEATURES_EXT
+	return p
 }
 func (p *PhysicalDeviceIndexTypeUint8FeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+const EXT_extended_dynamic_state = 1
+const EXT_EXTENDED_DYNAMIC_STATE_SPEC_VERSION = 1
+
+var EXT_EXTENDED_DYNAMIC_STATE_EXTENSION_NAME = "VK_EXT_extended_dynamic_state"
+
+// PhysicalDeviceExtendedDynamicStateFeaturesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceExtendedDynamicStateFeaturesEXT.html
+type PhysicalDeviceExtendedDynamicStateFeaturesEXT struct {
+	SType                StructureType
+	PNext                unsafe.Pointer
+	ExtendedDynamicState Bool32
+}
+
+func NewPhysicalDeviceExtendedDynamicStateFeaturesEXT() *PhysicalDeviceExtendedDynamicStateFeaturesEXT {
+	p := (*PhysicalDeviceExtendedDynamicStateFeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceExtendedDynamicStateFeaturesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_FEATURES_EXT
+	return p
+}
+func (p *PhysicalDeviceExtendedDynamicStateFeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+//  PfnCmdSetCullModeEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetCullModeEXT.html
+type PfnCmdSetCullModeEXT uintptr
+
+func (fn PfnCmdSetCullModeEXT) Call(commandBuffer CommandBuffer, cullMode CullModeFlags) {
+	C.bridge_vkCmdSetCullModeEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkCullModeFlags)(uint32(cullMode)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdSetCullModeEXT) String() string { return "vkCmdSetCullModeEXT" }
+
+//  PfnCmdSetFrontFaceEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetFrontFaceEXT.html
+type PfnCmdSetFrontFaceEXT uintptr
+
+func (fn PfnCmdSetFrontFaceEXT) Call(commandBuffer CommandBuffer, frontFace FrontFace) {
+	C.bridge_vkCmdSetFrontFaceEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkFrontFace)(frontFace))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdSetFrontFaceEXT) String() string { return "vkCmdSetFrontFaceEXT" }
+
+//  PfnCmdSetPrimitiveTopologyEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetPrimitiveTopologyEXT.html
+type PfnCmdSetPrimitiveTopologyEXT uintptr
+
+func (fn PfnCmdSetPrimitiveTopologyEXT) Call(commandBuffer CommandBuffer, primitiveTopology PrimitiveTopology) {
+	C.bridge_vkCmdSetPrimitiveTopologyEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkPrimitiveTopology)(primitiveTopology))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdSetPrimitiveTopologyEXT) String() string { return "vkCmdSetPrimitiveTopologyEXT" }
+
+//  PfnCmdSetViewportWithCountEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetViewportWithCountEXT.html
+type PfnCmdSetViewportWithCountEXT uintptr
+
+func (fn PfnCmdSetViewportWithCountEXT) Call(commandBuffer CommandBuffer, viewportCount uint32, pViewports *Viewport) {
+	C.bridge_vkCmdSetViewportWithCountEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(viewportCount), (*C.VkViewport)(unsafe.Pointer(pViewports)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdSetViewportWithCountEXT) String() string { return "vkCmdSetViewportWithCountEXT" }
+
+//  PfnCmdSetScissorWithCountEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetScissorWithCountEXT.html
+type PfnCmdSetScissorWithCountEXT uintptr
+
+func (fn PfnCmdSetScissorWithCountEXT) Call(commandBuffer CommandBuffer, scissorCount uint32, pScissors *Rect2D) {
+	C.bridge_vkCmdSetScissorWithCountEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(scissorCount), (*C.VkRect2D)(unsafe.Pointer(pScissors)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdSetScissorWithCountEXT) String() string { return "vkCmdSetScissorWithCountEXT" }
+
+//  PfnCmdBindVertexBuffers2EXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBindVertexBuffers2EXT.html
+type PfnCmdBindVertexBuffers2EXT uintptr
+
+func (fn PfnCmdBindVertexBuffers2EXT) Call(commandBuffer CommandBuffer, firstBinding, bindingCount uint32, pBuffers *Buffer, pOffsets, pSizes, pStrides *DeviceSize) {
+	C.bridge_vkCmdBindVertexBuffers2EXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(firstBinding), (C.uint32_t)(bindingCount), (*C.VkBuffer)(unsafe.Pointer(pBuffers)), (*C.VkDeviceSize)(unsafe.Pointer(pOffsets)), (*C.VkDeviceSize)(unsafe.Pointer(pSizes)), (*C.VkDeviceSize)(unsafe.Pointer(pStrides)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdBindVertexBuffers2EXT) String() string { return "vkCmdBindVertexBuffers2EXT" }
+
+//  PfnCmdSetDepthTestEnableEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetDepthTestEnableEXT.html
+type PfnCmdSetDepthTestEnableEXT uintptr
+
+func (fn PfnCmdSetDepthTestEnableEXT) Call(commandBuffer CommandBuffer, depthTestEnable Bool32) {
+	C.bridge_vkCmdSetDepthTestEnableEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBool32)(depthTestEnable))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdSetDepthTestEnableEXT) String() string { return "vkCmdSetDepthTestEnableEXT" }
+
+//  PfnCmdSetDepthWriteEnableEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetDepthWriteEnableEXT.html
+type PfnCmdSetDepthWriteEnableEXT uintptr
+
+func (fn PfnCmdSetDepthWriteEnableEXT) Call(commandBuffer CommandBuffer, depthWriteEnable Bool32) {
+	C.bridge_vkCmdSetDepthWriteEnableEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBool32)(depthWriteEnable))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdSetDepthWriteEnableEXT) String() string { return "vkCmdSetDepthWriteEnableEXT" }
+
+//  PfnCmdSetDepthCompareOpEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetDepthCompareOpEXT.html
+type PfnCmdSetDepthCompareOpEXT uintptr
+
+func (fn PfnCmdSetDepthCompareOpEXT) Call(commandBuffer CommandBuffer, depthCompareOp CompareOp) {
+	C.bridge_vkCmdSetDepthCompareOpEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkCompareOp)(depthCompareOp))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdSetDepthCompareOpEXT) String() string { return "vkCmdSetDepthCompareOpEXT" }
+
+//  PfnCmdSetDepthBoundsTestEnableEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetDepthBoundsTestEnableEXT.html
+type PfnCmdSetDepthBoundsTestEnableEXT uintptr
+
+func (fn PfnCmdSetDepthBoundsTestEnableEXT) Call(commandBuffer CommandBuffer, depthBoundsTestEnable Bool32) {
+	C.bridge_vkCmdSetDepthBoundsTestEnableEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBool32)(depthBoundsTestEnable))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdSetDepthBoundsTestEnableEXT) String() string {
+	return "vkCmdSetDepthBoundsTestEnableEXT"
+}
+
+//  PfnCmdSetStencilTestEnableEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetStencilTestEnableEXT.html
+type PfnCmdSetStencilTestEnableEXT uintptr
+
+func (fn PfnCmdSetStencilTestEnableEXT) Call(commandBuffer CommandBuffer, stencilTestEnable Bool32) {
+	C.bridge_vkCmdSetStencilTestEnableEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBool32)(stencilTestEnable))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdSetStencilTestEnableEXT) String() string { return "vkCmdSetStencilTestEnableEXT" }
+
+//  PfnCmdSetStencilOpEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetStencilOpEXT.html
+type PfnCmdSetStencilOpEXT uintptr
+
+func (fn PfnCmdSetStencilOpEXT) Call(commandBuffer CommandBuffer, faceMask StencilFaceFlags, failOp, passOp, depthFailOp StencilOp, compareOp CompareOp) {
+	C.bridge_vkCmdSetStencilOpEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkStencilFaceFlags)(uint32(faceMask)), (C.VkStencilOp)(failOp), (C.VkStencilOp)(passOp), (C.VkStencilOp)(depthFailOp), (C.VkCompareOp)(compareOp))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdSetStencilOpEXT) String() string { return "vkCmdSetStencilOpEXT" }
 
 const EXT_shader_demote_to_helper_invocation = 1
 const EXT_SHADER_DEMOTE_TO_HELPER_INVOCATION_SPEC_VERSION = 1
@@ -19890,6 +23211,419 @@ func NewPhysicalDeviceShaderDemoteToHelperInvocationFeaturesEXT() *PhysicalDevic
 	return p
 }
 func (p *PhysicalDeviceShaderDemoteToHelperInvocationFeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+const NV_device_generated_commands = 1
+
+// IndirectCommandsLayoutNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsLayoutNV.html
+type IndirectCommandsLayoutNV NonDispatchableHandle
+
+const NV_DEVICE_GENERATED_COMMANDS_SPEC_VERSION = 3
+
+var NV_DEVICE_GENERATED_COMMANDS_EXTENSION_NAME = "VK_NV_device_generated_commands"
+
+// IndirectCommandsTokenTypeNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsTokenTypeNV.html
+type IndirectCommandsTokenTypeNV int32
+
+const (
+	INDIRECT_COMMANDS_TOKEN_TYPE_SHADER_GROUP_NV  IndirectCommandsTokenTypeNV = 0
+	INDIRECT_COMMANDS_TOKEN_TYPE_STATE_FLAGS_NV   IndirectCommandsTokenTypeNV = 1
+	INDIRECT_COMMANDS_TOKEN_TYPE_INDEX_BUFFER_NV  IndirectCommandsTokenTypeNV = 2
+	INDIRECT_COMMANDS_TOKEN_TYPE_VERTEX_BUFFER_NV IndirectCommandsTokenTypeNV = 3
+	INDIRECT_COMMANDS_TOKEN_TYPE_PUSH_CONSTANT_NV IndirectCommandsTokenTypeNV = 4
+	INDIRECT_COMMANDS_TOKEN_TYPE_DRAW_INDEXED_NV  IndirectCommandsTokenTypeNV = 5
+	INDIRECT_COMMANDS_TOKEN_TYPE_DRAW_NV          IndirectCommandsTokenTypeNV = 6
+	INDIRECT_COMMANDS_TOKEN_TYPE_DRAW_TASKS_NV    IndirectCommandsTokenTypeNV = 7
+	INDIRECT_COMMANDS_TOKEN_TYPE_MAX_ENUM_NV      IndirectCommandsTokenTypeNV = 0x7FFFFFFF
+)
+
+func (x IndirectCommandsTokenTypeNV) String() string {
+	switch x {
+	case INDIRECT_COMMANDS_TOKEN_TYPE_SHADER_GROUP_NV:
+		return "INDIRECT_COMMANDS_TOKEN_TYPE_SHADER_GROUP_NV"
+	case INDIRECT_COMMANDS_TOKEN_TYPE_STATE_FLAGS_NV:
+		return "INDIRECT_COMMANDS_TOKEN_TYPE_STATE_FLAGS_NV"
+	case INDIRECT_COMMANDS_TOKEN_TYPE_INDEX_BUFFER_NV:
+		return "INDIRECT_COMMANDS_TOKEN_TYPE_INDEX_BUFFER_NV"
+	case INDIRECT_COMMANDS_TOKEN_TYPE_VERTEX_BUFFER_NV:
+		return "INDIRECT_COMMANDS_TOKEN_TYPE_VERTEX_BUFFER_NV"
+	case INDIRECT_COMMANDS_TOKEN_TYPE_PUSH_CONSTANT_NV:
+		return "INDIRECT_COMMANDS_TOKEN_TYPE_PUSH_CONSTANT_NV"
+	case INDIRECT_COMMANDS_TOKEN_TYPE_DRAW_INDEXED_NV:
+		return "INDIRECT_COMMANDS_TOKEN_TYPE_DRAW_INDEXED_NV"
+	case INDIRECT_COMMANDS_TOKEN_TYPE_DRAW_NV:
+		return "INDIRECT_COMMANDS_TOKEN_TYPE_DRAW_NV"
+	case INDIRECT_COMMANDS_TOKEN_TYPE_DRAW_TASKS_NV:
+		return "INDIRECT_COMMANDS_TOKEN_TYPE_DRAW_TASKS_NV"
+	case INDIRECT_COMMANDS_TOKEN_TYPE_MAX_ENUM_NV:
+		return "INDIRECT_COMMANDS_TOKEN_TYPE_MAX_ENUM_NV"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// IndirectStateFlagsNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectStateFlagsNV.html
+type IndirectStateFlagsNV uint32
+
+const (
+	INDIRECT_STATE_FLAG_FRONTFACE_BIT_NV IndirectStateFlagsNV = 0x00000001
+	INDIRECT_STATE_FLAG_BITS_MAX_ENUM_NV IndirectStateFlagsNV = 0x7FFFFFFF
+)
+
+func (x IndirectStateFlagsNV) String() string {
+	var s string
+	for i := uint32(0); i < 32; i++ {
+		if int32(x)&(1<<i) != 0 {
+			switch IndirectStateFlagsNV(1 << i) {
+			case INDIRECT_STATE_FLAG_FRONTFACE_BIT_NV:
+				s += "INDIRECT_STATE_FLAG_FRONTFACE_BIT_NV|"
+			}
+		}
+	}
+	return strings.TrimSuffix(s, `|`)
+}
+
+// IndirectCommandsLayoutUsageFlagsNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsLayoutUsageFlagsNV.html
+type IndirectCommandsLayoutUsageFlagsNV uint32
+
+const (
+	INDIRECT_COMMANDS_LAYOUT_USAGE_EXPLICIT_PREPROCESS_BIT_NV IndirectCommandsLayoutUsageFlagsNV = 0x00000001
+	INDIRECT_COMMANDS_LAYOUT_USAGE_INDEXED_SEQUENCES_BIT_NV   IndirectCommandsLayoutUsageFlagsNV = 0x00000002
+	INDIRECT_COMMANDS_LAYOUT_USAGE_UNORDERED_SEQUENCES_BIT_NV IndirectCommandsLayoutUsageFlagsNV = 0x00000004
+	INDIRECT_COMMANDS_LAYOUT_USAGE_FLAG_BITS_MAX_ENUM_NV      IndirectCommandsLayoutUsageFlagsNV = 0x7FFFFFFF
+)
+
+func (x IndirectCommandsLayoutUsageFlagsNV) String() string {
+	var s string
+	for i := uint32(0); i < 32; i++ {
+		if int32(x)&(1<<i) != 0 {
+			switch IndirectCommandsLayoutUsageFlagsNV(1 << i) {
+			case INDIRECT_COMMANDS_LAYOUT_USAGE_EXPLICIT_PREPROCESS_BIT_NV:
+				s += "INDIRECT_COMMANDS_LAYOUT_USAGE_EXPLICIT_PREPROCESS_BIT_NV|"
+			case INDIRECT_COMMANDS_LAYOUT_USAGE_INDEXED_SEQUENCES_BIT_NV:
+				s += "INDIRECT_COMMANDS_LAYOUT_USAGE_INDEXED_SEQUENCES_BIT_NV|"
+			case INDIRECT_COMMANDS_LAYOUT_USAGE_UNORDERED_SEQUENCES_BIT_NV:
+				s += "INDIRECT_COMMANDS_LAYOUT_USAGE_UNORDERED_SEQUENCES_BIT_NV|"
+			}
+		}
+	}
+	return strings.TrimSuffix(s, `|`)
+}
+
+// PhysicalDeviceDeviceGeneratedCommandsPropertiesNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceDeviceGeneratedCommandsPropertiesNV.html
+type PhysicalDeviceDeviceGeneratedCommandsPropertiesNV struct {
+	SType                                    StructureType
+	PNext                                    unsafe.Pointer
+	MaxGraphicsShaderGroupCount              uint32
+	MaxIndirectSequenceCount                 uint32
+	MaxIndirectCommandsTokenCount            uint32
+	MaxIndirectCommandsStreamCount           uint32
+	MaxIndirectCommandsTokenOffset           uint32
+	MaxIndirectCommandsStreamStride          uint32
+	MinSequencesCountBufferOffsetAlignment   uint32
+	MinSequencesIndexBufferOffsetAlignment   uint32
+	MinIndirectCommandsBufferOffsetAlignment uint32
+}
+
+func NewPhysicalDeviceDeviceGeneratedCommandsPropertiesNV() *PhysicalDeviceDeviceGeneratedCommandsPropertiesNV {
+	p := (*PhysicalDeviceDeviceGeneratedCommandsPropertiesNV)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceDeviceGeneratedCommandsPropertiesNV)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_DEVICE_GENERATED_COMMANDS_PROPERTIES_NV
+	return p
+}
+func (p *PhysicalDeviceDeviceGeneratedCommandsPropertiesNV) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceDeviceGeneratedCommandsFeaturesNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceDeviceGeneratedCommandsFeaturesNV.html
+type PhysicalDeviceDeviceGeneratedCommandsFeaturesNV struct {
+	SType                   StructureType
+	PNext                   unsafe.Pointer
+	DeviceGeneratedCommands Bool32
+}
+
+func NewPhysicalDeviceDeviceGeneratedCommandsFeaturesNV() *PhysicalDeviceDeviceGeneratedCommandsFeaturesNV {
+	p := (*PhysicalDeviceDeviceGeneratedCommandsFeaturesNV)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceDeviceGeneratedCommandsFeaturesNV)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_DEVICE_GENERATED_COMMANDS_FEATURES_NV
+	return p
+}
+func (p *PhysicalDeviceDeviceGeneratedCommandsFeaturesNV) Free() { MemFree(unsafe.Pointer(p)) }
+
+// GraphicsShaderGroupCreateInfoNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGraphicsShaderGroupCreateInfoNV.html
+type GraphicsShaderGroupCreateInfoNV struct {
+	SType              StructureType
+	PNext              unsafe.Pointer
+	StageCount         uint32
+	PStages            *PipelineShaderStageCreateInfo
+	PVertexInputState  *PipelineVertexInputStateCreateInfo
+	PTessellationState *PipelineTessellationStateCreateInfo
+}
+
+func NewGraphicsShaderGroupCreateInfoNV() *GraphicsShaderGroupCreateInfoNV {
+	p := (*GraphicsShaderGroupCreateInfoNV)(MemAlloc(unsafe.Sizeof(*(*GraphicsShaderGroupCreateInfoNV)(nil))))
+	p.SType = STRUCTURE_TYPE_GRAPHICS_SHADER_GROUP_CREATE_INFO_NV
+	return p
+}
+func (p *GraphicsShaderGroupCreateInfoNV) Free() { MemFree(unsafe.Pointer(p)) }
+
+// GraphicsPipelineShaderGroupsCreateInfoNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGraphicsPipelineShaderGroupsCreateInfoNV.html
+type GraphicsPipelineShaderGroupsCreateInfoNV struct {
+	SType         StructureType
+	PNext         unsafe.Pointer
+	GroupCount    uint32
+	PGroups       *GraphicsShaderGroupCreateInfoNV
+	PipelineCount uint32
+	PPipelines    *Pipeline
+}
+
+func NewGraphicsPipelineShaderGroupsCreateInfoNV() *GraphicsPipelineShaderGroupsCreateInfoNV {
+	p := (*GraphicsPipelineShaderGroupsCreateInfoNV)(MemAlloc(unsafe.Sizeof(*(*GraphicsPipelineShaderGroupsCreateInfoNV)(nil))))
+	p.SType = STRUCTURE_TYPE_GRAPHICS_PIPELINE_SHADER_GROUPS_CREATE_INFO_NV
+	return p
+}
+func (p *GraphicsPipelineShaderGroupsCreateInfoNV) Free() { MemFree(unsafe.Pointer(p)) }
+
+// BindShaderGroupIndirectCommandNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBindShaderGroupIndirectCommandNV.html
+type BindShaderGroupIndirectCommandNV struct {
+	GroupIndex uint32
+}
+
+func NewBindShaderGroupIndirectCommandNV() *BindShaderGroupIndirectCommandNV {
+	return (*BindShaderGroupIndirectCommandNV)(MemAlloc(unsafe.Sizeof(*(*BindShaderGroupIndirectCommandNV)(nil))))
+}
+func (p *BindShaderGroupIndirectCommandNV) Free() { MemFree(unsafe.Pointer(p)) }
+
+// BindIndexBufferIndirectCommandNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBindIndexBufferIndirectCommandNV.html
+type BindIndexBufferIndirectCommandNV struct {
+	BufferAddress DeviceAddress
+	Size          uint32
+	IndexType     IndexType
+}
+
+func NewBindIndexBufferIndirectCommandNV() *BindIndexBufferIndirectCommandNV {
+	return (*BindIndexBufferIndirectCommandNV)(MemAlloc(unsafe.Sizeof(*(*BindIndexBufferIndirectCommandNV)(nil))))
+}
+func (p *BindIndexBufferIndirectCommandNV) Free() { MemFree(unsafe.Pointer(p)) }
+
+// BindVertexBufferIndirectCommandNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBindVertexBufferIndirectCommandNV.html
+type BindVertexBufferIndirectCommandNV struct {
+	BufferAddress DeviceAddress
+	Size          uint32
+	Stride        uint32
+}
+
+func NewBindVertexBufferIndirectCommandNV() *BindVertexBufferIndirectCommandNV {
+	return (*BindVertexBufferIndirectCommandNV)(MemAlloc(unsafe.Sizeof(*(*BindVertexBufferIndirectCommandNV)(nil))))
+}
+func (p *BindVertexBufferIndirectCommandNV) Free() { MemFree(unsafe.Pointer(p)) }
+
+// SetStateFlagsIndirectCommandNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSetStateFlagsIndirectCommandNV.html
+type SetStateFlagsIndirectCommandNV struct {
+	Data uint32
+}
+
+func NewSetStateFlagsIndirectCommandNV() *SetStateFlagsIndirectCommandNV {
+	return (*SetStateFlagsIndirectCommandNV)(MemAlloc(unsafe.Sizeof(*(*SetStateFlagsIndirectCommandNV)(nil))))
+}
+func (p *SetStateFlagsIndirectCommandNV) Free() { MemFree(unsafe.Pointer(p)) }
+
+// IndirectCommandsStreamNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsStreamNV.html
+type IndirectCommandsStreamNV struct {
+	Buffer Buffer
+	Offset DeviceSize
+}
+
+func NewIndirectCommandsStreamNV() *IndirectCommandsStreamNV {
+	return (*IndirectCommandsStreamNV)(MemAlloc(unsafe.Sizeof(*(*IndirectCommandsStreamNV)(nil))))
+}
+func (p *IndirectCommandsStreamNV) Free() { MemFree(unsafe.Pointer(p)) }
+
+// IndirectCommandsLayoutTokenNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsLayoutTokenNV.html
+type IndirectCommandsLayoutTokenNV struct {
+	SType                        StructureType
+	PNext                        unsafe.Pointer
+	TokenType                    IndirectCommandsTokenTypeNV
+	Stream                       uint32
+	Offset                       uint32
+	VertexBindingUnit            uint32
+	VertexDynamicStride          Bool32
+	PushconstantPipelineLayout   PipelineLayout
+	PushconstantShaderStageFlags ShaderStageFlags
+	PushconstantOffset           uint32
+	PushconstantSize             uint32
+	IndirectStateFlags           IndirectStateFlagsNV
+	IndexTypeCount               uint32
+	PIndexTypes                  *IndexType
+	PIndexTypeValues             *uint32
+}
+
+func NewIndirectCommandsLayoutTokenNV() *IndirectCommandsLayoutTokenNV {
+	p := (*IndirectCommandsLayoutTokenNV)(MemAlloc(unsafe.Sizeof(*(*IndirectCommandsLayoutTokenNV)(nil))))
+	p.SType = STRUCTURE_TYPE_INDIRECT_COMMANDS_LAYOUT_TOKEN_NV
+	return p
+}
+func (p *IndirectCommandsLayoutTokenNV) Free() { MemFree(unsafe.Pointer(p)) }
+
+// IndirectCommandsLayoutCreateInfoNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkIndirectCommandsLayoutCreateInfoNV.html
+type IndirectCommandsLayoutCreateInfoNV struct {
+	SType             StructureType
+	PNext             unsafe.Pointer
+	Flags             IndirectCommandsLayoutUsageFlagsNV
+	PipelineBindPoint PipelineBindPoint
+	TokenCount        uint32
+	PTokens           *IndirectCommandsLayoutTokenNV
+	StreamCount       uint32
+	PStreamStrides    *uint32
+}
+
+func NewIndirectCommandsLayoutCreateInfoNV() *IndirectCommandsLayoutCreateInfoNV {
+	p := (*IndirectCommandsLayoutCreateInfoNV)(MemAlloc(unsafe.Sizeof(*(*IndirectCommandsLayoutCreateInfoNV)(nil))))
+	p.SType = STRUCTURE_TYPE_INDIRECT_COMMANDS_LAYOUT_CREATE_INFO_NV
+	return p
+}
+func (p *IndirectCommandsLayoutCreateInfoNV) Free() { MemFree(unsafe.Pointer(p)) }
+
+// GeneratedCommandsInfoNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGeneratedCommandsInfoNV.html
+type GeneratedCommandsInfoNV struct {
+	SType                  StructureType
+	PNext                  unsafe.Pointer
+	PipelineBindPoint      PipelineBindPoint
+	Pipeline               Pipeline
+	IndirectCommandsLayout IndirectCommandsLayoutNV
+	StreamCount            uint32
+	PStreams               *IndirectCommandsStreamNV
+	SequencesCount         uint32
+	PreprocessBuffer       Buffer
+	PreprocessOffset       DeviceSize
+	PreprocessSize         DeviceSize
+	SequencesCountBuffer   Buffer
+	SequencesCountOffset   DeviceSize
+	SequencesIndexBuffer   Buffer
+	SequencesIndexOffset   DeviceSize
+}
+
+func NewGeneratedCommandsInfoNV() *GeneratedCommandsInfoNV {
+	p := (*GeneratedCommandsInfoNV)(MemAlloc(unsafe.Sizeof(*(*GeneratedCommandsInfoNV)(nil))))
+	p.SType = STRUCTURE_TYPE_GENERATED_COMMANDS_INFO_NV
+	return p
+}
+func (p *GeneratedCommandsInfoNV) Free() { MemFree(unsafe.Pointer(p)) }
+
+// GeneratedCommandsMemoryRequirementsInfoNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkGeneratedCommandsMemoryRequirementsInfoNV.html
+type GeneratedCommandsMemoryRequirementsInfoNV struct {
+	SType                  StructureType
+	PNext                  unsafe.Pointer
+	PipelineBindPoint      PipelineBindPoint
+	Pipeline               Pipeline
+	IndirectCommandsLayout IndirectCommandsLayoutNV
+	MaxSequencesCount      uint32
+}
+
+func NewGeneratedCommandsMemoryRequirementsInfoNV() *GeneratedCommandsMemoryRequirementsInfoNV {
+	p := (*GeneratedCommandsMemoryRequirementsInfoNV)(MemAlloc(unsafe.Sizeof(*(*GeneratedCommandsMemoryRequirementsInfoNV)(nil))))
+	p.SType = STRUCTURE_TYPE_GENERATED_COMMANDS_MEMORY_REQUIREMENTS_INFO_NV
+	return p
+}
+func (p *GeneratedCommandsMemoryRequirementsInfoNV) Free() { MemFree(unsafe.Pointer(p)) }
+
+//  PfnGetGeneratedCommandsMemoryRequirementsNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetGeneratedCommandsMemoryRequirementsNV.html
+type PfnGetGeneratedCommandsMemoryRequirementsNV uintptr
+
+func (fn PfnGetGeneratedCommandsMemoryRequirementsNV) Call(device Device, pInfo *GeneratedCommandsMemoryRequirementsInfoNV, pMemoryRequirements *MemoryRequirements2) {
+	C.bridge_vkGetGeneratedCommandsMemoryRequirementsNV(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkGeneratedCommandsMemoryRequirementsInfoNV)(unsafe.Pointer(pInfo)), (*C.VkMemoryRequirements2)(unsafe.Pointer(pMemoryRequirements)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnGetGeneratedCommandsMemoryRequirementsNV) String() string {
+	return "vkGetGeneratedCommandsMemoryRequirementsNV"
+}
+
+//  PfnCmdPreprocessGeneratedCommandsNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdPreprocessGeneratedCommandsNV.html
+type PfnCmdPreprocessGeneratedCommandsNV uintptr
+
+func (fn PfnCmdPreprocessGeneratedCommandsNV) Call(commandBuffer CommandBuffer, pGeneratedCommandsInfo *GeneratedCommandsInfoNV) {
+	C.bridge_vkCmdPreprocessGeneratedCommandsNV(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkGeneratedCommandsInfoNV)(unsafe.Pointer(pGeneratedCommandsInfo)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdPreprocessGeneratedCommandsNV) String() string {
+	return "vkCmdPreprocessGeneratedCommandsNV"
+}
+
+//  PfnCmdExecuteGeneratedCommandsNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdExecuteGeneratedCommandsNV.html
+type PfnCmdExecuteGeneratedCommandsNV uintptr
+
+func (fn PfnCmdExecuteGeneratedCommandsNV) Call(commandBuffer CommandBuffer, isPreprocessed Bool32, pGeneratedCommandsInfo *GeneratedCommandsInfoNV) {
+	C.bridge_vkCmdExecuteGeneratedCommandsNV(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBool32)(isPreprocessed), (*C.VkGeneratedCommandsInfoNV)(unsafe.Pointer(pGeneratedCommandsInfo)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdExecuteGeneratedCommandsNV) String() string { return "vkCmdExecuteGeneratedCommandsNV" }
+
+//  PfnCmdBindPipelineShaderGroupNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBindPipelineShaderGroupNV.html
+type PfnCmdBindPipelineShaderGroupNV uintptr
+
+func (fn PfnCmdBindPipelineShaderGroupNV) Call(commandBuffer CommandBuffer, pipelineBindPoint PipelineBindPoint, pipeline Pipeline, groupIndex uint32) {
+	C.bridge_vkCmdBindPipelineShaderGroupNV(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkPipelineBindPoint)(pipelineBindPoint), (C.VkPipeline)(unsafe.Pointer(uintptr(pipeline))), (C.uint32_t)(groupIndex))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdBindPipelineShaderGroupNV) String() string { return "vkCmdBindPipelineShaderGroupNV" }
+
+//  PfnCreateIndirectCommandsLayoutNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateIndirectCommandsLayoutNV.html
+type PfnCreateIndirectCommandsLayoutNV uintptr
+
+func (fn PfnCreateIndirectCommandsLayoutNV) Call(device Device, pCreateInfo *IndirectCommandsLayoutCreateInfoNV, pAllocator *AllocationCallbacks, pIndirectCommandsLayout *IndirectCommandsLayoutNV) Result {
+	ret := C.bridge_vkCreateIndirectCommandsLayoutNV(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkIndirectCommandsLayoutCreateInfoNV)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkIndirectCommandsLayoutNV)(unsafe.Pointer(pIndirectCommandsLayout)))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnCreateIndirectCommandsLayoutNV) String() string {
+	return "vkCreateIndirectCommandsLayoutNV"
+}
+
+//  PfnDestroyIndirectCommandsLayoutNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyIndirectCommandsLayoutNV.html
+type PfnDestroyIndirectCommandsLayoutNV uintptr
+
+func (fn PfnDestroyIndirectCommandsLayoutNV) Call(device Device, indirectCommandsLayout IndirectCommandsLayoutNV, pAllocator *AllocationCallbacks) {
+	C.bridge_vkDestroyIndirectCommandsLayoutNV(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkIndirectCommandsLayoutNV)(unsafe.Pointer(uintptr(indirectCommandsLayout))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnDestroyIndirectCommandsLayoutNV) String() string {
+	return "vkDestroyIndirectCommandsLayoutNV"
+}
+
+const NV_inherited_viewport_scissor = 1
+const NV_INHERITED_VIEWPORT_SCISSOR_SPEC_VERSION = 1
+
+var NV_INHERITED_VIEWPORT_SCISSOR_EXTENSION_NAME = "VK_NV_inherited_viewport_scissor"
+
+// PhysicalDeviceInheritedViewportScissorFeaturesNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceInheritedViewportScissorFeaturesNV.html
+type PhysicalDeviceInheritedViewportScissorFeaturesNV struct {
+	SType                      StructureType
+	PNext                      unsafe.Pointer
+	InheritedViewportScissor2D Bool32
+}
+
+func NewPhysicalDeviceInheritedViewportScissorFeaturesNV() *PhysicalDeviceInheritedViewportScissorFeaturesNV {
+	p := (*PhysicalDeviceInheritedViewportScissorFeaturesNV)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceInheritedViewportScissorFeaturesNV)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_INHERITED_VIEWPORT_SCISSOR_FEATURES_NV
+	return p
+}
+func (p *PhysicalDeviceInheritedViewportScissorFeaturesNV) Free() { MemFree(unsafe.Pointer(p)) }
+
+// CommandBufferInheritanceViewportScissorInfoNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandBufferInheritanceViewportScissorInfoNV.html
+type CommandBufferInheritanceViewportScissorInfoNV struct {
+	SType              StructureType
+	PNext              unsafe.Pointer
+	ViewportScissor2D  Bool32
+	ViewportDepthCount uint32
+	PViewportDepths    *Viewport
+}
+
+func NewCommandBufferInheritanceViewportScissorInfoNV() *CommandBufferInheritanceViewportScissorInfoNV {
+	p := (*CommandBufferInheritanceViewportScissorInfoNV)(MemAlloc(unsafe.Sizeof(*(*CommandBufferInheritanceViewportScissorInfoNV)(nil))))
+	p.SType = STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_VIEWPORT_SCISSOR_INFO_NV
+	return p
+}
+func (p *CommandBufferInheritanceViewportScissorInfoNV) Free() { MemFree(unsafe.Pointer(p)) }
 
 const EXT_texel_buffer_alignment = 1
 const EXT_TEXEL_BUFFER_ALIGNMENT_SPEC_VERSION = 1
@@ -19926,3 +23660,1714 @@ func NewPhysicalDeviceTexelBufferAlignmentPropertiesEXT() *PhysicalDeviceTexelBu
 	return p
 }
 func (p *PhysicalDeviceTexelBufferAlignmentPropertiesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+const QCOM_render_pass_transform = 1
+const QCOM_RENDER_PASS_TRANSFORM_SPEC_VERSION = 2
+
+var QCOM_RENDER_PASS_TRANSFORM_EXTENSION_NAME = "VK_QCOM_render_pass_transform"
+
+// RenderPassTransformBeginInfoQCOM -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRenderPassTransformBeginInfoQCOM.html
+type RenderPassTransformBeginInfoQCOM struct {
+	SType     StructureType
+	PNext     unsafe.Pointer
+	Transform SurfaceTransformFlagsKHR
+}
+
+func NewRenderPassTransformBeginInfoQCOM() *RenderPassTransformBeginInfoQCOM {
+	p := (*RenderPassTransformBeginInfoQCOM)(MemAlloc(unsafe.Sizeof(*(*RenderPassTransformBeginInfoQCOM)(nil))))
+	p.SType = STRUCTURE_TYPE_RENDER_PASS_TRANSFORM_BEGIN_INFO_QCOM
+	return p
+}
+func (p *RenderPassTransformBeginInfoQCOM) Free() { MemFree(unsafe.Pointer(p)) }
+
+// CommandBufferInheritanceRenderPassTransformInfoQCOM -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCommandBufferInheritanceRenderPassTransformInfoQCOM.html
+type CommandBufferInheritanceRenderPassTransformInfoQCOM struct {
+	SType      StructureType
+	PNext      unsafe.Pointer
+	Transform  SurfaceTransformFlagsKHR
+	RenderArea Rect2D
+}
+
+func NewCommandBufferInheritanceRenderPassTransformInfoQCOM() *CommandBufferInheritanceRenderPassTransformInfoQCOM {
+	p := (*CommandBufferInheritanceRenderPassTransformInfoQCOM)(MemAlloc(unsafe.Sizeof(*(*CommandBufferInheritanceRenderPassTransformInfoQCOM)(nil))))
+	p.SType = STRUCTURE_TYPE_COMMAND_BUFFER_INHERITANCE_RENDER_PASS_TRANSFORM_INFO_QCOM
+	return p
+}
+func (p *CommandBufferInheritanceRenderPassTransformInfoQCOM) Free() { MemFree(unsafe.Pointer(p)) }
+
+const EXT_device_memory_report = 1
+const EXT_DEVICE_MEMORY_REPORT_SPEC_VERSION = 2
+
+var EXT_DEVICE_MEMORY_REPORT_EXTENSION_NAME = "VK_EXT_device_memory_report"
+
+// DeviceMemoryReportEventTypeEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceMemoryReportEventTypeEXT.html
+type DeviceMemoryReportEventTypeEXT int32
+
+const (
+	DEVICE_MEMORY_REPORT_EVENT_TYPE_ALLOCATE_EXT          DeviceMemoryReportEventTypeEXT = 0
+	DEVICE_MEMORY_REPORT_EVENT_TYPE_FREE_EXT              DeviceMemoryReportEventTypeEXT = 1
+	DEVICE_MEMORY_REPORT_EVENT_TYPE_IMPORT_EXT            DeviceMemoryReportEventTypeEXT = 2
+	DEVICE_MEMORY_REPORT_EVENT_TYPE_UNIMPORT_EXT          DeviceMemoryReportEventTypeEXT = 3
+	DEVICE_MEMORY_REPORT_EVENT_TYPE_ALLOCATION_FAILED_EXT DeviceMemoryReportEventTypeEXT = 4
+	DEVICE_MEMORY_REPORT_EVENT_TYPE_MAX_ENUM_EXT          DeviceMemoryReportEventTypeEXT = 0x7FFFFFFF
+)
+
+func (x DeviceMemoryReportEventTypeEXT) String() string {
+	switch x {
+	case DEVICE_MEMORY_REPORT_EVENT_TYPE_ALLOCATE_EXT:
+		return "DEVICE_MEMORY_REPORT_EVENT_TYPE_ALLOCATE_EXT"
+	case DEVICE_MEMORY_REPORT_EVENT_TYPE_FREE_EXT:
+		return "DEVICE_MEMORY_REPORT_EVENT_TYPE_FREE_EXT"
+	case DEVICE_MEMORY_REPORT_EVENT_TYPE_IMPORT_EXT:
+		return "DEVICE_MEMORY_REPORT_EVENT_TYPE_IMPORT_EXT"
+	case DEVICE_MEMORY_REPORT_EVENT_TYPE_UNIMPORT_EXT:
+		return "DEVICE_MEMORY_REPORT_EVENT_TYPE_UNIMPORT_EXT"
+	case DEVICE_MEMORY_REPORT_EVENT_TYPE_ALLOCATION_FAILED_EXT:
+		return "DEVICE_MEMORY_REPORT_EVENT_TYPE_ALLOCATION_FAILED_EXT"
+	case DEVICE_MEMORY_REPORT_EVENT_TYPE_MAX_ENUM_EXT:
+		return "DEVICE_MEMORY_REPORT_EVENT_TYPE_MAX_ENUM_EXT"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+type DeviceMemoryReportFlagsEXT uint32 // reserved
+// PhysicalDeviceDeviceMemoryReportFeaturesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceDeviceMemoryReportFeaturesEXT.html
+type PhysicalDeviceDeviceMemoryReportFeaturesEXT struct {
+	SType              StructureType
+	PNext              unsafe.Pointer
+	DeviceMemoryReport Bool32
+}
+
+func NewPhysicalDeviceDeviceMemoryReportFeaturesEXT() *PhysicalDeviceDeviceMemoryReportFeaturesEXT {
+	p := (*PhysicalDeviceDeviceMemoryReportFeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceDeviceMemoryReportFeaturesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_DEVICE_MEMORY_REPORT_FEATURES_EXT
+	return p
+}
+func (p *PhysicalDeviceDeviceMemoryReportFeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+// DeviceMemoryReportCallbackDataEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceMemoryReportCallbackDataEXT.html
+type DeviceMemoryReportCallbackDataEXT struct {
+	SType          StructureType
+	PNext          unsafe.Pointer
+	Flags          DeviceMemoryReportFlagsEXT
+	Type           DeviceMemoryReportEventTypeEXT
+	MemoryObjectId uint64
+	Size           DeviceSize
+	ObjectType     ObjectType
+	ObjectHandle   uint64
+	HeapIndex      uint32
+}
+
+func NewDeviceMemoryReportCallbackDataEXT() *DeviceMemoryReportCallbackDataEXT {
+	p := (*DeviceMemoryReportCallbackDataEXT)(MemAlloc(unsafe.Sizeof(*(*DeviceMemoryReportCallbackDataEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_DEVICE_MEMORY_REPORT_CALLBACK_DATA_EXT
+	return p
+}
+func (p *DeviceMemoryReportCallbackDataEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+//  PfnDeviceMemoryReportCallbackEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDeviceMemoryReportCallbackEXT.html
+type PfnDeviceMemoryReportCallbackEXT uintptr
+
+func (fn PfnDeviceMemoryReportCallbackEXT) Call(pCallbackData *DeviceMemoryReportCallbackDataEXT, pUserData unsafe.Pointer) {
+	C.bridge_vkDeviceMemoryReportCallbackEXT(C.uintptr_t(fn), (*C.VkDeviceMemoryReportCallbackDataEXT)(unsafe.Pointer(pCallbackData)), (unsafe.Pointer)(pUserData))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnDeviceMemoryReportCallbackEXT) String() string { return "vkDeviceMemoryReportCallbackEXT" }
+
+// DeviceDeviceMemoryReportCreateInfoEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceDeviceMemoryReportCreateInfoEXT.html
+type DeviceDeviceMemoryReportCreateInfoEXT struct {
+	SType           StructureType
+	PNext           unsafe.Pointer
+	Flags           DeviceMemoryReportFlagsEXT
+	PfnUserCallback PfnDeviceMemoryReportCallbackEXT
+	PUserData       unsafe.Pointer
+}
+
+func NewDeviceDeviceMemoryReportCreateInfoEXT() *DeviceDeviceMemoryReportCreateInfoEXT {
+	p := (*DeviceDeviceMemoryReportCreateInfoEXT)(MemAlloc(unsafe.Sizeof(*(*DeviceDeviceMemoryReportCreateInfoEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_DEVICE_DEVICE_MEMORY_REPORT_CREATE_INFO_EXT
+	return p
+}
+func (p *DeviceDeviceMemoryReportCreateInfoEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+const EXT_robustness2 = 1
+const EXT_ROBUSTNESS_2_SPEC_VERSION = 1
+
+var EXT_ROBUSTNESS_2_EXTENSION_NAME = "VK_EXT_robustness2"
+
+// PhysicalDeviceRobustness2FeaturesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceRobustness2FeaturesEXT.html
+type PhysicalDeviceRobustness2FeaturesEXT struct {
+	SType               StructureType
+	PNext               unsafe.Pointer
+	RobustBufferAccess2 Bool32
+	RobustImageAccess2  Bool32
+	NullDescriptor      Bool32
+}
+
+func NewPhysicalDeviceRobustness2FeaturesEXT() *PhysicalDeviceRobustness2FeaturesEXT {
+	p := (*PhysicalDeviceRobustness2FeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceRobustness2FeaturesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_ROBUSTNESS_2_FEATURES_EXT
+	return p
+}
+func (p *PhysicalDeviceRobustness2FeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceRobustness2PropertiesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceRobustness2PropertiesEXT.html
+type PhysicalDeviceRobustness2PropertiesEXT struct {
+	SType                                  StructureType
+	PNext                                  unsafe.Pointer
+	RobustStorageBufferAccessSizeAlignment DeviceSize
+	RobustUniformBufferAccessSizeAlignment DeviceSize
+}
+
+func NewPhysicalDeviceRobustness2PropertiesEXT() *PhysicalDeviceRobustness2PropertiesEXT {
+	p := (*PhysicalDeviceRobustness2PropertiesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceRobustness2PropertiesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_ROBUSTNESS_2_PROPERTIES_EXT
+	return p
+}
+func (p *PhysicalDeviceRobustness2PropertiesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+const EXT_custom_border_color = 1
+const EXT_CUSTOM_BORDER_COLOR_SPEC_VERSION = 12
+
+var EXT_CUSTOM_BORDER_COLOR_EXTENSION_NAME = "VK_EXT_custom_border_color"
+
+// SamplerCustomBorderColorCreateInfoEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkSamplerCustomBorderColorCreateInfoEXT.html
+type SamplerCustomBorderColorCreateInfoEXT struct {
+	SType             StructureType
+	PNext             unsafe.Pointer
+	CustomBorderColor ClearColorValue
+	Format            Format
+}
+
+func NewSamplerCustomBorderColorCreateInfoEXT() *SamplerCustomBorderColorCreateInfoEXT {
+	p := (*SamplerCustomBorderColorCreateInfoEXT)(MemAlloc(unsafe.Sizeof(*(*SamplerCustomBorderColorCreateInfoEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_SAMPLER_CUSTOM_BORDER_COLOR_CREATE_INFO_EXT
+	return p
+}
+func (p *SamplerCustomBorderColorCreateInfoEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceCustomBorderColorPropertiesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceCustomBorderColorPropertiesEXT.html
+type PhysicalDeviceCustomBorderColorPropertiesEXT struct {
+	SType                        StructureType
+	PNext                        unsafe.Pointer
+	MaxCustomBorderColorSamplers uint32
+}
+
+func NewPhysicalDeviceCustomBorderColorPropertiesEXT() *PhysicalDeviceCustomBorderColorPropertiesEXT {
+	p := (*PhysicalDeviceCustomBorderColorPropertiesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceCustomBorderColorPropertiesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_CUSTOM_BORDER_COLOR_PROPERTIES_EXT
+	return p
+}
+func (p *PhysicalDeviceCustomBorderColorPropertiesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceCustomBorderColorFeaturesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceCustomBorderColorFeaturesEXT.html
+type PhysicalDeviceCustomBorderColorFeaturesEXT struct {
+	SType                          StructureType
+	PNext                          unsafe.Pointer
+	CustomBorderColors             Bool32
+	CustomBorderColorWithoutFormat Bool32
+}
+
+func NewPhysicalDeviceCustomBorderColorFeaturesEXT() *PhysicalDeviceCustomBorderColorFeaturesEXT {
+	p := (*PhysicalDeviceCustomBorderColorFeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceCustomBorderColorFeaturesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_CUSTOM_BORDER_COLOR_FEATURES_EXT
+	return p
+}
+func (p *PhysicalDeviceCustomBorderColorFeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+const GOOGLE_user_type = 1
+const GOOGLE_USER_TYPE_SPEC_VERSION = 1
+
+var GOOGLE_USER_TYPE_EXTENSION_NAME = "VK_GOOGLE_user_type"
+
+const EXT_private_data = 1
+
+// PrivateDataSlotEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPrivateDataSlotEXT.html
+type PrivateDataSlotEXT NonDispatchableHandle
+
+const EXT_PRIVATE_DATA_SPEC_VERSION = 1
+
+var EXT_PRIVATE_DATA_EXTENSION_NAME = "VK_EXT_private_data"
+
+// PrivateDataSlotCreateFlagsEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPrivateDataSlotCreateFlagsEXT.html
+type PrivateDataSlotCreateFlagsEXT uint32
+
+const (
+	PRIVATE_DATA_SLOT_CREATE_FLAG_BITS_MAX_ENUM_EXT PrivateDataSlotCreateFlagsEXT = 0x7FFFFFFF
+)
+
+func (x PrivateDataSlotCreateFlagsEXT) String() string {
+	var s string
+	for i := uint32(0); i < 32; i++ {
+		if int32(x)&(1<<i) != 0 {
+			switch PrivateDataSlotCreateFlagsEXT(1 << i) {
+			}
+		}
+	}
+	return strings.TrimSuffix(s, `|`)
+}
+
+// PhysicalDevicePrivateDataFeaturesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDevicePrivateDataFeaturesEXT.html
+type PhysicalDevicePrivateDataFeaturesEXT struct {
+	SType       StructureType
+	PNext       unsafe.Pointer
+	PrivateData Bool32
+}
+
+func NewPhysicalDevicePrivateDataFeaturesEXT() *PhysicalDevicePrivateDataFeaturesEXT {
+	p := (*PhysicalDevicePrivateDataFeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDevicePrivateDataFeaturesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_PRIVATE_DATA_FEATURES_EXT
+	return p
+}
+func (p *PhysicalDevicePrivateDataFeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+// DevicePrivateDataCreateInfoEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDevicePrivateDataCreateInfoEXT.html
+type DevicePrivateDataCreateInfoEXT struct {
+	SType                       StructureType
+	PNext                       unsafe.Pointer
+	PrivateDataSlotRequestCount uint32
+}
+
+func NewDevicePrivateDataCreateInfoEXT() *DevicePrivateDataCreateInfoEXT {
+	p := (*DevicePrivateDataCreateInfoEXT)(MemAlloc(unsafe.Sizeof(*(*DevicePrivateDataCreateInfoEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_DEVICE_PRIVATE_DATA_CREATE_INFO_EXT
+	return p
+}
+func (p *DevicePrivateDataCreateInfoEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PrivateDataSlotCreateInfoEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPrivateDataSlotCreateInfoEXT.html
+type PrivateDataSlotCreateInfoEXT struct {
+	SType StructureType
+	PNext unsafe.Pointer
+	Flags PrivateDataSlotCreateFlagsEXT
+}
+
+func NewPrivateDataSlotCreateInfoEXT() *PrivateDataSlotCreateInfoEXT {
+	p := (*PrivateDataSlotCreateInfoEXT)(MemAlloc(unsafe.Sizeof(*(*PrivateDataSlotCreateInfoEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PRIVATE_DATA_SLOT_CREATE_INFO_EXT
+	return p
+}
+func (p *PrivateDataSlotCreateInfoEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+//  PfnCreatePrivateDataSlotEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreatePrivateDataSlotEXT.html
+type PfnCreatePrivateDataSlotEXT uintptr
+
+func (fn PfnCreatePrivateDataSlotEXT) Call(device Device, pCreateInfo *PrivateDataSlotCreateInfoEXT, pAllocator *AllocationCallbacks, pPrivateDataSlot *PrivateDataSlotEXT) Result {
+	ret := C.bridge_vkCreatePrivateDataSlotEXT(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkPrivateDataSlotCreateInfoEXT)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkPrivateDataSlotEXT)(unsafe.Pointer(pPrivateDataSlot)))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnCreatePrivateDataSlotEXT) String() string { return "vkCreatePrivateDataSlotEXT" }
+
+//  PfnDestroyPrivateDataSlotEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyPrivateDataSlotEXT.html
+type PfnDestroyPrivateDataSlotEXT uintptr
+
+func (fn PfnDestroyPrivateDataSlotEXT) Call(device Device, privateDataSlot PrivateDataSlotEXT, pAllocator *AllocationCallbacks) {
+	C.bridge_vkDestroyPrivateDataSlotEXT(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkPrivateDataSlotEXT)(unsafe.Pointer(uintptr(privateDataSlot))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnDestroyPrivateDataSlotEXT) String() string { return "vkDestroyPrivateDataSlotEXT" }
+
+//  PfnSetPrivateDataEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkSetPrivateDataEXT.html
+type PfnSetPrivateDataEXT uintptr
+
+func (fn PfnSetPrivateDataEXT) Call(device Device, objectType ObjectType, objectHandle uint64, privateDataSlot PrivateDataSlotEXT, data uint64) Result {
+	ret := C.bridge_vkSetPrivateDataEXT(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkObjectType)(objectType), (C.uint64_t)(objectHandle), (C.VkPrivateDataSlotEXT)(unsafe.Pointer(uintptr(privateDataSlot))), (C.uint64_t)(data))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnSetPrivateDataEXT) String() string { return "vkSetPrivateDataEXT" }
+
+//  PfnGetPrivateDataEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetPrivateDataEXT.html
+type PfnGetPrivateDataEXT uintptr
+
+func (fn PfnGetPrivateDataEXT) Call(device Device, objectType ObjectType, objectHandle uint64, privateDataSlot PrivateDataSlotEXT, pData *uint64) {
+	C.bridge_vkGetPrivateDataEXT(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkObjectType)(objectType), (C.uint64_t)(objectHandle), (C.VkPrivateDataSlotEXT)(unsafe.Pointer(uintptr(privateDataSlot))), (*C.uint64_t)(unsafe.Pointer(pData)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnGetPrivateDataEXT) String() string { return "vkGetPrivateDataEXT" }
+
+const EXT_pipeline_creation_cache_control = 1
+const EXT_PIPELINE_CREATION_CACHE_CONTROL_SPEC_VERSION = 3
+
+var EXT_PIPELINE_CREATION_CACHE_CONTROL_EXTENSION_NAME = "VK_EXT_pipeline_creation_cache_control"
+
+// PhysicalDevicePipelineCreationCacheControlFeaturesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDevicePipelineCreationCacheControlFeaturesEXT.html
+type PhysicalDevicePipelineCreationCacheControlFeaturesEXT struct {
+	SType                        StructureType
+	PNext                        unsafe.Pointer
+	PipelineCreationCacheControl Bool32
+}
+
+func NewPhysicalDevicePipelineCreationCacheControlFeaturesEXT() *PhysicalDevicePipelineCreationCacheControlFeaturesEXT {
+	p := (*PhysicalDevicePipelineCreationCacheControlFeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDevicePipelineCreationCacheControlFeaturesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_PIPELINE_CREATION_CACHE_CONTROL_FEATURES_EXT
+	return p
+}
+func (p *PhysicalDevicePipelineCreationCacheControlFeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+const NV_device_diagnostics_config = 1
+const NV_DEVICE_DIAGNOSTICS_CONFIG_SPEC_VERSION = 1
+
+var NV_DEVICE_DIAGNOSTICS_CONFIG_EXTENSION_NAME = "VK_NV_device_diagnostics_config"
+
+// DeviceDiagnosticsConfigFlagsNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceDiagnosticsConfigFlagsNV.html
+type DeviceDiagnosticsConfigFlagsNV uint32
+
+const (
+	DEVICE_DIAGNOSTICS_CONFIG_ENABLE_SHADER_DEBUG_INFO_BIT_NV     DeviceDiagnosticsConfigFlagsNV = 0x00000001
+	DEVICE_DIAGNOSTICS_CONFIG_ENABLE_RESOURCE_TRACKING_BIT_NV     DeviceDiagnosticsConfigFlagsNV = 0x00000002
+	DEVICE_DIAGNOSTICS_CONFIG_ENABLE_AUTOMATIC_CHECKPOINTS_BIT_NV DeviceDiagnosticsConfigFlagsNV = 0x00000004
+	DEVICE_DIAGNOSTICS_CONFIG_FLAG_BITS_MAX_ENUM_NV               DeviceDiagnosticsConfigFlagsNV = 0x7FFFFFFF
+)
+
+func (x DeviceDiagnosticsConfigFlagsNV) String() string {
+	var s string
+	for i := uint32(0); i < 32; i++ {
+		if int32(x)&(1<<i) != 0 {
+			switch DeviceDiagnosticsConfigFlagsNV(1 << i) {
+			case DEVICE_DIAGNOSTICS_CONFIG_ENABLE_SHADER_DEBUG_INFO_BIT_NV:
+				s += "DEVICE_DIAGNOSTICS_CONFIG_ENABLE_SHADER_DEBUG_INFO_BIT_NV|"
+			case DEVICE_DIAGNOSTICS_CONFIG_ENABLE_RESOURCE_TRACKING_BIT_NV:
+				s += "DEVICE_DIAGNOSTICS_CONFIG_ENABLE_RESOURCE_TRACKING_BIT_NV|"
+			case DEVICE_DIAGNOSTICS_CONFIG_ENABLE_AUTOMATIC_CHECKPOINTS_BIT_NV:
+				s += "DEVICE_DIAGNOSTICS_CONFIG_ENABLE_AUTOMATIC_CHECKPOINTS_BIT_NV|"
+			}
+		}
+	}
+	return strings.TrimSuffix(s, `|`)
+}
+
+// PhysicalDeviceDiagnosticsConfigFeaturesNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceDiagnosticsConfigFeaturesNV.html
+type PhysicalDeviceDiagnosticsConfigFeaturesNV struct {
+	SType             StructureType
+	PNext             unsafe.Pointer
+	DiagnosticsConfig Bool32
+}
+
+func NewPhysicalDeviceDiagnosticsConfigFeaturesNV() *PhysicalDeviceDiagnosticsConfigFeaturesNV {
+	p := (*PhysicalDeviceDiagnosticsConfigFeaturesNV)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceDiagnosticsConfigFeaturesNV)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_DIAGNOSTICS_CONFIG_FEATURES_NV
+	return p
+}
+func (p *PhysicalDeviceDiagnosticsConfigFeaturesNV) Free() { MemFree(unsafe.Pointer(p)) }
+
+// DeviceDiagnosticsConfigCreateInfoNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkDeviceDiagnosticsConfigCreateInfoNV.html
+type DeviceDiagnosticsConfigCreateInfoNV struct {
+	SType StructureType
+	PNext unsafe.Pointer
+	Flags DeviceDiagnosticsConfigFlagsNV
+}
+
+func NewDeviceDiagnosticsConfigCreateInfoNV() *DeviceDiagnosticsConfigCreateInfoNV {
+	p := (*DeviceDiagnosticsConfigCreateInfoNV)(MemAlloc(unsafe.Sizeof(*(*DeviceDiagnosticsConfigCreateInfoNV)(nil))))
+	p.SType = STRUCTURE_TYPE_DEVICE_DIAGNOSTICS_CONFIG_CREATE_INFO_NV
+	return p
+}
+func (p *DeviceDiagnosticsConfigCreateInfoNV) Free() { MemFree(unsafe.Pointer(p)) }
+
+const QCOM_render_pass_store_ops = 1
+const QCOM_RENDER_PASS_STORE_OPS_SPEC_VERSION = 2
+
+var QCOM_RENDER_PASS_STORE_OPS_EXTENSION_NAME = "VK_QCOM_render_pass_store_ops"
+
+const NV_fragment_shading_rate_enums = 1
+const NV_FRAGMENT_SHADING_RATE_ENUMS_SPEC_VERSION = 1
+
+var NV_FRAGMENT_SHADING_RATE_ENUMS_EXTENSION_NAME = "VK_NV_fragment_shading_rate_enums"
+
+// FragmentShadingRateTypeNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFragmentShadingRateTypeNV.html
+type FragmentShadingRateTypeNV int32
+
+const (
+	FRAGMENT_SHADING_RATE_TYPE_FRAGMENT_SIZE_NV FragmentShadingRateTypeNV = 0
+	FRAGMENT_SHADING_RATE_TYPE_ENUMS_NV         FragmentShadingRateTypeNV = 1
+	FRAGMENT_SHADING_RATE_TYPE_MAX_ENUM_NV      FragmentShadingRateTypeNV = 0x7FFFFFFF
+)
+
+func (x FragmentShadingRateTypeNV) String() string {
+	switch x {
+	case FRAGMENT_SHADING_RATE_TYPE_FRAGMENT_SIZE_NV:
+		return "FRAGMENT_SHADING_RATE_TYPE_FRAGMENT_SIZE_NV"
+	case FRAGMENT_SHADING_RATE_TYPE_ENUMS_NV:
+		return "FRAGMENT_SHADING_RATE_TYPE_ENUMS_NV"
+	case FRAGMENT_SHADING_RATE_TYPE_MAX_ENUM_NV:
+		return "FRAGMENT_SHADING_RATE_TYPE_MAX_ENUM_NV"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// FragmentShadingRateNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkFragmentShadingRateNV.html
+type FragmentShadingRateNV int32
+
+const (
+	FRAGMENT_SHADING_RATE_1_INVOCATION_PER_PIXEL_NV      FragmentShadingRateNV = 0
+	FRAGMENT_SHADING_RATE_1_INVOCATION_PER_1X2_PIXELS_NV FragmentShadingRateNV = 1
+	FRAGMENT_SHADING_RATE_1_INVOCATION_PER_2X1_PIXELS_NV FragmentShadingRateNV = 4
+	FRAGMENT_SHADING_RATE_1_INVOCATION_PER_2X2_PIXELS_NV FragmentShadingRateNV = 5
+	FRAGMENT_SHADING_RATE_1_INVOCATION_PER_2X4_PIXELS_NV FragmentShadingRateNV = 6
+	FRAGMENT_SHADING_RATE_1_INVOCATION_PER_4X2_PIXELS_NV FragmentShadingRateNV = 9
+	FRAGMENT_SHADING_RATE_1_INVOCATION_PER_4X4_PIXELS_NV FragmentShadingRateNV = 10
+	FRAGMENT_SHADING_RATE_2_INVOCATIONS_PER_PIXEL_NV     FragmentShadingRateNV = 11
+	FRAGMENT_SHADING_RATE_4_INVOCATIONS_PER_PIXEL_NV     FragmentShadingRateNV = 12
+	FRAGMENT_SHADING_RATE_8_INVOCATIONS_PER_PIXEL_NV     FragmentShadingRateNV = 13
+	FRAGMENT_SHADING_RATE_16_INVOCATIONS_PER_PIXEL_NV    FragmentShadingRateNV = 14
+	FRAGMENT_SHADING_RATE_NO_INVOCATIONS_NV              FragmentShadingRateNV = 15
+	FRAGMENT_SHADING_RATE_MAX_ENUM_NV                    FragmentShadingRateNV = 0x7FFFFFFF
+)
+
+func (x FragmentShadingRateNV) String() string {
+	switch x {
+	case FRAGMENT_SHADING_RATE_1_INVOCATION_PER_PIXEL_NV:
+		return "FRAGMENT_SHADING_RATE_1_INVOCATION_PER_PIXEL_NV"
+	case FRAGMENT_SHADING_RATE_1_INVOCATION_PER_1X2_PIXELS_NV:
+		return "FRAGMENT_SHADING_RATE_1_INVOCATION_PER_1X2_PIXELS_NV"
+	case FRAGMENT_SHADING_RATE_1_INVOCATION_PER_2X1_PIXELS_NV:
+		return "FRAGMENT_SHADING_RATE_1_INVOCATION_PER_2X1_PIXELS_NV"
+	case FRAGMENT_SHADING_RATE_1_INVOCATION_PER_2X2_PIXELS_NV:
+		return "FRAGMENT_SHADING_RATE_1_INVOCATION_PER_2X2_PIXELS_NV"
+	case FRAGMENT_SHADING_RATE_1_INVOCATION_PER_2X4_PIXELS_NV:
+		return "FRAGMENT_SHADING_RATE_1_INVOCATION_PER_2X4_PIXELS_NV"
+	case FRAGMENT_SHADING_RATE_1_INVOCATION_PER_4X2_PIXELS_NV:
+		return "FRAGMENT_SHADING_RATE_1_INVOCATION_PER_4X2_PIXELS_NV"
+	case FRAGMENT_SHADING_RATE_1_INVOCATION_PER_4X4_PIXELS_NV:
+		return "FRAGMENT_SHADING_RATE_1_INVOCATION_PER_4X4_PIXELS_NV"
+	case FRAGMENT_SHADING_RATE_2_INVOCATIONS_PER_PIXEL_NV:
+		return "FRAGMENT_SHADING_RATE_2_INVOCATIONS_PER_PIXEL_NV"
+	case FRAGMENT_SHADING_RATE_4_INVOCATIONS_PER_PIXEL_NV:
+		return "FRAGMENT_SHADING_RATE_4_INVOCATIONS_PER_PIXEL_NV"
+	case FRAGMENT_SHADING_RATE_8_INVOCATIONS_PER_PIXEL_NV:
+		return "FRAGMENT_SHADING_RATE_8_INVOCATIONS_PER_PIXEL_NV"
+	case FRAGMENT_SHADING_RATE_16_INVOCATIONS_PER_PIXEL_NV:
+		return "FRAGMENT_SHADING_RATE_16_INVOCATIONS_PER_PIXEL_NV"
+	case FRAGMENT_SHADING_RATE_NO_INVOCATIONS_NV:
+		return "FRAGMENT_SHADING_RATE_NO_INVOCATIONS_NV"
+	case FRAGMENT_SHADING_RATE_MAX_ENUM_NV:
+		return "FRAGMENT_SHADING_RATE_MAX_ENUM_NV"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// PhysicalDeviceFragmentShadingRateEnumsFeaturesNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceFragmentShadingRateEnumsFeaturesNV.html
+type PhysicalDeviceFragmentShadingRateEnumsFeaturesNV struct {
+	SType                            StructureType
+	PNext                            unsafe.Pointer
+	FragmentShadingRateEnums         Bool32
+	SupersampleFragmentShadingRates  Bool32
+	NoInvocationFragmentShadingRates Bool32
+}
+
+func NewPhysicalDeviceFragmentShadingRateEnumsFeaturesNV() *PhysicalDeviceFragmentShadingRateEnumsFeaturesNV {
+	p := (*PhysicalDeviceFragmentShadingRateEnumsFeaturesNV)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceFragmentShadingRateEnumsFeaturesNV)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_ENUMS_FEATURES_NV
+	return p
+}
+func (p *PhysicalDeviceFragmentShadingRateEnumsFeaturesNV) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceFragmentShadingRateEnumsPropertiesNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceFragmentShadingRateEnumsPropertiesNV.html
+type PhysicalDeviceFragmentShadingRateEnumsPropertiesNV struct {
+	SType                                 StructureType
+	PNext                                 unsafe.Pointer
+	MaxFragmentShadingRateInvocationCount SampleCountFlags
+}
+
+func NewPhysicalDeviceFragmentShadingRateEnumsPropertiesNV() *PhysicalDeviceFragmentShadingRateEnumsPropertiesNV {
+	p := (*PhysicalDeviceFragmentShadingRateEnumsPropertiesNV)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceFragmentShadingRateEnumsPropertiesNV)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADING_RATE_ENUMS_PROPERTIES_NV
+	return p
+}
+func (p *PhysicalDeviceFragmentShadingRateEnumsPropertiesNV) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PipelineFragmentShadingRateEnumStateCreateInfoNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineFragmentShadingRateEnumStateCreateInfoNV.html
+type PipelineFragmentShadingRateEnumStateCreateInfoNV struct {
+	SType           StructureType
+	PNext           unsafe.Pointer
+	ShadingRateType FragmentShadingRateTypeNV
+	ShadingRate     FragmentShadingRateNV
+	CombinerOps     [2]FragmentShadingRateCombinerOpKHR
+}
+
+func NewPipelineFragmentShadingRateEnumStateCreateInfoNV() *PipelineFragmentShadingRateEnumStateCreateInfoNV {
+	p := (*PipelineFragmentShadingRateEnumStateCreateInfoNV)(MemAlloc(unsafe.Sizeof(*(*PipelineFragmentShadingRateEnumStateCreateInfoNV)(nil))))
+	p.SType = STRUCTURE_TYPE_PIPELINE_FRAGMENT_SHADING_RATE_ENUM_STATE_CREATE_INFO_NV
+	return p
+}
+func (p *PipelineFragmentShadingRateEnumStateCreateInfoNV) Free() { MemFree(unsafe.Pointer(p)) }
+
+//  PfnCmdSetFragmentShadingRateEnumNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetFragmentShadingRateEnumNV.html
+type PfnCmdSetFragmentShadingRateEnumNV uintptr
+
+func (fn PfnCmdSetFragmentShadingRateEnumNV) Call(commandBuffer CommandBuffer, shadingRate FragmentShadingRateNV, combinerOp *[2]FragmentShadingRateCombinerOpKHR) {
+	C.bridge_vkCmdSetFragmentShadingRateEnumNV(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkFragmentShadingRateNV)(shadingRate), (*C.VkFragmentShadingRateCombinerOpKHR)(unsafe.Pointer(combinerOp)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdSetFragmentShadingRateEnumNV) String() string {
+	return "vkCmdSetFragmentShadingRateEnumNV"
+}
+
+const EXT_ycbcr_2plane_444_formats = 1
+const EXT_YCBCR_2PLANE_444_FORMATS_SPEC_VERSION = 1
+
+var EXT_YCBCR_2PLANE_444_FORMATS_EXTENSION_NAME = "VK_EXT_ycbcr_2plane_444_formats"
+
+// PhysicalDeviceYcbcr2Plane444FormatsFeaturesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceYcbcr2Plane444FormatsFeaturesEXT.html
+type PhysicalDeviceYcbcr2Plane444FormatsFeaturesEXT struct {
+	SType                 StructureType
+	PNext                 unsafe.Pointer
+	Ycbcr2plane444Formats Bool32
+}
+
+func NewPhysicalDeviceYcbcr2Plane444FormatsFeaturesEXT() *PhysicalDeviceYcbcr2Plane444FormatsFeaturesEXT {
+	p := (*PhysicalDeviceYcbcr2Plane444FormatsFeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceYcbcr2Plane444FormatsFeaturesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_YCBCR_2_PLANE_444_FORMATS_FEATURES_EXT
+	return p
+}
+func (p *PhysicalDeviceYcbcr2Plane444FormatsFeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+const EXT_fragment_density_map2 = 1
+const EXT_FRAGMENT_DENSITY_MAP_2_SPEC_VERSION = 1
+
+var EXT_FRAGMENT_DENSITY_MAP_2_EXTENSION_NAME = "VK_EXT_fragment_density_map2"
+
+// PhysicalDeviceFragmentDensityMap2FeaturesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceFragmentDensityMap2FeaturesEXT.html
+type PhysicalDeviceFragmentDensityMap2FeaturesEXT struct {
+	SType                      StructureType
+	PNext                      unsafe.Pointer
+	FragmentDensityMapDeferred Bool32
+}
+
+func NewPhysicalDeviceFragmentDensityMap2FeaturesEXT() *PhysicalDeviceFragmentDensityMap2FeaturesEXT {
+	p := (*PhysicalDeviceFragmentDensityMap2FeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceFragmentDensityMap2FeaturesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_DENSITY_MAP_2_FEATURES_EXT
+	return p
+}
+func (p *PhysicalDeviceFragmentDensityMap2FeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceFragmentDensityMap2PropertiesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceFragmentDensityMap2PropertiesEXT.html
+type PhysicalDeviceFragmentDensityMap2PropertiesEXT struct {
+	SType                                     StructureType
+	PNext                                     unsafe.Pointer
+	SubsampledLoads                           Bool32
+	SubsampledCoarseReconstructionEarlyAccess Bool32
+	MaxSubsampledArrayLayers                  uint32
+	MaxDescriptorSetSubsampledSamplers        uint32
+}
+
+func NewPhysicalDeviceFragmentDensityMap2PropertiesEXT() *PhysicalDeviceFragmentDensityMap2PropertiesEXT {
+	p := (*PhysicalDeviceFragmentDensityMap2PropertiesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceFragmentDensityMap2PropertiesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_DENSITY_MAP_2_PROPERTIES_EXT
+	return p
+}
+func (p *PhysicalDeviceFragmentDensityMap2PropertiesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+const QCOM_rotated_copy_commands = 1
+const QCOM_ROTATED_COPY_COMMANDS_SPEC_VERSION = 1
+
+var QCOM_ROTATED_COPY_COMMANDS_EXTENSION_NAME = "VK_QCOM_rotated_copy_commands"
+
+// CopyCommandTransformInfoQCOM -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCopyCommandTransformInfoQCOM.html
+type CopyCommandTransformInfoQCOM struct {
+	SType     StructureType
+	PNext     unsafe.Pointer
+	Transform SurfaceTransformFlagsKHR
+}
+
+func NewCopyCommandTransformInfoQCOM() *CopyCommandTransformInfoQCOM {
+	p := (*CopyCommandTransformInfoQCOM)(MemAlloc(unsafe.Sizeof(*(*CopyCommandTransformInfoQCOM)(nil))))
+	p.SType = STRUCTURE_TYPE_COPY_COMMAND_TRANSFORM_INFO_QCOM
+	return p
+}
+func (p *CopyCommandTransformInfoQCOM) Free() { MemFree(unsafe.Pointer(p)) }
+
+const EXT_image_robustness = 1
+const EXT_IMAGE_ROBUSTNESS_SPEC_VERSION = 1
+
+var EXT_IMAGE_ROBUSTNESS_EXTENSION_NAME = "VK_EXT_image_robustness"
+
+// PhysicalDeviceImageRobustnessFeaturesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceImageRobustnessFeaturesEXT.html
+type PhysicalDeviceImageRobustnessFeaturesEXT struct {
+	SType             StructureType
+	PNext             unsafe.Pointer
+	RobustImageAccess Bool32
+}
+
+func NewPhysicalDeviceImageRobustnessFeaturesEXT() *PhysicalDeviceImageRobustnessFeaturesEXT {
+	p := (*PhysicalDeviceImageRobustnessFeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceImageRobustnessFeaturesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_ROBUSTNESS_FEATURES_EXT
+	return p
+}
+func (p *PhysicalDeviceImageRobustnessFeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+const EXT_4444_formats = 1
+const EXT_4444_FORMATS_SPEC_VERSION = 1
+
+var EXT_4444_FORMATS_EXTENSION_NAME = "VK_EXT_4444_formats"
+
+// PhysicalDevice4444FormatsFeaturesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDevice4444FormatsFeaturesEXT.html
+type PhysicalDevice4444FormatsFeaturesEXT struct {
+	SType          StructureType
+	PNext          unsafe.Pointer
+	FormatA4R4G4B4 Bool32
+	FormatA4B4G4R4 Bool32
+}
+
+func NewPhysicalDevice4444FormatsFeaturesEXT() *PhysicalDevice4444FormatsFeaturesEXT {
+	p := (*PhysicalDevice4444FormatsFeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDevice4444FormatsFeaturesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_4444_FORMATS_FEATURES_EXT
+	return p
+}
+func (p *PhysicalDevice4444FormatsFeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+const NV_acquire_winrt_display = 1
+const NV_ACQUIRE_WINRT_DISPLAY_SPEC_VERSION = 1
+
+var NV_ACQUIRE_WINRT_DISPLAY_EXTENSION_NAME = "VK_NV_acquire_winrt_display"
+
+//  PfnAcquireWinrtDisplayNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkAcquireWinrtDisplayNV.html
+type PfnAcquireWinrtDisplayNV uintptr
+
+func (fn PfnAcquireWinrtDisplayNV) Call(physicalDevice PhysicalDevice, display DisplayKHR) Result {
+	ret := C.bridge_vkAcquireWinrtDisplayNV(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.VkDisplayKHR)(unsafe.Pointer(uintptr(display))))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnAcquireWinrtDisplayNV) String() string { return "vkAcquireWinrtDisplayNV" }
+
+//  PfnGetWinrtDisplayNV -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetWinrtDisplayNV.html
+type PfnGetWinrtDisplayNV uintptr
+
+func (fn PfnGetWinrtDisplayNV) Call(physicalDevice PhysicalDevice, deviceRelativeId uint32, pDisplay *DisplayKHR) Result {
+	ret := C.bridge_vkGetWinrtDisplayNV(C.uintptr_t(fn), (C.VkPhysicalDevice)(unsafe.Pointer(uintptr(physicalDevice))), (C.uint32_t)(deviceRelativeId), (*C.VkDisplayKHR)(unsafe.Pointer(pDisplay)))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnGetWinrtDisplayNV) String() string { return "vkGetWinrtDisplayNV" }
+
+const VALVE_mutable_descriptor_type = 1
+const VALVE_MUTABLE_DESCRIPTOR_TYPE_SPEC_VERSION = 1
+
+var VALVE_MUTABLE_DESCRIPTOR_TYPE_EXTENSION_NAME = "VK_VALVE_mutable_descriptor_type"
+
+// PhysicalDeviceMutableDescriptorTypeFeaturesVALVE -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceMutableDescriptorTypeFeaturesVALVE.html
+type PhysicalDeviceMutableDescriptorTypeFeaturesVALVE struct {
+	SType                 StructureType
+	PNext                 unsafe.Pointer
+	MutableDescriptorType Bool32
+}
+
+func NewPhysicalDeviceMutableDescriptorTypeFeaturesVALVE() *PhysicalDeviceMutableDescriptorTypeFeaturesVALVE {
+	p := (*PhysicalDeviceMutableDescriptorTypeFeaturesVALVE)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceMutableDescriptorTypeFeaturesVALVE)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_MUTABLE_DESCRIPTOR_TYPE_FEATURES_VALVE
+	return p
+}
+func (p *PhysicalDeviceMutableDescriptorTypeFeaturesVALVE) Free() { MemFree(unsafe.Pointer(p)) }
+
+// MutableDescriptorTypeListVALVE -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMutableDescriptorTypeListVALVE.html
+type MutableDescriptorTypeListVALVE struct {
+	DescriptorTypeCount uint32
+	PDescriptorTypes    *DescriptorType
+}
+
+func NewMutableDescriptorTypeListVALVE() *MutableDescriptorTypeListVALVE {
+	return (*MutableDescriptorTypeListVALVE)(MemAlloc(unsafe.Sizeof(*(*MutableDescriptorTypeListVALVE)(nil))))
+}
+func (p *MutableDescriptorTypeListVALVE) Free() { MemFree(unsafe.Pointer(p)) }
+
+// MutableDescriptorTypeCreateInfoVALVE -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkMutableDescriptorTypeCreateInfoVALVE.html
+type MutableDescriptorTypeCreateInfoVALVE struct {
+	SType                          StructureType
+	PNext                          unsafe.Pointer
+	MutableDescriptorTypeListCount uint32
+	PMutableDescriptorTypeLists    *MutableDescriptorTypeListVALVE
+}
+
+func NewMutableDescriptorTypeCreateInfoVALVE() *MutableDescriptorTypeCreateInfoVALVE {
+	p := (*MutableDescriptorTypeCreateInfoVALVE)(MemAlloc(unsafe.Sizeof(*(*MutableDescriptorTypeCreateInfoVALVE)(nil))))
+	p.SType = STRUCTURE_TYPE_MUTABLE_DESCRIPTOR_TYPE_CREATE_INFO_VALVE
+	return p
+}
+func (p *MutableDescriptorTypeCreateInfoVALVE) Free() { MemFree(unsafe.Pointer(p)) }
+
+const EXT_vertex_input_dynamic_state = 1
+const EXT_VERTEX_INPUT_DYNAMIC_STATE_SPEC_VERSION = 2
+
+var EXT_VERTEX_INPUT_DYNAMIC_STATE_EXTENSION_NAME = "VK_EXT_vertex_input_dynamic_state"
+
+// PhysicalDeviceVertexInputDynamicStateFeaturesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceVertexInputDynamicStateFeaturesEXT.html
+type PhysicalDeviceVertexInputDynamicStateFeaturesEXT struct {
+	SType                   StructureType
+	PNext                   unsafe.Pointer
+	VertexInputDynamicState Bool32
+}
+
+func NewPhysicalDeviceVertexInputDynamicStateFeaturesEXT() *PhysicalDeviceVertexInputDynamicStateFeaturesEXT {
+	p := (*PhysicalDeviceVertexInputDynamicStateFeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceVertexInputDynamicStateFeaturesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_INPUT_DYNAMIC_STATE_FEATURES_EXT
+	return p
+}
+func (p *PhysicalDeviceVertexInputDynamicStateFeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+// VertexInputBindingDescription2EXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkVertexInputBindingDescription2EXT.html
+type VertexInputBindingDescription2EXT struct {
+	SType     StructureType
+	PNext     unsafe.Pointer
+	Binding   uint32
+	Stride    uint32
+	InputRate VertexInputRate
+	Divisor   uint32
+}
+
+func NewVertexInputBindingDescription2EXT() *VertexInputBindingDescription2EXT {
+	p := (*VertexInputBindingDescription2EXT)(MemAlloc(unsafe.Sizeof(*(*VertexInputBindingDescription2EXT)(nil))))
+	p.SType = STRUCTURE_TYPE_VERTEX_INPUT_BINDING_DESCRIPTION_2_EXT
+	return p
+}
+func (p *VertexInputBindingDescription2EXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+// VertexInputAttributeDescription2EXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkVertexInputAttributeDescription2EXT.html
+type VertexInputAttributeDescription2EXT struct {
+	SType    StructureType
+	PNext    unsafe.Pointer
+	Location uint32
+	Binding  uint32
+	Format   Format
+	Offset   uint32
+}
+
+func NewVertexInputAttributeDescription2EXT() *VertexInputAttributeDescription2EXT {
+	p := (*VertexInputAttributeDescription2EXT)(MemAlloc(unsafe.Sizeof(*(*VertexInputAttributeDescription2EXT)(nil))))
+	p.SType = STRUCTURE_TYPE_VERTEX_INPUT_ATTRIBUTE_DESCRIPTION_2_EXT
+	return p
+}
+func (p *VertexInputAttributeDescription2EXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+//  PfnCmdSetVertexInputEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetVertexInputEXT.html
+type PfnCmdSetVertexInputEXT uintptr
+
+func (fn PfnCmdSetVertexInputEXT) Call(commandBuffer CommandBuffer, vertexBindingDescriptionCount uint32, pVertexBindingDescriptions *VertexInputBindingDescription2EXT, vertexAttributeDescriptionCount uint32, pVertexAttributeDescriptions *VertexInputAttributeDescription2EXT) {
+	C.bridge_vkCmdSetVertexInputEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(vertexBindingDescriptionCount), (*C.VkVertexInputBindingDescription2EXT)(unsafe.Pointer(pVertexBindingDescriptions)), (C.uint32_t)(vertexAttributeDescriptionCount), (*C.VkVertexInputAttributeDescription2EXT)(unsafe.Pointer(pVertexAttributeDescriptions)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdSetVertexInputEXT) String() string { return "vkCmdSetVertexInputEXT" }
+
+const EXT_extended_dynamic_state2 = 1
+const EXT_EXTENDED_DYNAMIC_STATE_2_SPEC_VERSION = 1
+
+var EXT_EXTENDED_DYNAMIC_STATE_2_EXTENSION_NAME = "VK_EXT_extended_dynamic_state2"
+
+// PhysicalDeviceExtendedDynamicState2FeaturesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceExtendedDynamicState2FeaturesEXT.html
+type PhysicalDeviceExtendedDynamicState2FeaturesEXT struct {
+	SType                                   StructureType
+	PNext                                   unsafe.Pointer
+	ExtendedDynamicState2                   Bool32
+	ExtendedDynamicState2LogicOp            Bool32
+	ExtendedDynamicState2PatchControlPoints Bool32
+}
+
+func NewPhysicalDeviceExtendedDynamicState2FeaturesEXT() *PhysicalDeviceExtendedDynamicState2FeaturesEXT {
+	p := (*PhysicalDeviceExtendedDynamicState2FeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceExtendedDynamicState2FeaturesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_2_FEATURES_EXT
+	return p
+}
+func (p *PhysicalDeviceExtendedDynamicState2FeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+//  PfnCmdSetPatchControlPointsEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetPatchControlPointsEXT.html
+type PfnCmdSetPatchControlPointsEXT uintptr
+
+func (fn PfnCmdSetPatchControlPointsEXT) Call(commandBuffer CommandBuffer, patchControlPoints uint32) {
+	C.bridge_vkCmdSetPatchControlPointsEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(patchControlPoints))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdSetPatchControlPointsEXT) String() string { return "vkCmdSetPatchControlPointsEXT" }
+
+//  PfnCmdSetRasterizerDiscardEnableEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetRasterizerDiscardEnableEXT.html
+type PfnCmdSetRasterizerDiscardEnableEXT uintptr
+
+func (fn PfnCmdSetRasterizerDiscardEnableEXT) Call(commandBuffer CommandBuffer, rasterizerDiscardEnable Bool32) {
+	C.bridge_vkCmdSetRasterizerDiscardEnableEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBool32)(rasterizerDiscardEnable))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdSetRasterizerDiscardEnableEXT) String() string {
+	return "vkCmdSetRasterizerDiscardEnableEXT"
+}
+
+//  PfnCmdSetDepthBiasEnableEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetDepthBiasEnableEXT.html
+type PfnCmdSetDepthBiasEnableEXT uintptr
+
+func (fn PfnCmdSetDepthBiasEnableEXT) Call(commandBuffer CommandBuffer, depthBiasEnable Bool32) {
+	C.bridge_vkCmdSetDepthBiasEnableEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBool32)(depthBiasEnable))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdSetDepthBiasEnableEXT) String() string { return "vkCmdSetDepthBiasEnableEXT" }
+
+//  PfnCmdSetLogicOpEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetLogicOpEXT.html
+type PfnCmdSetLogicOpEXT uintptr
+
+func (fn PfnCmdSetLogicOpEXT) Call(commandBuffer CommandBuffer, logicOp LogicOp) {
+	C.bridge_vkCmdSetLogicOpEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkLogicOp)(logicOp))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdSetLogicOpEXT) String() string { return "vkCmdSetLogicOpEXT" }
+
+//  PfnCmdSetPrimitiveRestartEnableEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetPrimitiveRestartEnableEXT.html
+type PfnCmdSetPrimitiveRestartEnableEXT uintptr
+
+func (fn PfnCmdSetPrimitiveRestartEnableEXT) Call(commandBuffer CommandBuffer, primitiveRestartEnable Bool32) {
+	C.bridge_vkCmdSetPrimitiveRestartEnableEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.VkBool32)(primitiveRestartEnable))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdSetPrimitiveRestartEnableEXT) String() string {
+	return "vkCmdSetPrimitiveRestartEnableEXT"
+}
+
+const EXT_color_write_enable = 1
+const EXT_COLOR_WRITE_ENABLE_SPEC_VERSION = 1
+
+var EXT_COLOR_WRITE_ENABLE_EXTENSION_NAME = "VK_EXT_color_write_enable"
+
+// PhysicalDeviceColorWriteEnableFeaturesEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceColorWriteEnableFeaturesEXT.html
+type PhysicalDeviceColorWriteEnableFeaturesEXT struct {
+	SType            StructureType
+	PNext            unsafe.Pointer
+	ColorWriteEnable Bool32
+}
+
+func NewPhysicalDeviceColorWriteEnableFeaturesEXT() *PhysicalDeviceColorWriteEnableFeaturesEXT {
+	p := (*PhysicalDeviceColorWriteEnableFeaturesEXT)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceColorWriteEnableFeaturesEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_COLOR_WRITE_ENABLE_FEATURES_EXT
+	return p
+}
+func (p *PhysicalDeviceColorWriteEnableFeaturesEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PipelineColorWriteCreateInfoEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPipelineColorWriteCreateInfoEXT.html
+type PipelineColorWriteCreateInfoEXT struct {
+	SType              StructureType
+	PNext              unsafe.Pointer
+	AttachmentCount    uint32
+	PColorWriteEnables *Bool32
+}
+
+func NewPipelineColorWriteCreateInfoEXT() *PipelineColorWriteCreateInfoEXT {
+	p := (*PipelineColorWriteCreateInfoEXT)(MemAlloc(unsafe.Sizeof(*(*PipelineColorWriteCreateInfoEXT)(nil))))
+	p.SType = STRUCTURE_TYPE_PIPELINE_COLOR_WRITE_CREATE_INFO_EXT
+	return p
+}
+func (p *PipelineColorWriteCreateInfoEXT) Free() { MemFree(unsafe.Pointer(p)) }
+
+//  PfnCmdSetColorWriteEnableEXT -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetColorWriteEnableEXT.html
+type PfnCmdSetColorWriteEnableEXT uintptr
+
+func (fn PfnCmdSetColorWriteEnableEXT) Call(commandBuffer CommandBuffer, attachmentCount uint32, pColorWriteEnables *Bool32) {
+	C.bridge_vkCmdSetColorWriteEnableEXT(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(attachmentCount), (*C.VkBool32)(unsafe.Pointer(pColorWriteEnables)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdSetColorWriteEnableEXT) String() string { return "vkCmdSetColorWriteEnableEXT" }
+
+const KHR_acceleration_structure = 1
+
+// AccelerationStructureKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureKHR.html
+type AccelerationStructureKHR NonDispatchableHandle
+
+const KHR_ACCELERATION_STRUCTURE_SPEC_VERSION = 11
+
+var KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME = "VK_KHR_acceleration_structure"
+
+// BuildAccelerationStructureModeKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkBuildAccelerationStructureModeKHR.html
+type BuildAccelerationStructureModeKHR int32
+
+const (
+	BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR    BuildAccelerationStructureModeKHR = 0
+	BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR   BuildAccelerationStructureModeKHR = 1
+	BUILD_ACCELERATION_STRUCTURE_MODE_MAX_ENUM_KHR BuildAccelerationStructureModeKHR = 0x7FFFFFFF
+)
+
+func (x BuildAccelerationStructureModeKHR) String() string {
+	switch x {
+	case BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR:
+		return "BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR"
+	case BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR:
+		return "BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR"
+	case BUILD_ACCELERATION_STRUCTURE_MODE_MAX_ENUM_KHR:
+		return "BUILD_ACCELERATION_STRUCTURE_MODE_MAX_ENUM_KHR"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// AccelerationStructureBuildTypeKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureBuildTypeKHR.html
+type AccelerationStructureBuildTypeKHR int32
+
+const (
+	ACCELERATION_STRUCTURE_BUILD_TYPE_HOST_KHR           AccelerationStructureBuildTypeKHR = 0
+	ACCELERATION_STRUCTURE_BUILD_TYPE_DEVICE_KHR         AccelerationStructureBuildTypeKHR = 1
+	ACCELERATION_STRUCTURE_BUILD_TYPE_HOST_OR_DEVICE_KHR AccelerationStructureBuildTypeKHR = 2
+	ACCELERATION_STRUCTURE_BUILD_TYPE_MAX_ENUM_KHR       AccelerationStructureBuildTypeKHR = 0x7FFFFFFF
+)
+
+func (x AccelerationStructureBuildTypeKHR) String() string {
+	switch x {
+	case ACCELERATION_STRUCTURE_BUILD_TYPE_HOST_KHR:
+		return "ACCELERATION_STRUCTURE_BUILD_TYPE_HOST_KHR"
+	case ACCELERATION_STRUCTURE_BUILD_TYPE_DEVICE_KHR:
+		return "ACCELERATION_STRUCTURE_BUILD_TYPE_DEVICE_KHR"
+	case ACCELERATION_STRUCTURE_BUILD_TYPE_HOST_OR_DEVICE_KHR:
+		return "ACCELERATION_STRUCTURE_BUILD_TYPE_HOST_OR_DEVICE_KHR"
+	case ACCELERATION_STRUCTURE_BUILD_TYPE_MAX_ENUM_KHR:
+		return "ACCELERATION_STRUCTURE_BUILD_TYPE_MAX_ENUM_KHR"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// AccelerationStructureCompatibilityKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureCompatibilityKHR.html
+type AccelerationStructureCompatibilityKHR int32
+
+const (
+	ACCELERATION_STRUCTURE_COMPATIBILITY_COMPATIBLE_KHR   AccelerationStructureCompatibilityKHR = 0
+	ACCELERATION_STRUCTURE_COMPATIBILITY_INCOMPATIBLE_KHR AccelerationStructureCompatibilityKHR = 1
+	ACCELERATION_STRUCTURE_COMPATIBILITY_MAX_ENUM_KHR     AccelerationStructureCompatibilityKHR = 0x7FFFFFFF
+)
+
+func (x AccelerationStructureCompatibilityKHR) String() string {
+	switch x {
+	case ACCELERATION_STRUCTURE_COMPATIBILITY_COMPATIBLE_KHR:
+		return "ACCELERATION_STRUCTURE_COMPATIBILITY_COMPATIBLE_KHR"
+	case ACCELERATION_STRUCTURE_COMPATIBILITY_INCOMPATIBLE_KHR:
+		return "ACCELERATION_STRUCTURE_COMPATIBILITY_INCOMPATIBLE_KHR"
+	case ACCELERATION_STRUCTURE_COMPATIBILITY_MAX_ENUM_KHR:
+		return "ACCELERATION_STRUCTURE_COMPATIBILITY_MAX_ENUM_KHR"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// AccelerationStructureCreateFlagsKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureCreateFlagsKHR.html
+type AccelerationStructureCreateFlagsKHR uint32
+
+const (
+	ACCELERATION_STRUCTURE_CREATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT_KHR AccelerationStructureCreateFlagsKHR = 0x00000001
+	ACCELERATION_STRUCTURE_CREATE_FLAG_BITS_MAX_ENUM_KHR                AccelerationStructureCreateFlagsKHR = 0x7FFFFFFF
+)
+
+func (x AccelerationStructureCreateFlagsKHR) String() string {
+	var s string
+	for i := uint32(0); i < 32; i++ {
+		if int32(x)&(1<<i) != 0 {
+			switch AccelerationStructureCreateFlagsKHR(1 << i) {
+			case ACCELERATION_STRUCTURE_CREATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT_KHR:
+				s += "ACCELERATION_STRUCTURE_CREATE_DEVICE_ADDRESS_CAPTURE_REPLAY_BIT_KHR|"
+			}
+		}
+	}
+	return strings.TrimSuffix(s, `|`)
+}
+
+// AccelerationStructureBuildRangeInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureBuildRangeInfoKHR.html
+type AccelerationStructureBuildRangeInfoKHR struct {
+	PrimitiveCount  uint32
+	PrimitiveOffset uint32
+	FirstVertex     uint32
+	TransformOffset uint32
+}
+
+func NewAccelerationStructureBuildRangeInfoKHR() *AccelerationStructureBuildRangeInfoKHR {
+	return (*AccelerationStructureBuildRangeInfoKHR)(MemAlloc(unsafe.Sizeof(*(*AccelerationStructureBuildRangeInfoKHR)(nil))))
+}
+func (p *AccelerationStructureBuildRangeInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// AccelerationStructureGeometryTrianglesDataKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureGeometryTrianglesDataKHR.html
+type AccelerationStructureGeometryTrianglesDataKHR struct {
+	SType         StructureType
+	PNext         unsafe.Pointer
+	VertexFormat  Format
+	VertexData    DeviceOrHostAddressConstKHR
+	VertexStride  DeviceSize
+	MaxVertex     uint32
+	IndexType     IndexType
+	IndexData     DeviceOrHostAddressConstKHR
+	TransformData DeviceOrHostAddressConstKHR
+}
+
+func NewAccelerationStructureGeometryTrianglesDataKHR() *AccelerationStructureGeometryTrianglesDataKHR {
+	p := (*AccelerationStructureGeometryTrianglesDataKHR)(MemAlloc(unsafe.Sizeof(*(*AccelerationStructureGeometryTrianglesDataKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR
+	return p
+}
+func (p *AccelerationStructureGeometryTrianglesDataKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// AccelerationStructureGeometryAabbsDataKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureGeometryAabbsDataKHR.html
+type AccelerationStructureGeometryAabbsDataKHR struct {
+	SType  StructureType
+	PNext  unsafe.Pointer
+	Data   DeviceOrHostAddressConstKHR
+	Stride DeviceSize
+}
+
+func NewAccelerationStructureGeometryAabbsDataKHR() *AccelerationStructureGeometryAabbsDataKHR {
+	p := (*AccelerationStructureGeometryAabbsDataKHR)(MemAlloc(unsafe.Sizeof(*(*AccelerationStructureGeometryAabbsDataKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_AABBS_DATA_KHR
+	return p
+}
+func (p *AccelerationStructureGeometryAabbsDataKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// AccelerationStructureGeometryInstancesDataKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureGeometryInstancesDataKHR.html
+type AccelerationStructureGeometryInstancesDataKHR struct {
+	SType           StructureType
+	PNext           unsafe.Pointer
+	ArrayOfPointers Bool32
+	Data            DeviceOrHostAddressConstKHR
+}
+
+func NewAccelerationStructureGeometryInstancesDataKHR() *AccelerationStructureGeometryInstancesDataKHR {
+	p := (*AccelerationStructureGeometryInstancesDataKHR)(MemAlloc(unsafe.Sizeof(*(*AccelerationStructureGeometryInstancesDataKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_INSTANCES_DATA_KHR
+	return p
+}
+func (p *AccelerationStructureGeometryInstancesDataKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// AccelerationStructureGeometryKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureGeometryKHR.html
+type AccelerationStructureGeometryKHR struct {
+	SType        StructureType
+	PNext        unsafe.Pointer
+	GeometryType GeometryTypeKHR
+	Geometry     AccelerationStructureGeometryDataKHR
+	Flags        GeometryFlagsKHR
+}
+
+func NewAccelerationStructureGeometryKHR() *AccelerationStructureGeometryKHR {
+	p := (*AccelerationStructureGeometryKHR)(MemAlloc(unsafe.Sizeof(*(*AccelerationStructureGeometryKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR
+	return p
+}
+func (p *AccelerationStructureGeometryKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// AccelerationStructureBuildGeometryInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureBuildGeometryInfoKHR.html
+type AccelerationStructureBuildGeometryInfoKHR struct {
+	SType                    StructureType
+	PNext                    unsafe.Pointer
+	Type                     AccelerationStructureTypeKHR
+	Flags                    BuildAccelerationStructureFlagsKHR
+	Mode                     BuildAccelerationStructureModeKHR
+	SrcAccelerationStructure AccelerationStructureKHR
+	DstAccelerationStructure AccelerationStructureKHR
+	GeometryCount            uint32
+	PGeometries              *AccelerationStructureGeometryKHR
+	PpGeometries             **AccelerationStructureGeometryKHR
+	ScratchData              DeviceOrHostAddressKHR
+}
+
+func NewAccelerationStructureBuildGeometryInfoKHR() *AccelerationStructureBuildGeometryInfoKHR {
+	p := (*AccelerationStructureBuildGeometryInfoKHR)(MemAlloc(unsafe.Sizeof(*(*AccelerationStructureBuildGeometryInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR
+	return p
+}
+func (p *AccelerationStructureBuildGeometryInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// AccelerationStructureCreateInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureCreateInfoKHR.html
+type AccelerationStructureCreateInfoKHR struct {
+	SType         StructureType
+	PNext         unsafe.Pointer
+	CreateFlags   AccelerationStructureCreateFlagsKHR
+	Buffer        Buffer
+	Offset        DeviceSize
+	Size          DeviceSize
+	Type          AccelerationStructureTypeKHR
+	DeviceAddress DeviceAddress
+}
+
+func NewAccelerationStructureCreateInfoKHR() *AccelerationStructureCreateInfoKHR {
+	p := (*AccelerationStructureCreateInfoKHR)(MemAlloc(unsafe.Sizeof(*(*AccelerationStructureCreateInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_KHR
+	return p
+}
+func (p *AccelerationStructureCreateInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// WriteDescriptorSetAccelerationStructureKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkWriteDescriptorSetAccelerationStructureKHR.html
+type WriteDescriptorSetAccelerationStructureKHR struct {
+	SType                      StructureType
+	PNext                      unsafe.Pointer
+	AccelerationStructureCount uint32
+	PAccelerationStructures    *AccelerationStructureKHR
+}
+
+func NewWriteDescriptorSetAccelerationStructureKHR() *WriteDescriptorSetAccelerationStructureKHR {
+	p := (*WriteDescriptorSetAccelerationStructureKHR)(MemAlloc(unsafe.Sizeof(*(*WriteDescriptorSetAccelerationStructureKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_NV
+	return p
+}
+func (p *WriteDescriptorSetAccelerationStructureKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceAccelerationStructureFeaturesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceAccelerationStructureFeaturesKHR.html
+type PhysicalDeviceAccelerationStructureFeaturesKHR struct {
+	SType                                                 StructureType
+	PNext                                                 unsafe.Pointer
+	AccelerationStructure                                 Bool32
+	AccelerationStructureCaptureReplay                    Bool32
+	AccelerationStructureIndirectBuild                    Bool32
+	AccelerationStructureHostCommands                     Bool32
+	DescriptorBindingAccelerationStructureUpdateAfterBind Bool32
+}
+
+func NewPhysicalDeviceAccelerationStructureFeaturesKHR() *PhysicalDeviceAccelerationStructureFeaturesKHR {
+	p := (*PhysicalDeviceAccelerationStructureFeaturesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceAccelerationStructureFeaturesKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR
+	return p
+}
+func (p *PhysicalDeviceAccelerationStructureFeaturesKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceAccelerationStructurePropertiesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceAccelerationStructurePropertiesKHR.html
+type PhysicalDeviceAccelerationStructurePropertiesKHR struct {
+	SType                                                      StructureType
+	PNext                                                      unsafe.Pointer
+	MaxGeometryCount                                           uint64
+	MaxInstanceCount                                           uint64
+	MaxPrimitiveCount                                          uint64
+	MaxPerStageDescriptorAccelerationStructures                uint32
+	MaxPerStageDescriptorUpdateAfterBindAccelerationStructures uint32
+	MaxDescriptorSetAccelerationStructures                     uint32
+	MaxDescriptorSetUpdateAfterBindAccelerationStructures      uint32
+	MinAccelerationStructureScratchOffsetAlignment             uint32
+}
+
+func NewPhysicalDeviceAccelerationStructurePropertiesKHR() *PhysicalDeviceAccelerationStructurePropertiesKHR {
+	p := (*PhysicalDeviceAccelerationStructurePropertiesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceAccelerationStructurePropertiesKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_PROPERTIES_KHR
+	return p
+}
+func (p *PhysicalDeviceAccelerationStructurePropertiesKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// AccelerationStructureDeviceAddressInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureDeviceAddressInfoKHR.html
+type AccelerationStructureDeviceAddressInfoKHR struct {
+	SType                 StructureType
+	PNext                 unsafe.Pointer
+	AccelerationStructure AccelerationStructureKHR
+}
+
+func NewAccelerationStructureDeviceAddressInfoKHR() *AccelerationStructureDeviceAddressInfoKHR {
+	p := (*AccelerationStructureDeviceAddressInfoKHR)(MemAlloc(unsafe.Sizeof(*(*AccelerationStructureDeviceAddressInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_ACCELERATION_STRUCTURE_DEVICE_ADDRESS_INFO_KHR
+	return p
+}
+func (p *AccelerationStructureDeviceAddressInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// AccelerationStructureVersionInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureVersionInfoKHR.html
+type AccelerationStructureVersionInfoKHR struct {
+	SType        StructureType
+	PNext        unsafe.Pointer
+	PVersionData *uint8
+}
+
+func NewAccelerationStructureVersionInfoKHR() *AccelerationStructureVersionInfoKHR {
+	p := (*AccelerationStructureVersionInfoKHR)(MemAlloc(unsafe.Sizeof(*(*AccelerationStructureVersionInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_ACCELERATION_STRUCTURE_VERSION_INFO_KHR
+	return p
+}
+func (p *AccelerationStructureVersionInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// CopyAccelerationStructureToMemoryInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCopyAccelerationStructureToMemoryInfoKHR.html
+type CopyAccelerationStructureToMemoryInfoKHR struct {
+	SType StructureType
+	PNext unsafe.Pointer
+	Src   AccelerationStructureKHR
+	Dst   DeviceOrHostAddressKHR
+	Mode  CopyAccelerationStructureModeKHR
+}
+
+func NewCopyAccelerationStructureToMemoryInfoKHR() *CopyAccelerationStructureToMemoryInfoKHR {
+	p := (*CopyAccelerationStructureToMemoryInfoKHR)(MemAlloc(unsafe.Sizeof(*(*CopyAccelerationStructureToMemoryInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_TO_MEMORY_INFO_KHR
+	return p
+}
+func (p *CopyAccelerationStructureToMemoryInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// CopyMemoryToAccelerationStructureInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCopyMemoryToAccelerationStructureInfoKHR.html
+type CopyMemoryToAccelerationStructureInfoKHR struct {
+	SType StructureType
+	PNext unsafe.Pointer
+	Src   DeviceOrHostAddressConstKHR
+	Dst   AccelerationStructureKHR
+	Mode  CopyAccelerationStructureModeKHR
+}
+
+func NewCopyMemoryToAccelerationStructureInfoKHR() *CopyMemoryToAccelerationStructureInfoKHR {
+	p := (*CopyMemoryToAccelerationStructureInfoKHR)(MemAlloc(unsafe.Sizeof(*(*CopyMemoryToAccelerationStructureInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_COPY_MEMORY_TO_ACCELERATION_STRUCTURE_INFO_KHR
+	return p
+}
+func (p *CopyMemoryToAccelerationStructureInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// CopyAccelerationStructureInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkCopyAccelerationStructureInfoKHR.html
+type CopyAccelerationStructureInfoKHR struct {
+	SType StructureType
+	PNext unsafe.Pointer
+	Src   AccelerationStructureKHR
+	Dst   AccelerationStructureKHR
+	Mode  CopyAccelerationStructureModeKHR
+}
+
+func NewCopyAccelerationStructureInfoKHR() *CopyAccelerationStructureInfoKHR {
+	p := (*CopyAccelerationStructureInfoKHR)(MemAlloc(unsafe.Sizeof(*(*CopyAccelerationStructureInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_COPY_ACCELERATION_STRUCTURE_INFO_KHR
+	return p
+}
+func (p *CopyAccelerationStructureInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// AccelerationStructureBuildSizesInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkAccelerationStructureBuildSizesInfoKHR.html
+type AccelerationStructureBuildSizesInfoKHR struct {
+	SType                     StructureType
+	PNext                     unsafe.Pointer
+	AccelerationStructureSize DeviceSize
+	UpdateScratchSize         DeviceSize
+	BuildScratchSize          DeviceSize
+}
+
+func NewAccelerationStructureBuildSizesInfoKHR() *AccelerationStructureBuildSizesInfoKHR {
+	p := (*AccelerationStructureBuildSizesInfoKHR)(MemAlloc(unsafe.Sizeof(*(*AccelerationStructureBuildSizesInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR
+	return p
+}
+func (p *AccelerationStructureBuildSizesInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+//  PfnCreateAccelerationStructureKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateAccelerationStructureKHR.html
+type PfnCreateAccelerationStructureKHR uintptr
+
+func (fn PfnCreateAccelerationStructureKHR) Call(device Device, pCreateInfo *AccelerationStructureCreateInfoKHR, pAllocator *AllocationCallbacks, pAccelerationStructure *AccelerationStructureKHR) Result {
+	ret := C.bridge_vkCreateAccelerationStructureKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkAccelerationStructureCreateInfoKHR)(unsafe.Pointer(pCreateInfo)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkAccelerationStructureKHR)(unsafe.Pointer(pAccelerationStructure)))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnCreateAccelerationStructureKHR) String() string {
+	return "vkCreateAccelerationStructureKHR"
+}
+
+//  PfnDestroyAccelerationStructureKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkDestroyAccelerationStructureKHR.html
+type PfnDestroyAccelerationStructureKHR uintptr
+
+func (fn PfnDestroyAccelerationStructureKHR) Call(device Device, accelerationStructure AccelerationStructureKHR, pAllocator *AllocationCallbacks) {
+	C.bridge_vkDestroyAccelerationStructureKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkAccelerationStructureKHR)(unsafe.Pointer(uintptr(accelerationStructure))), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnDestroyAccelerationStructureKHR) String() string {
+	return "vkDestroyAccelerationStructureKHR"
+}
+
+//  PfnCmdBuildAccelerationStructuresKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBuildAccelerationStructuresKHR.html
+type PfnCmdBuildAccelerationStructuresKHR uintptr
+
+func (fn PfnCmdBuildAccelerationStructuresKHR) Call(commandBuffer CommandBuffer, infoCount uint32, pInfos *AccelerationStructureBuildGeometryInfoKHR, ppBuildRangeInfos **AccelerationStructureBuildRangeInfoKHR) {
+	C.bridge_vkCmdBuildAccelerationStructuresKHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(infoCount), (*C.VkAccelerationStructureBuildGeometryInfoKHR)(unsafe.Pointer(pInfos)), (**C.VkAccelerationStructureBuildRangeInfoKHR)(unsafe.Pointer(ppBuildRangeInfos)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdBuildAccelerationStructuresKHR) String() string {
+	return "vkCmdBuildAccelerationStructuresKHR"
+}
+
+//  PfnCmdBuildAccelerationStructuresIndirectKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdBuildAccelerationStructuresIndirectKHR.html
+type PfnCmdBuildAccelerationStructuresIndirectKHR uintptr
+
+func (fn PfnCmdBuildAccelerationStructuresIndirectKHR) Call(commandBuffer CommandBuffer, infoCount uint32, pInfos *AccelerationStructureBuildGeometryInfoKHR, pIndirectDeviceAddresses *DeviceAddress, pIndirectStrides *uint32, ppMaxPrimitiveCounts **uint32) {
+	C.bridge_vkCmdBuildAccelerationStructuresIndirectKHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(infoCount), (*C.VkAccelerationStructureBuildGeometryInfoKHR)(unsafe.Pointer(pInfos)), (*C.VkDeviceAddress)(unsafe.Pointer(pIndirectDeviceAddresses)), (*C.uint32_t)(unsafe.Pointer(pIndirectStrides)), (**C.uint32_t)(unsafe.Pointer(ppMaxPrimitiveCounts)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdBuildAccelerationStructuresIndirectKHR) String() string {
+	return "vkCmdBuildAccelerationStructuresIndirectKHR"
+}
+
+//  PfnBuildAccelerationStructuresKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkBuildAccelerationStructuresKHR.html
+type PfnBuildAccelerationStructuresKHR uintptr
+
+func (fn PfnBuildAccelerationStructuresKHR) Call(device Device, deferredOperation DeferredOperationKHR, infoCount uint32, pInfos *AccelerationStructureBuildGeometryInfoKHR, ppBuildRangeInfos **AccelerationStructureBuildRangeInfoKHR) Result {
+	ret := C.bridge_vkBuildAccelerationStructuresKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkDeferredOperationKHR)(unsafe.Pointer(uintptr(deferredOperation))), (C.uint32_t)(infoCount), (*C.VkAccelerationStructureBuildGeometryInfoKHR)(unsafe.Pointer(pInfos)), (**C.VkAccelerationStructureBuildRangeInfoKHR)(unsafe.Pointer(ppBuildRangeInfos)))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnBuildAccelerationStructuresKHR) String() string {
+	return "vkBuildAccelerationStructuresKHR"
+}
+
+//  PfnCopyAccelerationStructureKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCopyAccelerationStructureKHR.html
+type PfnCopyAccelerationStructureKHR uintptr
+
+func (fn PfnCopyAccelerationStructureKHR) Call(device Device, deferredOperation DeferredOperationKHR, pInfo *CopyAccelerationStructureInfoKHR) Result {
+	ret := C.bridge_vkCopyAccelerationStructureKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkDeferredOperationKHR)(unsafe.Pointer(uintptr(deferredOperation))), (*C.VkCopyAccelerationStructureInfoKHR)(unsafe.Pointer(pInfo)))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnCopyAccelerationStructureKHR) String() string { return "vkCopyAccelerationStructureKHR" }
+
+//  PfnCopyAccelerationStructureToMemoryKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCopyAccelerationStructureToMemoryKHR.html
+type PfnCopyAccelerationStructureToMemoryKHR uintptr
+
+func (fn PfnCopyAccelerationStructureToMemoryKHR) Call(device Device, deferredOperation DeferredOperationKHR, pInfo *CopyAccelerationStructureToMemoryInfoKHR) Result {
+	ret := C.bridge_vkCopyAccelerationStructureToMemoryKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkDeferredOperationKHR)(unsafe.Pointer(uintptr(deferredOperation))), (*C.VkCopyAccelerationStructureToMemoryInfoKHR)(unsafe.Pointer(pInfo)))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnCopyAccelerationStructureToMemoryKHR) String() string {
+	return "vkCopyAccelerationStructureToMemoryKHR"
+}
+
+//  PfnCopyMemoryToAccelerationStructureKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCopyMemoryToAccelerationStructureKHR.html
+type PfnCopyMemoryToAccelerationStructureKHR uintptr
+
+func (fn PfnCopyMemoryToAccelerationStructureKHR) Call(device Device, deferredOperation DeferredOperationKHR, pInfo *CopyMemoryToAccelerationStructureInfoKHR) Result {
+	ret := C.bridge_vkCopyMemoryToAccelerationStructureKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkDeferredOperationKHR)(unsafe.Pointer(uintptr(deferredOperation))), (*C.VkCopyMemoryToAccelerationStructureInfoKHR)(unsafe.Pointer(pInfo)))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnCopyMemoryToAccelerationStructureKHR) String() string {
+	return "vkCopyMemoryToAccelerationStructureKHR"
+}
+
+//  PfnWriteAccelerationStructuresPropertiesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkWriteAccelerationStructuresPropertiesKHR.html
+type PfnWriteAccelerationStructuresPropertiesKHR uintptr
+
+func (fn PfnWriteAccelerationStructuresPropertiesKHR) Call(device Device, accelerationStructureCount uint32, pAccelerationStructures *AccelerationStructureKHR, queryType QueryType, dataSize uintptr, pData unsafe.Pointer, stride uintptr) Result {
+	ret := C.bridge_vkWriteAccelerationStructuresPropertiesKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.uint32_t)(accelerationStructureCount), (*C.VkAccelerationStructureKHR)(unsafe.Pointer(pAccelerationStructures)), (C.VkQueryType)(queryType), (C.size_t)(dataSize), (unsafe.Pointer)(pData), (C.size_t)(stride))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnWriteAccelerationStructuresPropertiesKHR) String() string {
+	return "vkWriteAccelerationStructuresPropertiesKHR"
+}
+
+//  PfnCmdCopyAccelerationStructureKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdCopyAccelerationStructureKHR.html
+type PfnCmdCopyAccelerationStructureKHR uintptr
+
+func (fn PfnCmdCopyAccelerationStructureKHR) Call(commandBuffer CommandBuffer, pInfo *CopyAccelerationStructureInfoKHR) {
+	C.bridge_vkCmdCopyAccelerationStructureKHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkCopyAccelerationStructureInfoKHR)(unsafe.Pointer(pInfo)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdCopyAccelerationStructureKHR) String() string {
+	return "vkCmdCopyAccelerationStructureKHR"
+}
+
+//  PfnCmdCopyAccelerationStructureToMemoryKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdCopyAccelerationStructureToMemoryKHR.html
+type PfnCmdCopyAccelerationStructureToMemoryKHR uintptr
+
+func (fn PfnCmdCopyAccelerationStructureToMemoryKHR) Call(commandBuffer CommandBuffer, pInfo *CopyAccelerationStructureToMemoryInfoKHR) {
+	C.bridge_vkCmdCopyAccelerationStructureToMemoryKHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkCopyAccelerationStructureToMemoryInfoKHR)(unsafe.Pointer(pInfo)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdCopyAccelerationStructureToMemoryKHR) String() string {
+	return "vkCmdCopyAccelerationStructureToMemoryKHR"
+}
+
+//  PfnCmdCopyMemoryToAccelerationStructureKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdCopyMemoryToAccelerationStructureKHR.html
+type PfnCmdCopyMemoryToAccelerationStructureKHR uintptr
+
+func (fn PfnCmdCopyMemoryToAccelerationStructureKHR) Call(commandBuffer CommandBuffer, pInfo *CopyMemoryToAccelerationStructureInfoKHR) {
+	C.bridge_vkCmdCopyMemoryToAccelerationStructureKHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkCopyMemoryToAccelerationStructureInfoKHR)(unsafe.Pointer(pInfo)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdCopyMemoryToAccelerationStructureKHR) String() string {
+	return "vkCmdCopyMemoryToAccelerationStructureKHR"
+}
+
+//  PfnGetAccelerationStructureDeviceAddressKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetAccelerationStructureDeviceAddressKHR.html
+type PfnGetAccelerationStructureDeviceAddressKHR uintptr
+
+func (fn PfnGetAccelerationStructureDeviceAddressKHR) Call(device Device, pInfo *AccelerationStructureDeviceAddressInfoKHR) DeviceAddress {
+	ret := C.bridge_vkGetAccelerationStructureDeviceAddressKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkAccelerationStructureDeviceAddressInfoKHR)(unsafe.Pointer(pInfo)))
+	debugCheckAndBreak()
+	return DeviceAddress(ret)
+}
+func (fn PfnGetAccelerationStructureDeviceAddressKHR) String() string {
+	return "vkGetAccelerationStructureDeviceAddressKHR"
+}
+
+//  PfnCmdWriteAccelerationStructuresPropertiesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdWriteAccelerationStructuresPropertiesKHR.html
+type PfnCmdWriteAccelerationStructuresPropertiesKHR uintptr
+
+func (fn PfnCmdWriteAccelerationStructuresPropertiesKHR) Call(commandBuffer CommandBuffer, accelerationStructureCount uint32, pAccelerationStructures *AccelerationStructureKHR, queryType QueryType, queryPool QueryPool, firstQuery uint32) {
+	C.bridge_vkCmdWriteAccelerationStructuresPropertiesKHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(accelerationStructureCount), (*C.VkAccelerationStructureKHR)(unsafe.Pointer(pAccelerationStructures)), (C.VkQueryType)(queryType), (C.VkQueryPool)(unsafe.Pointer(uintptr(queryPool))), (C.uint32_t)(firstQuery))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdWriteAccelerationStructuresPropertiesKHR) String() string {
+	return "vkCmdWriteAccelerationStructuresPropertiesKHR"
+}
+
+//  PfnGetDeviceAccelerationStructureCompatibilityKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetDeviceAccelerationStructureCompatibilityKHR.html
+type PfnGetDeviceAccelerationStructureCompatibilityKHR uintptr
+
+func (fn PfnGetDeviceAccelerationStructureCompatibilityKHR) Call(device Device, pVersionInfo *AccelerationStructureVersionInfoKHR, pCompatibility *AccelerationStructureCompatibilityKHR) {
+	C.bridge_vkGetDeviceAccelerationStructureCompatibilityKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (*C.VkAccelerationStructureVersionInfoKHR)(unsafe.Pointer(pVersionInfo)), (*C.VkAccelerationStructureCompatibilityKHR)(unsafe.Pointer(pCompatibility)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnGetDeviceAccelerationStructureCompatibilityKHR) String() string {
+	return "vkGetDeviceAccelerationStructureCompatibilityKHR"
+}
+
+//  PfnGetAccelerationStructureBuildSizesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetAccelerationStructureBuildSizesKHR.html
+type PfnGetAccelerationStructureBuildSizesKHR uintptr
+
+func (fn PfnGetAccelerationStructureBuildSizesKHR) Call(device Device, buildType AccelerationStructureBuildTypeKHR, pBuildInfo *AccelerationStructureBuildGeometryInfoKHR, pMaxPrimitiveCounts *uint32, pSizeInfo *AccelerationStructureBuildSizesInfoKHR) {
+	C.bridge_vkGetAccelerationStructureBuildSizesKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkAccelerationStructureBuildTypeKHR)(buildType), (*C.VkAccelerationStructureBuildGeometryInfoKHR)(unsafe.Pointer(pBuildInfo)), (*C.uint32_t)(unsafe.Pointer(pMaxPrimitiveCounts)), (*C.VkAccelerationStructureBuildSizesInfoKHR)(unsafe.Pointer(pSizeInfo)))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnGetAccelerationStructureBuildSizesKHR) String() string {
+	return "vkGetAccelerationStructureBuildSizesKHR"
+}
+
+const KHR_ray_tracing_pipeline = 1
+const KHR_RAY_TRACING_PIPELINE_SPEC_VERSION = 1
+
+var KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME = "VK_KHR_ray_tracing_pipeline"
+
+// ShaderGroupShaderKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkShaderGroupShaderKHR.html
+type ShaderGroupShaderKHR int32
+
+const (
+	SHADER_GROUP_SHADER_GENERAL_KHR      ShaderGroupShaderKHR = 0
+	SHADER_GROUP_SHADER_CLOSEST_HIT_KHR  ShaderGroupShaderKHR = 1
+	SHADER_GROUP_SHADER_ANY_HIT_KHR      ShaderGroupShaderKHR = 2
+	SHADER_GROUP_SHADER_INTERSECTION_KHR ShaderGroupShaderKHR = 3
+	SHADER_GROUP_SHADER_MAX_ENUM_KHR     ShaderGroupShaderKHR = 0x7FFFFFFF
+)
+
+func (x ShaderGroupShaderKHR) String() string {
+	switch x {
+	case SHADER_GROUP_SHADER_GENERAL_KHR:
+		return "SHADER_GROUP_SHADER_GENERAL_KHR"
+	case SHADER_GROUP_SHADER_CLOSEST_HIT_KHR:
+		return "SHADER_GROUP_SHADER_CLOSEST_HIT_KHR"
+	case SHADER_GROUP_SHADER_ANY_HIT_KHR:
+		return "SHADER_GROUP_SHADER_ANY_HIT_KHR"
+	case SHADER_GROUP_SHADER_INTERSECTION_KHR:
+		return "SHADER_GROUP_SHADER_INTERSECTION_KHR"
+	case SHADER_GROUP_SHADER_MAX_ENUM_KHR:
+		return "SHADER_GROUP_SHADER_MAX_ENUM_KHR"
+	default:
+		return fmt.Sprint(int32(x))
+	}
+}
+
+// RayTracingShaderGroupCreateInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRayTracingShaderGroupCreateInfoKHR.html
+type RayTracingShaderGroupCreateInfoKHR struct {
+	SType                           StructureType
+	PNext                           unsafe.Pointer
+	Type                            RayTracingShaderGroupTypeKHR
+	GeneralShader                   uint32
+	ClosestHitShader                uint32
+	AnyHitShader                    uint32
+	IntersectionShader              uint32
+	PShaderGroupCaptureReplayHandle unsafe.Pointer
+}
+
+func NewRayTracingShaderGroupCreateInfoKHR() *RayTracingShaderGroupCreateInfoKHR {
+	p := (*RayTracingShaderGroupCreateInfoKHR)(MemAlloc(unsafe.Sizeof(*(*RayTracingShaderGroupCreateInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_RAY_TRACING_SHADER_GROUP_CREATE_INFO_KHR
+	return p
+}
+func (p *RayTracingShaderGroupCreateInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// RayTracingPipelineInterfaceCreateInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRayTracingPipelineInterfaceCreateInfoKHR.html
+type RayTracingPipelineInterfaceCreateInfoKHR struct {
+	SType                          StructureType
+	PNext                          unsafe.Pointer
+	MaxPipelineRayPayloadSize      uint32
+	MaxPipelineRayHitAttributeSize uint32
+}
+
+func NewRayTracingPipelineInterfaceCreateInfoKHR() *RayTracingPipelineInterfaceCreateInfoKHR {
+	p := (*RayTracingPipelineInterfaceCreateInfoKHR)(MemAlloc(unsafe.Sizeof(*(*RayTracingPipelineInterfaceCreateInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_RAY_TRACING_PIPELINE_INTERFACE_CREATE_INFO_KHR
+	return p
+}
+func (p *RayTracingPipelineInterfaceCreateInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// RayTracingPipelineCreateInfoKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkRayTracingPipelineCreateInfoKHR.html
+type RayTracingPipelineCreateInfoKHR struct {
+	SType                        StructureType
+	PNext                        unsafe.Pointer
+	Flags                        PipelineCreateFlags
+	StageCount                   uint32
+	PStages                      *PipelineShaderStageCreateInfo
+	GroupCount                   uint32
+	PGroups                      *RayTracingShaderGroupCreateInfoKHR
+	MaxPipelineRayRecursionDepth uint32
+	PLibraryInfo                 *PipelineLibraryCreateInfoKHR
+	PLibraryInterface            *RayTracingPipelineInterfaceCreateInfoKHR
+	PDynamicState                *PipelineDynamicStateCreateInfo
+	Layout                       PipelineLayout
+	BasePipelineHandle           Pipeline
+	BasePipelineIndex            int32
+}
+
+func NewRayTracingPipelineCreateInfoKHR() *RayTracingPipelineCreateInfoKHR {
+	p := (*RayTracingPipelineCreateInfoKHR)(MemAlloc(unsafe.Sizeof(*(*RayTracingPipelineCreateInfoKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_RAY_TRACING_PIPELINE_CREATE_INFO_KHR
+	return p
+}
+func (p *RayTracingPipelineCreateInfoKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceRayTracingPipelineFeaturesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceRayTracingPipelineFeaturesKHR.html
+type PhysicalDeviceRayTracingPipelineFeaturesKHR struct {
+	SType                                                 StructureType
+	PNext                                                 unsafe.Pointer
+	RayTracingPipeline                                    Bool32
+	RayTracingPipelineShaderGroupHandleCaptureReplay      Bool32
+	RayTracingPipelineShaderGroupHandleCaptureReplayMixed Bool32
+	RayTracingPipelineTraceRaysIndirect                   Bool32
+	RayTraversalPrimitiveCulling                          Bool32
+}
+
+func NewPhysicalDeviceRayTracingPipelineFeaturesKHR() *PhysicalDeviceRayTracingPipelineFeaturesKHR {
+	p := (*PhysicalDeviceRayTracingPipelineFeaturesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceRayTracingPipelineFeaturesKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_FEATURES_KHR
+	return p
+}
+func (p *PhysicalDeviceRayTracingPipelineFeaturesKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// PhysicalDeviceRayTracingPipelinePropertiesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceRayTracingPipelinePropertiesKHR.html
+type PhysicalDeviceRayTracingPipelinePropertiesKHR struct {
+	SType                              StructureType
+	PNext                              unsafe.Pointer
+	ShaderGroupHandleSize              uint32
+	MaxRayRecursionDepth               uint32
+	MaxShaderGroupStride               uint32
+	ShaderGroupBaseAlignment           uint32
+	ShaderGroupHandleCaptureReplaySize uint32
+	MaxRayDispatchInvocationCount      uint32
+	ShaderGroupHandleAlignment         uint32
+	MaxRayHitAttributeSize             uint32
+}
+
+func NewPhysicalDeviceRayTracingPipelinePropertiesKHR() *PhysicalDeviceRayTracingPipelinePropertiesKHR {
+	p := (*PhysicalDeviceRayTracingPipelinePropertiesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceRayTracingPipelinePropertiesKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_TRACING_PIPELINE_PROPERTIES_KHR
+	return p
+}
+func (p *PhysicalDeviceRayTracingPipelinePropertiesKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// StridedDeviceAddressRegionKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkStridedDeviceAddressRegionKHR.html
+type StridedDeviceAddressRegionKHR struct {
+	DeviceAddress DeviceAddress
+	Stride        DeviceSize
+	Size          DeviceSize
+}
+
+func NewStridedDeviceAddressRegionKHR() *StridedDeviceAddressRegionKHR {
+	return (*StridedDeviceAddressRegionKHR)(MemAlloc(unsafe.Sizeof(*(*StridedDeviceAddressRegionKHR)(nil))))
+}
+func (p *StridedDeviceAddressRegionKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+// TraceRaysIndirectCommandKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkTraceRaysIndirectCommandKHR.html
+type TraceRaysIndirectCommandKHR struct {
+	Width  uint32
+	Height uint32
+	Depth  uint32
+}
+
+func NewTraceRaysIndirectCommandKHR() *TraceRaysIndirectCommandKHR {
+	return (*TraceRaysIndirectCommandKHR)(MemAlloc(unsafe.Sizeof(*(*TraceRaysIndirectCommandKHR)(nil))))
+}
+func (p *TraceRaysIndirectCommandKHR) Free() { MemFree(unsafe.Pointer(p)) }
+
+//  PfnCmdTraceRaysKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdTraceRaysKHR.html
+type PfnCmdTraceRaysKHR uintptr
+
+func (fn PfnCmdTraceRaysKHR) Call(commandBuffer CommandBuffer, pRaygenShaderBindingTable, pMissShaderBindingTable, pHitShaderBindingTable, pCallableShaderBindingTable *StridedDeviceAddressRegionKHR, width, height, depth uint32) {
+	C.bridge_vkCmdTraceRaysKHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkStridedDeviceAddressRegionKHR)(unsafe.Pointer(pRaygenShaderBindingTable)), (*C.VkStridedDeviceAddressRegionKHR)(unsafe.Pointer(pMissShaderBindingTable)), (*C.VkStridedDeviceAddressRegionKHR)(unsafe.Pointer(pHitShaderBindingTable)), (*C.VkStridedDeviceAddressRegionKHR)(unsafe.Pointer(pCallableShaderBindingTable)), (C.uint32_t)(width), (C.uint32_t)(height), (C.uint32_t)(depth))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdTraceRaysKHR) String() string { return "vkCmdTraceRaysKHR" }
+
+//  PfnCreateRayTracingPipelinesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateRayTracingPipelinesKHR.html
+type PfnCreateRayTracingPipelinesKHR uintptr
+
+func (fn PfnCreateRayTracingPipelinesKHR) Call(device Device, deferredOperation DeferredOperationKHR, pipelineCache PipelineCache, createInfoCount uint32, pCreateInfos *RayTracingPipelineCreateInfoKHR, pAllocator *AllocationCallbacks, pPipelines *Pipeline) Result {
+	ret := C.bridge_vkCreateRayTracingPipelinesKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkDeferredOperationKHR)(unsafe.Pointer(uintptr(deferredOperation))), (C.VkPipelineCache)(unsafe.Pointer(uintptr(pipelineCache))), (C.uint32_t)(createInfoCount), (*C.VkRayTracingPipelineCreateInfoKHR)(unsafe.Pointer(pCreateInfos)), (*C.VkAllocationCallbacks)(unsafe.Pointer(pAllocator)), (*C.VkPipeline)(unsafe.Pointer(pPipelines)))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnCreateRayTracingPipelinesKHR) String() string { return "vkCreateRayTracingPipelinesKHR" }
+
+//  PfnGetRayTracingCaptureReplayShaderGroupHandlesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetRayTracingCaptureReplayShaderGroupHandlesKHR.html
+type PfnGetRayTracingCaptureReplayShaderGroupHandlesKHR uintptr
+
+func (fn PfnGetRayTracingCaptureReplayShaderGroupHandlesKHR) Call(device Device, pipeline Pipeline, firstGroup, groupCount uint32, dataSize uintptr, pData unsafe.Pointer) Result {
+	ret := C.bridge_vkGetRayTracingCaptureReplayShaderGroupHandlesKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkPipeline)(unsafe.Pointer(uintptr(pipeline))), (C.uint32_t)(firstGroup), (C.uint32_t)(groupCount), (C.size_t)(dataSize), (unsafe.Pointer)(pData))
+	debugCheckAndBreak()
+	return Result(ret)
+}
+func (fn PfnGetRayTracingCaptureReplayShaderGroupHandlesKHR) String() string {
+	return "vkGetRayTracingCaptureReplayShaderGroupHandlesKHR"
+}
+
+//  PfnCmdTraceRaysIndirectKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdTraceRaysIndirectKHR.html
+type PfnCmdTraceRaysIndirectKHR uintptr
+
+func (fn PfnCmdTraceRaysIndirectKHR) Call(commandBuffer CommandBuffer, pRaygenShaderBindingTable, pMissShaderBindingTable, pHitShaderBindingTable, pCallableShaderBindingTable *StridedDeviceAddressRegionKHR, indirectDeviceAddress DeviceAddress) {
+	C.bridge_vkCmdTraceRaysIndirectKHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (*C.VkStridedDeviceAddressRegionKHR)(unsafe.Pointer(pRaygenShaderBindingTable)), (*C.VkStridedDeviceAddressRegionKHR)(unsafe.Pointer(pMissShaderBindingTable)), (*C.VkStridedDeviceAddressRegionKHR)(unsafe.Pointer(pHitShaderBindingTable)), (*C.VkStridedDeviceAddressRegionKHR)(unsafe.Pointer(pCallableShaderBindingTable)), (C.VkDeviceAddress)(indirectDeviceAddress))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdTraceRaysIndirectKHR) String() string { return "vkCmdTraceRaysIndirectKHR" }
+
+//  PfnGetRayTracingShaderGroupStackSizeKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkGetRayTracingShaderGroupStackSizeKHR.html
+type PfnGetRayTracingShaderGroupStackSizeKHR uintptr
+
+func (fn PfnGetRayTracingShaderGroupStackSizeKHR) Call(device Device, pipeline Pipeline, group uint32, groupShader ShaderGroupShaderKHR) DeviceSize {
+	ret := C.bridge_vkGetRayTracingShaderGroupStackSizeKHR(C.uintptr_t(fn), (C.VkDevice)(unsafe.Pointer(uintptr(device))), (C.VkPipeline)(unsafe.Pointer(uintptr(pipeline))), (C.uint32_t)(group), (C.VkShaderGroupShaderKHR)(groupShader))
+	debugCheckAndBreak()
+	return DeviceSize(ret)
+}
+func (fn PfnGetRayTracingShaderGroupStackSizeKHR) String() string {
+	return "vkGetRayTracingShaderGroupStackSizeKHR"
+}
+
+//  PfnCmdSetRayTracingPipelineStackSizeKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCmdSetRayTracingPipelineStackSizeKHR.html
+type PfnCmdSetRayTracingPipelineStackSizeKHR uintptr
+
+func (fn PfnCmdSetRayTracingPipelineStackSizeKHR) Call(commandBuffer CommandBuffer, pipelineStackSize uint32) {
+	C.bridge_vkCmdSetRayTracingPipelineStackSizeKHR(C.uintptr_t(fn), (C.VkCommandBuffer)(unsafe.Pointer(uintptr(commandBuffer))), (C.uint32_t)(pipelineStackSize))
+	debugCheckAndBreak()
+	return
+}
+func (fn PfnCmdSetRayTracingPipelineStackSizeKHR) String() string {
+	return "vkCmdSetRayTracingPipelineStackSizeKHR"
+}
+
+const KHR_ray_query = 1
+const KHR_RAY_QUERY_SPEC_VERSION = 1
+
+var KHR_RAY_QUERY_EXTENSION_NAME = "VK_KHR_ray_query"
+
+// PhysicalDeviceRayQueryFeaturesKHR -- https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkPhysicalDeviceRayQueryFeaturesKHR.html
+type PhysicalDeviceRayQueryFeaturesKHR struct {
+	SType    StructureType
+	PNext    unsafe.Pointer
+	RayQuery Bool32
+}
+
+func NewPhysicalDeviceRayQueryFeaturesKHR() *PhysicalDeviceRayQueryFeaturesKHR {
+	p := (*PhysicalDeviceRayQueryFeaturesKHR)(MemAlloc(unsafe.Sizeof(*(*PhysicalDeviceRayQueryFeaturesKHR)(nil))))
+	p.SType = STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_QUERY_FEATURES_KHR
+	return p
+}
+func (p *PhysicalDeviceRayQueryFeaturesKHR) Free() { MemFree(unsafe.Pointer(p)) }
